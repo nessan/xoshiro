@@ -1,0 +1,701 @@
+[
+  {
+    "objectID": "pages/constructors.html",
+    "href": "pages/constructors.html",
+    "title": "xso::generator — Constructors",
+    "section": "",
+    "text": "\\[\n\\newcommand{\\FF}{\\mathbb{F}_2}\n\\newcommand{\\bold}[1]{\\mathbf{#1}}\n\\newcommand{\\mod}[2]{ {#1 \\, \\mathrm{mod} \\, #2}}\n\\]\n\n\n\n\n\n\n\n\n\nConstructors for an xoshiro/xoroshiro random number generator.\n1explicit generator();\n\n2explicit generator(word_type seed);\n\ntemplate&lt;typename Iter&gt;\n3explicit generator(Iter b, Iter e);\n\n1\n\nDefault constructor fully seeds the generator primarily from a std::random_device.\n\n2\n\nConstructs a generator quickly and repeatably from a single unsigned integer.\n\n3\n\nConstructs a generator by copying in words from an iteration.\n\n\nNotes:\n\nThe default constructor seeds the underlying state fully from a default source of entropy by multiple calls to std::random_device. Reportedly some implementations of that standard facility are not great so we also mix in a scrambled call to a high-resolution clock for one of the state words.\nSeeding generators with multiple words of state from a single word is never ideal.\nNevertheless, it is often handy to be able to do exactly this when you are trying to prototype a simulation of some sort. For that stage of development being able to run and rerun things with an easily constructed “fixed” random number stream is very useful.\nTo mitigate some of the worst features of this type of construction, the implementation uses a scrambled version of the one input word as a seed to a simple, small state, but pretty effective SplitMix64 random number generator. That generator is then used to create a full state array for the xoshiro/xoshiro in question.\nIf you do construct a generator by passing in an iteration of words then be sure that the values are not all zero as that is a fixed point for these generators.\n\nExample: Default construction\n#include &lt;xoshiro.h&gt;\nint main()\n{\n    using rng = xso::rng;\n1    rng f, g;\n2    std::cout &lt;&lt; \"f(): \" &lt;&lt; f() &lt;&lt; '\\n';\n    std::cout &lt;&lt; \"g(): \" &lt;&lt; g() &lt;&lt; \"\\n\\n\";\n\n    std::array&lt;typename rng::word_type, rng::word_count()&gt; state;\n3    f.get_state(state.begin());\n\n4    xso::rng h(state.cbegin(), state.cend());\n5    std::cout &lt;&lt; \"f(): \" &lt;&lt; f() &lt;&lt; '\\n';\n    std::cout &lt;&lt; \"h(): \" &lt;&lt; h() &lt;&lt; '\\n';\n}\n\n1\n\nTwo default constructed generators f and gare fully and randomly seeded.\n\n2\n\nWe print one output from each generator and expect those to be different.\n\n3\n\nWe then capture the current state from the f generator.\n\n4\n\nWe construct a third generator h seeded from that captured state.\n\n5\n\nWe print one output from f and h and expect those to be identical.\n\n\nOutput: The specific outputs will vary from run to run\nf(): 1887568754843356615\ng(): 287576570925641124\n\nf(): 16125400203545409679\nh(): 16125400203545409679\n&lt;.&gt; Different values as expected from calls to f() and g(). &lt;.&gt; Identical values as expected from calls to f() and h().\nExample: Construction from a single seed word\n#include &lt;xoshiro.h&gt;\nint main()\n{\n1    xso::rng64 g0(1);\n    xso::rng64 g1(2);\n    std::cout &lt;&lt; \"Calls to two nearby seeded xso::rng64 generators:\\n\";\n    for (std::size_t i = 0; i &lt; 5; ++i)\n        std::cout &lt;&lt; \"Call \" &lt;&lt; i &lt;&lt; \": \" &lt;&lt; g0() &lt;&lt; \"\\t\" &lt;&lt; g1() &lt;&lt; '\\n';\n\n2    g0.seed(123);\n    g1.seed(123);\n    std::cout &lt;&lt; \"\\nCalls to two identically seeded xso::rng64 generators:\\n\";\n    for (std::size_t i = 0; i &lt; 5; ++i)\n        std::cout &lt;&lt; \"Call \" &lt;&lt; i &lt;&lt; \": \" &lt;&lt; g0() &lt;&lt; \"\\t\" &lt;&lt; g1() &lt;&lt; '\\n';\n}\n\n1\n\nCreate two xoshiro generators with very similar seeds and print the results of a few calls.\n\n2\n\nReseed both generators with the same seed and again print the results of a few calls.\n\n\nOutput: The specific outputs will vary from run to run\n1Calls to two nearby seeded xso::rng64 generators:\nCall 0: 17411061279518156131    4890025243076846858\nCall 1: 17949023749619734469    9084667301668848462\nCall 2: 175122747298038362      1296031388660499858\nCall 3: 5372970870250148463     5968655099240147287\nCall 4: 10829287877746345362    18045567523022708517\n\n2Calls to two identically seeded xso::rng64 generators:\nCall 0: 12981287971670330679    12981287971670330679\nCall 1: 7116868237474176081     7116868237474176081\nCall 2: 7843178069876964882     7843178069876964882\nCall 3: 2023445265056700755     2023445265056700755\nCall 4: 2199654306148732348     2199654306148732348\n\n1\n\nNote that while the seeds were very close the generated outputs are not!\n\n2\n\nWith identical seeds we get identical outputs.\n\n\nExample: Seeding from all zeros is a bad idea\n#include &lt;xoshiro.h&gt;\nint main()\n{\n    typename xso::rng::state_type seed_array;\n    seed_array.fill(0);\n    xso::rng gen(seed_array);\n    for(std::size_t i = 0; i &lt; 10; ++i) std::cout &lt;&lt; \"Iteration \" &lt;&lt; i &lt;&lt; \" returns: \" &lt;&lt; gen() &lt;&lt; '\\n';\n}\nOutput: The outputs will always be 0.\nIteration 0 returns: 0\nIteration 1 returns: 0\nIteration 2 returns: 0\nIteration 3 returns: 0\nIteration 4 returns: 0\nIteration 5 returns: 0\nIteration 6 returns: 0\nIteration 7 returns: 0\nIteration 8 returns: 0\nIteration 9 returns: 0\n\nSee Also\nseed\n\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "pages/sample.html",
+    "href": "pages/sample.html",
+    "title": "xso::generator — Sampling Methods",
+    "section": "",
+    "text": "\\[\n\\newcommand{\\FF}{\\mathbb{F}_2}\n\\newcommand{\\bold}[1]{\\mathbf{#1}}\n\\newcommand{\\mod}[2]{ {#1 \\, \\mathrm{mod} \\, #2}}\n\\]"
+  },
+  {
+    "objectID": "pages/sample.html#single-samples",
+    "href": "pages/sample.html#single-samples",
+    "title": "xso::generator — Sampling Methods",
+    "section": "Single Samples",
+    "text": "Single Samples\nWe provide methods to extract a single sample from an interval, from an arbitrary distribution, and from a container. There is also a method that picks a random index given an array size.\n\nUniform Distributions\ntemplate&lt;std::integral T&gt;\n1constexpr T sample(T a, T b)\n\ntemplate&lt;std::integral T&gt;\n2constexpr T index(T n);\n\ntemplate&lt;std::floating_point T&gt;\n3constexpr T sample(T a, T b);\n\ntemplate&lt;std::input_iterator T&gt;\n4constexpr auto sample(T b, T e);\n\ntemplate&lt;typename Container&gt;\n5constexpr auto sample(const Container &c);\n\n1\n\nReturns a single integer value from a uniform distribution over \\([a,b]\\). No error checks are performed and the behavior is undefined if \\(a &lt; b\\).\n\n2\n\nReturns a single index from a uniform distribution over stem:\\([0,n)\\). No error checks are performed and the behavior is undefined if \\(n=0\\).\n\n3\n\nReturns a single real value from a uniform distribution over stem:\\([a,b)\\). No error checks are performed and the behavior is undefined if \\(a &lt; b\\).\n\n4\n\nReturns a single element from the iteration \\([b,e)\\) where all elements are equally likely to be returned. No error checks are performed and the behavior is undefined if \\(e &lt; b\\).\n\n5\n\nReturns a single element from the container c where all elements are equally likely to be returned. The method will work on any container c which supports std::cbegin(c) and std::cend(c).\n\n\n\n\nArbitrary Distributions\nWe have a C++ concept that captures a common feature of the distributions defined in the standard &lt;random&gt; header:\ntemplate&lt;typename D&gt;\n1concept xso::Distribution = requires { typename D::param_type; };\n\n1\n\nAll of those distributions have define an embedded param_type — this is distinct from the standard collections like std::vector.\n\n\nWe can use that concept to overload the sample methods with xso::Distribution arguments as follows:\n1constexpr auto sample(Distribution auto &dist);\n\n1\n\nReturns a single variate from the distribution dist e.g. from a std::normal_distribution instance.\n\n\n\n\n\n\n\n\nThe distribution concept\n\n\n\nIt is convenient to have many sampling methods all named sample(...) and C++ allows this through overloading. The specific sample version invoked depends on the type of the passed arguments. To make this work we need to distinguish between a container like a std::vector and a distribution like a std::normal_distribution. The xso::Distribution concept is a minimal way to identify the distributions defined in the standard library. It relies on the fact that all distribution classes have an embedded typename defining a param_type. None of the standard container classes have that.\n\n\n\n\nExamples\nExtract single samples from intervals, distributions, and containers:\n#include &lt;utilities/utilities.h&gt;\n#include &lt;xoshiro.h&gt;\nint main()\n{\n    xso::rng    gen;\n    std::size_t n, n_samples = 3;\n\n    std::cout &lt;&lt; \"Characters from ['a','z']\\n\";\n    for (n = 0; n &lt; n_samples; ++n) std::print(\"'{:c}' \", gen.sample(std::uint8_t{'a'}, std::uint8_t{'z'}));\n    std::print(\"\\n\");\n\n    std::cout &lt;&lt; \"Integers from [1,10]\\n\";\n    for (n = 0; n &lt; n_samples; ++n) std::print(\"{} \", gen.sample(1, 10));\n    std::print(\"\\n\");\n\n    std::cout &lt;&lt; \"Reals from[1,10)\\n\";\n    for (n = 0; n &lt; n_samples; ++n) std::print(\"{:4.2f} \", gen.sample(1., 10.));\n    std::print(\"\\n\");\n\n    std::normal_distribution nd{70., 15.};\n    std::print(\"Normals with mean {} and std-dev {}\\n\", nd.mean(), nd.stddev());\n    for (n = 0; n &lt; n_samples; ++n) std::print(\"{:4.2f} \", gen.sample(nd));\n    std::print(\"\\n\");\n\n    std::binomial_distribution bd{6, 0.5};\n    std::print(\"Binomials with {} trials and P[success] = {}\\n\", bd.t(), bd.p());\n    for (n = 0; n &lt; n_samples; ++n) std::print(\"{} \", gen.sample(bd));\n    std::print(\"\\n\");\n\n    std::array&lt;int, 10&gt; array;\n    std::iota(array.begin(), array.end(), 0);\n    std::print(\"Random from the array {}\\n\", array);\n    for (n = 0; n &lt; n_samples; ++n) std::print(\"{} \", gen.sample(array));\n    std::print(\"\\n\");\n}\nOutput:\nCharacters from ['a','z']\n'x' 'd' 'n'\nIntegers from [1,10]\n2 10 7\nReals from[1,10)\n2.17 3.08 5.18\nNormals with mean 70 and std-dev 15\n92.30 78.33 66.20\nBinomials with 6 trials and P[success] = 0.5\n4 1 2\nRandom from the array [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\n2 4 4"
+  },
+  {
+    "objectID": "pages/sample.html#multiple-samples",
+    "href": "pages/sample.html#multiple-samples",
+    "title": "xso::generator — Sampling Methods",
+    "section": "Multiple Samples",
+    "text": "Multiple Samples\nWe provide methods to extract multiple samples without replacement from various sources.\n\nFrom Containers\nWe have methods to copy samples from a container without replacement.\ntemplate&lt;std::input_iterator Src, typename Dst&gt;\nconstexpr Dst\n1sample(Src b, Src e, Dst dst, std::unsigned_integral auto n);\n\ntemplate&lt;typename Src, typename Dst&gt;\nconstexpr auto\n2sample(const Src &src, Dst dst, std::unsigned_integral auto n);\n\n1\n\nPicks n elements from the sequence \\([b,e)\\) without replacement and copies the chosen samples into dst. Returns the end of dst.\n\n2\n\nPicks n elements from the container src without replacement and copies the chosen samples into dst. Returns the end of dst.\n\n\nThese methods will preserve the order of the selected elements. You can use the shuffle method to mix those up.\nView std::sample for more details.\n\n\nFrom Distributions\nThere is also a method to copy samples from an arbitrary distribution into a destination.\ntemplate&lt;typename Dst&gt;\nconstexpr Dst\n1sample(Distribution auto &dist, Dst dst, std::unsigned_integral auto n);\n\n1\n\nExtracts n variates from the distribution dist and puts them into dst. Returns the end of dst.\n\n\n\n\nExamples\nExtract multiple samples from a container or a distribution:\n#include &lt;utilities/utilities.h&gt;\n#include &lt;xoshiro.h&gt;\nint main()\n{\n    xso::rng gen;\n\n    constexpr std::size_t N = 10;\n    constexpr std::size_t K = N / 2;\n\n    std::array&lt;int, N&gt; u;\n    std::iota(u.begin(), u.end(), 0);\n    std::print(\"Population: {}\\n\", u);\n\n    std::array&lt;int, K&gt; u_samples;\n1    gen.sample(u, u_samples.begin(), u_samples.word_count());\n    std::print(\"Samples:    {}\\n\", u_samples);\n\n    std::normal_distribution nd{70., 15.};\n    std::array&lt;double, N&gt; v;\n2    gen.sample(nd, v.begin(), v.word_count());\n    std::print(\"Population: {::4.2f}\\n\", v);\n\n    std::array&lt;double, K&gt; v_samples;\n3    gen.sample(v, v_samples.begin(), v_samples.word_count());\n    std::print(\"Samples:    {::4.2f}\\n\", v_samples);\n}\n\n1\n\nGenerate 5 samples from the population of 10 elements.\n\n2\n\nGenerate 10 samples from a normal distribution.\n\n3\n\nGenerate 5 samples from that array we just generated.\n\n\nOutput:\nPopulation: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\n1Samples:    [0, 2, 6, 7, 8]\nPopulation: [66.50, 78.99, 70.24, 58.61, 53.95, 48.18, 74.63, 43.87, 82.07, 60.32]\n2Samples:    [53.95, 48.18, 43.87, 82.07, 60.32]\n\n1\n\nNote that order is preserved by these samples.\n\n2\n\nThat is also true here.\n\n\n\n\nSee Also\nstd::sample\nshuffle"
+  },
+  {
+    "objectID": "pages/flip.html",
+    "href": "pages/flip.html",
+    "title": "xso::generator — Coin Flips & Dice Rolls",
+    "section": "",
+    "text": "\\[\n\\newcommand{\\FF}{\\mathbb{F}_2}\n\\newcommand{\\bold}[1]{\\mathbf{#1}}\n\\newcommand{\\mod}[2]{ {#1 \\, \\mathrm{mod} \\, #2}}\n\\]\n\n\n\n\n\n\n\n\n\nWe have a method that returns the result of flipping a possibly biased coin and another that returns the result of rolling a fair dice with an arbitrary number of sides:\n1constexpr bool flip(double p = 0.5);\n2constexpr int  roll(int n = 6);\n\n1\n\nReturns the result of flipping a coin where p is the probability of getting a true result.\n\n2\n\nReturns an integer in the range \\([1, n]\\) where each number is equally likely to be returned.\n\n\nExample:\n#include &lt;xoshiro.h&gt;\nint main()\n{\n    xso::rng gen;\n    std::size_t n_trials = 600'000;\n    std::size_t count = 0;\n    for(std::size_t n = 0; n &lt; n_trials; ++n) if(gen.flip()) count++;\n    std::cout &lt;&lt; count &lt;&lt; \" heads from \" &lt;&lt; n_trials &lt;&lt; \" fair coin flips.\\n\";\n\n    count = 0;\n    for(std::size_t n = 0; n &lt; n_trials; ++n) if(gen.roll() == 4) count++;\n    std::cout &lt;&lt; count &lt;&lt; \" fours from \" &lt;&lt; n_trials &lt;&lt; \" six-sided dice rolls.\\n\";\n}\nOutput: Varies from run to run\n299620 heads from 600000 fair coin flips.\n100061 fours from 600000 six-sided dice rolls.\n\nSee Also\nsample\nshuffle\n\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "pages/shuffle.html",
+    "href": "pages/shuffle.html",
+    "title": "xso::generator — Shuffling",
+    "section": "",
+    "text": "\\[\n\\newcommand{\\FF}{\\mathbb{F}_2}\n\\newcommand{\\bold}[1]{\\mathbf{#1}}\n\\newcommand{\\mod}[2]{ {#1 \\, \\mathrm{mod} \\, #2}}\n\\]\n\n\n\n\n\n\n\n\n\nWe have methods to shuffle the elements in a sequence or a container:\ntemplate&lt;std::random_access_iterator Iter&gt;\n1constexpr void shuffle(Iter b, Iter e);\n\ntemplate&lt;typename Container&gt;\n2constexpr void shuffle(Container &c);\n\n1\n\nShuffles the elements of the iteration \\([b,e)\\).\nNo error checking is done and the behavior is undefined if \\(e &lt; b\\).\n\n2\n\nShuffles the elements of container c.\nThis works on any container that supports std::begin(c) & std::end(c).\n\n\nExample:\n#include &lt;xoshiro.h&gt;\n#include \"utilities/utilities.h\"\nint main()\n{\n    std::array&lt;int, 10&gt; u;\n    std::iota(u.begin(), u.end(), 0);\n    std::cout &lt;&lt; std::format(\"Original: {}\\n\", u);\n    xso::rng gen;\n    gen.shuffle(u);\n    std::cout &lt;&lt; std::format(\"Shuffled: {}\\n\", u);\n}\nOutput: Will vary from run to run\nOriginal: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\nShuffled: [4, 5, 7, 9, 0, 8, 2, 1, 3, 6]\n\nSee Also\nsample\n\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "pages/jump_coefficients.html",
+    "href": "pages/jump_coefficients.html",
+    "title": "xso::generator — Jump Coefficients",
+    "section": "",
+    "text": "\\[\n\\newcommand{\\FF}{\\mathbb{F}_2}\n\\newcommand{\\bold}[1]{\\mathbf{#1}}\n\\newcommand{\\mod}[2]{ {#1 \\, \\mathrm{mod} \\, #2}}\n\\]\nWe have a non-member function that returns the coefficients for the jump polynomial that can be used to efficiently move a generator or State ahead in its random number stream:\nThe template parameter State type can be either a full xso::generator or State class as both have the methods needed for the function to succeed.\nThese functions returns the coefficients of a polynomial that will jump the generator or State ahead by either \\(J = N\\) or \\(J = 2^N\\) steps. By default \\(J = N\\) but if the final argument is true then \\(J = 2^N\\) which allows for huge jumps like \\(J = 2^{100}\\) that would overflow normal integer arguments.\nThe jump polynomial is returned as a set of coefficients packed into a std::array of words. That array can be passed to the jump function to perform multiple jumps of size \\(J\\)."
+  },
+  {
+    "objectID": "pages/jump_coefficients.html#the-idea",
+    "href": "pages/jump_coefficients.html#the-idea",
+    "title": "xso::generator — Jump Coefficients",
+    "section": "The Idea",
+    "text": "The Idea\nSuppose there are \\(n\\) bits of state packed into \\(n_w\\) words.\nThe corresponding transition matrix over \\(\\FF\\) will be \\(n \\times n\\) and will be of full rank with a monic characteristic polynomial \\(c(x)\\).\nFor a jump of size \\(J\\) the jump polynomial is the residual of \\(x^J\\) with respect to \\(c(x)\\): \\[\n    j(x; J) \\equiv \\mod{x^J}{c(x)}.\n\\] For a given jump size \\(J\\) our function first gets the precomputed coefficients for \\(c(x)\\) by calling to characteristic_coefficients.\nAssuming that succeeds, it then performs the needed polynomial reduction to compute the coefficients of \\(j(x; J)\\): \\[\n    j(x; J) = j_0 + j_1 x + \\cdots + j_{n-1} x^{n-1}.\n\\] The computation packs the \\(n\\) coefficients \\(j_0, j_1, \\ldots, j_{n-1}\\) into \\(n_w\\) words of an array it returns to the user. The jump method uses that array of coefficients to perform jumps of size \\(J\\)."
+  },
+  {
+    "objectID": "pages/jump_coefficients.html#the-details",
+    "href": "pages/jump_coefficients.html#the-details",
+    "title": "xso::generator — Jump Coefficients",
+    "section": "The Details",
+    "text": "The Details\nThe technique is fully explained in the jump technique page.\nExample\n#include &lt;xoshiro.h&gt;\n#include &lt;utilities/utilities.h&gt;\nint main()\n{\n    using rng = xso::rng;\n\n1    std::size_t N = 100;\n    bool N_is_pow2 = true;\n    auto j = xso::jump_coefficients&lt;rng&gt;(N, N_is_pow2);\n    std::print(\"Jump polynomial coefficients for 2^{} steps:\\n{::#x}\\n\\n\", N, j);\n\n2    rng  g0;\n3    auto g1 = g0;   xso::jump(g0, j);\n4    auto g2 = g1;   xso::jump(g1, j);\n\n    std::print(\"Some outputs from the different stream locations ...\\n\");\n    for (std::size_t i = 0; i &lt; 5; ++i)\n        std::print(\"g0() = {:#x}\\tg1() = {:#x}\\tg2() = {:#x}\\n\", g0(), g1(), g2());\n}\n\n1\n\nj is an array that has the coefficients of the jump polynomial for jumps of size \\(2^{100}\\).\n\n2\n\ng0 is a randomly seeded generator with 256 bits of state.\n\n3\n\ng1 is a copy of g0 with its state jumped forward by by \\(2^{100}\\) steps.\n\n4\n\ng2 is a copy of g0 with its state jumped forward by by \\(2 \\times 2^{100}\\) steps.\n\n\nOutput: The stream values vary across runs\nJump polynomial coefficients for 2^100 steps:\n1[0x1fe7835e4087fe62, 0xa797dd2a234c782b, 0x6bef1c2cbcff5536, 0xbf7e526feafe9fab]\n\nSome outputs from the different stream locations ...\ng0() = 0xa1948c61b3586d87       g1() = 0x66c8ab7ef1b5854d       g2() = 0xaa58e75a0f994f96\ng0() = 0x3889856d621eb38d       g1() = 0x3ca9784b4851783f       g2() = 0xee2bd0800a4a6915\ng0() = 0x4bd670c20f991bd3       g1() = 0xb7ac16efe1798c7f       g2() = 0x345a95aaed28520c\ng0() = 0x7f03a920c24e889c       g1() = 0xb385d3c7b74b20fc       g2() = 0xcdab76d410b1f409\ng0() = 0xabff23904d24f67        g1() = 0xd15f94305285313d       g2() = 0x92071bcea847b5ee\n\n1\n\nThe return value from jump_coefficients isn’t hugely useful by itself but it can be used to jump to multiple locations in the random number stream.\n\n\n\nSee Also\ncharacteristic_coefficients\njump\ndiscard"
+  },
+  {
+    "objectID": "pages/class-types.html",
+    "href": "pages/class-types.html",
+    "title": "xso::generator — Class Types and Methods",
+    "section": "",
+    "text": "\\[\n\\newcommand{\\FF}{\\mathbb{F}_2}\n\\newcommand{\\bold}[1]{\\mathbf{#1}}\n\\newcommand{\\mod}[2]{ {#1 \\, \\mathrm{mod} \\, #2}}\n\\]"
+  },
+  {
+    "objectID": "pages/class-types.html#class-types",
+    "href": "pages/class-types.html#class-types",
+    "title": "xso::generator — Class Types and Methods",
+    "section": "Class Types",
+    "text": "Class Types\nThe xso::generator&lt;State, Scrambler&gt; class defines the following types:\n\n\n\n\n\n\n\n\nType\nDefinition\n\n\n\n\nstate_type\nThis is the State template parameter.\n\n\nscrambler_type\nThis is the Scrambler template parameter.\n\n\nword_type\nThis is the State::word_type.\n\n\nresult_type\nThis is the State::word_type.\n\n\n\n\nNotes:\n\nThe word_type is either a 32-bit or 64-bit unsigned integer.\nThe result_type should be defined by the Scrambler but for our generators and many others, the result_type is always identical to the word_type."
+  },
+  {
+    "objectID": "pages/class-types.html#class-methods",
+    "href": "pages/class-types.html#class-methods",
+    "title": "xso::generator — Class Types and Methods",
+    "section": "Class Methods",
+    "text": "Class Methods\nThe xso::generator&lt;State, Scrambler&gt; class defines the following class methods:\n\n\n\n\n\n\n\n\n\nClass Method\nReturn Type\nDescription\n\n\n\n\nword_count()\nstd::size_t\nReturns the number of words of state.\n\n\nbit_count()\nstd::size_t\nReturns the number of bits of state.\n\n\nmin()\nresult_type\nReturns the smallest possible output word.\n\n\nmax()\nresult_type\nReturns the largest possible output word.\n\n\nxso_name()\nstd::string\nReturns a string that can be used as a name for this generator.\n\n\n\n\nNotes:\n\nThese are all declared as static constexpr.\nThe trivial min() and max() methods are needed to satisfy the std::uniform_random_bit_generator concept.\nThe xso_name() method combines the results of the State::xso_name() and the Scrambler::xso_name() class methods to produce an overall “name” for this generator that incorporates the various template parameters it depends on."
+  },
+  {
+    "objectID": "pages/class-types.html#example",
+    "href": "pages/class-types.html#example",
+    "title": "xso::generator — Class Types and Methods",
+    "section": "Example",
+    "text": "Example\nExample: Print some generator parameters\n#include &lt;xoshiro.h&gt;\nint main()\n{\n    using rng = xso::rng;\n    std::cout &lt;&lt; \"Generator Name:        \" &lt;&lt; rng::xso_name() &lt;&lt; '\\n';\n    std::cout &lt;&lt; \"State:                 \" &lt;&lt; rng::state_engine_type::xso_name() &lt;&lt; '\\n';\n    std::cout &lt;&lt; \"Scrambler:             \" &lt;&lt; rng::output_function_type::xso_name() &lt;&lt; '\\n';\n    std::cout &lt;&lt; \"Number of state words: \" &lt;&lt; rng::word_count() &lt;&lt; '\\n';\n    std::cout &lt;&lt; \"Number of state bits:  \" &lt;&lt; rng::bit_count() &lt;&lt; '\\n';\n}\nOutput:\nGenerator Name:         xoshiro&lt;4x64,17,45&gt;star_star&lt;5,7,1&gt;\nState:                  xoshiro&lt;4x64,17,45&gt;\nScrambler:              star_star&lt;5,7,1&gt;\nNumber of state words:  4\nNumber of state bits:   256\n\nSee Also\nState\nScrambler"
+  },
+  {
+    "objectID": "pages/functor.html",
+    "href": "pages/functor.html",
+    "title": "xso::generator — Generation",
+    "section": "",
+    "text": "\\[\n\\newcommand{\\FF}{\\mathbb{F}_2}\n\\newcommand{\\bold}[1]{\\mathbf{#1}}\n\\newcommand{\\mod}[2]{ {#1 \\, \\mathrm{mod} \\, #2}}\n\\]\n\n\n\n\n\n\n\n\n\nWe have core methods that advance the generator’s state and reduce it to a single output word.\n1constexpr result_type operator()();\n2constexpr void        step();\n\n1\n\nReduces the state to a single output word and also calls step() to prepare for the next call.\nThis operator is required by the std::uniform_random_bit_generator concept.\n\n2\n\nThis is a sub-operation of the operator()() method that advances the state by one step without producing any output.\n\n\n\n\n\n\n\n\nTip\n\n\n\nFor the most part, users will rely on operator()() which calls step() as part of its process.\n\n\nExample: Run a randomly seeded generator for several trials\n#include &lt;xoshiro.h&gt;\nint main()\n{\n1    xso::rng gen;\n    for (std::size_t i = 0; i &lt; 10; ++i)\n        std::cout &lt;&lt; \"Call \" &lt;&lt; i &lt;&lt; \": gen() = \" &lt;&lt; gen() &lt;&lt; '\\n';\n}\n\n1\n\nCreate a randomly seeded generator.\nNote that xso::rng is a type alias for xso::rng64 so gen will produce 64-bit outputs.\n\n\nOutput: The specific outputs will vary from run to run\nCall 0: gen() = 6263138263434847173\nCall 1: gen() = 8362716980094561668\nCall 2: gen() = 11879325620643989793\nCall 3: gen() = 6043654542199795453\nCall 4: gen() = 5797233119354578927\nCall 5: gen() = 2824358181435278861\nCall 6: gen() = 16684351809006121981\nCall 7: gen() = 14574163322765470879\nCall 8: gen() = 3664863240348818305\nCall 9: gen() = 3538750318106202103\n\nSee Also\ndiscard\njump\n\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "pages/formatter.html",
+    "href": "pages/formatter.html",
+    "title": "xso::generator — Custom Formatting",
+    "section": "",
+    "text": "\\[\n\\newcommand{\\FF}{\\mathbb{F}_2}\n\\newcommand{\\bold}[1]{\\mathbf{#1}}\n\\newcommand{\\mod}[2]{ {#1 \\, \\mathrm{mod} \\, #2}}\n\\]\n\n\n\n\n\n\n\n\n\nWe specialize the std::formatter class to connect any xso::generator, State, or Scrambler class to std::format and friends.\nAll of our classes have a class method xso_name() that returns a suitable name string.\nWe define a C++ concept to capture that common feature:\ntemplate&lt;typename T&gt;\nconcept has_xso_name_class_method = requires {\n    { T::xso_name() } -&gt; std::convertible_to&lt;std::string&gt;;\n};\nWe use that concept to appropriately specialize the template std::formatter struct:\ntemplate&lt;has_xso_name_class_method T&gt;\nstruct std::formatter&lt;T&gt; {\n    ...\n};\nWe can also define the usual output stream operator:\ntemplate&lt;has_xso_name_class_method T&gt;\nstd::ostream &\noperator&lt;&lt;(std::ostream &s, const T& rhs);\n\nSee Also\nxso_name\nstd::formatter\n\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "pages/get_state.html",
+    "href": "pages/get_state.html",
+    "title": "xso::generator — Read Access to the State",
+    "section": "",
+    "text": "\\[\n\\newcommand{\\FF}{\\mathbb{F}_2}\n\\newcommand{\\bold}[1]{\\mathbf{#1}}\n\\newcommand{\\mod}[2]{ {#1 \\, \\mathrm{mod} \\, #2}}\n\\]\n\n\n\n\n\n\n\n\n\nWe have methods that provide read-only access to the state:\n1constexpr word_type operator[](std::size_t i) const;\n\ntemplate&lt;typename Iter&gt;\n2constexpr void get_state(Iter dst) const;\n\n1\n\nRead-only access to the word i of state.\n\n2\n\nCopies the whole state into the destination dst.\n\n\n\n\n\n\n\n\nNo range checking\n\n\n\nThe index i should be less than word_count(). Calls with larger values of i will result in undefined behavior.\n\n\nExample:\n#include &lt;xoshiro.h&gt;\nint main()\n{\n1    xso::rng g0(1);\n    xso::rng g1(2);\n\n    for(std::size_t i = 0; i &lt; xso::rng::word_count(); ++i) {\n2        std::cout &lt;&lt; \"g0[\" &lt;&lt; i &lt;&lt; \"] = \" &lt;&lt; g0[i] &lt;&lt; '\\t';\n        std::cout &lt;&lt; \"g1[\" &lt;&lt; i &lt;&lt; \"] = \" &lt;&lt; g1[i] &lt;&lt; '\\n';\n    }\n}\n\n1\n\nCreate a pair of generators that are seeded from neighboring integers.\n\n2\n\nPrint each word of state for the two generators.\n\n\nOutput: Varies from run to run\n1g0[0] = 2973750756608955175     g1[0] = 17576013672004619970\ng0[1] = 11413743089567126834    g1[1] = 16442790642303457438\ng0[2] = 4383533935485149688     g1[2] = 3610580237369810524\ng0[3] = 3535799440905119283     g1[3] = 11046704898693758421\n\n1\n\nSeeded g0 and g1 with neighboring values.\nSplitMix64 was used on those seeds to mix them up and get to very different underlying state arrays.\n\n\n\nSee Also\nseed\n\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "pages/discard.html",
+    "href": "pages/discard.html",
+    "title": "xso::generator — Discard Method",
+    "section": "",
+    "text": "\\[\n\\newcommand{\\FF}{\\mathbb{F}_2}\n\\newcommand{\\bold}[1]{\\mathbf{#1}}\n\\newcommand{\\mod}[2]{ {#1 \\, \\mathrm{mod} \\, #2}}\n\\]\n\n\n\n\n\n\n\n\n\nWe have an instance method to advance the state while ignoring the generated outputs.\n1constexpr void discard(std::uint64_t n);\n\n1\n\nCalls the step method n times without recording any output.\n\n\n\n\n\n\n\n\nThis is dumb method!\n\n\n\nThe discard() method is a slow and dumb approach to advancing the state ahead in its orbit. For large values of n, the same thing is achieved in a much more efficient manner by using the jump methods.\n\n\nExample:\n#include &lt;xoshiro.h&gt;\nint main()\n{\n1    xso::rng f;\n2    xso::rng g = f;\n\n    std::size_t n = 10;\n    std::cout &lt;&lt; \"Calling f() \" &lt;&lt; n &lt;&lt; \" times:\\n\";\n    for (std::size_t i = 0; i &lt; 10; ++i)\n        std::cout &lt;&lt; \"Call \" &lt;&lt; i &lt;&lt; \": f() = \" &lt;&lt; f() &lt;&lt; '\\n';\n\n    std::cout &lt;&lt; \"Making sure the jumped forward copy of f matches:\\n\";\n3    g.discard(n);\n4    std::cout &lt;&lt; \"f() = \" &lt;&lt; f() &lt;&lt; '\\n';\n    std::cout &lt;&lt; \"g() = \" &lt;&lt; g() &lt;&lt; '\\n';\n}\n\n1\n\nCreate a randomly seeded RNG.\n\n2\n\nMake a copy of that generator — one with the exact same state.\n\n3\n\nWe have called f() multiple times and now get g to the same point by using the discard method.\n\n4\n\nOne more call to f() and g() to demonstrate they have reached the identical point in their random number streams.\n\n\nOutput: Varies from run to run\nCalling f() 10 times:\nCall 0: f() = 14005126867685016518\nCall 1: f() = 10640180379987258470\nCall 2: f() = 16367042443805637715\nCall 3: f() = 10852054829793099863\nCall 4: f() = 17355665557991136519\nCall 5: f() = 17884768122497745551\nCall 6: f() = 8981322931967380562\nCall 7: f() = 9724290714337168340\nCall 8: f() = 11553202802824749703\nCall 9: f() = 5222239817378406001\nMaking sure the jumped forward copy of f matches:\nf() = 14624851349943862646\ng() = 14624851349943862646\n\nSee Also\njump\n\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "pages/Scrambler.html",
+    "href": "pages/Scrambler.html",
+    "title": "Scrambler",
+    "section": "",
+    "text": "\\[\n\\newcommand{\\FF}{\\mathbb{F}_2}\n\\newcommand{\\bold}[1]{\\mathbf{#1}}\n\\newcommand{\\mod}[2]{ {#1 \\, \\mathrm{mod} \\, #2}}\n\\]",
+    "crumbs": [
+      "Home",
+      "Scramblers",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "pages/Scrambler.html#introduction",
+    "href": "pages/Scrambler.html#introduction",
+    "title": "Scrambler",
+    "section": "Introduction",
+    "text": "Introduction\nA Scrambler reduces the current State to a single output word which in our case will always be a 32-bit or 64-bit unsigned integer.\nOur xso::generator class takes a State and a Scrambler template parameter.\nThe requirements for the former are discussed here.\nThe requirements for the Scrambler are rather simple:\n\nRequired Methods\n\n\n\n\n\n\n\n\nItem\nDescription\n\n\n\n\nxso_name()\nClass method that should return a name for the output function.\n\n\noperator()(const auto& state)\nInstance method that reduces the passed state to a single output word.",
+    "crumbs": [
+      "Home",
+      "Scramblers",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "pages/Scrambler.html#our-scrambler-classes",
+    "href": "pages/Scrambler.html#our-scrambler-classes",
+    "title": "Scrambler",
+    "section": "Our Scrambler Classes",
+    "text": "Our Scrambler Classes\nWe provide four scrambler classes in the xso namespace:\n1template&lt;auto S, std::size_t w&gt;\nstruct xso::star;\n\n2template&lt;auto S, auto R, auto T, std::size_t w&gt;\nstruct xso::star_star;\n\n3template&lt;std::size_t w0, std::size_t w1&gt;\nstruct xso::plus;\n\n4template&lt;auto R, std::size_t w0, std::size_t w1&gt;\nstruct xso::plus_plus;\n\n1\n\nFunctor: state[w] * S\n\n2\n\nFunctor: std::rotl(state[w] * S, R) * T\n\n3\n\nFunctor: state[w0] + state[w1]\n\n4\n\nFunctor: std::rotl(state[w0] + state[w1], R) + state[w0]\n\n\n\nTemplate Parameters\n\n\n\n\n\n\n\n\nParameter\nDescription\n\n\n\n\nw, w0, w1\nIndices for specific words of state to work on/scramble.\n\n\nS, T\nScaling parameters.\n\n\nR\nRotation parameter.",
+    "crumbs": [
+      "Home",
+      "Scramblers",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "pages/Scrambler.html#methods",
+    "href": "pages/Scrambler.html#methods",
+    "title": "Scrambler",
+    "section": "Methods",
+    "text": "Methods\n\n\n\n\n\n\n\n\nItem\nDescription\n\n\n\n\noperator()(const auto& state)\nReturns the values given above.\n\n\nxso_name()\nClass method that returns a name for the output function which incorporates all the template parameters.\n\n\n\n\nNotes:\n\nThe name returned by the xso_name() class method might look like star_star&lt;5,7,9,1&gt;.\nThe names for the output functions match the ones used in this original paper.\n\n\nSee Also\nState\nxso::generator",
+    "crumbs": [
+      "Home",
+      "Scramblers",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "The xoshiroLibrary",
+    "section": "",
+    "text": "\\[\n\\newcommand{\\FF}{\\mathbb{F}_2}\n\\newcommand{\\bold}[1]{\\mathbf{#1}}\n\\newcommand{\\mod}[2]{ {#1 \\, \\mathrm{mod} \\, #2}}\n\\]",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html#introduction",
+    "href": "index.html#introduction",
+    "title": "The xoshiroLibrary",
+    "section": "Introduction",
+    "text": "Introduction\nxoshiro.h is a single header file, C++ implementation of the complete family of xoshiro/xoroshiro pseudorandom uniform number generators.\nDavid Blackman & Sebastiano Vigna introduced these efficient, linear, pseudorandom number generators that have relatively small state but which, nonetheless, display excellent statistical properties. This paper provides the full mathematical details.\nThe generators satisfy C++’s std::uniform_random_bit_generator concept and can drive any of the distributions defined in the standard library.\nWe provide efficient jump-ahead methods for arbitrary jump sizes, making them particularly suitable for parallel processing applications. They are excellent replacements for the “standard” Mersenne Twister generator.\nWhile the implementation is very general, there are simple type aliases for specific preferred instantiations that are known to work well in most situations.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html#installation",
+    "href": "index.html#installation",
+    "title": "The xoshiroLibrary",
+    "section": "Installation",
+    "text": "Installation\nThis library is header-only, so there is nothing to compile & link — drop the xoshiro.h file somewhere convenient, and you are good to go.\nAlternatively, if you are using CMake, you can use the standard FetchContent module by adding a few lines to your project’s CMakeLists.txt file:\ninclude(FetchContent)\nFetchContent_Declare(xoshiro URL https://github.com/nessan/bit/releases/download/current/xoshiro.zip)\nFetchContent_MakeAvailable(xoshiro)\nThis command downloads and unpacks an archive of the current version of xoshiro to your project’s build folder. You can then add a dependency on xoshiro::xoshiro, a CMake alias for xoshiro. FetchContent will automatically ensure the build system knows where to find the downloaded header files and any needed compiler flags.\nUsed like this, FetchContent will only download a minimal library version without any redundant test code, sample programs, documentation files, etc.\n\n\n\n\n\n\nLibrary versions\n\n\n\nThe shown URL gets the current version of the library—whatever is in the main branch. For a fixed, stable library version (say release 2.0.0), use a URL parameter like: https://github.com/nessan/xoshiro/releases/download/2.0.0/xoshiro.zip.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html#example",
+    "href": "index.html#example",
+    "title": "The xoshiroLibrary",
+    "section": "Example",
+    "text": "Example\nHere is a simple example where we use the default xoshiro generator to sample a normal distribution from the standard library.\nWe have copied the sample code from std::normal_distribution webpage and used xso::rng as a drop-in replacement for std::mersenne_twister_engine.\n1#include &lt;xoshiro.h&gt;\n#include &lt;random&gt;\n#include &lt;map&gt;\n#include &lt;iomanip&gt;\n\nint main()\n{\n2    xso::rng gen;\n\n    // lambda: draws a sample from a normal distribution and rounds it to an integer.\n    std::normal_distribution d{5.0, 2.0};\n    auto random_int = [&d, &gen] { return int(std::round(dist(gen))); };\n\n    // Run lots of trials and create a histogram of the results in integer buckets.\n    std::map&lt;int, int&gt; hist{};\n    for (int n = 0; n != 25'000; ++n) ++hist[random_int()];\n\n    // Print that histogram.\n    for (auto [bucket, count] : hist) {\n        auto n = static_cast&lt;std::size_t&gt;(count / 100);\n        std::cout &lt;&lt; std::setw(2) &lt;&lt; bucket &lt;&lt; ' ' &lt;&lt; std::string(n, '*') &lt;&lt; '\\n';\n    }\n}\n\n1\n\nEverything is in the single xoshiro.h header file. The classes, functions etc. are all in the xso namespace.\n\n2\n\nThis is a type alias for xso::rng64 which produces 64-bit outputs from a specific xoshiro generator with 256 bits of state.\n\n\nOutput:\n-3\n-2\n-1\n 0 **\n 1 *******\n 2 ****************\n 3 *****************************\n 4 ********************************************\n 5 ************************************************\n 6 ********************************************\n 7 *****************************\n 8 ****************\n 9 *******\n10 **\n11\n12\n14",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html#implementation",
+    "href": "index.html#implementation",
+    "title": "The xoshiroLibrary",
+    "section": "Implementation",
+    "text": "Implementation\nC versions of the generators are available on the author’s website. Wrapping those routines so they conform to the std::uniform_random_bit_generator concept is a trivial exercise.\nHowever, our implementation in xoshiro.h is distinguished in several other ways:\n\nGenerality\nUsing the code in xoshiro.h you can create any member of the xoshiro/xoroshiro family.\nWe have State classes that are templatized across the number of bits of state, and the parameters (labelled A, B, and C in the literature) that determine how the state is advanced from step to step.\nScrambler classes are templatized across the other parameters (labelled R, S, and T in the literature) that determine how the higher dimensional state is scrambled/reduced to single 32 or 64 bit output words.\nThis means you can instantiate any generator in the xoshiro/xoroshiro family.\n\n\n\n\n\n\nNo compromise on speed\n\n\n\nFor the reasonable optimization levels you are likely to employ in any numerical code, the C++ versions perform identically to the simpler-looking C versions linked above.\n\n\n\n\nSimplicity\nWhile you can instantiate any generator in the xoshiro/xoroshiro family we also recognize that only a very limited number of those generators have ever been properly vetted for suitability as being “good”.\nTherefore, we provide some short and sweet type aliases for the recommended default generators you should use in most cases.\n\n\nArbitrary Jumps\nWe provide methods to advance a generator by arbitrary and potentially huge numbers of steps. This contrasts to the C versions, which only define a limited number of jump possibilities.\nVery large jumps partition a single random number stream into non-overlapping sub-streams. In parallel processing applications, the sub-streams drive independent jobs running on different compute cores.\n\n\n\n\n\n\nArbitrary jumps do not need bit\n\n\n\nEven if you only use the single xoshiro.h header file without incorporating the bit library, you can still jump any of the predefined type-aliased xoshiro/xoroshiro variants by arbitrary numbers of steps.\n\n\n\n\nExtra Analysis\nExtra non-member functions for generator analysis are defined if the [`bit] library is available.\nbit is a C++ library for doing linear algebra over GF(2) the simplest field of two elements \\(\\{0,1\\}\\) where the usual arithmetic operations are performed mod 2. The bit library is header only so easily incorporated into any application.\nIf it is available then xoshiro.h defines some extra functions that let you access the generator’s transition matrix and use/analyze that in various ways.\n\n\nSampling Methods\nThe C++ standard library follows a common design pattern for the facilities in its &lt;random&gt; header. It maintains a strict separation between the classes that produce random bits and others that use those bits.\nUniform random bit generators produce streams of uniformly distributed output words (usually 32-bit or 64-bit unsigned integers). Other classes and functions shape those core streams to simulate a desired distribution over some field of interest (for example, to generate variates from a uniform distribution of reals in the range 0 to 1).\nThe idea is reasonable enough. You can swap out the uniform random bit generator for a better one and continue to use the other functions without change.\nHowever, this interface is quite complicated for the end user — particularly for a user that has no idea, or interest in, how all the generator/distribution machinery works. Perhaps you google “c++ random number generator” and get advice to use the std::mersenne_twister_engine class. However, that just produces those unsigned output words that are useless by themselves. To simulate something as simple as a die roll, you must feed the thing into some other class and use that to get the required effect.\nFor this reason, we enrich our xoshiro/xoroshiro classes with some utility methods that interface directly with the various distribution classes in the standard &lt;random&gt; header. That dice roll becomes something as simple as:\nxso::rng gen;\nstd::cout &lt;&lt; \"Six sided dice roll: \" &lt;&lt; gen.roll() &lt;&lt; '\\n';\nSimilarly, you can ask one of our generators to flip a coin or shuffle the elements in a container.\nPerhaps most importantly the generators directly support the idea of sampling. This includes pulling samples from a range, from a container, or an arbitrary distribution.\nHere are some examples:\n1std::cout &lt;&lt; gen.sample(1, 10)   &lt;&lt; '\\n';\n2std::cout &lt;&lt; gen.sample(1., 10.) &lt;&lt; '\\n';\n\nstd::normal_distribution nd{70., 15.};\n3std::cout &lt;&lt; gen.sample(nd);\n\nstd::array&lt;double, 10&gt; v;\n4gen.sample(nd, v.begin(), v.word_count());\n\nstd::array&lt;double, 5&gt; u;\n5gen.sample(v, u.begin(), u.word_count());\n\n6ge.shuffle(u);\n\n1\n\nPrints a random integer from \\([1,10]\\) where each integer is equally likely to occur.\n\n2\n\nPrints a random real from a uniform distribution over \\([1,10)\\)\n\n3\n\nPrints a random variate from a normal distribution with mean 70 and standard deviation 15.\n\n4\n\nFills an array v with 10 random variates from that same distribution.\n\n5\n\nFills an array u with 5 elements drawn from v without replacement.\n\n6\n\nShuffles the elements of u.\n\n\n\n\n\n\n\n\nOther distributions can be used\n\n\n\nOf course, the generators can also still be used as uniform random bit generators. The extra sampling methods etc. just make them much more useful out of the box.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "index.html#documentation",
+    "href": "index.html#documentation",
+    "title": "The xoshiroLibrary",
+    "section": "Documentation",
+    "text": "Documentation\nThe project’s source code repository is here.\nYou can read the project’s documentation here.\nThe documentation site was generated using Quarto.\n\nContact\nYou can contact me by email here.\n\n\nCopyright and License\nCopyright (c) 2023-present Nessan Fitzmaurice.\nYou can use this software under the MIT license.",
+    "crumbs": [
+      "Home",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "pages/partition.html",
+    "href": "pages/partition.html",
+    "title": "The xso::partition Class",
+    "section": "",
+    "text": "\\[\n\\newcommand{\\FF}{\\mathbb{F}_2}\n\\newcommand{\\bold}[1]{\\mathbf{#1}}\n\\newcommand{\\mod}[2]{ {#1 \\, \\mathrm{mod} \\, #2}}\n\\]",
+    "crumbs": [
+      "Home",
+      "Stream Partitioning",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "pages/partition.html#introduction",
+    "href": "pages/partition.html#introduction",
+    "title": "The xso::partition Class",
+    "section": "Introduction",
+    "text": "Introduction\nThe xso::partition class partitions a single stream of random numbers into a collection of non-overlapping sub-streams. This is primarily useful for setting up parallel computations.",
+    "crumbs": [
+      "Home",
+      "Stream Partitioning",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "pages/partition.html#declaration",
+    "href": "pages/partition.html#declaration",
+    "title": "The xso::partition Class",
+    "section": "Declaration",
+    "text": "Declaration\nThe partition class is in the xso namespace and is declared as follows:\nnamespace xso {\n    template&lt;typename RNG&gt; class partition;\n}\n\nTemplate Parameter\nThe template parameter RNG should satisfy the requirements of a State type. In particular, it should have a working class method characteristic_coefficients.",
+    "crumbs": [
+      "Home",
+      "Stream Partitioning",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "pages/partition.html#instance-methods",
+    "href": "pages/partition.html#instance-methods",
+    "title": "The xso::partition Class",
+    "section": "Instance Methods",
+    "text": "Instance Methods\nThe xso::partition class has just a couple of instance methods:\n\nConstruction\npartition(const State& gen, std::size_t n_partitions);\nHere gen is a parent generator or State and we want to partition its random state stream into n_partitions non-overlapping sub-streams. Each of those will be owned by a copy of gen that is seeded with the correct starting state for the sub-stream.\nThe constructor computes an appropriate jump size \\(J\\) that depends on the n_partitions argument. It then uses the State characteristic coefficients to compute an appropriate jump polynomial for jumps of size \\(J\\).\n\n\nThe next() Method\nState next();\nThis returns a new State that is a copy of the parent gen but seeded at a the start of the next partition. The returned RNG will be the same as gen with its state jumped along by ome multiple of \\(J\\) steps",
+    "crumbs": [
+      "Home",
+      "Stream Partitioning",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "pages/partition.html#example",
+    "href": "pages/partition.html#example",
+    "title": "The xso::partition Class",
+    "section": "Example",
+    "text": "Example\nThe xso::partition class is best illustrated with a sketch example.\nExample: Setting up for parallel processing\n#include &lt;xoshiro.h&gt;\nint main()\n{\n1    std::size_t     n_cores = available_cores(...);\n2    xso::rng        gen;\n3    xso::partition  partition(gen, n_cores);\n    for(std::size_t job = 0; job &lt; n_cores; ++job) {\n4        spawn_job(partition.next(), ...);\n    }\n    ...\n}\n\n1\n\nSome method that returns the number of compute cores we have available.\n\n2\n\nCreate a randomly seeded parent generator.\n\n3\n\nThis constructs a partition of the parent state stream into n_cores non-overlapping pieces.\n\n4\n\nAnd we’re off spawning an independent job for each core handing each its own sub-stream generator to work with.\n\n\nIn this sketch we start by determining how many cores we have available for the simulation. That may be a fixed number or perhaps there is some function that determines the number on the fly. For the sake of this example let’s suppose that n_cores comes back as 100.\nWe want to partition the random number stream from gen into 100 pieces and hand each core its own sub-stream to work with. So we set up an xso::partition object to do just that.\nThe loop spawns jobs where each one is given its own random number generator. The generators come from calling the partition.next() method. The xso::partition class ensures that these generators really are identical to the original gen except that they are seeded appropriately far along to the next sub-stream.\nThe parent generator has 256 bits of state so its random state stream has \\(2^{256}\\) slots. This means that all the sub-streams still have vast number of random numbers to use up before there is any chance of getting overlaps.",
+    "crumbs": [
+      "Home",
+      "Stream Partitioning",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "pages/partition.html#implementation-note",
+    "href": "pages/partition.html#implementation-note",
+    "title": "The xso::partition Class",
+    "section": "Implementation Note",
+    "text": "Implementation Note\nIn the example above we are using a random number generator xso::rng which has 256 bits of state. Those generators will step through an enormous \\(2^{256}\\) states before repeating the cycle.\nWe have 100 cores available for parallel computation. Ideally then we want to partition the random number stream from gen into a 100 pieces and hand each core its own non overlapping sub-stream of size: \\[\n\\frac{2^{256}}{100}.\n\\] However, that number will overflow any normal 32-bit or 64-bit integer! Instead the partition class will actually create some number of sub-stream that is a power of two close to, but larger than 100. In this case that power will be 7 as \\(2^7 = 128 \\ge 100\\).\nThe number of created non-overlapping partitions is then actually 128 instead of 100.\nWe only use 100 of the 128 as we spawn independent jobs so each partition is therefore slightly smaller than the ideal and of course we are not using any of the final 28 partitions at all. However, each of the sub-streams still has some \\(2^{256 - 7} = 2^{249}\\) random numbers available. That is vastly more than a job on any present day computer will ever consume so the “wastage” is completely insignificant.\n\n\n\n\n\n\nThe corresponding precomputed characteristic coefficients must be available\n\n\n\nThis class requires that State has its pre-computed characteristic coefficients available. This is true for all our type aliased recommended generators.\n\n\n\nSee Also\ncharacteristic_coefficients\njump_coefficients\njump\ndiscard\nThe jump technique",
+    "crumbs": [
+      "Home",
+      "Stream Partitioning",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "pages/bit.html",
+    "href": "pages/bit.html",
+    "title": "xso::generator — Extra Functions Using bit",
+    "section": "",
+    "text": "\\[\n\\newcommand{\\FF}{\\mathbb{F}_2}\n\\newcommand{\\bold}[1]{\\mathbf{#1}}\n\\newcommand{\\mod}[2]{ {#1 \\, \\mathrm{mod} \\, #2}}\n\\]"
+  },
+  {
+    "objectID": "pages/bit.html#introduction",
+    "href": "pages/bit.html#introduction",
+    "title": "xso::generator — Extra Functions Using bit",
+    "section": "Introduction",
+    "text": "Introduction\nbit is a C++ library for doing linear algebra over GF(2) the simplest field of two elements \\(\\{0,1\\}\\) where the usual arithmetic operations are performed mod 2. The bit library is header only so easily incorporated into any application. If it is available the xoshiro.h header file defines some extra non-member functions:\n\n\n\n\n\n\nIncorporating bit\n\n\n\nThe extra functions are defined only if the compiler flag BIT is set.\nSee the CMakeLists.txt file at the root of the xoshiro repo for an example of how to automatically download the needed bit headers and incorporate them into a project.\n\n\n\n\n\n\n\n\nFunctions work on either a State or an xso::generator\n\n\n\nAny xso::generator satisfies all requirements of the State concept."
+  },
+  {
+    "objectID": "pages/bit.html#transition-matrix",
+    "href": "pages/bit.html#transition-matrix",
+    "title": "xso::generator — Extra Functions Using bit",
+    "section": "Transition Matrix",
+    "text": "Transition Matrix\ntemplate&lt;typename State&gt;\nauto\n1transition_matrix();\n\n1\n\nReturns the transition matrix for a State as a bit::matrix.\nNote that any xso::generator also satisfies the State concept.\n\n\nAs we explain here one can always view the State’s step function as being the product of a transition bit-matrix \\(T\\) with the state bit-vector \\(\\bold{s}\\) \\[\n\\bold{s} \\gets T \\cdot \\bold{s}.\n\\] If there are \\(n\\) bits of state, then in this view, \\(\\bold{s}\\) is a bit-vector of size \\(n\\), and \\(T\\) is a \\(n \\times n\\) bit-matrix. For example, the State underlying the xso::rng64 generator has 256 bits of state so \\(\\bold{s}\\) is a \\(256\\) element bit-vector and \\(T\\) is a \\(256 \\times 256\\) bit-matrix.\nIn practice, the state bit-vector is stored as an array of ordinary words and the transition matrix \\(T\\) is only implicitly defined by the step method which works directly on those state words. There are no references to either bit-vectors or bit-matrices.\nHowever, using the bit library, which efficiently performs linear algebra over \\(\\FF\\), we can get an explicit representation of \\(T\\) as a bit::matrix.\nExample: The transition matrix for xso::rng32\n#include &lt;xoshiro.h&gt;\nint main()\n{\n    auto T = xso::transition_matrix&lt;xso::rng32&gt;();\n    std::cout &lt;&lt; T.to_string() &lt;&lt; '\\n';\n}\nOutput: The full output has been truncated here.\n1000000000000000000000000000000010000000000000000000 ...\n0100000000000000000000000000000001000000000000000000 ...\n0010000000000000000000000000000000100000000000000000 ...\n0001000000000000000000000000000000010000000000000000 ...\n...\n...\n0000000000000000000000000000000000000000000000000100 ...\n0000000000000000000000000000000000000000000000000010 ...\n0000000000000000000000000000000000000000000000000001 ...\n0000000000000000000000000000000000000000000000000000 ..."
+  },
+  {
+    "objectID": "pages/bit.html#characteristic-polynomial",
+    "href": "pages/bit.html#characteristic-polynomial",
+    "title": "xso::generator — Extra Functions Using bit",
+    "section": "Characteristic Polynomial",
+    "text": "Characteristic Polynomial\nWe also have a method to extract the characteristic polynomial for \\(T\\):\ntemplate&lt;typename State&gt;\nauto\n1characteristic_polynomial();\n\n1\n\nReturns the characteristic polynomial of the State’s transition matrix as a bit::polynomial.\n\n\nThe \\(n \\times n\\) transition matrix \\(T\\) has a characteristic polynomial \\(c(x)\\) of degree \\(n\\): \\[\nc(x) = c_0 + c_1 x + \\cdots + c_n x^n.\n\\] This is a polynomial over \\(\\FF\\) so \\(c_i \\in \\{0, 1\\}\\) for \\(i = 0, \\ldots, n\\).\nWe have a method to extract this polynomial and return it as a bit::polynomial of size \\(n+1\\).\n\n\n\n\n\n\nThe characteristic polynomial will be monic\n\n\n\nAll our transition matrices will be of full rank and the characteristic polynomial will have degree \\(n\\). So \\(c(x)\\) is monic and we always have \\(c_n = 1\\).\n\n\nExample: The characteristic polynomial for xso::rng32\n#include &lt;xoshiro.h&gt;\nint main()\n{\n    auto c = xso::characteristic_polynomial&lt;xso::rng32&gt;();\n    std::cout &lt;&lt; \"c(x) = \" &lt;&lt; c &lt;&lt; '\\n';\n}\nOutput:\n1c(x) = 1 + x^10 + x^11 + x^12 + x^13 + x^14 + x^15 + x^19 + x^20 + x^25 + x^26 + x^27 + x^28 + x^30 + x^31 + x^33 + x^34 + x^36 + x^37 + x^39 + x^40 + x^42 + x^43 + x^44 + x^47 + x^51 + x^54 + x^56 + x^57 + x^59 + x^60 + x^64 + x^68 + x^69 + x^71 + x^74 + x^76 + x^78 + x^81 + x^85 + x^86 + x^97 + x^101 + x^103 + x^104 + x^106 + x^109 + x^110 + x^114 + x^115 + x^116 + x^117 + x^118 + x^119 + x^128\n\n1\n\nNote that the polynomial is monic as \\(c_{128} = 1\\).\n\n\n\n\n\n\n\n\nEmbedded characteristic polynomial coefficients\n\n\n\nThe xoshiro.h header file contains the characteristic polynomial coefficients for all the predefined type aliased generators. Those coefficients are packed into standard arrays of ordinary words where the leading \\(c_n = 1\\) coefficient is dropped. See the [characteristic_coefficient] class method documentation for more details."
+  },
+  {
+    "objectID": "pages/bit.html#jump-polynomial",
+    "href": "pages/bit.html#jump-polynomial",
+    "title": "xso::generator — Extra Functions Using bit",
+    "section": "Jump Polynomial",
+    "text": "Jump Polynomial\nThe State characteristic polynomial is primarily used to compute a jump polynomial that can rapidly move the engine ahead by \\(N\\) steps where \\(N\\) can be huge — e.g. \\(N = 2^{100}\\).\ntemplate&lt;std::unsigned_integral Block, typename Allocator&gt;\nauto\n1jump_polynomial(const bit::polynomial&lt;Block, Allocator&gt;& c, std::size_t N, bool N_is_pow2 = false);\n\n1\n\nReturns a bit::polynomial that can rapidly move the State ahead by \\(N\\) or \\(2^N\\) steps.\nThe c argument should be the bit::polynomial returned by the characteristic_polynomial() function.\n\n\nAs explained here the jump polynomial that can advance a state engine by \\(N\\) steps is given by: \\[\nr(x) = \\mod{x^N}{c(x)},\n\\] where \\(c(x)\\) is the engine’s characteristic polynomial which is degree \\(n\\) so \\(r(x)\\) has degree of at most \\(n-1\\). The xso::jump_polynomial function returns the coefficients of \\(r(x)\\) as bit::polynomial that can in turn be used as the argument to the non-member xso::jump function described next.\n\n\n\n\n\n\nVery large jumps\n\n\n\nWe often want to jump by an \\(N \\gg 1\\) that is too large to fit into a 64-bit word. By setting N to 100 and the N_is_pow2 argument to true you can get the coefficients of the jump polynomial for \\(N = 2^{100}\\) steps.\n\n\nExample: A jump polynomial for xso::rng32 and stem:[N=2^{100}] steps\n#include &lt;xoshiro.h&gt;\nint main()\n{\n    auto c = xso::characteristic_polynomial&lt;xso::rng32&gt;();\n1    auto j = xso::jump_polynomial(c, 100, true);\n    std::cout &lt;&lt; \"j(x) = \" &lt;&lt; j &lt;&lt; '\\n';\n}\n\n1\n\nThe final argument in the function call is true so \\(j(x)\\) will jump xso::rng32 ahead by \\(2^{100}\\) steps.\n\n\nOutput:\n1j(x) = x^1 + x^2 + x^3 + x^4 + x^6 + x^7 + x^9 + x^13 + x^14 + x^15 + x^17 + x^18 + x^19 + x^20 + x^21 + x^22 + x^25 + x^26 + x^29 + x^30 + x^32 + x^33 + x^35 + x^39 + x^40 + x^42 + x^43 + x^46 + x^48 + x^50 + x^52 + x^55 + x^57 + x^59 + x^63 + x^64 + x^65 + x^68 + x^71 + x^72 + x^74 + x^78 + x^79 + x^80 + x^84 + x^86 + x^88 + x^90 + x^93 + x^94 + x^98 + x^101 + x^102 + x^103 + x^104 + x^105 + x^106 + x^108 + x^109 + x^110 + x^111 + x^112 + x^114 + x^115 + x^118 + x^119 + x^120 + x^121 + x^122 + x^123 + x^125\n\n1\n\nNot much use to look at but very useful when combined with the next jump function."
+  },
+  {
+    "objectID": "pages/bit.html#performing-jumps",
+    "href": "pages/bit.html#performing-jumps",
+    "title": "xso::generator — Extra Functions Using bit",
+    "section": "Performing Jumps",
+    "text": "Performing Jumps\nThe jump technique page explains how we can use a jump polynomial over \\(\\FF\\) to jump the State forward.\n&lt;typename State&gt;\nvoid\n1jump(State &state, const bit::polynomial&lt;&gt;& jump_poly);\n\n1\n\nJumps state ahead using the jump polynomial jump_poly.\n\n\nExample: Jumping vs. Discarding\n#include &lt;xoshiro.h&gt;\nint main()\n{\n1    std::size_t N = 10'000'000;\n\n    auto c = xso::characteristic_polynomial&lt;xso::rng&gt;();\n    auto j = xso::jump_polynomial(c, N);\n\n    xso::rng f;\n2    xso::rng g = f;\n\n3    xso::jump(f, j);\n4    g.discard(N);\n\n    std::cout &lt;&lt; \"After jumping:    \" &lt;&lt; f() &lt;&lt; '\\n';\n    std::cout &lt;&lt; \"After discarding: \" &lt;&lt; g() &lt;&lt; '\\n';\n}\n\n1\n\nThe number of steps we want to advance the state by.\n\n2\n\nf is a randomly seeded 64-bit generator and g is an exact copy so has the same seed state.\n\n3\n\nWe jump f forward by n steps using a jump polynomial.\n\n4\n\nWe (slowly) get g to the same point by discarding and expecting to get to the same point.\n\n\nOutput: The specific outputs will vary from run to run\n1After jumping:    10471512239979414217\nAfter discarding: 10471512239979414217\n\n1\n\nThe two generators are indeed at the same point in their random output streams.\n\n\nWe don’t show it here but the discard method is several orders of magnitude slower than the jump method."
+  },
+  {
+    "objectID": "pages/bit.html#see-also",
+    "href": "pages/bit.html#see-also",
+    "title": "xso::generator — Extra Functions Using bit",
+    "section": "See Also",
+    "text": "See Also\ncharacteristic_coefficients\njump_coefficients\njump\ndiscard\nxso::partition\njump technique"
+  },
+  {
+    "objectID": "pages/type-aliases.html",
+    "href": "pages/type-aliases.html",
+    "title": "xso::generator — Predefined Type Aliases",
+    "section": "",
+    "text": "\\[\n\\newcommand{\\FF}{\\mathbb{F}_2}\n\\newcommand{\\bold}[1]{\\mathbf{#1}}\n\\newcommand{\\mod}[2]{ {#1 \\, \\mathrm{mod} \\, #2}}\n\\]",
+    "crumbs": [
+      "Home",
+      "Generators",
+      "Recommended Generators"
+    ]
+  },
+  {
+    "objectID": "pages/type-aliases.html#introduction",
+    "href": "pages/type-aliases.html#introduction",
+    "title": "xso::generator — Predefined Type Aliases",
+    "section": "Introduction",
+    "text": "Introduction\nOur xoshiro/xoroshiro implementations depend on up to 10 template parameters:\n\nThe unsigned word type used to store the state which is also the output type of the generator.\nThe number of words used to store the state. More words mean more state.\nUp to three parameters labeled \\(A\\), \\(B\\), and \\(C\\) which determine how the state is advanced.\nUp to three further parameters labeled \\(R\\), \\(S\\), and \\(T\\) which determine how the state is scrambled to produce the required single word of output.\nUp to two indices that determine the words of the state taking part in the output function.\n\nThe code in xoshiro.h covers all possible cases but typing that many parameters is a pain. Moreover, while we can instantiate any generator in the family, only a very limited number of those have ever been properly vetted for suitability as being “good”.\nTherefore, we provide a few short type aliases for the generators you should use in most cases.",
+    "crumbs": [
+      "Home",
+      "Generators",
+      "Recommended Generators"
+    ]
+  },
+  {
+    "objectID": "pages/type-aliases.html#recommended-generators",
+    "href": "pages/type-aliases.html#recommended-generators",
+    "title": "xso::generator — Predefined Type Aliases",
+    "section": "Recommended Generators",
+    "text": "Recommended Generators\nThe following type aliases cover the recommended defaults for 32-bit and 64-bit outputs:\n\n\n\n\n\n\n\n\n\nType Alias\nOutput Bits\nState Bits\nSynonym For\n\n\n\n\nxso::rng\n64\n256\nxso::rng64\n\n\nxso::rng64\n64\n256\nxso::xoshiro_4x64_star_star\n\n\nxso::rng32\n32\n128\nxso::xoshiro_4x32_star_star\n\n\n\nThe overall “default” xso::rng is the same thing as xso::rng64.\nThe 32-bit version has 128 bits of state in four 32-bit words, while the 64-bit version has 256 bits of state stored in four 64-bit words.\nThese generators correspond to picking specific A, B, and C parameters for the state advance method and specific R, S and T parameters for the output/scrambler function. The choices are shown in more detail in rows 11 and 14 of the next table below.",
+    "crumbs": [
+      "Home",
+      "Generators",
+      "Recommended Generators"
+    ]
+  },
+  {
+    "objectID": "pages/type-aliases.html#analyzed-generators",
+    "href": "pages/type-aliases.html#analyzed-generators",
+    "title": "xso::generator — Predefined Type Aliases",
+    "section": "Analyzed Generators",
+    "text": "Analyzed Generators\nBeyond the recommended and simplest type aliases above we also provide rationally named type aliases for 17 variants that are analyzed in some detail in this original paper.\n\n\n\n\n\n\n\n\n\n\n\n#\nType Alias\nOutput Bits\nState Bits\nState State\nOutput Function\n\n\n\n\n1\nxoroshiro_2x32_star\n32\n64\nxoroshiro&lt;26,9,13&gt;\nstar&lt;0x9E3779BB,0&gt;\n\n\n2\nxoroshiro_2x32_star_star\n32\n64\nxoroshiro&lt;26,9,13&gt;\nstar_star&lt;0x9E3779BBu,5,5,0&gt;\n\n\n3\nxoroshiro_2x64_plus\n64\n128\nxoroshiro&lt;24,16,37&gt;\nplus&lt;0,1&gt;\n\n\n4\nxoroshiro_2x64_plus_plus\n64\n128\nxoroshiro&lt;49,21,28&gt;\nplus_plus&lt;17,0,1&gt;\n\n\n5\nxoroshiro_2x64_star_star\n64\n128\nxoroshiro&lt;24,16,37&gt;\nstar_star&lt;5,7,9,0&gt;\n\n\n6\nxoroshiro_16x64_star\n64\n1024\nxoroshiro&lt;25,27,36&gt;\nstar&lt;0x9e3779b97f4a7c13,0&gt;\n\n\n7\nxoroshiro_16x64_star_star\n64\n1024\nxoroshiro&lt;25,27,36&gt;\nstar_star&lt;5,7,9,0&gt;\n\n\n8\nxoroshiro_16x64_plus_plus\n64\n1024\nxoroshiro&lt;25,27,36&gt;\nplus_plus&lt;23,15,0&gt;\n\n\n9\nxoshiro_4x32_plus\n32\n128\nxoshiro&lt;9,11&gt;\nplus&lt;0,3&gt;\n\n\n10\nxoshiro_4x32_plus_plus\n32\n128\nxoshiro&lt;9,11&gt;\nplus_plus&lt;7,0,3&gt;\n\n\n11\nxoshiro_4x32_star_star\n32\n128\nxoshiro&lt;9,11&gt;\nplus_plus&lt;7,0,3&gt;\n\n\n12\nxoshiro_4x64_plus\n64\n256\nxoshiro&lt;17,45&gt;\nplus&lt;0,3&gt;\n\n\n13\nxoshiro_4x64_plus_plus\n64\n256\nxoshiro&lt;17,45&gt;\nplus_plus&lt;23,0,3&gt;\n\n\n14\nxoshiro_4x64_star_star\n64\n256\nxoshiro&lt;17,45&gt;\nstar_star&lt;5,7,9,1&gt;\n\n\n15\nxoshiro_8x64_plus\n64\n512\nxoshiro&lt;11,21&gt;\nplus&lt;2,0&gt;\n\n\n16\nxoshiro_8x64_plus_plus\n64\n512\nxoshiro&lt;11,21&gt;\nplus_plus&lt;17,2,0&gt;\n\n\n17\nxoshiro_8x64_star_star\n64\n512\nxoshiro&lt;11,21&gt;\nstar_star&lt;5,7,9,1&gt;\n\n\n\nThe naming convention should be fairly obvious — xoshiro or xoroshiro followed by the number of words of state and the size of those words, followed by some information about the type of output function that is used. The specific choices for the A, B, C, R, S, and T parameters are shown in the final two columns of the table.\n\n\n\n\n\n\nNamespace\n\n\n\nAll the type aliases, engines, and output functions above are actually in the xso namespace — that has been dropped in the table for the sake of brevity.\n\n\n\nSee Also\nxso::generator\nState\nScrambler",
+    "crumbs": [
+      "Home",
+      "Generators",
+      "Recommended Generators"
+    ]
+  },
+  {
+    "objectID": "pages/jump.html",
+    "href": "pages/jump.html",
+    "title": "xso::generator — Jumps",
+    "section": "",
+    "text": "\\[\n\\newcommand{\\FF}{\\mathbb{F}_2}\n\\newcommand{\\bold}[1]{\\mathbf{#1}}\n\\newcommand{\\mod}[2]{ {#1 \\, \\mathrm{mod} \\, #2}}\n\\]\nWe have a non-member jump function to rapidly move any recommended xoshiro/xoroshiro generator or State very far ahead in its random number stream.\nThe template parameter State type can be either a full xso::generator or State class as both have the methods needed for the function to succeed.\nTo jump \\(J\\) steps ahead in the stream you first call jump_coefficients&lt;State&gt;(J) which returns an appropriate set of jump polynomial coefficients that you can use as the final argument in this jump function. See the documentation for jump_coefficients."
+  },
+  {
+    "objectID": "pages/jump.html#recommended-generators",
+    "href": "pages/jump.html#recommended-generators",
+    "title": "xso::generator — Jumps",
+    "section": "Recommended Generators",
+    "text": "Recommended Generators\nThe method for efficiently jumping the state by arbitrary and possibly huge numbers of steps is fully described here.\nTo use it you need to have access to the generator’s characteristic polynomial. With that available you can compute jump polynomials for any jump size \\(J\\).\nThe header file xoshiro.h contains pre-canned characteristic polynomial coefficients for all our type aliased xoshiro/xoroshiro generators. This means that, out of the box, the library supports jumping any of those generators by arbitrary numbers of steps.\nBy calling the jump method repeatedly you can create many independent copies of a single-parent generator.\nExample:\n#include &lt;xoshiro.h&gt;\nint main()\n{\n    using rng = xso::rng;\n1    auto jump_poly = xso::jump_coefficients&lt;rng&gt;(100, true);\n2    rng g0;\n3    auto g1 = g0; xso::jump(g1, jump_poly);\n4    auto g2 = g1; xso::jump(g2, jump_poly);\n5    auto g3 = g2; xso::jump(g3, jump_poly);\n    ...\n}\n\n1\n\njump_poly has the coefficients for the jump polynomial that can advance rng by \\(2^{100}\\) steps.\n\n2\n\ng0 is a randomly seeded generator with 256 bits of state.\n\n3\n\ng1 is a copy of g0 with its state jumped forward by \\(2^{100}\\) steps.\n\n4\n\ng2 is a copy of g0 with its state jumped forward by \\(2 \\times 2^{100}\\) steps.\n\n5\n\ng3 is a copy of g0 with its state jumped forward by \\(3 \\times 2^{100}\\) steps.\n\n\nIn practice, you are likely to create these generators in a loop that spawns independent jobs each running on a separate compute engine/core. Each job will own a copy of the random number generator jumped ahead to a new sub-stream that is large enough to never overlap with its neighbors.\nThe xso::partition class makes this sort of sub-stream partitioning easy to do."
+  },
+  {
+    "objectID": "pages/jump.html#other-generator-variants",
+    "href": "pages/jump.html#other-generator-variants",
+    "title": "xso::generator — Jumps",
+    "section": "Other Generator Variants",
+    "text": "Other Generator Variants\nThis xso::jump and xso::jump_coefficients functions rely on the pre-canned characteristic polynomials that are embedded in the xoshiro.h. All our type aliased generators have their characteristic polynomial precomputed in that header file. This means that we support jumping any of those generators by an arbitrary number of steps.\nIf instead, you are using some other variant of xoshiro/xoroshiro you can still get its characteristic polynomial and jump polynomials by employing the extra, header-only, bit library. That is a package for GF(2) which can compute the needed characteristic polynomials for the generator’s transition matrix. Once the bit library is included then the xoshiro.h header file defines some extra non-member functions that can compute those characteristic and jump polynomials.\nSee the documentation for these functions here."
+  },
+  {
+    "objectID": "pages/jump.html#motivation-for-jumping",
+    "href": "pages/jump.html#motivation-for-jumping",
+    "title": "xso::generator — Jumps",
+    "section": "Motivation for Jumping",
+    "text": "Motivation for Jumping\nMonte Carlo analyses and their kin that employ random number generators are, in theory at least, easy to parallelize.\nFor example, if you have 128 compute cores available, you can start 128 separate analyses each with its own random number generator. These run in parallel and you aggregate the independent results as they come in.\nOf course, having confidence in one type of generator is hard enough let alone 128 of them. For that reason, we generally stick to using a single well-understood, well-tested generator and create 128 copies started with different seeds. However, if you just pick the 128 seeds “at random” there can be significant overlaps in, and correlations between, the resulting output streams. Those unknowable effects will pollute any conclusions you draw from the results of the supposedly independent simulations.\nInstead of picking 128 different seeds at random, an alternative approach is to pick a single seed \\(s_0\\) and then partition the resulting stream of random numbers into 128 sub-streams.\nFor example, you need to run xsg::rng64() some \\(2^{256}\\) times before the stream repeats. That is an enormous number — a simulation on any current computer will only ever consume a small fraction of that stream. Therefore we can afford to break it into sub-streams and then use those across our parallel computation.\nIn our example, we have 128 available compute cores and have thoughtfully picked a single seed state \\(s_0\\) for xso::rng64. From that seed \\(s_0\\) there stretches a stream of \\(2^{256}\\) states \\(\\left\\{s_0, s_1, s_2, \\cdots \\right\\}\\). We want to split this parent stream into 128 equal non-overlapping sub-streams. Each sub-stream will have size: \\[\n    \\frac{2^{256}}{128} = \\frac{2^{256}}{2^7} = 2^{259}\n\\] which is still vast!\nHowever, to parallelize the computation we cannot have the 128 simulators all reference a single bottleneck random number generator!\nInstead, we want to create the non-overlapping sub-streams lazily by just instantiating 128 copies of the generator. The first is seeded with \\(s_0\\), the next is seeded some \\(2^{259}\\) slots along, the next another \\(2^{259}\\) slots along from that, and so on. Each of the 128 simulations has its generator that just happens to return partitions of a single parent stream and therefore should have nice independence properties.\nThe key to making this work is to be able to efficiently jump ahead in the state stream. In our example, we need to go from any state \\(s\\) to another state that is \\(2^{259}\\) steps along from \\(s\\) in the random state stream. And that is exactly what all our various jump methods and functions accomplish.\nThese jump methods are vastly more efficient than using the discard method. Moreover, they can accommodate jump sizes like \\(N = 2^{259}\\) which will overflow even the argument type for discard(N) before that method ever gets going!"
+  },
+  {
+    "objectID": "pages/jump.html#see-also",
+    "href": "pages/jump.html#see-also",
+    "title": "xso::generator — Jumps",
+    "section": "See Also",
+    "text": "See Also\ncharacteristic_coefficients\njump_coefficients\nxso::partition\nbit::characteristic_polynomial\nbit::polynomial::reduce\nThe jump technique\nThe polynomial reduction algorithm"
+  },
+  {
+    "objectID": "pages/characteristic_coefficients.html",
+    "href": "pages/characteristic_coefficients.html",
+    "title": "xso::generator — Precomputed Characteristics",
+    "section": "",
+    "text": "\\[\n\\newcommand{\\FF}{\\mathbb{F}_2}\n\\newcommand{\\bold}[1]{\\mathbf{#1}}\n\\newcommand{\\mod}[2]{ {#1 \\, \\mathrm{mod} \\, #2}}\n\\]\nWe have a class method that returns the precomputed lower-order coefficients of the characteristic polynomial associated with the State.\nCalls to this method will fail at compile time if no such coefficients are embedded in the xoshiro.h header file. Calls will succeed for all the type aliased recommended generators."
+  },
+  {
+    "objectID": "pages/characteristic_coefficients.html#summary",
+    "href": "pages/characteristic_coefficients.html#summary",
+    "title": "xso::generator — Precomputed Characteristics",
+    "section": "Summary",
+    "text": "Summary\nSuppose that the generator’s has \\(n\\) bits of state packed into \\(n_w\\) words.\nThe corresponding transition matrix over \\(\\FF\\) will be \\(n \\times n\\) and will be of full rank with a monic characteristic polynomial: \\[\n    c(x) = x^n + p(x).\n\\] The polynomial \\(p(x)\\) is the lower-order piece of \\(c(x)\\) and is of degree less than \\(n\\): \\[\n    p(x) = p_0 + p_1 x + \\cdots + p_{n-1} x^{n-1}.\n\\] Each coefficient \\(p_i\\) is either 0 or 1 and we can pack the \\(n\\) coefficients of \\(p(x)\\) into \\(n_w\\) words.\nA successful call to the characteristic_coefficients() class method returns the coefficients of \\(p(x)\\) in a standard array of \\(n_w\\) words."
+  },
+  {
+    "objectID": "pages/characteristic_coefficients.html#the-details",
+    "href": "pages/characteristic_coefficients.html#the-details",
+    "title": "xso::generator — Precomputed Characteristics",
+    "section": "The Details",
+    "text": "The Details\nSee the jump technique page for details on how the polynomial \\(p(x)\\) is used in practice.\n\nSee Also\njump_coefficients\njump"
+  },
+  {
+    "objectID": "pages/index.html",
+    "href": "pages/index.html",
+    "title": "The xoshiroLibrary",
+    "section": "",
+    "text": "\\[\n\\newcommand{\\FF}{\\mathbb{F}_2}\n\\newcommand{\\bold}[1]{\\mathbf{#1}}\n\\newcommand{\\mod}[2]{ {#1 \\, \\mathrm{mod} \\, #2}}\n\\]"
+  },
+  {
+    "objectID": "pages/index.html#introduction",
+    "href": "pages/index.html#introduction",
+    "title": "The xoshiroLibrary",
+    "section": "Introduction",
+    "text": "Introduction\nxoshiro.h is a single header file, C++ implementation of the complete family of xoshiro/xoroshiro pseudorandom uniform number generators.\nDavid Blackman & Sebastiano Vigna introduced these efficient, linear, pseudorandom number generators that have relatively small state but which, nonetheless, display excellent statistical properties. This paper provides the full mathematical details.\nThe generators satisfy C++’s std::uniform_random_bit_generator concept and can drive any of the distributions defined in the standard library.\nWe provide efficient jump-ahead methods for arbitrary jump sizes, making them particularly suitable for parallel processing applications. They are excellent replacements for the “standard” Mersenne Twister generator.\nWhile the implementation is very general, there are simple type aliases for specific preferred instantiations that are known to work well in most situations."
+  },
+  {
+    "objectID": "pages/index.html#installation",
+    "href": "pages/index.html#installation",
+    "title": "The xoshiroLibrary",
+    "section": "Installation",
+    "text": "Installation\nThis library is header-only, so there is nothing to compile & link — drop the xoshiro.h file somewhere convenient, and you are good to go.\nAlternatively, if you are using CMake, you can use the standard FetchContent module by adding a few lines to your project’s CMakeLists.txt file:\ninclude(FetchContent)\nFetchContent_Declare(xoshiro URL https://github.com/nessan/bit/releases/download/current/xoshiro.zip)\nFetchContent_MakeAvailable(xoshiro)\nThis command downloads and unpacks an archive of the current version of xoshiro to your project’s build folder. You can then add a dependency on xoshiro::xoshiro, a CMake alias for xoshiro. FetchContent will automatically ensure the build system knows where to find the downloaded header files and any needed compiler flags.\nUsed like this, FetchContent will only download a minimal library version without any redundant test code, sample programs, documentation files, etc.\n\n\n\n\n\n\nLibrary versions\n\n\n\nThe shown URL gets the current version of the library—whatever is in the main branch. For a fixed, stable library version (say release 2.0.0), use a URL parameter like: https://github.com/nessan/xoshiro/releases/download/2.0.0/xoshiro.zip."
+  },
+  {
+    "objectID": "pages/index.html#example",
+    "href": "pages/index.html#example",
+    "title": "The xoshiroLibrary",
+    "section": "Example",
+    "text": "Example\nHere is a simple example where we use the default xoshiro generator to sample a normal distribution from the standard library.\nWe have copied the sample code from std::normal_distribution webpage and used xso::rng as a drop-in replacement for std::mersenne_twister_engine.\n1#include &lt;xoshiro.h&gt;\n#include &lt;random&gt;\n#include &lt;map&gt;\n#include &lt;iomanip&gt;\n\nint main()\n{\n2    xso::rng gen;\n\n    // lambda: draws a sample from a normal distribution and rounds it to an integer.\n    std::normal_distribution d{5.0, 2.0};\n    auto random_int = [&d, &gen] { return int(std::round(dist(gen))); };\n\n    // Run lots of trials and create a histogram of the results in integer buckets.\n    std::map&lt;int, int&gt; hist{};\n    for (int n = 0; n != 25'000; ++n) ++hist[random_int()];\n\n    // Print that histogram.\n    for (auto [bucket, count] : hist) {\n        auto n = static_cast&lt;std::size_t&gt;(count / 100);\n        std::cout &lt;&lt; std::setw(2) &lt;&lt; bucket &lt;&lt; ' ' &lt;&lt; std::string(n, '*') &lt;&lt; '\\n';\n    }\n}\n\n1\n\nEverything is in the single xoshiro.h header file. The classes, functions etc. are all in the xso namespace.\n\n2\n\nThis is a type alias for xso::rng64 which produces 64-bit outputs from a specific xoshiro generator with 256 bits of state.\n\n\nOutput:\n-3\n-2\n-1\n 0 **\n 1 *******\n 2 ****************\n 3 *****************************\n 4 ********************************************\n 5 ************************************************\n 6 ********************************************\n 7 *****************************\n 8 ****************\n 9 *******\n10 **\n11\n12\n14"
+  },
+  {
+    "objectID": "pages/index.html#implementation",
+    "href": "pages/index.html#implementation",
+    "title": "The xoshiroLibrary",
+    "section": "Implementation",
+    "text": "Implementation\nC versions of the generators are available on the author’s website. Wrapping those routines so they conform to the std::uniform_random_bit_generator concept is a trivial exercise.\nHowever, our implementation in xoshiro.h is distinguished in several other ways:\n\nGenerality\nUsing the code in xoshiro.h you can create any member of the xoshiro/xoroshiro family.\nWe have State classes that are templatized across the number of bits of state, and the parameters (labelled A, B, and C in the literature) that determine how the state is advanced from step to step.\nScrambler classes are templatized across the other parameters (labelled R, S, and T in the literature) that determine how the higher dimensional state is scrambled/reduced to single 32 or 64 bit output words.\nThis means you can instantiate any generator in the xoshiro/xoroshiro family.\n\n\n\n\n\n\nNo compromise on speed\n\n\n\nFor the reasonable optimization levels you are likely to employ in any numerical code, the C++ versions perform identically to the simpler-looking C versions linked above.\n\n\n\n\nSimplicity\nWhile you can instantiate any generator in the xoshiro/xoroshiro family we also recognize that only a very limited number of those generators have ever been properly vetted for suitability as being “good”.\nTherefore, we provide some short and sweet type aliases for the recommended default generators you should use in most cases.\n\n\nArbitrary Jumps\nWe provide methods to advance a generator by arbitrary and potentially huge numbers of steps. This contrasts to the C versions, which only define a limited number of jump possibilities.\nVery large jumps partition a single random number stream into non-overlapping sub-streams. In parallel processing applications, the sub-streams drive independent jobs running on different compute cores.\n\n\n\n\n\n\nArbitrary jumps do not need bit\n\n\n\nEven if you only use the single xoshiro.h header file without incorporating the bit library, you can still jump any of the predefined type-aliased xoshiro/xoroshiro variants by arbitrary numbers of steps.\n\n\n\n\nExtra Analysis\nExtra non-member functions for generator analysis are defined if the [`bit] library is available.\nbit is a C++ library for doing linear algebra over GF(2) the simplest field of two elements \\(\\{0,1\\}\\) where the usual arithmetic operations are performed mod 2. The bit library is header only so easily incorporated into any application.\nIf it is available then xoshiro.h defines some extra functions that let you access the generator’s transition matrix and use/analyze that in various ways.\n\n\nSampling Methods\nThe C++ standard library follows a common design pattern for the facilities in its &lt;random&gt; header. It maintains a strict separation between the classes that produce random bits and others that use those bits.\nUniform random bit generators produce streams of uniformly distributed output words (usually 32-bit or 64-bit unsigned integers). Other classes and functions shape those core streams to simulate a desired distribution over some field of interest (for example, to generate variates from a uniform distribution of reals in the range 0 to 1).\nThe idea is reasonable enough. You can swap out the uniform random bit generator for a better one and continue to use the other functions without change.\nHowever, this interface is quite complicated for the end user — particularly for a user that has no idea, or interest in, how all the generator/distribution machinery works. Perhaps you google “c++ random number generator” and get advice to use the std::mersenne_twister_engine class. However, that just produces those unsigned output words that are useless by themselves. To simulate something as simple as a die roll, you must feed the thing into some other class and use that to get the required effect.\nFor this reason, we enrich our xoshiro/xoroshiro classes with some utility methods that interface directly with the various distribution classes in the standard &lt;random&gt; header. That dice roll becomes something as simple as:\nxso::rng gen;\nstd::cout &lt;&lt; \"Six sided dice roll: \" &lt;&lt; gen.roll() &lt;&lt; '\\n';\nSimilarly, you can ask one of our generators to flip a coin or shuffle the elements in a container.\nPerhaps most importantly the generators directly support the idea of sampling. This includes pulling samples from a range, from a container, or an arbitrary distribution.\nHere are some examples:\n1std::cout &lt;&lt; gen.sample(1, 10)   &lt;&lt; '\\n';\n2std::cout &lt;&lt; gen.sample(1., 10.) &lt;&lt; '\\n';\n\nstd::normal_distribution nd{70., 15.};\n3std::cout &lt;&lt; gen.sample(nd);\n\nstd::array&lt;double, 10&gt; v;\n4gen.sample(nd, v.begin(), v.word_count());\n\nstd::array&lt;double, 5&gt; u;\n5gen.sample(v, u.begin(), u.word_count());\n\n6ge.shuffle(u);\n\n1\n\nPrints a random integer from \\([1,10]\\) where each integer is equally likely to occur.\n\n2\n\nPrints a random real from a uniform distribution over \\([1,10)\\)\n\n3\n\nPrints a random variate from a normal distribution with mean 70 and standard deviation 15.\n\n4\n\nFills an array v with 10 random variates from that same distribution.\n\n5\n\nFills an array u with 5 elements drawn from v without replacement.\n\n6\n\nShuffles the elements of u.\n\n\n\n\n\n\n\n\nOther distributions can be used\n\n\n\nOf course, the generators can also still be used as uniform random bit generators. The extra sampling methods etc. just make them much more useful out of the box."
+  },
+  {
+    "objectID": "pages/index.html#documentation",
+    "href": "pages/index.html#documentation",
+    "title": "The xoshiroLibrary",
+    "section": "Documentation",
+    "text": "Documentation\nThe project’s source code repository is here.\nYou can read the project’s documentation here.\nThe documentation site was generated using Quarto.\n\nContact\nYou can contact me by email here.\n\n\nCopyright and License\nCopyright (c) 2023-present Nessan Fitzmaurice.\nYou can use this software under the MIT license."
+  },
+  {
+    "objectID": "pages/generator.html",
+    "href": "pages/generator.html",
+    "title": "The xso::generator Class",
+    "section": "",
+    "text": "\\[\n\\newcommand{\\FF}{\\mathbb{F}_2}\n\\newcommand{\\bold}[1]{\\mathbf{#1}}\n\\newcommand{\\mod}[2]{ {#1 \\, \\mathrm{mod} \\, #2}}\n\\]",
+    "crumbs": [
+      "Home",
+      "Generators",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "pages/generator.html#introduction",
+    "href": "pages/generator.html#introduction",
+    "title": "The xso::generator Class",
+    "section": "Introduction",
+    "text": "Introduction\nxso::generator is the template class that can be used to make any xoshiro/xoroshiro variant. It connects a State with an Scrambler to create a pseudorandom number generator.\n\n\n\n\n\n\nMost users should just use one of the predefined type aliases\n\n\n\nThe xoshiro.h header file has several predefined type aliased instantiations of the general template class. Use xso::rng64 and xso::rng32 to access the recommended default state engines and output functions for 64-bit and 32-bit outputs. The overall default xso::rng is a synonym for xso::rng64.",
+    "crumbs": [
+      "Home",
+      "Generators",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "pages/generator.html#declaration",
+    "href": "pages/generator.html#declaration",
+    "title": "The xso::generator Class",
+    "section": "Declaration",
+    "text": "Declaration\nThe generator class is in the xso namespace and is declared as follows:\nnamespace xso {\n    template&lt;typename State, typename Scrambler&gt; class generator;\n}\nThe State holds the bits of state and has methods to get, set, and advance that state.\nThe Scrambler is a functor that reduces the state to a single 32-bit or 64-bit unsigned integer output word.\n\nTemplate Parameters\nThe xso::generator expects the State to implement the following class and instance methods:\nState: Required Class Types & Methods\n\n\n\n\n\n\n\n\nType/Method\nDescription\n\n\n\n\nword_type\nThe state consists of words of this type.\n\n\nword_count\nClass method that should return the number of words of state.\n\n\nbit_count\nClass method that should return the number of bits of state.\n\n\nxso_name\nClass method that should return a name for the engine.\n\n\ncharacteristic_coefficients\nClass method that should return the precomputed characteristic polynomial.\n\n\n\n\nState: Required Instance Methods\n\n\n\n\n\n\n\n\nMethod\nDescription\n\n\n\n\nseed\nMethod to set the state.\n\n\nget_state\nMethod to copy the current state to a destination.\n\n\noperator[]\nMethod to provide read-only access to the individual words of state.\n\n\nstep\nMethod to advance the state by one step.\n\n\n\n\n\n\n\n\n\n\nAn xso::generator can be used anywhere a State is expected\n\n\n\nAny xso::generator satisfies all requirements of the State concept. This is useful as some functions work naturally on a State but you can just pass the generator along in its place as a proxy.\n\n\nThe xso::generator expects the Scrambler to implement the following methods:\nScrambler: Required Methods\n\n\n\n\n\n\n\n\nMethod\nDescription\n\n\n\n\nxso_name\nClass method that should return a name for the output function.\n\n\noperator()\nInstance method to reduce the passed state to a single word.\n\n\n\n\nThese types and methods are used by the generator as described next.",
+    "crumbs": [
+      "Home",
+      "Generators",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "pages/generator.html#class-types-and-methods",
+    "href": "pages/generator.html#class-types-and-methods",
+    "title": "The xso::generator Class",
+    "section": "Class Types and Methods",
+    "text": "Class Types and Methods\n\n\n\n\n\n\n\n\nType/Method\nDescription\n\n\n\n\nstate_type\nTheState template type.\n\n\nscrambler_type\nTheScrambler template type.\n\n\nword_type\nThe state bits are packed into words of this type.\n\n\nword_count\nReturns the number of words of state.\n\n\nbit_count\nReturns the number of bits of state.\n\n\nresult_type\nEach generator() call returns a single integer of this type.\n\n\nmin\nReturns the smallest value the generator can produce.\n\n\nmax\nReturns the largest value the generator can produce.\n\n\nxso_name\nClass method that returns a name for the generator.\n\n\ncharacteristic_coefficients\nClass method that returns the precomputed characteristic polynomial..",
+    "crumbs": [
+      "Home",
+      "Generators",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "pages/generator.html#instance-methods",
+    "href": "pages/generator.html#instance-methods",
+    "title": "The xso::generator Class",
+    "section": "Instance Methods",
+    "text": "Instance Methods\n\n\n\n\n\n\n\n\nMethod\nDescription\n\n\n\n\nconstructors\nConstruct and seed a generator in various ways.\n\n\nseed\nSet the generator state in various ways.\n\n\nget_state\nRead access to the whole state.\n\n\noperator[]\nRead access to one word of state.\n\n\nstep\nAdvance the generator’s state by one step.\n\n\noperator()\nReduce the current state to a single result_type word and advance by one step.\n\n\nsample\nUse the generator to extract a sample from various sources.\n\n\nindex\nUse the generator to pick an index from a range.\n\n\nflip\nUse the generator to flip a coin.\n\n\nroll\nUse the generator to roll a die.\n\n\nshuffle\nUse the generator to shuffle the elements of an iteration or container.\n\n\ndiscard\nDiscard some iterations of the generator.",
+    "crumbs": [
+      "Home",
+      "Generators",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "pages/generator.html#non-member-functions",
+    "href": "pages/generator.html#non-member-functions",
+    "title": "The xso::generator Class",
+    "section": "Non-member Functions",
+    "text": "Non-member Functions\n\nAlways Available\n\n\n\n\n\n\n\n\nFunction\nDescription\n\n\n\n\njump_coefficients\nCompute the coefficients of a jump polynomial that can be used to efficiently jump a generator or State ahead by a potentially huge number of steps.\n\n\njump\nThis function uses the output of jump_coefficients to efficiently jump ta generator or State ahead by a potentially huge number of steps.\n\n\nstream&lt;&lt;\nStream output for the generator, State, and Scrambler classes.\n\n\nformatter\nConnect the generator, State, and Scrambler classes to std::format and friends.\n\n\n\n\n\n\nDependent on the bit Library\nIf the bit library is available extra non-member functions are defined.\nbit is a C++ library for doing linear algebra over GF(2) the simplest field of two elements \\(\\{0,1\\}\\) where the usual arithmetic operations are performed mod 2. The bit library is header only so easily incorporated into any application.\nIf it is available then xoshiro.h defines some extra functions:\n\n\n\n\n\n\n\n\nFunction\nDescription\n\n\n\n\ntransition_matrix\nReturns the transition matrix for a State as a bit::matrix.\n\n\ncharacteristic_polynomial\nReturns the transition matrix’s characteristic polynomial as a bit::polynomial.\n\n\njump_polynomial\nReturns a jump polynomial that can be used to efficiently jump a State ahead by a potentially huge number of steps.\n\n\njump\nUses a jump polynomial to efficiently jump a State ahead in its stream.",
+    "crumbs": [
+      "Home",
+      "Generators",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "pages/seed.html",
+    "href": "pages/seed.html",
+    "title": "xso::generator — Write Access to the State",
+    "section": "",
+    "text": "\\[\n\\newcommand{\\FF}{\\mathbb{F}_2}\n\\newcommand{\\bold}[1]{\\mathbf{#1}}\n\\newcommand{\\mod}[2]{ {#1 \\, \\mathrm{mod} \\, #2}}\n\\]\n\n\n\n\n\n\n\n\n\nWe have methods that set the state in various ways:\n1void seed();\n\n2constexpr void seed(word_type seed);\n\ntemplate&lt;typename Iter&gt;\n3constexpr void seed(Iter b, Iter e);\n\n1\n\nSets the state primarily from a std::random_device.\n\n2\n\nSets the state quickly and repeatably from a single unsigned seed integer.\n\n3\n\nSets the state by copying all the words from an iteration.\n\n\nNotes:\n\nThe term “seeding” is very commonly used in the context of random number generation.\nThe no-argument version of seed sets the underlying state fully from a default source of entropy by multiple calls to std::random_device. Reportedly some implementations of that standard facility are not great so we also mix in a scrambled call to a high-resolution clock for one of the state words.\nSeeding generators with multiple words of state from a single word is never ideal.\nNevertheless, it is often handy to be able to do exactly this when you are trying to prototype a simulation of some sort. For that stage of development being able to run and rerun things with an easily constructed “fixed” random number stream is very useful.\nTo mitigate some of the worst features of this type of construction, the implementation uses a scrambled version of the one input word as a seed to a simple, small state, but pretty effective SplitMix64 random number generator. That generator is then used to create a full state array for the xoshiro/xoshiro in question.\nIf you do construct a generator by passing in an initial state array then be sure that the values are not all zero as that is a fixed point for these generators.\n\n\nSee Also\nconstructors\nget_state\n\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "pages/State.html",
+    "href": "pages/State.html",
+    "title": "State",
+    "section": "",
+    "text": "\\[\n\\newcommand{\\FF}{\\mathbb{F}_2}\n\\newcommand{\\bold}[1]{\\mathbf{#1}}\n\\newcommand{\\mod}[2]{ {#1 \\, \\mathrm{mod} \\, #2}}\n\\]",
+    "crumbs": [
+      "Home",
+      "States",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "pages/State.html#introduction",
+    "href": "pages/State.html#introduction",
+    "title": "State",
+    "section": "Introduction",
+    "text": "Introduction\nA State class holds the words of state and has methods to get, set, and advance that state.\nOur xso::generator class takes a State template parameter.\nIt expects that State to implement the following class and instance methods:\n\nRequired Class Types & Methods\n\n\n\n\n\n\n\n\nType/Method\nDescription\n\n\n\n\nword_type\nThe state consists of words of this type.\n\n\nword_count\nClass method that should return the number of words of state.\n\n\nbit_count\nClass method that should return the number of bits of state.\n\n\nxso_name\nClass method that should return a name for the engine.\n\n\ncharacteristic_coefficients\nClass method that should return the precomputed characteristic polynomial.\n\n\n\n\n\n\nRequired Instance Methods\n\n\n\n\n\n\n\n\nMethod\nDescription\n\n\n\n\nseed\nMethod to set the state.\n\n\nget_state\nMethod to copy the current state to a destination.\n\n\noperator[]\nMethod to provide read-only access to the individual words of state.\n\n\nstep\nMethod to advance the state by one step.\n\n\n\n\n\n\n\n\n\n\nAn xso::generator can be used anywhere a State is expected\n\n\n\nAny xso::generator satisfies all requirements of the State concept. This is useful as some functions work naturally on a State but you can just pass the generator along in its place as a proxy.",
+    "crumbs": [
+      "Home",
+      "States",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "pages/State.html#our-state-classes",
+    "href": "pages/State.html#our-state-classes",
+    "title": "State",
+    "section": "Our State Classes",
+    "text": "Our State Classes\nWe provide two different State template classes in the xso namespace:\ntemplate&lt;std::size_t N, std::unsigned_integral T, uint8_t A, uint8_t B, uint8_t C&gt;\n1class xso::xoroshiro;\n\ntemplate&lt;std::size_t N, std::unsigned_integral T, uint8_t A, uint8_t B&gt;\n2class xso::xoshiro;\n\n1\n\nThis state type implements the xoroshiro style of state advancement.\n\n2\n\nThis state type implements the xoshiro style of state advancement.\n\n\n\nTemplate Parameters\n\n\n\n\n\n\n\n\nParameter\nDescription\n\n\n\n\nN\nThere are N words of state.\n\n\nT\nThe words of state are this type of unsigned integer.\nIn practice either std::uint32_t or std::uint64_t.\n\n\nA, B, C\nParameters used in the engine’s step method that advances the state.\n\n\n\n\n\n\n\n\n\n\nRestrictions on N\n\n\n\nThe xso::xoroshiro engine can have arbitrary size — i.e. the N parameter can be anything and its step method will still work. However, the xso::xoshiro engine has a hand-coded step method which currently only works for the two cases, N = 4, and N = 8.",
+    "crumbs": [
+      "Home",
+      "States",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "pages/State.html#class-types-and-methods",
+    "href": "pages/State.html#class-types-and-methods",
+    "title": "State",
+    "section": "Class Types and Methods",
+    "text": "Class Types and Methods\n\n\n\n\n\n\n\n\nItem\nDescription\n\n\n\n\nword_type\nThe type for the words of state: T.\n\n\nword_count\nThe number of state words: N.\n\n\nbit_count\nThe number of state bits: N * std::numeric_limits&lt;T&gt;::digits.\n\n\nxso_name\nReturns a name for the engine which incorporates all the template parameters.\n\n\ncharacteristic_coefficients\nReturns the precomputed coefficients of the engine’s characteristic polynomial in a compact array format.\n\n\n\n\nNotes:\n\nAs well as the state array, the xoroshiro engine has some extra “housekeeping” members. That non-state data is not counted by the bit_count method.\nThe name returned by the xso_name() class method might look like xoshiro&lt;4x32,6,4&gt;.\nWe have precomputed the characteristic polynomial for all the recommended type aliased States. Calling the characteristic_coefficients method for any other State will cause an exception.",
+    "crumbs": [
+      "Home",
+      "States",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "pages/State.html#instance-methods",
+    "href": "pages/State.html#instance-methods",
+    "title": "State",
+    "section": "Instance Methods",
+    "text": "Instance Methods\n\n\n\n\n\n\n\n\nItem\nDescription\n\n\n\n\nseed(const state_type& src)\nSets the state by copying the src argument.\n\n\nget_state(state_type& dst)\nCopies the current state to dst.\n\n\noperator[](std::size_t i)\nRead-only access to a word i of state — the index is not range checked.\n\n\nstep()\nAdvances the state by a single step.",
+    "crumbs": [
+      "Home",
+      "States",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "pages/State.html#precomputed-characteristics",
+    "href": "pages/State.html#precomputed-characteristics",
+    "title": "State",
+    "section": "Precomputed Characteristics",
+    "text": "Precomputed Characteristics\nIf a State holds \\(n\\) bits of state then its transition matrix is a \\(n \\times n\\) matrix over GF(2).\nThe characteristic polynomial for that matrix is a polynomial \\(c(x)\\) of degree \\(n\\) over \\(\\FF\\) which we can write as: \\[\nc(x) = x^n + p(x),\n\\] where the degree of \\(p\\) is less than \\(n\\): \\[\np(x) = p_0 + p_1 x + \\cdots p_{n-1} x^{n-1}.\n\\] This is useful because, as discussed here, if we know the polynomial \\(p(x)\\) then we can very efficiently advance the state by enormous numbers of steps.\nWe have precomputed the coefficients of the polynomial \\(p(x)\\) for all our type aliased recommended state engines and stored them in a compact word form that is returned by the characteristic_coefficients class method.\nThe compact word form is simply a static std::array that holds n bits that make up the \\(n\\) coefficients \\(p_0, p_1, \\ldots, p_{n-1}\\) of \\(p(x)\\). These pre-computed arrays are embedded in the xoshiro.h header file.\n\n\n\n\n\n\nOnly have precomputed \\(p(x)\\) for some engines\n\n\n\nThe library has these static arrays built in for all the recommended state engines. Calling the characteristic_coefficients method for an arbitrary State will throw an error.\n\n\n\nSee Also\nScrambler\nxso::generator",
+    "crumbs": [
+      "Home",
+      "States",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "pages/jump-technique.html",
+    "href": "pages/jump-technique.html",
+    "title": "Efficient Jump Ahead Methods for Some RNGs",
+    "section": "",
+    "text": "\\[\n\\newcommand{\\FF}{\\mathbb{F}_2}\n\\newcommand{\\bold}[1]{\\mathbf{#1}}\n\\newcommand{\\mod}[2]{ {#1 \\, \\mathrm{mod} \\, #2}}\n\\]",
+    "crumbs": [
+      "Home",
+      "Technical Notes",
+      "The Jump Technique"
+    ]
+  },
+  {
+    "objectID": "pages/jump-technique.html#introduction",
+    "href": "pages/jump-technique.html#introduction",
+    "title": "Efficient Jump Ahead Methods for Some RNGs",
+    "section": "Introduction",
+    "text": "Introduction\nThe heart of all random number generators is the method that produces a stream of uniformly distributed output words — usually 32-bit or 64-bit unsigned integers. That core stream is used by other functions to simulate any desired distribution over the field of interest, for example, to simulate a uniform distribution of reals in the range 0 to 1.\nFor some generators, the core step can be broken down into two stages. In the first, the generator’s current state \\(\\bold{s}\\) is iteratively advanced in some fashion and, in the second, that new state is passed through a function \\(\\phi(\\bold{s})\\) to get an output of the desired size: \\[\n\\begin{gather}\n    \\bold{s} \\gets t(\\bold{s}),     \\\\\n    o        \\gets \\phi(\\bold{s}).\n\\end{gather}\n\\] Here \\(t\\) is the transition function which advances the state, and \\(\\phi\\) is the output function, sometimes referred to as the scrambler, that reduces the state to a single output word \\(o\\).\nThe output function doesn’t change the current state but mangles it in some fashion to project the higher dimensional state to the desired lower number of bits of output. At a minimum, the state will have the same number of bits as an output word and generally “good” generators will have more bits of state than that.\nUseful generators produce streams of output words with desirable statistical properties. For example, uniformly distributed across the output space, having a high degree of unpredictability, etc. A full mathematical analysis of an RNG is typically very difficult but various empirical test suites have been developed that directly examine the output streams looking for statistical weaknesses.\nOf course, a good generator must also be efficient. In many practical applications, the generator will be expected to produce a vast number of outputs so speed is important.\nFor this reason, most RNGs internally treat the state as some finite collection of computer words (for a lot of architectures that will be 64-bit words or perhaps 32-bit words) and the transition function is designed to mix those words up in a manner that makes use of a small number of basic computer operations like XOR instructions and so on.\nFor example, one well-regarded RNG for 64-bit outputs is a particular variant of xoshiro. In this RNG the state is internally stored as a collection of four 64-bit words (256 total bits of state).\nIf that array is {s[0],s[1],s[2],s[3]} then the state step/transition function \\(t\\) is:\nvoid step()\n{\n    const std::uint64_t tmp = s[1] &lt;&lt; 17;\n    s[2] ^= s[0];\n    s[3] ^= s[1];\n    s[1] ^= s[2];\n    s[0] ^= s[3];\n    s[2] ^= tmp;\n    s[3] = std::rotl(s[3], 45);\n}\nSo a single bit-shift operation, five XOR operations, and a final bitwise left-rotation. Not a lot of computation and all of it is fundamentally efficient.\nThe step function can be coupled with various simple scramblers to produce the desired output. One \\(\\phi(\\bold{s})\\) that is used is:\nstd::uint64_t operator()(const std::uint64_t *s) { return std::rotl(s[1] * 5, 7) * 9; }\nThe total amount of code here is tiny and this RNG will be pretty efficient. Of course, verifying its quality is another matter.",
+    "crumbs": [
+      "Home",
+      "Technical Notes",
+      "The Jump Technique"
+    ]
+  },
+  {
+    "objectID": "pages/jump-technique.html#linear-transition-functions",
+    "href": "pages/jump-technique.html#linear-transition-functions",
+    "title": "Efficient Jump Ahead Methods for Some RNGs",
+    "section": "Linear Transition Functions",
+    "text": "Linear Transition Functions\nSurprisingly, the state transition function \\(t\\) for many popular RNGs can be written as a linear transformation when the state is viewed as a vector over GF(2) the simplest Galois Field with two elements.\nGF(2) also known as \\(\\FF\\) is just a mathematical way of talking about bits.\n\\(\\FF\\) has just two elements 0 and 1 and all the usual arithmetic operations are carried out mod 2 to keep everything closed in \\(\\{0,1\\}\\). You can easily verify that addition in \\(\\FF\\) becomes XOR and multiplication becomes AND. It is also useful to know that you can replace any minus signs with pluses and divisions by multiplications.\nIn our specific xoshiro example above we saw that the generator works internally on an array of four 64-bit unsigned words and the transition function \\(t\\) performs a small number of bit-shift, XOR, and bit-rotation operations on and between those four words.\nThe four 64-bit words can also be thought of as a single 256-element bit-vector: \\[\n    \\bold{s} \\in \\FF^{256}.\n\\] Remember that any XOR operation between 64-bit words can be thought of as an addition in \\(\\FF^{64}\\) when the words are treated as 64-element bit-vectors.\nWe also note that bit-shifting a 64-bit number one place to the left can be thought of as pre-multiplying the word’s 64 bits with a \\(64 \\times 64\\) left bit shift matrix (i.e. the bit-matrix that is all zeros except for ones on the principal sub-diagonal): \\[\n\\cal{L} =\n\\begin{bmatrix}\n0      & 0      & 0      & \\ldots & 0      & 0      & 0      \\\\\n1      & 0      & 0      & \\ldots & 0      & 0      & 0      \\\\\n0      & 1      & 0      & \\ldots & 0      & 0      & 0      \\\\\n\\vdots & \\vdots & \\vdots & \\vdots & \\vdots & \\vdots & \\vdots \\\\\n0      & 0      & 0      & \\ldots & 1      & 0      & 0      \\\\\n0      & 0      & 0      & \\ldots & 0      & 1      & 0\n\\end{bmatrix}\n\\]\nSimilarly rotating a 64-bit word one place to the left can be thought of as pre-multiplying the word’s 64 bits with a \\(64 \\times 64\\) left bit rotation matrix (i.e. the bit-matrix that is all zeros except for ones on the principal sub-diagonal and a one in the upper right corner): \\[\n\\cal{R} =\n\\begin{bmatrix}\n0      & 0      & 0      & \\ldots & 0      & 0      & 1      \\\\\n1      & 0      & 0      & \\ldots & 0      & 0      & 0      \\\\\n0      & 1      & 0      & \\ldots & 0      & 0      & 0      \\\\\n\\vdots & \\vdots & \\vdots & \\vdots & \\vdots & \\vdots & \\vdots \\\\\n0      & 0      & 0      & \\ldots & 1      & 0      & 0      \\\\\n0      & 0      & 0      & \\ldots & 0      & 1      & 0\n\\end{bmatrix}\n\\]\nUsing these facts it is not hard to verify that we can cast the step method above as: \\[\n\\bold{s} \\gets T \\cdot \\bold{s}\n\\] where \\(T\\) is a square \\(256 \\times 256\\) element bit-matrix which can also be seen as the following \\(4 \\times 4\\) word matrix: \\[\nT  =\n\\begin{bmatrix}\nI & I            & 0 & I \\\\\nI & I            & I & 0 \\\\\nI & \\cal{L}^{17} & I & 0 \\\\\n0 & \\cal{R}^{45} & 0 & \\cal{R}^{45}\n\\end{bmatrix}\n\\] Here each word block is a \\(64 \\times 64\\) sub-bit-matrix and \\(I\\) is the \\(64 \\times 64\\) identity bit-matrix.\nMore details can be found for this xoshiro and several other variants in the original paper. However, bear in mind that the paper’s authors think of \\(\\bold{s}\\) as a row vector and the transition as \\(\\bold{s} \\gets \\bold{s} \\cdot T\\) That means their version of \\(T\\) matrix is transposed from the one shown here.\n\nComputing the Transition Matrix\nIn the case of xoshiro we have an explicit representation of the transition matrix \\(T\\) in terms of simple sub-matrices and one can indeed use those blocks to build up \\(T\\) in code.\nHowever, it is more practical/convenient to have a general method to construct \\(T\\) for any RNG with a linear transition function for the state.\nTo do that, think about how \\(T\\) will act on the unit bit-vectors \\(\\bold{u}_i\\) which has just one set bit. You can easily convince yourself that \\(T \\cdot \\bold{u}_i\\) pulls out the column \\(i\\) of \\(T\\).\nSo a general method to fill \\(T\\) simply iterates through all the unit bit-vectors, and for each one translates it back to word space. Then those state words are put through a single call of the generator’s step method. The resulting state words can be translated back to bit space and that bit-vector becomes a column in \\(T\\).\n\n\n\n\n\n\nUsefulness of the transition matrix\n\n\n\nIt is worth noting that while the transition matrix can be used to advance the state, the required matrix-vector product, even using a linear algebra package like bit that is optimized for \\(\\FF\\), is much slower than using code like the step() method shown above.\n\n\nThe \\(\\bold{s} \\gets T \\cdot \\bold{s}\\) view of things is only useful for doing analysis or when we think about making large-scale jumps ahead in the stream as we will show next.",
+    "crumbs": [
+      "Home",
+      "Technical Notes",
+      "The Jump Technique"
+    ]
+  },
+  {
+    "objectID": "pages/jump-technique.html#jumping-ahead-in-the-stream",
+    "href": "pages/jump-technique.html#jumping-ahead-in-the-stream",
+    "title": "Efficient Jump Ahead Methods for Some RNGs",
+    "section": "Jumping Ahead in the Stream",
+    "text": "Jumping Ahead in the Stream\nA very useful thing to be able to do with an RNG is to jump very far ahead in the random number stream. This allows one to treat a single stream of random numbers as a bunch of disjoint sub-streams that collectively cover a wide spectrum of the state space in a non-overlapping manner. Each sub-stream needs to be long enough to run a simulation that by itself will consume a vast number of random numbers so the jumps we are talking about are also huge.\nSo we want to have sub-streams where each “owns” \\(N\\) random numbers for some very large \\(N\\).\nWith an appropriate generator, this can be done by first starting it anywhere, then creating a copy of the generator but with the state advanced \\(N\\) times, then making a copy of that generator but with its state advanced a further \\(N\\) times etc.\nOne simple way to advance \\(N\\) steps is:\nvoid discard(std::uint64_t N)\n{\n    for(std::uint64_t i = 0; i &lt; N; ++i) step();\n}\nCurrently, most of the standard C++ libraries seem to take this naive approach for their RNGs. While this is workable for modest values of \\(N\\) it too slow for the actual use cases where we expect \\(N\\) to be very, very large. Even the argument type is probably wrong for many of those cases and it might be more useful to think about e.g. \\(N=2^\\nu\\) where \\(\\nu\\) is the std::uint64_t argument.\n\nUsing the Transition Matrix\nWe have seen that for linear transition RNGs we can cast the state step function as the product of a bit-matrix (the transition matrix) with the state viewed as a bit-vector: \\[\n\\bold{s} \\gets T \\cdot \\bold{s}.\n\\] This means that if we want to advance the state by say \\(N\\) steps we can do so by computing \\[\n\\bold{s} \\gets T^N \\cdot \\bold{s}.\n\\] Unfortunately, even if \\(T\\) is sparse and “special” like the \\(T\\) above for xoshiro, \\(T^N\\) is unlikely to have a readily written down form.\nNevertheless, if we use a linear algebra package like bit that is optimized for \\(\\FF\\) and which uses the well-known square and multiply algorithm to minimize the operation count when evaluating matrix powers this simple compute-the-power method can be somewhat competitive for large enough \\(N\\) at least for generators that aren’t off the scale in terms of the size of the state space.\n\n\nThe Characteristic Polynomial\nHowever, we can do much better by following the method first developed by Haramoto et al..\nIf there are \\(n\\) bits in the state then the transition matrix \\(T\\) is some non-singular \\(n \\times n\\) bit-matrix.\nLet \\(c(x)\\) be the characteristic polynomial for \\(T\\) which we can write as \\[\nc(x) = c_n x^n + c_{n-1} x^{n-1} + \\cdots+c_1 x + c_0\n\\] where the argument \\(x\\) and each polynomial coefficient \\(c_i\\) is in \\(\\FF\\).\nThe fast jump ahead method hinges on the observation that we can write any polynomial as some multiple of \\(c(x)\\) plus a lower degree remainder term.\nIn particular, for an arbitrary power \\(N\\), we will express the polynomial \\(x^N\\) as \\[\nx^N = q(x) c(x) + r(x)\n\\] where the degree of the remainder \\(r(x)\\) is less than \\(n\\) so we can write \\[\nr(x) = r_{n-1} x^{n-1} + r_{n-2} x^{n-2} + \\cdots+r_1 x + r_0\n\\] for some set of coefficients \\(r_i\\) in \\(\\FF\\).\nThis also works for bit-matrix arguments which means we can express \\(T^N\\) as \\[\nT^N = q(T)c(T) + r(T).\n\\] But the Cayley Hamilton theorem tells us that every matrix satisfies its own characteristic polynomial which means that \\(c(T) = 0\\).\nIt follows that \\[\nT^N = r(T) = r_{n-1} T^{n-1} + r_{n-2} T^{n-2} + \\cdots + r_2 T^2 +  r_1 T + r_0 I\n\\] where \\(I\\) is the \\(n \\times n\\) identity bit-matrix and in cases of interest \\(n \\ll N\\).\nThis bit of magic means that we can compute very large power \\(T^N\\) by doing a much lower-order polynomial sum!\nMoreover, we are really after \\(T^N \\cdot \\bold{s}\\) which now becomes \\[\nT^N \\cdot \\bold{s} =\nr(T) \\cdot \\bold{s} =\n\\left( r_{n-1} T^{n-1} + r_{n-2} T^{n-2} + \\cdots + r_2 T^2 + r_1 T + r_0 I \\right) \\cdot \\bold{s}\n\\] But \\(T \\cdot \\bold{s}\\) is just a single call to the step function.\nSimilarly, \\(T^2 \\cdot \\bold{s}\\) can be evaluated with a second step call and so on.\nThis means that \\[\n    T^N \\cdot \\bold{s} = r(T) \\cdot \\bold{s}\n\\] can be calculated with just \\(n-1\\) calls to the step method. This is extremely efficient when \\(N \\gg n\\) — for example, if we want to jump by \\(N = 2^{100}\\) steps and the generator has \\(n = 256\\) bits of state.\n\n\nWith the bit Library\nWhat do we need to implement this idea?\n\nA method to construct the transition matrix \\(T\\).\nA method to extract its characteristic polynomial \\(c(x)\\).\nA method to compute \\(r(x) = \\mod{x^N}{c(x)}\\) .\nA method to efficiently compute \\(r(T) \\cdot \\bold{s}\\).\n\nFortunately, we can fill in these steps by making use of the bit library:\n\nAs we saw above, we can construct \\(T\\) column by column without any deep knowledge of the structure of the generator. Assuming it is indeed linear then one call of the step method for a seed state that is a unit bit-vector will return one column of \\(T\\). Our generators don’t work on bit-vectors directly but the bit library lets you go from bits to words and vice-versa.\nWe can use Danilevsky’s algorithm to extract the characteristic polynomial for \\(T\\). That is already implemented in the bit library and the function will never overflow.\nThe bit library also has an algorithm to compute \\(\\mod{x^N}{c(x)}\\) over \\(\\FF\\) for very large \\(N\\).\nFinally, as noted above, \\(r(T) \\cdot \\bold{s}\\) can be computed with \\(n-1\\) calls to the step method and, in the cases of interest, \\(n\\) is very small relative to the jump size \\(N\\) i.e. \\(n \\ll N\\).\n\n\n\n\n\n\n\nJump polynomial\n\n\n\nIn this context, the remainder polynomial \\(r(x)\\) is called a jump polynomial and using the steps above we can compute it for arbitrary xoshiro/xoroshiro generators and any jump size \\(N\\). These jump polynomials will be returned as bit-vectors i.e. as bit::vector objects.\n\n\n\n\nWithout the bit Library\nThe C++ bit library is header only so it is easily incorporated into any application. But we also recognize that is very convenient to have xoshiro.h be complete as a standalone file.\nIdeally, even without access to the bit headers, we would still like to have access to the jump methods and also the xso::partition class to split a single parent stream of random outputs into a set of non-overlapping sub-streams.\nOf course, if we don’t have the bit library available then we don’t have the bit::matrix and bit::vector classes. This means we have no easy way to even represent the generator’s transition bit-matrix \\(T\\).\nBut computing \\(T\\) is just a means to an end. We want the jump polynomial which for a specific generator and specific jump size \\(N\\) is the polynomial \\(r(x) = \\mod{x^N}{c(x)}\\) where \\(c(x)\\) is the characteristic polynomial for the transition matrix associated with the generator in question.\nLet’s start with that characteristic polynomial.\nUsing the bit library it is easy to compute the coefficients of \\(c(x)\\) for the transition matrix \\(T\\) where \\[\n    c(x) = c_n x^n + \\cdots + c_0.\n\\] Those coefficients will naturally be represented as a bit-vector with \\(n+1\\) elements.\nHowever, our transition matrices should always be of full rank which implies that \\(c(x)\\) is monic and therefore we always expect \\(c_n = 1\\) and we can always write: \\[\nc(x) =  x^n + p(x)\n\\] where the \\(p(x)\\) is a polynomial of degree at most \\(n-1\\): \\[\n    p(x) = p_{n-1} x^{n-1} + \\cdots + p_1 x + p_0\n\\] So we can store the characteristic polynomial as a bit-vector \\(\\sseq{p}\\) which has just \\(n\\) elements. That is very handy as we can readily pack those coefficients into an array of ordinary words of the same state_type used to store the state itself.\nSo that is the first part of the puzzle. For all the predefined type aliased generators in xoshiro.h we have precomputed their characteristic polynomials and then embedded the coefficients of the relevant \\(p(x)\\) as an array of words inside the header file.\nThe characteristic_coefficients instance method returns those arrays if they are available or fails at compile time if they aren’t.\nOf course, getting the characteristic polynomial is also just a means to an end.\nGiven a jump size \\(N\\), we want to compute the jump polynomial \\(r(x) \\equiv \\mod{x^N}{c(x)}\\).\nNow if \\(c(x)\\) is stored as a bit-vector of its coefficients then the bit library has a function that can efficiently compute \\(r(x)\\) and return its coefficients as a bit-vector \\(\\sseq{r}\\). We have replicated a slightly simplified version of that method in xoshiro.h.\nThe instance method jump_coefficients is passed the coefficients of \\(p(x)\\) as the pre-canned array of words we mentioned above and it returns the coefficients of \\(r(x)\\) as another array of words.\nFinally of course we have the jump instance methods that take the jump polynomial as an array of ordinary words and uses that polynomial to efficiently jump the state forward.\n\n\n\n\n\n\nThe takeaway\n\n\n\nThe main thing to understand is that the single xoshiro.h header file has all the pieces in place to jump any of its predefined type aliased generators by arbitrary numbers of steps \\(N\\) or \\(2^N\\).",
+    "crumbs": [
+      "Home",
+      "Technical Notes",
+      "The Jump Technique"
+    ]
+  }
+]

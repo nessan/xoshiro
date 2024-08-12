@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.555">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>xoshiro/xoroshiro PRNG’s - Efficient Jump Ahead Methods for Some RNGs</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../assets/images/logo.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-XV29LHZDKD"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-XV29LHZDKD', { 'anonymize_ip': true});
+</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="xoshiro/xoroshiro PRNG’s - Efficient Jump Ahead Methods for Some RNGs">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://nessan.github.io/xoshiro/pages/assets/images/logo.png">
+<meta property="og:site_name" content="xoshiro/xoroshiro PRNG's">
+<meta name="twitter:title" content="xoshiro/xoroshiro PRNG’s - Efficient Jump Ahead Methods for Some RNGs">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://nessan.github.io/xoshiro/pages/assets/images/logo.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../assets/images/logo.png" alt="The xoshiro library logo" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">RNG</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../pages/generator.html"> 
+<span class="menu-text">Generators</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../pages/State.html"> 
+<span class="menu-text">States</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../pages/Scrambler.html"> 
+<span class="menu-text">Scramblers</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../pages/type-aliases.html"> 
+<span class="menu-text">Aliases</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../pages/partition.html"> 
+<span class="menu-text">Partitions</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../pages/jump-technique.html"> 
+<span class="menu-text">Jumps</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-more" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">More</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-more">    
+        <li>
+    <a class="dropdown-item" href="https://github.com/nessan/xoshiro"><i class="bi bi-github" role="img">
+</i> 
+ <span class="dropdown-text">Project Repo</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://github.com/nessan/xoshiro/issues"><i class="bi bi-bug" role="img">
+</i> 
+ <span class="dropdown-text">Report a Bug</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://github.com/nessan/xoshiro/discussions"><i class="bi bi-chat-right-text" role="img">
+</i> 
+ <span class="dropdown-text">Ask a Question</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+    <a href="https://github.com/nessan/xoshiro" title="GitHub repo" class="quarto-navigation-tool px-1" aria-label="GitHub repo"><i class="bi bi-github"></i></a>
+    <a href="https://twitter.com/nezzan" title="" class="quarto-navigation-tool px-1" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <a class="flex-grow-1 no-decor" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+          <h1 class="quarto-secondary-nav-title">Efficient Jump Ahead Methods for Some RNGs</h1>
+        </a>     
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Generators</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/generator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/generator.html#declaration" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Declaration</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/generator.html#class-types-and-methods" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Class Types &amp; Methods</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/generator.html#instance-methods" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Instance Methods</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/generator.html#non-member-functions" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Non-member Functions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/type-aliases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Recommended Generators</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">States</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/State.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/State.html#our-state-classes" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Defined States</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/State.html#class-types-and-methods" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Class Types &amp; Methods</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/State.html#instance-methods" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Instance Methods</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/State.html#precomputed-characteristics" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Precomputed Characteristics</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Scramblers</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/Scrambler.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/Scrambler.html#our-scrambler-classes" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Defined Scramblers</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/Scrambler.html#methods" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Methods</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">Stream Partitioning</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/partition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/partition.html#declaration" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Declaration</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/partition.html#instance-methods" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Instance Methods</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+ <span class="menu-text">Technical Notes</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/jump-technique.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">The Jump Technique</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#linear-transition-functions" id="toc-linear-transition-functions" class="nav-link" data-scroll-target="#linear-transition-functions">Linear Transition Functions</a>
+  <ul class="collapse">
+  <li><a href="#computing-the-transition-matrix" id="toc-computing-the-transition-matrix" class="nav-link" data-scroll-target="#computing-the-transition-matrix">Computing the Transition Matrix</a></li>
+  </ul></li>
+  <li><a href="#jumping-ahead-in-the-stream" id="toc-jumping-ahead-in-the-stream" class="nav-link" data-scroll-target="#jumping-ahead-in-the-stream">Jumping Ahead in the Stream</a>
+  <ul class="collapse">
+  <li><a href="#using-the-transition-matrix" id="toc-using-the-transition-matrix" class="nav-link" data-scroll-target="#using-the-transition-matrix">Using the Transition Matrix</a></li>
+  <li><a href="#the-characteristic-polynomial" id="toc-the-characteristic-polynomial" class="nav-link" data-scroll-target="#the-characteristic-polynomial">The Characteristic Polynomial</a></li>
+  <li><a href="#with-the-bit-library" id="toc-with-the-bit-library" class="nav-link" data-scroll-target="#with-the-bit-library">With the <code>bit</code> Library</a></li>
+  <li><a href="#without-the-bit-library" id="toc-without-the-bit-library" class="nav-link" data-scroll-target="#without-the-bit-library">Without the <code>bit</code> Library</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/nessan/xoshiro/edit/main/docs/pages/jump-technique.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nessan/xoshiro/issues/new/choose" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Efficient Jump Ahead Methods for Some RNGs</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- Links and shortcuts used throughout the documentation -->
+<!-- Math shortcuts we use frequently in the documentation -->
+<div class="hidden">
+<p><span class="math display">\[
+\newcommand{\FF}{\mathbb{F}_2}
+\newcommand{\bold}[1]{\mathbf{#1}}
+\newcommand{\mod}[2]{ {#1 \, \mathrm{mod} \, #2}}
+\]</span></p>
+</div>
+<!-- Our library -->
+<!-- Extras that are defined if `bit` is available -->
+<!-- Library concepts and technical notes -->
+<!-- The standard library -->
+<!-- The `bit` library -->
+<!-- The `utilities` library used in some example code -->
+<!-- Other software etc. -->
+<!-- Articles and Wikipedia pages -->
+<!-- Math shortcuts we use -->
+<div class="hidden">
+<p><span class="math display">\[
+\newcommand{\seq}[2][n]{ #2_0 #2_1 \ldots #2_{#1-1} }
+\newcommand{\sseq}[2][n]{ \left[#2_0 #2_1 \ldots #2_{#1-1}\right] }
+\]</span></p>
+</div>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>The heart of all random number generators is the method that produces a stream of <em>uniformly</em> distributed output words — usually 32-bit or 64-bit unsigned integers. That core stream is used by other functions to simulate any desired distribution over the field of interest, for example, to simulate a uniform distribution of reals in the range 0 to 1.</p>
+<p>For some generators, the core step can be broken down into two stages. In the first, the generator’s current <em>state</em> <span class="math inline">\(\bold{s}\)</span> is iteratively advanced in some fashion and, in the second, that new state is passed through a function <span class="math inline">\(\phi(\bold{s})\)</span> to get an output of the desired size: <span class="math display">\[
+\begin{gather}
+    \bold{s} \gets t(\bold{s}),     \\
+    o        \gets \phi(\bold{s}).
+\end{gather}
+\]</span> Here <span class="math inline">\(t\)</span> is the <em>transition function</em> which advances the state, and <span class="math inline">\(\phi\)</span> is the output function, sometimes referred to as the <em>scrambler</em>, that reduces the state to a single output word <span class="math inline">\(o\)</span>.</p>
+<p>The output function doesn’t change the current state but mangles it in some fashion to project the higher dimensional state to the desired lower number of bits of output. At a minimum, the state will have the same number of bits as an output word and generally “good” generators will have more bits of state than that.</p>
+<p>Useful generators produce streams of output words with desirable statistical properties. For example, uniformly distributed across the output space, having a high degree of unpredictability, etc. A full mathematical analysis of an RNG is typically very difficult but various empirical test suites have been developed that directly examine the output streams looking for statistical weaknesses.</p>
+<p>Of course, a good generator must also be <em>efficient</em>. In many practical applications, the generator will be expected to produce a vast number of outputs so speed is important.</p>
+<p>For this reason, most RNGs internally treat the state as some finite collection of computer words (for a lot of architectures that will be 64-bit words or perhaps 32-bit words) and the transition function is designed to mix those words up in a manner that makes use of a small number of basic computer operations like <code>XOR</code> instructions and so on.</p>
+<p>For example, one well-regarded RNG for 64-bit outputs is a particular variant of <em>xoshiro</em>. In this RNG the state is internally stored as a collection of four 64-bit words (256 total bits of state).</p>
+<p>If that array is <code>{s[0],s[1],s[2],s[3]}</code> then the state step/transition function <span class="math inline">\(t\)</span> is:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> step<span class="op">()</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>uint64_t tmp <span class="op">=</span> s<span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="op">&lt;&lt;</span> <span class="dv">17</span><span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    s<span class="op">[</span><span class="dv">2</span><span class="op">]</span> <span class="op">^=</span> s<span class="op">[</span><span class="dv">0</span><span class="op">];</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    s<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">^=</span> s<span class="op">[</span><span class="dv">1</span><span class="op">];</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    s<span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="op">^=</span> s<span class="op">[</span><span class="dv">2</span><span class="op">];</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    s<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">^=</span> s<span class="op">[</span><span class="dv">3</span><span class="op">];</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    s<span class="op">[</span><span class="dv">2</span><span class="op">]</span> <span class="op">^=</span> tmp<span class="op">;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    s<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">=</span> <span class="bu">std::</span>rotl<span class="op">(</span>s<span class="op">[</span><span class="dv">3</span><span class="op">],</span> <span class="dv">45</span><span class="op">);</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>So a single bit-shift operation, five <code>XOR</code> operations, and a final bitwise left-rotation. Not a lot of computation and all of it is fundamentally efficient.</p>
+<p>The step function can be coupled with various simple scramblers to produce the desired output. One <span class="math inline">\(\phi(\bold{s})\)</span> that is used is:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>uint64_t <span class="kw">operator</span><span class="op">()(</span><span class="at">const</span> <span class="bu">std::</span>uint64_t <span class="op">*</span>s<span class="op">)</span> <span class="op">{</span> <span class="cf">return</span> <span class="bu">std::</span>rotl<span class="op">(</span>s<span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="op">*</span> <span class="dv">5</span><span class="op">,</span> <span class="dv">7</span><span class="op">)</span> <span class="op">*</span> <span class="dv">9</span><span class="op">;</span> <span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The total amount of code here is tiny and this RNG will be pretty efficient. Of course, verifying its quality is another matter.</p>
+</section>
+<section id="linear-transition-functions" class="level2">
+<h2 class="anchored" data-anchor-id="linear-transition-functions">Linear Transition Functions</h2>
+<p>Surprisingly, the state transition function <span class="math inline">\(t\)</span> for many popular RNGs can be written as a <em>linear</em> transformation when the state is viewed as a vector over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a> the simplest <a href="https://en.wikipedia.org/wiki/Finite_field">Galois Field</a> with two elements.</p>
+<p>GF(2) also known as <span class="math inline">\(\FF\)</span> is just a mathematical way of talking about <em>bits</em>.</p>
+<p><span class="math inline">\(\FF\)</span> has just two elements 0 and 1 and all the usual arithmetic operations are carried out mod 2 to keep everything closed in <span class="math inline">\(\{0,1\}\)</span>. You can easily verify that addition in <span class="math inline">\(\FF\)</span> becomes <code>XOR</code> and multiplication becomes <code>AND</code>. It is also useful to know that you can replace any minus signs with pluses and divisions by multiplications.</p>
+<p>In our specific <em>xoshiro</em> example above we saw that the generator works internally on an array of four 64-bit unsigned words and the transition function <span class="math inline">\(t\)</span> performs a small number of bit-shift, <code>XOR</code>, and bit-rotation operations on and between those four words.</p>
+<p>The four 64-bit words can also be thought of as a single 256-element bit-vector: <span class="math display">\[
+    \bold{s} \in \FF^{256}.
+\]</span> Remember that any <code>XOR</code> operation between 64-bit words can be thought of as an addition in <span class="math inline">\(\FF^{64}\)</span> when the words are treated as 64-element bit-vectors.</p>
+<p>We also note that bit-shifting a 64-bit number one place to the left can be thought of as pre-multiplying the word’s 64 bits with a <span class="math inline">\(64 \times 64\)</span> left <em>bit shift</em> matrix (i.e.&nbsp;the bit-matrix that is all zeros except for ones on the principal sub-diagonal): <span class="math display">\[
+\cal{L} =
+\begin{bmatrix}
+0      &amp; 0      &amp; 0      &amp; \ldots &amp; 0      &amp; 0      &amp; 0      \\
+1      &amp; 0      &amp; 0      &amp; \ldots &amp; 0      &amp; 0      &amp; 0      \\
+0      &amp; 1      &amp; 0      &amp; \ldots &amp; 0      &amp; 0      &amp; 0      \\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+0      &amp; 0      &amp; 0      &amp; \ldots &amp; 1      &amp; 0      &amp; 0      \\
+0      &amp; 0      &amp; 0      &amp; \ldots &amp; 0      &amp; 1      &amp; 0
+\end{bmatrix}
+\]</span></p>
+<p>Similarly rotating a 64-bit word one place to the left can be thought of as pre-multiplying the word’s 64 bits with a <span class="math inline">\(64 \times 64\)</span> left <em>bit rotation</em> matrix (i.e.&nbsp;the bit-matrix that is all zeros except for ones on the principal sub-diagonal and a one in the upper right corner): <span class="math display">\[
+\cal{R} =
+\begin{bmatrix}
+0      &amp; 0      &amp; 0      &amp; \ldots &amp; 0      &amp; 0      &amp; 1      \\
+1      &amp; 0      &amp; 0      &amp; \ldots &amp; 0      &amp; 0      &amp; 0      \\
+0      &amp; 1      &amp; 0      &amp; \ldots &amp; 0      &amp; 0      &amp; 0      \\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+0      &amp; 0      &amp; 0      &amp; \ldots &amp; 1      &amp; 0      &amp; 0      \\
+0      &amp; 0      &amp; 0      &amp; \ldots &amp; 0      &amp; 1      &amp; 0
+\end{bmatrix}
+\]</span></p>
+<p>Using these facts it is not hard to verify that we can cast the <code>step</code> method above as: <span class="math display">\[
+\bold{s} \gets T \cdot \bold{s}
+\]</span> where <span class="math inline">\(T\)</span> is a square <span class="math inline">\(256 \times 256\)</span> element bit-matrix which can also be seen as the following <span class="math inline">\(4 \times 4\)</span> <em>word</em> matrix: <span class="math display">\[
+T  =
+\begin{bmatrix}
+I &amp; I            &amp; 0 &amp; I \\
+I &amp; I            &amp; I &amp; 0 \\
+I &amp; \cal{L}^{17} &amp; I &amp; 0 \\
+0 &amp; \cal{R}^{45} &amp; 0 &amp; \cal{R}^{45}
+\end{bmatrix}
+\]</span> Here each word block is a <span class="math inline">\(64 \times 64\)</span> sub-bit-matrix and <span class="math inline">\(I\)</span> is the <span class="math inline">\(64 \times 64\)</span> identity bit-matrix.</p>
+<p>More details can be found for this <em>xoshiro</em> and several other variants in the <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">original paper</a>. However, bear in mind that the paper’s authors think of <span class="math inline">\(\bold{s}\)</span> as a <em>row</em> vector and the transition as <span class="math inline">\(\bold{s} \gets \bold{s} \cdot T\)</span> That means their version of <span class="math inline">\(T\)</span> matrix is transposed from the one shown here.</p>
+<section id="computing-the-transition-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="computing-the-transition-matrix">Computing the Transition Matrix</h3>
+<p>In the case of <em>xoshiro</em> we have an explicit representation of the transition matrix <span class="math inline">\(T\)</span> in terms of simple sub-matrices and one can indeed use those blocks to build up <span class="math inline">\(T\)</span> in code.</p>
+<p>However, it is more practical/convenient to have a general method to construct <span class="math inline">\(T\)</span> for any RNG with a linear transition function for the state.</p>
+<p>To do that, think about how <span class="math inline">\(T\)</span> will act on the <em>unit</em> bit-vectors <span class="math inline">\(\bold{u}_i\)</span> which has just one set bit. You can easily convince yourself that <span class="math inline">\(T \cdot \bold{u}_i\)</span> pulls out the column <span class="math inline">\(i\)</span> of <span class="math inline">\(T\)</span>.</p>
+<p>So a general method to fill <span class="math inline">\(T\)</span> simply iterates through all the unit bit-vectors, and for each one translates it back to word space. Then those state words are put through a single call of the generator’s <code>step</code> method. The resulting state words can be translated back to bit space and that bit-vector becomes a column in <span class="math inline">\(T\)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Usefulness of the transition matrix
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>It is worth noting that while the transition matrix can be used to advance the state, the required matrix-vector product, even using a linear algebra package like <a href="https://nessan.github.io/bit"><code>bit</code></a> that is optimized for <span class="math inline">\(\FF\)</span>, is much slower than using code like the <code>step()</code> method shown above.</p>
+</div>
+</div>
+<p>The <span class="math inline">\(\bold{s} \gets T \cdot \bold{s}\)</span> view of things is only useful for doing analysis or when we think about making large-scale jumps ahead in the stream as we will show next.</p>
+</section>
+</section>
+<section id="jumping-ahead-in-the-stream" class="level2">
+<h2 class="anchored" data-anchor-id="jumping-ahead-in-the-stream">Jumping Ahead in the Stream</h2>
+<p>A very useful thing to be able to do with an RNG is to jump very far ahead in the random number stream. This allows one to treat a single stream of random numbers as a bunch of disjoint sub-streams that collectively cover a wide spectrum of the state space in a non-overlapping manner. Each sub-stream needs to be long enough to run a simulation that by itself will consume a vast number of random numbers so the jumps we are talking about are also huge.</p>
+<p>So we want to have sub-streams where each “owns” <span class="math inline">\(N\)</span> random numbers for some very large <span class="math inline">\(N\)</span>.</p>
+<p>With an appropriate generator, this can be done by first starting it anywhere, then creating a copy of the generator but with the state advanced <span class="math inline">\(N\)</span> times, then making a copy of that generator but with its state advanced a further <span class="math inline">\(N\)</span> times etc.</p>
+<p>One simple way to advance <span class="math inline">\(N\)</span> steps is:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> discard<span class="op">(</span><span class="bu">std::</span>uint64_t N<span class="op">)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span><span class="op">(</span><span class="bu">std::</span>uint64_t i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> N<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> step<span class="op">();</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Currently, most of the standard C++ libraries seem to take this naive approach for their RNGs. While this is workable for modest values of <span class="math inline">\(N\)</span> it too slow for the actual use cases where we expect <span class="math inline">\(N\)</span> to be very, very large. Even the argument type is probably wrong for many of those cases and it might be more useful to think about e.g.&nbsp;<span class="math inline">\(N=2^\nu\)</span> where <span class="math inline">\(\nu\)</span> is the <code>std::uint64_t</code> argument.</p>
+<section id="using-the-transition-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="using-the-transition-matrix">Using the Transition Matrix</h3>
+<p>We have seen that for linear transition RNGs we can cast the state <code>step</code> function as the product of a bit-matrix (the <em>transition</em> matrix) with the state viewed as a bit-vector: <span class="math display">\[
+\bold{s} \gets T \cdot \bold{s}.
+\]</span> This means that if we want to advance the state by say <span class="math inline">\(N\)</span> steps we can do so by computing <span class="math display">\[
+\bold{s} \gets T^N \cdot \bold{s}.
+\]</span> Unfortunately, even if <span class="math inline">\(T\)</span> is sparse and “special” like the <span class="math inline">\(T\)</span> above for <em>xoshiro</em>, <span class="math inline">\(T^N\)</span> is unlikely to have a readily written down form.</p>
+<p>Nevertheless, if we use a linear algebra package like <a href="https://nessan.github.io/bit"><code>bit</code></a> that is optimized for <span class="math inline">\(\FF\)</span> and which uses the well-known square and multiply algorithm to minimize the operation count when evaluating matrix powers this simple compute-the-power method can be somewhat competitive for large enough <span class="math inline">\(N\)</span> at least for generators that aren’t off the scale in terms of the size of the state space.</p>
+</section>
+<section id="the-characteristic-polynomial" class="level3">
+<h3 class="anchored" data-anchor-id="the-characteristic-polynomial">The Characteristic Polynomial</h3>
+<p>However, we can do much better by following the method first developed by <a href="http://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/ARTICLES/jumpf2-printed.pdf%5BHaramoto%20et%20al.%5D">Haramoto et al.</a>.</p>
+<p>If there are <span class="math inline">\(n\)</span> bits in the state then the transition matrix <span class="math inline">\(T\)</span> is some non-singular <span class="math inline">\(n \times n\)</span> bit-matrix.</p>
+<p>Let <span class="math inline">\(c(x)\)</span> be the <a href="https://en.wikipedia.org/wiki/Characteristic_polynomial">characteristic polynomial</a> for <span class="math inline">\(T\)</span> which we can write as <span class="math display">\[
+c(x) = c_n x^n + c_{n-1} x^{n-1} + \cdots+c_1 x + c_0
+\]</span> where the argument <span class="math inline">\(x\)</span> and each polynomial coefficient <span class="math inline">\(c_i\)</span> is in <span class="math inline">\(\FF\)</span>.</p>
+<p>The fast jump ahead method hinges on the observation that we can write any polynomial as some multiple of <span class="math inline">\(c(x)\)</span> plus a lower degree remainder term.</p>
+<p>In particular, for an arbitrary power <span class="math inline">\(N\)</span>, we will express the polynomial <span class="math inline">\(x^N\)</span> as <span class="math display">\[
+x^N = q(x) c(x) + r(x)
+\]</span> where the degree of the remainder <span class="math inline">\(r(x)\)</span> is less than <span class="math inline">\(n\)</span> so we can write <span class="math display">\[
+r(x) = r_{n-1} x^{n-1} + r_{n-2} x^{n-2} + \cdots+r_1 x + r_0
+\]</span> for some set of coefficients <span class="math inline">\(r_i\)</span> in <span class="math inline">\(\FF\)</span>.</p>
+<p>This also works for bit-matrix arguments which means we can express <span class="math inline">\(T^N\)</span> as <span class="math display">\[
+T^N = q(T)c(T) + r(T).
+\]</span> But the <a href="https://en.wikipedia.org/wiki/Cayley–Hamilton_theorem">Cayley Hamilton</a> theorem tells us that every matrix satisfies its own characteristic polynomial which means that <span class="math inline">\(c(T) = 0\)</span>.</p>
+<p>It follows that <span class="math display">\[
+T^N = r(T) = r_{n-1} T^{n-1} + r_{n-2} T^{n-2} + \cdots + r_2 T^2 +  r_1 T + r_0 I
+\]</span> where <span class="math inline">\(I\)</span> is the <span class="math inline">\(n \times n\)</span> identity bit-matrix and in cases of interest <span class="math inline">\(n \ll N\)</span>.</p>
+<p>This bit of magic means that we can compute very large power <span class="math inline">\(T^N\)</span> by doing a much lower-order polynomial sum!</p>
+<p>Moreover, we are really after <span class="math inline">\(T^N \cdot \bold{s}\)</span> which now becomes <span class="math display">\[
+T^N \cdot \bold{s} =
+r(T) \cdot \bold{s} =
+\left( r_{n-1} T^{n-1} + r_{n-2} T^{n-2} + \cdots + r_2 T^2 + r_1 T + r_0 I \right) \cdot \bold{s}
+\]</span> But <span class="math inline">\(T \cdot \bold{s}\)</span> is just a single call to the <code>step</code> function.<br>
+Similarly, <span class="math inline">\(T^2 \cdot \bold{s}\)</span> can be evaluated with a second <code>step</code> call and so on.</p>
+<p>This means that <span class="math display">\[
+    T^N \cdot \bold{s} = r(T) \cdot \bold{s}
+\]</span> can be calculated with just <span class="math inline">\(n-1\)</span> calls to the <code>step</code> method. This is extremely efficient when <span class="math inline">\(N \gg n\)</span> — for example, if we want to jump by <span class="math inline">\(N = 2^{100}\)</span> steps and the generator has <span class="math inline">\(n = 256\)</span> bits of state.</p>
+</section>
+<section id="with-the-bit-library" class="level3">
+<h3 class="anchored" data-anchor-id="with-the-bit-library">With the <code>bit</code> Library</h3>
+<p>What do we need to implement this idea?</p>
+<ol type="1">
+<li>A method to construct the transition matrix <span class="math inline">\(T\)</span>.</li>
+<li>A method to extract its characteristic polynomial <span class="math inline">\(c(x)\)</span>.</li>
+<li>A method to compute <span class="math inline">\(r(x) = \mod{x^N}{c(x)}\)</span> .</li>
+<li>A method to efficiently compute <span class="math inline">\(r(T) \cdot \bold{s}\)</span>.</li>
+</ol>
+<p>Fortunately, we can fill in these steps by making use of the <a href="https://nessan.github.io/bit"><code>bit</code></a> library:</p>
+<ol type="1">
+<li>As we saw above, we can construct <span class="math inline">\(T\)</span> column by column without any deep knowledge of the structure of the generator. Assuming it is indeed linear then one call of the <code>step</code> method for a seed state that is a unit bit-vector will return one column of <span class="math inline">\(T\)</span>. Our generators don’t work on <em>bit-vectors</em> directly but the <code>bit</code> library lets you go from <em>bits</em> to <em>words</em> and vice-versa.</li>
+<li>We can use <a href="http://web.tecnico.ulisboa.pt/~mcasquilho/compute/com/,eigen/FaddeevaDanil.pdf">Danilevsky’s algorithm</a> to extract the characteristic polynomial for <span class="math inline">\(T\)</span>. That is already implemented in the <code>bit</code> library and the function will never overflow.</li>
+<li>The <code>bit</code> library also has an algorithm to compute <span class="math inline">\(\mod{x^N}{c(x)}\)</span> over <span class="math inline">\(\FF\)</span> for very large <span class="math inline">\(N\)</span>.</li>
+<li>Finally, as noted above, <span class="math inline">\(r(T) \cdot \bold{s}\)</span> can be computed with <span class="math inline">\(n-1\)</span> calls to the <code>step</code> method and, in the cases of interest, <span class="math inline">\(n\)</span> is very small relative to the jump size <span class="math inline">\(N\)</span> i.e.&nbsp;<span class="math inline">\(n \ll N\)</span>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Jump polynomial
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In this context, the remainder polynomial <span class="math inline">\(r(x)\)</span> is called a <em>jump polynomial</em> and using the steps above we can compute it for arbitrary <em>xoshiro/xoroshiro</em> generators and any jump size <span class="math inline">\(N\)</span>. These jump polynomials will be returned as <em>bit-vectors</em> i.e.&nbsp;as <code>bit::vector</code> objects.</p>
+</div>
+</div>
+</section>
+<section id="without-the-bit-library" class="level3">
+<h3 class="anchored" data-anchor-id="without-the-bit-library">Without the <code>bit</code> Library</h3>
+<p>The C++ <a href="https://nessan.github.io/bit"><code>bit</code></a> library is header only so it is easily incorporated into any application. But we also recognize that is very convenient to have <code>xoshiro.h</code> be complete as a standalone file.</p>
+<p>Ideally, even without access to the <code>bit</code> headers, we would still like to have access to the <code>jump</code> methods and also the <a href="../pages/partition.html"><code>xso::partition</code></a> class to split a single parent stream of random outputs into a set of non-overlapping sub-streams.</p>
+<p>Of course, if we don’t have the <a href="https://nessan.github.io/bit"><code>bit</code></a> library available then we don’t have the <a href="https://nessan.github.io/bit/pages/matrix/"><code>bit::matrix</code></a> and <a href="https://nessan.github.io/bit/pages/vector/"><code>bit::vector</code></a> classes. This means we have no easy way to even represent the generator’s transition bit-matrix <span class="math inline">\(T\)</span>.</p>
+<p>But computing <span class="math inline">\(T\)</span> is just a means to an end. We want the <em>jump polynomial</em> which for a specific generator and specific jump size <span class="math inline">\(N\)</span> is the polynomial <span class="math inline">\(r(x) = \mod{x^N}{c(x)}\)</span> where <span class="math inline">\(c(x)\)</span> is the characteristic polynomial for the transition matrix associated with the generator in question.</p>
+<p>Let’s start with that characteristic polynomial.</p>
+<p>Using the <a href="https://nessan.github.io/bit"><code>bit</code></a> library it is easy to compute the coefficients of <span class="math inline">\(c(x)\)</span> for the transition matrix <span class="math inline">\(T\)</span> where <span class="math display">\[
+    c(x) = c_n x^n + \cdots + c_0.
+\]</span> Those coefficients will naturally be represented as a bit-vector with <span class="math inline">\(n+1\)</span> elements.</p>
+<p>However, our transition matrices should always be of full rank which implies that <span class="math inline">\(c(x)\)</span> is <em>monic</em> and therefore we always expect <span class="math inline">\(c_n = 1\)</span> and we can always write: <span class="math display">\[
+c(x) =  x^n + p(x)
+\]</span> where the <span class="math inline">\(p(x)\)</span> is a polynomial of degree at most <span class="math inline">\(n-1\)</span>: <span class="math display">\[
+    p(x) = p_{n-1} x^{n-1} + \cdots + p_1 x + p_0
+\]</span> So we can store the characteristic polynomial as a bit-vector <span class="math inline">\(\sseq{p}\)</span> which has just <span class="math inline">\(n\)</span> elements. That is very handy as we can readily pack those coefficients into an array of ordinary words of the same <a href="../pages/class-types.html"><code>state_type</code></a> used to store the state itself.</p>
+<p>So that is the first part of the puzzle. For all the predefined <a href="../pages/type-aliases.html">type aliased</a> generators in <code>xoshiro.h</code> we have <em>precomputed</em> their characteristic polynomials and then embedded the coefficients of the relevant <span class="math inline">\(p(x)\)</span> as an array of words inside the header file.</p>
+<p>The <a href="../pages/characteristic_coefficients.html"><code>characteristic_coefficients</code></a> instance method returns those arrays if they are available or fails at compile time if they aren’t.</p>
+<p>Of course, getting the characteristic polynomial is also just a means to an end.</p>
+<p>Given a jump size <span class="math inline">\(N\)</span>, we want to compute the jump polynomial <span class="math inline">\(r(x) \equiv \mod{x^N}{c(x)}\)</span>.</p>
+<p>Now if <span class="math inline">\(c(x)\)</span> is stored as a bit-vector of its coefficients then the <a href="https://nessan.github.io/bit"><code>bit</code></a> library has a function that can efficiently compute <span class="math inline">\(r(x)\)</span> and return its coefficients as a bit-vector <span class="math inline">\(\sseq{r}\)</span>. We have replicated a slightly simplified version of that method in <code>xoshiro.h</code>.</p>
+<p>The instance method <a href="../pages/jump_coefficients.html"><code>jump_coefficients</code></a> is passed the coefficients of <span class="math inline">\(p(x)\)</span> as the <em>pre-canned</em> array of words we mentioned above and it returns the coefficients of <span class="math inline">\(r(x)\)</span> as another array of words.</p>
+<p>Finally of course we have the <a href="../pages/jump.html"><code>jump</code></a> instance methods that take the jump polynomial as an array of ordinary words and uses that polynomial to efficiently jump the state forward.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+The takeaway
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The main thing to understand is that the single <code>xoshiro.h</code> header file has all the pieces in place to jump <em>any</em> of its predefined <a href="../pages/type-aliases.html">type aliased</a> generators by <em>arbitrary</em> numbers of steps <span class="math inline">\(N\)</span> or <span class="math inline">\(2^N\)</span>.</p>
+</div>
+</div>
+
+
+</section>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/nessan\.github\.io\/xoshiro");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright (c) Nessan Fitzmaurice</p>
+</div>   
+    <div class="nav-footer-center">
+<p>Project is under the MIT License</p>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/nessan/xoshiro/edit/main/docs/pages/jump-technique.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nessan/xoshiro/issues/new/choose" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/nessan/xoshiro">
+      <i class="bi bi-github" role="img" aria-label="GitHub Repo">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/nezzan">
+      <i class="bi bi-twitter" role="img" aria-label="Twitter">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
