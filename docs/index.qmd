@@ -1,0 +1,2 @@
+<!-- The real landing page, like all the other pages, is in the pages/ directory -->
+{{< include /pages/index.qmd >}}

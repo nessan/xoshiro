@@ -1,0 +1,5 @@
+// The repo's top-level README is identical to the landing page for the documentation site.
+:pages: ./docs/pages
+include::{pages}/_common.adoc[]
+include::{pages}/_links.adoc[]
+include::{pages}/index.adoc[]

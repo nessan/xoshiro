@@ -1,0 +1,125 @@
+{{< include /pages/_links.qmd >}}
+---
+title: "`State`"
+---
+
+## Introduction
+
+A `State` class holds the words of state and has methods to get, set, and advance that state.
+
+Our [`xso::generator`] class takes a `State` template parameter. \
+It expects that `State` to implement the following class and instance methods:
+
+### Required Class Types & Methods
+
+Type/Method                  | Description
+---------------------------- | ---------------------------------------------------
+`word_type`                  | The state consists of words of this type.
+`word_count`                 | Class method that should return the number of words of state.
+`bit_count`                  | Class method that should return the number of bits of state.
+`xso_name`                   | Class method that should return a name for the engine.
+`characteristic_coefficients`| Class method that should return the *precomputed* characteristic polynomial.
+: {.bordered .hover .responsive tbl-colwidths="[40,60]"}
+
+### Required Instance Methods
+
+Method                      | Description
+--------------------------- | ---------------------------------------------------
+`seed`                      | Method to set the state.
+`get_state`                 | Method to copy the current state to a destination.
+`operator[]`                | Method to provide read-only access to the individual words of state.
+`step`                      | Method to advance the state by one step.
+: {.bordered .hover .responsive tbl-colwidths="[40,60]"}
+
+::: {.callout-note}
+# An `xso::generator` can be used anywhere a `State` is expected
+Any `xso::generator` satisfies all requirements of the [`State`] concept.
+This is useful as some functions work naturally on a `State` but you can just pass the `generator` along in its place as a proxy.
+:::
+
+## Our State Classes
+
+We provide two different `State` template classes in the `xso` namespace:
+
+```cpp
+template<std::size_t N, std::unsigned_integral T, uint8_t A, uint8_t B, uint8_t C>
+class xso::xoroshiro;    // <1>
+
+template<std::size_t N, std::unsigned_integral T, uint8_t A, uint8_t B>
+class xso::xoshiro;      // <2>
+```
+1. This state type implements the *xoroshiro* style of state advancement.
+2. This state type implements the *xoshiro* style of state advancement.
+
+### Template Parameters
+
+Parameter                   | Description
+--------------------------- | ---------------------------------------------------
+`N`                         | There are `N` words of state.
+`T`                         | The words of state are this type of unsigned integer. \
+                              In practice either `std::uint32_t` or `std::uint64_t`.
+`A`, `B`, `C`               | Parameters used in the engine's `step` method that advances the state.
+: {.bordered .hover .responsive tbl-colwidths="[20,80]"}
+
+::: {.callout-warning}
+# Restrictions on `N`
+The `xso::xoroshiro` engine can have arbitrary size --- i.e. the `N` parameter can be anything and its `step` method will still work.
+However, the `xso::xoshiro` engine has a hand-coded `step` method which currently only works for the two cases, `N` = 4, and `N` = 8.
+:::
+
+## Class Types and Methods
+
+Item                          | Description
+----------------------------- | ---------------------------------------------------
+`word_type`                   | The type for the words of state: `T`.
+`word_count`                  | The number of state words: `N`.
+`bit_count`                   | The number of state bits:  `N * std::numeric_limits<T>::digits`.
+`xso_name`                    | Returns a name for the engine which incorporates all the template parameters.
+`characteristic_coefficients` | Returns the *precomputed* coefficients of the engine's characteristic polynomial in a compact array format.
+: {.bordered .hover .responsive tbl-colwidths="[20,80]"}
+
+[Notes:]{.pt}
+
+1. As well as the state array, the `xoroshiro` engine has some extra "housekeeping" members. That non-state data is *not* counted by the [`bit_count`] method.
+2. The name returned by the `xso_name()` class method might look like `xoshiro<4x32,6,4>`.
+3. We have precomputed the characteristic polynomial for *all* the recommended type aliased *States*. Calling the [`characteristic_coefficients`] method for any other *State* will cause an exception.
+
+## Instance Methods
+
+Item                               | Description
+---------------------------------- | ---------------------------------------------------
+`seed(const state_type& src)`      | Sets the state by copying the `src` argument.
+`get_state(state_type& dst)`       | Copies the current state to `dst`.
+`operator[](std::size_t i)`        | Read-only access to a word `i` of state --- the index is not range checked.
+`step()`                           | Advances the state by a single step.
+: {.bordered .hover .responsive tbl-colwidths="[40,60]"}
+
+## Precomputed Characteristics
+
+If a `State` holds $n$ bits of state then its transition matrix is a $n \times n$ matrix over [GF(2)].
+
+The characteristic polynomial for that matrix is a polynomial $c(x)$ of degree $n$ over $\FF$ which we can write as:
+$$
+c(x) = x^n + p(x),
+$$
+where the degree of $p$ is less than $n$:
+$$
+p(x) = p_0 + p_1 x + \cdots p_{n-1} x^{n-1}.
+$$
+This is useful because, as discussed [here][jump technique], if we know the polynomial $p(x)$ then we can very efficiently advance the state by enormous numbers of steps.
+
+We have precomputed the coefficients of the polynomial $p(x)$ for all our type aliased recommended state engines and stored them in a compact word form that is returned by the `characteristic_coefficients` class method.
+
+The compact word form is simply a static  [`std::array`] that holds `n` bits that make up the $n$ coefficients $p_0, p_1, \ldots, p_{n-1}$ of $p(x)$.
+These pre-computed arrays are embedded in the `xoshiro.h` header file.
+
+::: {.callout-warning}
+# Only have precomputed $p(x)$ for some engines
+The library has these static arrays built in for all the recommended state engines.
+Calling the `characteristic_coefficients` method for an *arbitrary* `State` will throw an error.
+:::
+
+### See Also
+
+[`Scrambler`] \
+[`xso::generator`]

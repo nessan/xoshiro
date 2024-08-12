@@ -1,0 +1,33 @@
+/*-- scss:defaults --*/
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap");
+:is(h1, h2, h3, h4, h5, h6) {
+  font-weight: 400;
+}
+
+code {
+  font-size: 0.95em;
+}
+
+table {
+  font-size: 0.9em;
+}
+
+table code {
+  font-size: 14px;
+}
+
+.bt {
+  color: blue;
+  font-size: 0.9em;
+  font-weight: normal;
+  display: block;
+}
+
+p:has(> .bt):has(+ .sourceCode) {
+  margin-bottom: -1em;
+}
+
+p:has(> .bt):has(+ dl) {
+  margin-bottom: 0em;
+}/*# sourceMappingURL=theme.css.map */

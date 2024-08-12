@@ -1,0 +1,211 @@
+{{< include /pages/_links.qmd >}}
+---
+title: "`xso::generator` --- Extra Functions Using `bit`"
+---
+
+## Introduction
+
+[`bit`] is a {{< var cpp >}}  library for doing linear algebra over [GF(2)] the simplest field of two elements $\{0,1\}$ where the usual arithmetic operations are performed mod 2.
+The `bit` library is header only so easily incorporated into any application.
+If it is available the `xoshiro.h` header file defines some extra non-member functions:
+
+::: {.callout-tip}
+# Incorporating `bit`
+The extra functions are defined only if the compiler flag `BIT` is set. \
+See the `CMakeLists.txt` file at the root of the `xoshiro` repo for an example of how to automatically download the needed `bit` headers and incorporate them into a project.
+:::
+
+::: {.callout-note}
+# Functions work on either a `State` *or* an `xso::generator`
+Any `xso::generator` satisfies all requirements of the [`State`] concept.
+:::
+
+## Transition Matrix
+
+```cpp
+template<typename State>
+auto
+transition_matrix();        // <1>
+```
+1. Returns the transition matrix for a [`State`] as a `bit::matrix`. \
+Note that any `xso::generator` also satisfies the `State` concept.
+
+As we explain [here][jump technique] one can always view the `State`'s [`step`] function as being the product of a transition bit-matrix $T$ with the state bit-vector $\bold{s}$
+$$
+\bold{s} \gets T \cdot \bold{s}.
+$$
+If there are $n$ bits of state, then in this view, $\bold{s}$ is a bit-vector of size $n$, and $T$ is a $n \times n$ bit-matrix.
+For example, the `State` underlying the `xso::rng64` generator has 256 bits of state so $\bold{s}$ is a $256$ element bit-vector and $T$ is a $256 \times 256$ bit-matrix.
+
+In practice, the state bit-vector is stored as an array of ordinary words and the transition matrix $T$ is only implicitly defined by the [`step`] method which works directly on those state words.
+There are no references to either bit-vectors or bit-matrices.
+
+However, using the `bit` library, which efficiently performs linear algebra over $\FF$, we can get an explicit representation of $T$ as a `bit::matrix`.
+
+[Example: The transition matrix for `xso::rng32`]{.bt}
+```cpp
+#include <xoshiro.h>
+int main()
+{
+    auto T = xso::transition_matrix<xso::rng32>();
+    std::cout << T.to_string() << '\n';
+}
+```
+
+[Output: The full output has been truncated here.]{.bt}
+```bash
+1000000000000000000000000000000010000000000000000000 ...
+0100000000000000000000000000000001000000000000000000 ...
+0010000000000000000000000000000000100000000000000000 ...
+0001000000000000000000000000000000010000000000000000 ...
+...
+...
+0000000000000000000000000000000000000000000000000100 ...
+0000000000000000000000000000000000000000000000000010 ...
+0000000000000000000000000000000000000000000000000001 ...
+0000000000000000000000000000000000000000000000000000 ...
+```
+
+## Characteristic Polynomial
+
+We also have a method to extract the [characteristic polynomial] for $T$:
+
+```cpp
+template<typename State>
+auto
+characteristic_polynomial();    // <1>
+```
+1. Returns the characteristic polynomial of the `State`'s transition matrix as a `bit::polynomial`.
+
+The $n \times n$ transition matrix $T$ has a characteristic polynomial $c(x)$ of degree $n$:
+$$
+c(x) = c_0 + c_1 x + \cdots + c_n x^n.
+$$
+This is a polynomial over $\FF$ so $c_i \in \{0, 1\}$ for $i = 0, \ldots, n$.
+
+We have a method to extract this polynomial and return it as a `bit::polynomial` of size $n+1$.
+
+::: {.callout-note}
+# The characteristic polynomial will be monic
+All our transition matrices will be of *full rank* and the characteristic polynomial will have degree $n$.
+So $c(x)$ is *monic* and we always have $c_n = 1$.
+:::
+
+[Example: The characteristic polynomial for `xso::rng32`]{.bt}
+```cpp
+#include <xoshiro.h>
+int main()
+{
+    auto c = xso::characteristic_polynomial<xso::rng32>();
+    std::cout << "c(x) = " << c << '\n';
+}
+```
+
+[Output:]{.bt}
+```sh
+c(x) = 1 + x^10 + x^11 + x^12 + x^13 + x^14 + x^15 + x^19 + x^20 + x^25 + x^26 + x^27 + x^28 + x^30 + x^31 + x^33 + x^34 + x^36 + x^37 + x^39 + x^40 + x^42 + x^43 + x^44 + x^47 + x^51 + x^54 + x^56 + x^57 + x^59 + x^60 + x^64 + x^68 + x^69 + x^71 + x^74 + x^76 + x^78 + x^81 + x^85 + x^86 + x^97 + x^101 + x^103 + x^104 + x^106 + x^109 + x^110 + x^114 + x^115 + x^116 + x^117 + x^118 + x^119 + x^128    # <1>
+```
+1. Note that the polynomial is *monic* as $c_{128} = 1$.
+
+::: {.callout-note}
+# Embedded characteristic polynomial coefficients
+The `xoshiro.h` header file contains the characteristic polynomial coefficients for all the predefined [type aliased] generators.
+Those coefficients are packed into standard arrays of ordinary words where the leading $c_n = 1$ coefficient is dropped.
+See the [`characteristic_coefficient`] class method documentation for more details.
+:::
+
+## Jump Polynomial
+
+The `State` characteristic polynomial is primarily used to compute a *jump polynomial* that can rapidly move the engine ahead by $N$ steps where $N$ can be huge --- e.g. $N = 2^{100}$.
+```cpp
+template<std::unsigned_integral Block, typename Allocator>
+auto
+jump_polynomial(const bit::polynomial<Block, Allocator>& c, std::size_t N, bool N_is_pow2 = false);    // <1>
+```
+1. Returns a `bit::polynomial` that can rapidly move the `State` ahead by $N$ or $2^N$ steps. \
+The `c` argument should be the `bit::polynomial` returned by the `characteristic_polynomial()` function.
+
+As explained [here][jump technique] the *jump polynomial* that can advance a state engine by $N$ steps is given by:
+$$
+r(x) = \mod{x^N}{c(x)},
+$$
+where $c(x)$ is the engine's characteristic polynomial which is degree $n$ so  $r(x)$ has degree of at most $n-1$.
+The `xso::jump_polynomial` function returns the coefficients of $r(x)$  as `bit::polynomial` that can in turn be used as the argument to the non-member `xso::jump` function described next.
+
+::: {.callout-tip}
+# Very large jumps
+We often want to jump by an $N \gg 1$ that is too large to fit into a 64-bit word.
+By setting `N` to 100 and the `N_is_pow2` argument to `true` you can get the coefficients of the jump polynomial for $N = 2^{100}$ steps.
+:::
+
+[Example: A jump polynomial for `xso::rng32` and stem:[N=2^{100}] steps]{.bt}
+```cpp
+#include <xoshiro.h>
+int main()
+{
+    auto c = xso::characteristic_polynomial<xso::rng32>();
+    auto j = xso::jump_polynomial(c, 100, true);      // <1>
+    std::cout << "j(x) = " << j << '\n';
+}
+```
+1. The final argument in the function call is `true` so $j(x)$ will jump `xso::rng32` ahead by $2^{100}$ steps.
+
+Output:
+```sh
+j(x) = x^1 + x^2 + x^3 + x^4 + x^6 + x^7 + x^9 + x^13 + x^14 + x^15 + x^17 + x^18 + x^19 + x^20 + x^21 + x^22 + x^25 + x^26 + x^29 + x^30 + x^32 + x^33 + x^35 + x^39 + x^40 + x^42 + x^43 + x^46 + x^48 + x^50 + x^52 + x^55 + x^57 + x^59 + x^63 + x^64 + x^65 + x^68 + x^71 + x^72 + x^74 + x^78 + x^79 + x^80 + x^84 + x^86 + x^88 + x^90 + x^93 + x^94 + x^98 + x^101 + x^102 + x^103 + x^104 + x^105 + x^106 + x^108 + x^109 + x^110 + x^111 + x^112 + x^114 + x^115 + x^118 + x^119 + x^120 + x^121 + x^122 + x^123 + x^125  # <1>
+```
+1. Not much use to look at but very useful when combined with the next `jump` function.
+
+## Performing Jumps
+
+The [jump technique] page explains how we can use a jump polynomial over $\FF$ to jump the `State` forward.
+```cpp
+<typename State>
+void
+jump(State &state, const bit::polynomial<>& jump_poly);     // <1>
+```
+1. Jumps `state` ahead using the jump polynomial `jump_poly`.
+
+[Example: Jumping vs. Discarding]{.bt}
+```cpp
+#include <xoshiro.h>
+int main()
+{
+    std::size_t N = 10'000'000;                 // <1>
+
+    auto c = xso::characteristic_polynomial<xso::rng>();
+    auto j = xso::jump_polynomial(c, N);
+
+    xso::rng f;
+    xso::rng g = f;                             // <2>
+
+    xso::jump(f, j);                            // <3>
+    g.discard(N);                               // <4>
+
+    std::cout << "After jumping:    " << f() << '\n';
+    std::cout << "After discarding: " << g() << '\n';
+}
+```
+1. The number of steps we want to advance the state by.
+2. `f` is a randomly seeded 64-bit generator and `g` is an exact copy so has the same seed state.
+3. We jump `f` forward by `n` steps using a jump polynomial.
+4. We (slowly) get `g` to the same point by discarding and expecting to get to the same point.
+
+[Output: The specific outputs will vary from run to run]{.bt}
+```sh
+After jumping:    10471512239979414217      # <1>
+After discarding: 10471512239979414217
+```
+1. The two generators are indeed at the same point in their random output streams.
+
+We don't show it here but the `discard` method is several orders of magnitude slower than the `jump` method.
+
+## See Also
+
+[`characteristic_coefficients`]  \
+[`jump_coefficients`]            \
+[`jump`]                         \
+[`discard`]                      \
+[`xso::partition`]
+
+[jump technique]

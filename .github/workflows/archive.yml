@@ -1,0 +1,56 @@
+# Creates & releases a minimal archive of this library's core files and directories.
+# This is useful for the standard CMake module `FetchContent` and friends.
+name: Release library archive
+
+# The files & directories we archive and the name for the archive.
+# The git tag for the release is either 'current' or the relase tag like '2.1.2'
+env:
+    archive_content: LICENSE CMakeLists.txt include
+    archive_name: ${{ github.event.repository.name }}.zip
+    archive_tag: ${{github.ref == 'refs/heads/main' && 'current' || github.ref}}
+
+# We may overwrite the $archive_tag so need write permissions
+permissions:
+    contents: write
+
+# When is the workflow run?
+on:
+    # Any push to the main branch that changes the content of the archive.
+    # TODO: Perhaps we can use the $archive_content variable here?
+    push:
+        branches:
+            - main
+        paths:
+            - "LICENSE"
+            - "CMakeLists.txt"
+            - "include/**"
+    # Any formal release
+    release:
+        types: [published]
+
+    # You can trigger the workflow manually (handy to debug the workflow).
+    workflow_dispatch:
+
+# There is just a single job in the workflow
+jobs:
+    archive:
+        name: Create and release an archive of the library's core files and directories.
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Zip the important files and directories
+              run: |
+                  echo "Creating archive '$archive_name' from: '$archive_content' ..."
+                  echo "The git ref is:  '${{github.ref}}'"
+                  echo "The release tag: '${{env.archive_tag}}'"
+                  zip -r $archive_name $archive_content
+
+            - name: Upload the archive to a release
+              uses: svenstaro/upload-release-action@v2
+              with:
+                  repo_token: ${{secrets.GITHUB_TOKEN}}
+                  file: ${{env.archive_name}}
+                  tag: ${{env.archive_tag}}
+                  overwrite: true
+                  body: "Latest minimal version of the library for CMake's module `FetchContent` and friends."

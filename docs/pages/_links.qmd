@@ -1,0 +1,101 @@
+<!-- Links and shortcuts used throughout the documentation -->
+
+<!-- Math shortcuts we use frequently in the documentation -->
+::: {.hidden}
+$$
+\newcommand{\FF}{\mathbb{F}_2}
+\newcommand{\bold}[1]{\mathbf{#1}}
+\newcommand{\mod}[2]{ {#1 \, \mathrm{mod} \, #2}}
+$$
+:::
+
+<!-- Our library -->
+[`xso::generator`]:                     /pages/generator.qmd
+[`xso::partition`]:                     /pages/partition.qmd
+[`constructors`]:                       /pages/constructors.qmd
+[`bit_count`]:                          /pages/class-types.qmd
+[`discard`]:                            /pages/discard.qmd
+[`flip`]:                               /pages/flip.qmd
+[`formatter`]:                          /pages/formatter.qmd
+[`get_state`]:                          /pages/get_state.qmd
+[`index`]:                              /pages/sample.qmd
+[`jump_coefficients`]:                  /pages/jump_coefficients.qmd
+[`jump`]:                               /pages/jump.qmd
+[`max`]:                                /pages/class-types.qmd
+[`min`]:                                /pages/class-types.qmd
+[`operator()`]:                         /pages/functor.qmd
+[`operator[]`]:                         /pages/get_state.qmd
+[`scrambler_type`]:                     /pages/class-types.qmd
+[`characteristic_coefficients`]:        /pages/characteristic_coefficients.qmd
+[`result_type`]:                        /pages/class-types.qmd
+[`roll`]:                               /pages/flip.qmd
+[`sample`]:                             /pages/sample.qmd
+[`seed`]:                               /pages/seed.qmd
+[`shuffle`]:                            /pages/shuffle.qmd
+[`state_type`]:                         /pages/class-types.qmd
+[`stream<<`]:                           /pages/formatter.qmd
+[`word_count`]:                         /pages/class-types.qmd
+[`step`]:                               /pages/functor.qmd
+[`xso_name`]:                           /pages/class-types.qmd
+[`word_type`]:                          /pages/class-types.qmd
+
+<!-- Extras that are defined if `bit` is available -->
+[`transition_matrix`]:                  /pages/bit.qmd#transition-matrix
+[`characteristic_polynomial`]:          /pages/bit.qmd#characteristic-polynomial
+[`jump_polynomial`]:                    /pages/bit.qmd#jump-polynomial
+[performing jumps]:                     /pages/bit.qmd#performing-jumps
+
+<!-- Library concepts and technical notes -->
+[type aliased]:                         /pages/type-aliases.qmd
+[`Scrambler`]:                          /pages/Scrambler.qmd
+[`State`]:                              /pages/State.qmd
+[jump technique]:                       /pages/jump-technique.qmd
+
+<!-- The standard library -->
+[`<concepts>`]:                         https://en.cppreference.com/w/cpp/language/constraints
+[`<random>`]:                           https://en.cppreference.com/w/cpp/header/random
+[`std::array`]:                         https://en.cppreference.com/w/cpp/container/array
+[`std::format`]:                        https://en.cppreference.com/w/cpp/utility/format/format
+[`std::formatter`]:                     https://en.cppreference.com/w/cpp/utility/format/formatter
+[`std::mersenne_twister_engine`]:       https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine
+[`std::normal_distribution`]:           https://en.cppreference.com/w/cpp/numeric/random/normal_distribution
+[`std::random_device`]:                 https://en.cppreference.com/w/cpp/numeric/random/random_device
+[`std::sample`]:                        https://en.cppreference.com/w/cpp/algorithm/sample
+[`std::seed_seq`]:                      https://en.cppreference.com/w/cpp/numeric/random/seed_seq
+[`std::shuffle`]:                       https://en.cppreference.com/w/cpp/algorithm/random_shuffle
+[`std::uniform_random_bit_generator`]:  https://en.cppreference.com/w/cpp/numeric/random/uniform_random_bit_generator
+[`std::unsigned_integral`]:             https://en.cppreference.com/w/cpp/concepts/unsigned_integral
+[`std::vector`]:                        https://en.cppreference.com/w/cpp/container/vector
+
+
+<!-- The `bit` library -->
+[`bit`]:                                https://nessan.github.io/bit
+[`bit::vector`]:                        https://nessan.github.io/bit/pages/vector/
+[`bit::matrix`]:                        https://nessan.github.io/bit/pages/matrix/
+[`bit::polynomial`]:                    https://nessan.github.io/bit/pages/polynomial/
+[`bit::characteristic_polynomial`]:     https://nessan.github.io/bit/pages/matrix/characteristic_polynomial.html
+[`bit::polynomial::reduce`]:            https://nessan.github.io/bit/pages/polynomial/reduce.html
+[reduction technique]:                  https://nessan.github.io/bit/pages/notes/reduction.html
+
+<!-- The `utilities` library used in some example code -->
+[`utilities`]:                          https://nessan.github.io/utilities
+
+<!-- Other software etc. -->
+[MIT License]:                          https://opensource.org/license/mit/[MIT License]
+[Pandoc]:                               https://pandoc.org
+[Quarto]:                               https://quarto.org
+[repo]:                                 https://github.com/nessan/xoshiro
+[docs]:                                 https://nessan.github.io/xoshiro
+[email]:                                mailto:nzznfitz+gh@icloud.com
+
+<!-- Articles and Wikipedia pages -->
+[Cayley Hamilton]:                      https://en.wikipedia.org/wiki/Cayley–Hamilton_theorem
+[characteristic polynomial]:            https://en.wikipedia.org/wiki/Characteristic_polynomial
+[Danilevsky's algorithm]:               http://web.tecnico.ulisboa.pt/~mcasquilho/compute/com/,eigen/FaddeevaDanil.pdf
+[Galois Field]:                         https://en.wikipedia.org/wiki/Finite_field
+[Gaussian elimination]:                 https://en.wikipedia.org/wiki/Gaussian_elimination
+[GF(2)]:                                https://en.wikipedia.org/wiki/GF(2)
+[Haramoto]:                             http://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/ARTICLES/jumpf2-printed.pdf[Haramoto et al.]
+[paper]:                                https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf
+[SplitMix]:                             https://dl.acm.org/doi/10.1145/2660193.2660195
+[xoshiro/xoroshiro]:                    https://prng.di.unimi.it

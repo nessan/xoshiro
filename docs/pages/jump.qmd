@@ -1,0 +1,118 @@
+{{< include /pages/_links.qmd >}}
+---
+title: "`xso::generator` --- Jumps"
+---
+
+We have a non-member jump function to rapidly move any recommended *xoshiro/xoroshiro* generator or `State` very far ahead in its random number stream.
+
+```cpp
+template<typename State>
+void
+xso::jump(State& state, const std::array<typename State::word_type, State::word_count()>& jump_coeff)
+```
+1. This jumps the generator using the `jump_coeff` argument.
+
+The template parameter `State` type can be either a full [`xso::generator`] or [`State`] class as both have the methods needed for the function to succeed.
+
+To jump $J$ steps ahead in the stream you first call `jump_coefficients<State>(J)` which returns an appropriate set of jump polynomial coefficients that you can use as the final argument in this `jump` function.
+See the documentation for [`jump_coefficients`].
+
+## Recommended Generators
+
+The method for efficiently jumping the state by arbitrary and possibly huge numbers of steps is fully described [here][jump technique].
+
+To use it you need to have access to the generator's [characteristic polynomial][`characteristic_coefficients`].
+With that available you can compute *jump polynomials* for any jump size $J$.
+
+The header file `xoshiro.h` contains *pre-canned*  characteristic polynomial coefficients for *all* our [type aliased] *xoshiro/xoroshiro* generators.
+This means that, out of the box, the library supports jumping any of those generators by arbitrary numbers of steps.
+
+By calling the `jump` method repeatedly you can create many independent copies of a single-parent generator.
+
+[Example:]{.bt}
+```cpp
+#include <xoshiro.h>
+int main()
+{
+    using rng = xso::rng;
+    auto jump_poly = xso::jump_coefficients<rng>(100, true);   // <1>
+    rng g0;                                                    // <2>
+    auto g1 = g0; xso::jump(g1, jump_poly);                    // <3>
+    auto g2 = g1; xso::jump(g2, jump_poly);                    // <4>
+    auto g3 = g2; xso::jump(g3, jump_poly);                    // <5>
+    ...
+}
+```
+1. `jump_poly` has the coefficients for the jump polynomial that can advance `rng` by $2^{100}$ steps.
+2. `g0` is a randomly seeded generator with  256 bits of state.
+3. `g1` is a copy of `g0` with its state jumped forward by $2^{100}$ steps.
+4. `g2` is a copy of `g0` with its state jumped forward by $2 \times 2^{100}$ steps.
+5. `g3` is a copy of `g0` with its state jumped forward by $3 \times 2^{100}$ steps.
+
+In practice, you are likely to create these generators in a loop that spawns independent jobs each running on a separate compute engine/core.
+Each job will own a copy of the random number generator jumped ahead to a new sub-stream that is large enough to never overlap with its neighbors.
+
+The [`xso::partition`] class makes this sort of sub-stream partitioning easy to do.
+
+## Other Generator Variants
+
+This `xso::jump` and `xso::jump_coefficients` functions rely on the *pre-canned* characteristic polynomials that are embedded in the `xoshiro.h`.
+All our [type aliased] generators have their characteristic polynomial precomputed in that header file.
+This means that we support jumping any of those generators by an *arbitrary* number of steps.
+
+If instead, you are using some other variant of *xoshiro/xoroshiro* you can still get its characteristic polynomial and jump polynomials by employing the extra, header-only, [`bit`] library.
+That is a package for [GF(2)] which can compute the needed characteristic polynomials for the generator's transition matrix.
+Once the `bit` library is included then the `xoshiro.h` header file defines some extra non-member functions that can compute those characteristic and jump polynomials.
+
+See the documentation for these functions [here][`bit`].
+
+## Motivation for Jumping
+
+Monte Carlo analyses and their kin that employ random number generators are, in theory at least, easy to parallelize.
+
+For example, if you have 128 compute cores available, you can start 128 separate analyses each with its own random number generator.
+These run in parallel and you aggregate the *independent* results as they come in.
+
+Of course, having confidence in one type of generator is hard enough let alone 128 of them.
+For that reason, we generally stick to using a single well-understood, well-tested generator and create 128 copies started with different seeds.
+However, if you just pick the 128 seeds "at random" there can be significant overlaps in, and correlations between, the resulting output streams.
+Those unknowable effects will pollute any conclusions you draw from the results of the supposedly independent simulations.
+
+Instead of picking 128 different seeds at random, an alternative approach is to pick a single seed $s_0$ and then *partition* the resulting stream of random numbers into 128 *sub-streams*.
+
+For example, you need to run `xsg::rng64()` some $2^{256}$ times before the stream repeats.
+That is an enormous number --- a simulation on any current computer will only ever consume a small fraction of that stream.
+Therefore we can afford to break it into sub-streams and then use those across our parallel computation.
+
+In our example, we have 128 available compute cores and have thoughtfully picked a single seed state $s_0$ for `xso::rng64`.
+From that seed $s_0$ there stretches a stream of $2^{256}$ states $\left\{s_0, s_1, s_2, \cdots \right\}$.
+We want to split this parent stream into 128 equal non-overlapping sub-streams.
+Each sub-stream will have size:
+$$
+    \frac{2^{256}}{128} = \frac{2^{256}}{2^7} = 2^{259}
+$$
+which is still vast!
+
+However, to parallelize the computation we cannot have the 128 simulators all reference a single bottleneck random number generator!
+
+Instead, we want to create the non-overlapping sub-streams *lazily* by just instantiating 128 copies of the generator.
+The first is seeded with $s_0$, the next is seeded some $2^{259}$ slots along, the next another $2^{259}$ slots along from that, and so on.
+Each of the 128 simulations has its generator that just happens to return partitions of a single parent stream and therefore should have nice independence properties.
+
+The key to making this work is to be able to *efficiently* jump ahead in the state stream.
+In our example, we need to go from any state $s$ to another state that is $2^{259}$ steps along from $s$ in the random state stream.
+And that is exactly what all our various `jump` methods and functions accomplish.
+
+These `jump` methods are vastly more efficient than using the [`discard`] method.
+Moreover, they can accommodate jump sizes like $N = 2^{259}$ which will overflow even the *argument type* for `discard(N)` before that method ever gets going!
+
+## See Also
+
+[`characteristic_coefficients`]              \
+[`jump_coefficients`]                        \
+[`xso::partition`]                           \
+[`bit::characteristic_polynomial`]           \
+[`bit::polynomial::reduce`]
+
+[The jump technique][jump technique]         \
+[The polynomial reduction algorithm][reduction technique]

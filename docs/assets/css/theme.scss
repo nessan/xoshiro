@@ -1,0 +1,66 @@
+/*-- scss:defaults --*/
+
+// ------------------------------------------------------------------------------------------------
+// Fonts:
+// ------------------------------------------------------------------------------------------------
+
+// Import google fonts
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap");
+
+// Set the main font and the mono-spaced one
+$font-family-sans-serif: "Roboto", sans-serif !default;
+$font-family-monospace: "Roboto Mono", monospace !default;
+
+// Go with lighter fonts for all headings etc.
+$headings-font-weight: 400 !default;
+:is(h1, h2, h3, h4, h5, h6) {
+    font-weight: 400;
+}
+
+code {
+    font-size: 0.95em;
+}
+
+table {
+    font-size: 0.9em;
+}
+
+table code {
+    font-size: 14px;
+}
+
+// ------------------------------------------------------------------------------------------------
+// Our own classes ...
+// ------------------------------------------------------------------------------------------------
+
+// Block titles -- the .bt class:
+// Markdown: "[Example: blah blah blah]{.bt}".
+// HTML:      "<p><span class="bt">Example: blah blah blah:</span></p>"
+
+// Basic styling for block titles
+.bt {
+    color: blue;
+    font-size: 0.9em;
+    font-weight: normal;
+    display: block;
+}
+
+// Block titles preceding code-blocks should be tighter to the code.
+// Selector picks any p with a .bt child that is then followed by a .sourceCode element.
+p:has(> .bt):has(+ .sourceCode) {
+    margin-bottom: -1em;
+}
+
+p:has(> .bt):has(+ dl) {
+    margin-bottom: 0em;
+}
+
+// Paragraph titles
+.pt {
+    //color: rgb(249, 1, 18);
+    font-size: 1.1em;
+    font-weight: bold;
+    display: block;
+    margin-bottom: -0.8em;
+}
