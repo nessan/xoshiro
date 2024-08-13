@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.555">
+<meta name="generator" content="quarto-1.5.56">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>xoshiro/xoroshiro PRNG’s - xso::generator — Sampling Methods</title>
+<title>xso::generator — Sampling Methods – xoshiro/xoroshiro PRNG's</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -110,7 +110,7 @@ gtag('js', new Date());
 gtag('config', 'G-XV29LHZDKD', { 'anonymize_ip': true});
 </script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
@@ -140,11 +140,11 @@ window.Quarto = {
 };
 </script>
 
-<meta property="og:title" content="xoshiro/xoroshiro PRNG’s - xso::generator — Sampling Methods">
+<meta property="og:title" content="xso::generator — Sampling Methods – xoshiro/xoroshiro PRNG’s">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://nessan.github.io/xoshiro/pages/assets/images/logo.png">
 <meta property="og:site_name" content="xoshiro/xoroshiro PRNG's">
-<meta name="twitter:title" content="xoshiro/xoroshiro PRNG’s - xso::generator — Sampling Methods">
+<meta name="twitter:title" content="xso::generator — Sampling Methods – xoshiro/xoroshiro PRNG’s">
 <meta name="twitter:description" content="">
 <meta name="twitter:image" content="https://nessan.github.io/xoshiro/pages/assets/images/logo.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -165,7 +165,7 @@ window.Quarto = {
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -199,7 +199,7 @@ window.Quarto = {
 <span class="menu-text">Jumps</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-more" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-more" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">More</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-more">    
@@ -222,7 +222,7 @@ window.Quarto = {
   </li>
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
     <a href="https://github.com/nessan/xoshiro" title="GitHub repo" class="quarto-navigation-tool px-1" aria-label="GitHub repo"><i class="bi bi-github"></i></a>
     <a href="https://twitter.com/nezzan" title="" class="quarto-navigation-tool px-1" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
 </div>
@@ -230,10 +230,10 @@ window.Quarto = {
     </nav>
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <a class="flex-grow-1 no-decor" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
           <h1 class="quarto-secondary-nav-title"><code>xso::generator</code> — Sampling Methods</h1>
         </a>     
     </div>
@@ -254,9 +254,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
  <span class="menu-text">Generators</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -302,9 +302,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
  <span class="menu-text">States</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -344,9 +344,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
  <span class="menu-text">Scramblers</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -374,9 +374,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
  <span class="menu-text">Stream Partitioning</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -404,9 +404,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
  <span class="menu-text">Technical Notes</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -486,7 +486,7 @@ window.Quarto = {
 <!-- Articles and Wikipedia pages -->
 <section id="single-samples" class="level2">
 <h2 class="anchored" data-anchor-id="single-samples">Single Samples</h2>
-<p>We provide methods to extract a single sample from an interval, from an arbitrary distribution, and from a container. There is also a method that picks a random index given an array size.</p>
+<p>We provide methods to extract a single sample from an interval, arbitrary distribution, and a container. Another method also picks a random index given an array size.</p>
 <section id="uniform-distributions" class="level3">
 <h3 class="anchored" data-anchor-id="uniform-distributions">Uniform Distributions</h3>
 <div class="sourceCode" id="annotated-cell-1"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><span id="annotated-cell-1-1"><a href="#annotated-cell-1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span><span class="bu">std::</span>integral T<span class="op">&gt;</span></span>
@@ -506,43 +506,35 @@ window.Quarto = {
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-1" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-1" data-code-lines="2" data-code-annotation="1">Returns a single integer value from a <em>uniform</em> distribution over <span class="math inline">\([a,b]\)</span>. No error checks are performed and the behavior is undefined if <span class="math inline">\(a &lt; b\)</span>.</span>
+<span data-code-cell="annotated-cell-1" data-code-lines="2" data-code-annotation="1">Returns a single integer value from a <em>uniform</em> distribution over <span class="math inline">\([a,b]\)</span>. No error checks are performed, and the behaviour is undefined if <span class="math inline">\(a &lt; b\)</span>.</span>
 </dd>
 <dt data-target-cell="annotated-cell-1" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-1" data-code-lines="5" data-code-annotation="2">Returns a single <em>index</em> from a uniform distribution over stem:<span class="math inline">\([0,n)\)</span>. No error checks are performed and the behavior is undefined if <span class="math inline">\(n=0\)</span>.</span>
+<span data-code-cell="annotated-cell-1" data-code-lines="5" data-code-annotation="2">Returns a single <em>index</em> from a uniform distribution over <span class="math inline">\([0,n)\)</span>. No error checks are performed, and the behaviour is undefined if <span class="math inline">\(n=0\)</span>.</span>
 </dd>
 <dt data-target-cell="annotated-cell-1" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-1" data-code-lines="8" data-code-annotation="3">Returns a single real value from a <em>uniform</em> distribution over stem:<span class="math inline">\([a,b)\)</span>. No error checks are performed and the behavior is undefined if <span class="math inline">\(a &lt; b\)</span>.</span>
+<span data-code-cell="annotated-cell-1" data-code-lines="8" data-code-annotation="3">Returns a single real value from a <em>uniform</em> distribution over <span class="math inline">\([a,b)\)</span>. No error checks are performed, and the behaviour is undefined if <span class="math inline">\(a &lt; b\)</span>.</span>
 </dd>
 <dt data-target-cell="annotated-cell-1" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-cell="annotated-cell-1" data-code-lines="11" data-code-annotation="4">Returns a single element from the iteration <span class="math inline">\([b,e)\)</span> where all elements are equally likely to be returned. No error checks are performed and the behavior is undefined if <span class="math inline">\(e &lt; b\)</span>.</span>
+<span data-code-cell="annotated-cell-1" data-code-lines="11" data-code-annotation="4">Returns a single element from the iteration <span class="math inline">\([b,e)\)</span>, where all elements are equally likely to be returned. No error checks are performed, and the behaviour is undefined if <span class="math inline">\(e &lt; b\)</span>.</span>
 </dd>
 <dt data-target-cell="annotated-cell-1" data-target-annotation="5">5</dt>
 <dd>
-<span data-code-cell="annotated-cell-1" data-code-lines="14" data-code-annotation="5">Returns a single element from the container <code>c</code> where all elements are equally likely to be returned. The method will work on any container <code>c</code> which supports <code>std::cbegin(c)</code> and <code>std::cend(c)</code>.</span>
+<span data-code-cell="annotated-cell-1" data-code-lines="14" data-code-annotation="5">Returns a single element from container <code>c</code>, where all elements are equally likely to be returned. The method will work on any container <code>c</code> which supports <code>std::cbegin(c)</code> and <code>std::cend(c)</code>.</span>
 </dd>
 </dl>
 </section>
 <section id="arbitrary-distributions" class="level3">
 <h3 class="anchored" data-anchor-id="arbitrary-distributions">Arbitrary Distributions</h3>
-<p>We have a C++ <a href="https://en.cppreference.com/w/cpp/language/constraints">concept</a> that captures a common feature of the distributions defined in the standard <a href="https://en.cppreference.com/w/cpp/header/random"><code>&lt;random&gt;</code></a> header:</p>
-<div class="sourceCode" id="annotated-cell-2"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><span id="annotated-cell-2-1"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span><span class="kw">typename</span> D<span class="op">&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-2-2" class="code-annotation-target"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">concept</span> xso<span class="op">::</span>Distribution <span class="op">=</span> <span class="kw">requires</span> <span class="op">{</span> <span class="kw">typename</span> D<span class="op">::</span><span class="dt">param_type</span><span class="op">;</span> <span class="op">};</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We have a C++ [concept][`<code>] that captures a common feature of the distributions defined in the standard [</code><random><code>] header: ```cpp template&lt;typename D&gt; concept xso::Distribution = requires { typename D::param_type; };   // &lt;1&gt; ``` 1. All those distributions define an embedded</code>param_type<code>--- this is distinct from the standard collections like [</code>std::vector`].</random></p>
+<p>We can use that concept to overload the <code>sample</code> methods with <code>xso::Distribution</code> arguments as follows:</p>
+<div class="sourceCode" id="annotated-cell-2"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-2-1" class="code-annotation-target"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">constexpr</span> <span class="kw">auto</span> sample<span class="op">(</span>Distribution <span class="kw">auto</span> <span class="op">&amp;</span>dist<span class="op">);</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="2" data-code-annotation="1">All of those distributions have define an embedded <code>param_type</code> — this is distinct from the standard collections like <a href="https://en.cppreference.com/w/cpp/container/vector"><code>std::vector</code></a>.</span>
-</dd>
-</dl>
-<p>We can use that concept to overload the <code>sample</code> methods with <code>xso::Distribution</code> arguments as follows:</p>
-<div class="sourceCode" id="annotated-cell-3"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-3-1" class="code-annotation-target"><a href="#annotated-cell-3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">constexpr</span> <span class="kw">auto</span> sample<span class="op">(</span>Distribution <span class="kw">auto</span> <span class="op">&amp;</span>dist<span class="op">);</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-3" data-target-annotation="1">1</dt>
-<dd>
-<span data-code-cell="annotated-cell-3" data-code-lines="1" data-code-annotation="1">Returns a single variate from the distribution <code>dist</code> e.g.&nbsp;from a <a href="https://en.cppreference.com/w/cpp/numeric/random/normal_distribution"><code>std::normal_distribution</code></a> instance.</span>
+<span data-code-cell="annotated-cell-2" data-code-lines="1" data-code-annotation="1">Returns a single variate from the distribution <code>dist</code> e.g.&nbsp;from a <a href="https://en.cppreference.com/w/cpp/numeric/random/normal_distribution"><code>std::normal_distribution</code></a> instance.</span>
 </dd>
 </dl>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -555,7 +547,7 @@ The distribution concept
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>It is convenient to have many sampling methods all named <code>sample(...)</code> and C++ allows this through overloading. The specific <code>sample</code> version invoked depends on the type of the passed arguments. To make this work we need to distinguish between a container like a <code>std::vector</code> and a distribution like a <a href="https://en.cppreference.com/w/cpp/numeric/random/normal_distribution"><code>std::normal_distribution</code></a>. The <code>xso::Distribution</code> concept is a minimal way to identify the distributions defined in the standard library. It relies on the fact that all distribution classes have an embedded <code>typename</code> defining a <code>param_type</code>. None of the standard container classes have that.</p>
+<p>It is convenient to have many sampling methods, all named sample(…), and C++ allows this through overloading. The specific <code>sample</code> version invoked depends on the type of arguments passed. To make this work, we must distinguish between a container like a <code>std::vector</code> and a distribution like a <a href="https://en.cppreference.com/w/cpp/numeric/random/normal_distribution"><code>std::normal_distribution</code></a>. The <code>xso::Distribution</code> concept is a minimal way to identify the distributions defined in the standard library. It relies on all distribution classes having an embedded <code>typename</code> defining a <code>param_type</code>. None of the standard container classes have that.</p>
 </div>
 </div>
 </section>
@@ -618,21 +610,21 @@ The distribution concept
 <section id="from-containers" class="level3">
 <h3 class="anchored" data-anchor-id="from-containers">From Containers</h3>
 <p>We have methods to copy samples from a container without replacement.</p>
-<div class="sourceCode" id="annotated-cell-6"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><span id="annotated-cell-6-1"><a href="#annotated-cell-6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span><span class="bu">std::</span>input_iterator Src<span class="op">,</span> <span class="kw">typename</span> Dst<span class="op">&gt;</span></span>
-<span id="annotated-cell-6-2"><a href="#annotated-cell-6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">constexpr</span> Dst</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-6-3" class="code-annotation-target"><a href="#annotated-cell-6-3" aria-hidden="true" tabindex="-1"></a>sample<span class="op">(</span>Src b<span class="op">,</span> Src e<span class="op">,</span> Dst dst<span class="op">,</span> <span class="bu">std::</span>unsigned_integral <span class="kw">auto</span> n<span class="op">);</span></span>
-<span id="annotated-cell-6-4"><a href="#annotated-cell-6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-5"><a href="#annotated-cell-6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span><span class="kw">typename</span> Src<span class="op">,</span> <span class="kw">typename</span> Dst<span class="op">&gt;</span></span>
-<span id="annotated-cell-6-6"><a href="#annotated-cell-6-6" aria-hidden="true" tabindex="-1"></a><span class="kw">constexpr</span> <span class="kw">auto</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-6-7" class="code-annotation-target"><a href="#annotated-cell-6-7" aria-hidden="true" tabindex="-1"></a>sample<span class="op">(</span><span class="at">const</span> Src <span class="op">&amp;</span>src<span class="op">,</span> Dst dst<span class="op">,</span> <span class="bu">std::</span>unsigned_integral <span class="kw">auto</span> n<span class="op">);</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="annotated-cell-5"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><span id="annotated-cell-5-1"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span><span class="bu">std::</span>input_iterator Src<span class="op">,</span> <span class="kw">typename</span> Dst<span class="op">&gt;</span></span>
+<span id="annotated-cell-5-2"><a href="#annotated-cell-5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">constexpr</span> Dst</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-5-3" class="code-annotation-target"><a href="#annotated-cell-5-3" aria-hidden="true" tabindex="-1"></a>sample<span class="op">(</span>Src b<span class="op">,</span> Src e<span class="op">,</span> Dst dst<span class="op">,</span> <span class="bu">std::</span>unsigned_integral <span class="kw">auto</span> n<span class="op">);</span></span>
+<span id="annotated-cell-5-4"><a href="#annotated-cell-5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-5-5"><a href="#annotated-cell-5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span><span class="kw">typename</span> Src<span class="op">,</span> <span class="kw">typename</span> Dst<span class="op">&gt;</span></span>
+<span id="annotated-cell-5-6"><a href="#annotated-cell-5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">constexpr</span> <span class="kw">auto</span></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-5-7" class="code-annotation-target"><a href="#annotated-cell-5-7" aria-hidden="true" tabindex="-1"></a>sample<span class="op">(</span><span class="at">const</span> Src <span class="op">&amp;</span>src<span class="op">,</span> Dst dst<span class="op">,</span> <span class="bu">std::</span>unsigned_integral <span class="kw">auto</span> n<span class="op">);</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-6" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="3" data-code-annotation="1">Picks <code>n</code> elements from the sequence <span class="math inline">\([b,e)\)</span> <em>without</em> replacement and copies the chosen samples into <code>dst</code>. Returns the end of <code>dst</code>.</span>
+<span data-code-cell="annotated-cell-5" data-code-lines="3" data-code-annotation="1">Picks <code>n</code> elements from the sequence <span class="math inline">\([b,e)\)</span>, <em>without</em> replacement and copies the chosen samples into <code>dst</code>. Returns the end of <code>dst</code>.</span>
 </dd>
-<dt data-target-cell="annotated-cell-6" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="7" data-code-annotation="2">Picks <code>n</code> elements from the container <code>src</code> <em>without</em> replacement and copies the chosen samples into <code>dst</code>. Returns the end of <code>dst</code>.</span>
+<span data-code-cell="annotated-cell-5" data-code-lines="7" data-code-annotation="2">Picks <code>n</code> elements from the container <code>src</code> <em>without</em> replacement and copies the chosen samples into <code>dst</code>. Returns the end of <code>dst</code>.</span>
 </dd>
 </dl>
 <p>These methods will preserve the order of the selected elements. You can use the <a href="../pages/shuffle.html"><code>shuffle</code></a> method to mix those up.<br>
@@ -641,72 +633,72 @@ View <a href="https://en.cppreference.com/w/cpp/algorithm/sample"><code>std::sam
 <section id="from-distributions" class="level3">
 <h3 class="anchored" data-anchor-id="from-distributions">From Distributions</h3>
 <p>There is also a method to copy samples from an arbitrary distribution into a destination.</p>
-<div class="sourceCode" id="annotated-cell-7"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><span id="annotated-cell-7-1"><a href="#annotated-cell-7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span><span class="kw">typename</span> Dst<span class="op">&gt;</span></span>
-<span id="annotated-cell-7-2"><a href="#annotated-cell-7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">constexpr</span> Dst</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-7-3" class="code-annotation-target"><a href="#annotated-cell-7-3" aria-hidden="true" tabindex="-1"></a>sample<span class="op">(</span>Distribution <span class="kw">auto</span> <span class="op">&amp;</span>dist<span class="op">,</span> Dst dst<span class="op">,</span> <span class="bu">std::</span>unsigned_integral <span class="kw">auto</span> n<span class="op">);</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="annotated-cell-6"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><span id="annotated-cell-6-1"><a href="#annotated-cell-6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span><span class="kw">typename</span> Dst<span class="op">&gt;</span></span>
+<span id="annotated-cell-6-2"><a href="#annotated-cell-6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">constexpr</span> Dst</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-6-3" class="code-annotation-target"><a href="#annotated-cell-6-3" aria-hidden="true" tabindex="-1"></a>sample<span class="op">(</span>Distribution <span class="kw">auto</span> <span class="op">&amp;</span>dist<span class="op">,</span> Dst dst<span class="op">,</span> <span class="bu">std::</span>unsigned_integral <span class="kw">auto</span> n<span class="op">);</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-7" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-6" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-7" data-code-lines="3" data-code-annotation="1">Extracts <code>n</code> variates from the distribution <code>dist</code> and puts them into <code>dst</code>. Returns the end of <code>dst</code>.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="3" data-code-annotation="1">Extracts <code>n</code> variates from the distribution <code>dist</code> and puts them into <code>dst</code>. Returns the end of <code>dst</code>.</span>
 </dd>
 </dl>
 </section>
 <section id="examples-1" class="level3">
 <h3 class="anchored" data-anchor-id="examples-1">Examples</h3>
 <p><span class="bt">Extract multiple samples from a container or a distribution:</span></p>
-<div class="sourceCode" id="annotated-cell-8"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><span id="annotated-cell-8-1"><a href="#annotated-cell-8-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;utilities/utilities.h&gt;</span></span>
-<span id="annotated-cell-8-2"><a href="#annotated-cell-8-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;xoshiro.h&gt;</span></span>
-<span id="annotated-cell-8-3"><a href="#annotated-cell-8-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
-<span id="annotated-cell-8-4"><a href="#annotated-cell-8-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="annotated-cell-8-5"><a href="#annotated-cell-8-5" aria-hidden="true" tabindex="-1"></a>    xso<span class="op">::</span>rng gen<span class="op">;</span></span>
-<span id="annotated-cell-8-6"><a href="#annotated-cell-8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-8-7"><a href="#annotated-cell-8-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">constexpr</span> <span class="bu">std::</span>size_t N <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
-<span id="annotated-cell-8-8"><a href="#annotated-cell-8-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">constexpr</span> <span class="bu">std::</span>size_t K <span class="op">=</span> N <span class="op">/</span> <span class="dv">2</span><span class="op">;</span></span>
-<span id="annotated-cell-8-9"><a href="#annotated-cell-8-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-8-10"><a href="#annotated-cell-8-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>array<span class="op">&lt;</span><span class="dt">int</span><span class="op">,</span> N<span class="op">&gt;</span> u<span class="op">;</span></span>
-<span id="annotated-cell-8-11"><a href="#annotated-cell-8-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>iota<span class="op">(</span>u<span class="op">.</span>begin<span class="op">(),</span> u<span class="op">.</span>end<span class="op">(),</span> <span class="dv">0</span><span class="op">);</span></span>
-<span id="annotated-cell-8-12"><a href="#annotated-cell-8-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>print<span class="op">(</span><span class="st">"Population: </span><span class="sc">{}\n</span><span class="st">"</span><span class="op">,</span> u<span class="op">);</span></span>
-<span id="annotated-cell-8-13"><a href="#annotated-cell-8-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-8-14"><a href="#annotated-cell-8-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>array<span class="op">&lt;</span><span class="dt">int</span><span class="op">,</span> K<span class="op">&gt;</span> u_samples<span class="op">;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-8-15" class="code-annotation-target"><a href="#annotated-cell-8-15" aria-hidden="true" tabindex="-1"></a>    gen<span class="op">.</span>sample<span class="op">(</span>u<span class="op">,</span> u_samples<span class="op">.</span>begin<span class="op">(),</span> u_samples<span class="op">.</span>word_count<span class="op">());</span></span>
-<span id="annotated-cell-8-16"><a href="#annotated-cell-8-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>print<span class="op">(</span><span class="st">"Samples:    </span><span class="sc">{}\n</span><span class="st">"</span><span class="op">,</span> u_samples<span class="op">);</span></span>
-<span id="annotated-cell-8-17"><a href="#annotated-cell-8-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-8-18"><a href="#annotated-cell-8-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>normal_distribution nd<span class="op">{</span><span class="fl">70.</span><span class="op">,</span> <span class="fl">15.</span><span class="op">};</span></span>
-<span id="annotated-cell-8-19"><a href="#annotated-cell-8-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>array<span class="op">&lt;</span><span class="dt">double</span><span class="op">,</span> N<span class="op">&gt;</span> v<span class="op">;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-8-20" class="code-annotation-target"><a href="#annotated-cell-8-20" aria-hidden="true" tabindex="-1"></a>    gen<span class="op">.</span>sample<span class="op">(</span>nd<span class="op">,</span> v<span class="op">.</span>begin<span class="op">(),</span> v<span class="op">.</span>word_count<span class="op">());</span></span>
-<span id="annotated-cell-8-21"><a href="#annotated-cell-8-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>print<span class="op">(</span><span class="st">"Population: {::4.2f}</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> v<span class="op">);</span></span>
-<span id="annotated-cell-8-22"><a href="#annotated-cell-8-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-8-23"><a href="#annotated-cell-8-23" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>array<span class="op">&lt;</span><span class="dt">double</span><span class="op">,</span> K<span class="op">&gt;</span> v_samples<span class="op">;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-8-24" class="code-annotation-target"><a href="#annotated-cell-8-24" aria-hidden="true" tabindex="-1"></a>    gen<span class="op">.</span>sample<span class="op">(</span>v<span class="op">,</span> v_samples<span class="op">.</span>begin<span class="op">(),</span> v_samples<span class="op">.</span>word_count<span class="op">());</span></span>
-<span id="annotated-cell-8-25"><a href="#annotated-cell-8-25" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>print<span class="op">(</span><span class="st">"Samples:    {::4.2f}</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> v_samples<span class="op">);</span></span>
-<span id="annotated-cell-8-26"><a href="#annotated-cell-8-26" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="annotated-cell-7"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><span id="annotated-cell-7-1"><a href="#annotated-cell-7-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;utilities/utilities.h&gt;</span></span>
+<span id="annotated-cell-7-2"><a href="#annotated-cell-7-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;xoshiro.h&gt;</span></span>
+<span id="annotated-cell-7-3"><a href="#annotated-cell-7-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
+<span id="annotated-cell-7-4"><a href="#annotated-cell-7-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="annotated-cell-7-5"><a href="#annotated-cell-7-5" aria-hidden="true" tabindex="-1"></a>    xso<span class="op">::</span>rng gen<span class="op">;</span></span>
+<span id="annotated-cell-7-6"><a href="#annotated-cell-7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-7-7"><a href="#annotated-cell-7-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">constexpr</span> <span class="bu">std::</span>size_t N <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="annotated-cell-7-8"><a href="#annotated-cell-7-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">constexpr</span> <span class="bu">std::</span>size_t K <span class="op">=</span> N <span class="op">/</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="annotated-cell-7-9"><a href="#annotated-cell-7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-7-10"><a href="#annotated-cell-7-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>array<span class="op">&lt;</span><span class="dt">int</span><span class="op">,</span> N<span class="op">&gt;</span> u<span class="op">;</span></span>
+<span id="annotated-cell-7-11"><a href="#annotated-cell-7-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>iota<span class="op">(</span>u<span class="op">.</span>begin<span class="op">(),</span> u<span class="op">.</span>end<span class="op">(),</span> <span class="dv">0</span><span class="op">);</span></span>
+<span id="annotated-cell-7-12"><a href="#annotated-cell-7-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>print<span class="op">(</span><span class="st">"Population: </span><span class="sc">{}\n</span><span class="st">"</span><span class="op">,</span> u<span class="op">);</span></span>
+<span id="annotated-cell-7-13"><a href="#annotated-cell-7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-7-14"><a href="#annotated-cell-7-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>array<span class="op">&lt;</span><span class="dt">int</span><span class="op">,</span> K<span class="op">&gt;</span> u_samples<span class="op">;</span></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-7-15" class="code-annotation-target"><a href="#annotated-cell-7-15" aria-hidden="true" tabindex="-1"></a>    gen<span class="op">.</span>sample<span class="op">(</span>u<span class="op">,</span> u_samples<span class="op">.</span>begin<span class="op">(),</span> u_samples<span class="op">.</span>word_count<span class="op">());</span></span>
+<span id="annotated-cell-7-16"><a href="#annotated-cell-7-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>print<span class="op">(</span><span class="st">"Samples:    </span><span class="sc">{}\n</span><span class="st">"</span><span class="op">,</span> u_samples<span class="op">);</span></span>
+<span id="annotated-cell-7-17"><a href="#annotated-cell-7-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-7-18"><a href="#annotated-cell-7-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>normal_distribution nd<span class="op">{</span><span class="fl">70.</span><span class="op">,</span> <span class="fl">15.</span><span class="op">};</span></span>
+<span id="annotated-cell-7-19"><a href="#annotated-cell-7-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>array<span class="op">&lt;</span><span class="dt">double</span><span class="op">,</span> N<span class="op">&gt;</span> v<span class="op">;</span></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-7-20" class="code-annotation-target"><a href="#annotated-cell-7-20" aria-hidden="true" tabindex="-1"></a>    gen<span class="op">.</span>sample<span class="op">(</span>nd<span class="op">,</span> v<span class="op">.</span>begin<span class="op">(),</span> v<span class="op">.</span>word_count<span class="op">());</span></span>
+<span id="annotated-cell-7-21"><a href="#annotated-cell-7-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>print<span class="op">(</span><span class="st">"Population: {::4.2f}</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> v<span class="op">);</span></span>
+<span id="annotated-cell-7-22"><a href="#annotated-cell-7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-7-23"><a href="#annotated-cell-7-23" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>array<span class="op">&lt;</span><span class="dt">double</span><span class="op">,</span> K<span class="op">&gt;</span> v_samples<span class="op">;</span></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-7-24" class="code-annotation-target"><a href="#annotated-cell-7-24" aria-hidden="true" tabindex="-1"></a>    gen<span class="op">.</span>sample<span class="op">(</span>v<span class="op">,</span> v_samples<span class="op">.</span>begin<span class="op">(),</span> v_samples<span class="op">.</span>word_count<span class="op">());</span></span>
+<span id="annotated-cell-7-25"><a href="#annotated-cell-7-25" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>print<span class="op">(</span><span class="st">"Samples:    {::4.2f}</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> v_samples<span class="op">);</span></span>
+<span id="annotated-cell-7-26"><a href="#annotated-cell-7-26" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-7" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="15" data-code-annotation="1">Generate 5 samples from the population of 10 elements.</span>
+<span data-code-cell="annotated-cell-7" data-code-lines="15" data-code-annotation="1">Generate 5 samples from the population of 10 elements.</span>
 </dd>
-<dt data-target-cell="annotated-cell-8" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-7" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="20" data-code-annotation="2">Generate 10 samples from a normal distribution.</span>
+<span data-code-cell="annotated-cell-7" data-code-lines="20" data-code-annotation="2">Generate 10 samples from a normal distribution.</span>
 </dd>
-<dt data-target-cell="annotated-cell-8" data-target-annotation="3">3</dt>
+<dt data-target-cell="annotated-cell-7" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="24" data-code-annotation="3">Generate 5 samples from that array we just generated.</span>
+<span data-code-cell="annotated-cell-7" data-code-lines="24" data-code-annotation="3">Generate 5 samples from that array we just generated.</span>
 </dd>
 </dl>
 <p><span class="bt">Output:</span></p>
-<div class="sourceCode" id="annotated-cell-9"><pre class="sourceCode bash code-annotation-code code-with-copy code-annotated"><code class="sourceCode bash"><span id="annotated-cell-9-1"><a href="#annotated-cell-9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Population:</span> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-9-2" class="code-annotation-target"><a href="#annotated-cell-9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Samples:</span>    [0, 2, 6, 7, 8]</span>
-<span id="annotated-cell-9-3"><a href="#annotated-cell-9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Population:</span> [66.50, 78.99, 70.24, 58.61, 53.95, 48.18, 74.63, 43.87, 82.07, 60.32]</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-9-4" class="code-annotation-target"><a href="#annotated-cell-9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Samples:</span>    [53.95, 48.18, 43.87, 82.07, 60.32]</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="annotated-cell-8"><pre class="sourceCode bash code-annotation-code code-with-copy code-annotated"><code class="sourceCode bash"><span id="annotated-cell-8-1"><a href="#annotated-cell-8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Population:</span> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-8-2" class="code-annotation-target"><a href="#annotated-cell-8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Samples:</span>    [0, 2, 6, 7, 8]</span>
+<span id="annotated-cell-8-3"><a href="#annotated-cell-8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Population:</span> [66.50, 78.99, 70.24, 58.61, 53.95, 48.18, 74.63, 43.87, 82.07, 60.32]</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-8-4" class="code-annotation-target"><a href="#annotated-cell-8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Samples:</span>    [53.95, 48.18, 43.87, 82.07, 60.32]</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-9" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-9" data-code-lines="2" data-code-annotation="1">Note that order is preserved by these samples.</span>
+<span data-code-cell="annotated-cell-8" data-code-lines="2" data-code-annotation="1">Note that order is preserved by these samples.</span>
 </dd>
-<dt data-target-cell="annotated-cell-9" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-8" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-9" data-code-lines="4" data-code-annotation="2">That is also true here.</span>
+<span data-code-cell="annotated-cell-8" data-code-lines="4" data-code-annotation="2">That is also true here.</span>
 </dd>
 </dl>
 </section>
@@ -755,18 +747,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -798,7 +779,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp("https:\/\/nessan\.github\.io\/xoshiro");
@@ -806,7 +809,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {

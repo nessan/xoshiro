@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.555">
+<meta name="generator" content="quarto-1.5.56">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>xoshiro/xoroshiro PRNG’s</title>
+<title>The xoshiroLibrary – xoshiro/xoroshiro PRNG's</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -110,7 +110,7 @@ gtag('js', new Date());
 gtag('config', 'G-XV29LHZDKD', { 'anonymize_ip': true});
 </script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
@@ -140,13 +140,13 @@ window.Quarto = {
 };
 </script>
 
-<meta property="og:title" content="xoshiro/xoroshiro PRNG’s">
+<meta property="og:title" content="The xoshiroLibrary – xoshiro/xoroshiro PRNG’s">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://nessan.github.io/xoshiro/assets/images/logo.png">
 <meta property="og:site_name" content="xoshiro/xoroshiro PRNG's">
 <meta property="og:image:height" content="191">
 <meta property="og:image:width" content="566">
-<meta name="twitter:title" content="xoshiro/xoroshiro PRNG’s">
+<meta name="twitter:title" content="The xoshiroLibrary – xoshiro/xoroshiro PRNG’s">
 <meta name="twitter:description" content="">
 <meta name="twitter:image" content="https://nessan.github.io/xoshiro/assets/images/logo.png">
 <meta name="twitter:image-height" content="191">
@@ -169,7 +169,7 @@ window.Quarto = {
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -203,7 +203,7 @@ window.Quarto = {
 <span class="menu-text">Jumps</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-more" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-more" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">More</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-more">    
@@ -226,7 +226,7 @@ window.Quarto = {
   </li>
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
     <a href="https://github.com/nessan/xoshiro" title="GitHub repo" class="quarto-navigation-tool px-1" aria-label="GitHub repo"><i class="bi bi-github"></i></a>
     <a href="https://twitter.com/nezzan" title="" class="quarto-navigation-tool px-1" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
 </div>
@@ -234,10 +234,10 @@ window.Quarto = {
     </nav>
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <a class="flex-grow-1 no-decor" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
           <h1 class="quarto-secondary-nav-title">The <code>xoshiro</code>Library</h1>
         </a>     
     </div>
@@ -258,9 +258,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
  <span class="menu-text">Generators</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -306,9 +306,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
  <span class="menu-text">States</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -348,9 +348,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
  <span class="menu-text">Scramblers</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -378,9 +378,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
  <span class="menu-text">Stream Partitioning</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -408,9 +408,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
  <span class="menu-text">Technical Notes</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -495,7 +495,7 @@ window.Quarto = {
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p><code>xoshiro.h</code> is a single header file, C++ implementation of the <em>complete</em> family of <a href="https://prng.di.unimi.it">xoshiro/xoroshiro</a> pseudorandom uniform number generators.</p>
-<p>David Blackman &amp; Sebastiano Vigna introduced these efficient, linear, pseudorandom number generators that have relatively small state but which, nonetheless, display excellent statistical properties. This <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">paper</a> provides the full mathematical details.</p>
+<p>David Blackman and Sebastiano Vigna introduced these efficient, linear pseudorandom number generators, which have relatively small states but display excellent statistical properties nonetheless. This <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">paper</a> provides the full mathematical details.</p>
 <p>The generators satisfy C++’s <a href="https://en.cppreference.com/w/cpp/numeric/random/uniform_random_bit_generator"><code>std::uniform_random_bit_generator</code></a> concept and can drive any of the distributions defined in the standard library.</p>
 <p>We provide efficient jump-ahead methods for <em>arbitrary</em> jump sizes, making them particularly suitable for parallel processing applications. They are excellent replacements for the “standard” <em>Mersenne Twister</em> generator.</p>
 <p>While the implementation is very general, there are simple type aliases for specific preferred instantiations that are known to work well in most situations.</p>
@@ -525,7 +525,7 @@ Library versions
 </section>
 <section id="example" class="level2">
 <h2 class="anchored" data-anchor-id="example">Example</h2>
-<p>Here is a simple example where we use the <em>default xoshiro</em> generator to sample a normal distribution from the standard library.</p>
+<p>Here is a simple example: We use the <em>default xoshiro</em> generator to sample a normal distribution from the standard library.</p>
 <p>We have copied the sample code from <a href="https://en.cppreference.com/w/cpp/numeric/random/normal_distribution"><code>std::normal_distribution</code></a> webpage and used <code>xso::rng</code> as a drop-in replacement for <code>std::mersenne_twister_engine</code>.</p>
 <div class="sourceCode" id="annotated-cell-2"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-2-1" class="code-annotation-target"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;xoshiro.h&gt;</span></span>
 <span id="annotated-cell-2-2"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;random&gt;</span></span>
@@ -553,11 +553,11 @@ Library versions
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="1" data-code-annotation="1">Everything is in the single <code>xoshiro.h</code> header file. The classes, functions etc. are all in the <code>xso</code> namespace.</span>
+<span data-code-cell="annotated-cell-2" data-code-lines="1" data-code-annotation="1">Everything is in the single <code>xoshiro.h</code> header file. The classes, functions, etc., are all in the <code>xso</code> namespace.</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="8" data-code-annotation="2">This is a type alias for <code>xso::rng64</code> which produces 64-bit outputs from a specific <em>xoshiro</em> generator with 256 bits of state.</span>
+<span data-code-cell="annotated-cell-2" data-code-lines="8" data-code-annotation="2">This type alias for xso::rng64 produces 64-bit outputs from a specific <em>xoshiro</em> generator with 256 bits of state.</span>
 </dd>
 </dl>
 <p><span class="bt">Output:</span></p>
@@ -581,13 +581,13 @@ Library versions
 </section>
 <section id="implementation" class="level2">
 <h2 class="anchored" data-anchor-id="implementation">Implementation</h2>
-<p><code>C</code> versions of the generators are available on the author’s <a href="https://prng.di.unimi.it">website</a>. Wrapping those routines so they conform to the <a href="https://en.cppreference.com/w/cpp/numeric/random/uniform_random_bit_generator"><code>std::uniform_random_bit_generator</code></a> concept is a trivial exercise.</p>
+<p><code>C</code> versions of the generators are available on the author’s <a href="https://prng.di.unimi.it">website</a>. Wrapping those routines to conform to the [std::uniform_random_bit_generator] concept is trivial.</p>
 <p>However, our implementation in <code>xoshiro.h</code> is distinguished in several other ways:</p>
 <section id="generality" class="level3">
 <h3 class="anchored" data-anchor-id="generality">Generality</h3>
 <p>Using the code in <code>xoshiro.h</code> you can create <em>any</em> member of the <em>xoshiro/xoroshiro</em> family.</p>
-<p>We have <a href="./pages/State.html"><code>State</code></a> classes that are templatized across the number of bits of state, and the parameters (labelled <code>A</code>, <code>B</code>, and <code>C</code> in the literature) that determine how the state is advanced from step to step.</p>
-<p><a href="./pages/Scrambler.html"><code>Scrambler</code></a> classes are templatized across the other parameters (labelled <code>R</code>, <code>S</code>, and <code>T</code> in the literature) that determine how the higher dimensional state is scrambled/reduced to single 32 or 64 bit output words.</p>
+<p>We have <a href="./pages/State.html"><code>State</code></a> classes that are templatized across the number of state bits, and the parameters (labelled <code>A</code>, <code>B</code>, and <code>C</code> in the literature) that determine how the state is advanced from step to step.</p>
+<p><a href="./pages/Scrambler.html"><code>Scrambler</code></a> classes are templatized across the other parameters (labelled <code>R</code>, <code>S</code>, and <code>T</code> in the literature) that determine how the higher dimensional state is scrambled/reduced to single 32-bit or 64-bit output words.</p>
 <p>This means you can instantiate <em>any</em> generator in the <em>xoshiro/xoroshiro</em> family.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -605,12 +605,12 @@ No compromise on speed
 </section>
 <section id="simplicity" class="level3">
 <h3 class="anchored" data-anchor-id="simplicity">Simplicity</h3>
-<p>While you can instantiate <em>any</em> generator in the <em>xoshiro/xoroshiro</em> family we also recognize that only a very limited number of those generators have ever been properly vetted for suitability as being “good”.</p>
-<p>Therefore, we provide some short and sweet <em>type aliases</em> for the recommended default generators you should use in most cases.</p>
+<p>While you can instantiate <em>any</em> generator in the <em>xoshiro/xoroshiro</em> family, we also recognize that only a limited number of those generators have been properly vetted for suitability as being “good”.</p>
+<p>Therefore, we provide <em>type aliases</em> for the recommended default generators you should use in most cases.</p>
 </section>
 <section id="arbitrary-jumps" class="level3">
 <h3 class="anchored" data-anchor-id="arbitrary-jumps">Arbitrary Jumps</h3>
-<p>We provide methods to advance a generator by <em>arbitrary</em> and potentially huge numbers of steps. This contrasts to the <code>C</code> versions, which only define a limited number of jump possibilities.</p>
+<p>We provide methods to advance a generator by <em>arbitrary</em> and potentially huge numbers of steps. This contrasts with the <code>C</code> versions, which only define a limited number of jump possibilities.</p>
 <p>Very large jumps <em>partition</em> a single random number stream into non-overlapping sub-streams. In parallel processing applications, the sub-streams drive independent jobs running on different compute cores.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -629,20 +629,20 @@ Arbitrary jumps do not need <code>bit</code>
 <section id="extra-analysis" class="level3">
 <h3 class="anchored" data-anchor-id="extra-analysis">Extra Analysis</h3>
 <p>Extra non-member functions for generator analysis are defined if the [`<code>bit</code>] library is available.</p>
-<p><code>bit</code> is a C++ library for doing linear algebra over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a> the simplest field of two elements <span class="math inline">\(\{0,1\}\)</span> where the usual arithmetic operations are performed mod 2. The <code>bit</code> library is header only so easily incorporated into any application.</p>
-<p>If it is available then <code>xoshiro.h</code> defines some extra functions that let you access the generator’s <em>transition matrix</em> and use/analyze that in various ways.</p>
+<p><code>bit</code> is a C++ library for doing linear algebra over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a> the simplest field of two elements <span class="math inline">\(\{0,1\}\)</span>, where the usual arithmetic operations are performed mod 2. The <code>bit</code> library is header-only, so it can be easily incorporated into any application.</p>
+<p>If it is available, then <code>xoshiro.h</code> defines some extra functions that let you access the generator’s <em>transition matrix</em> and use/analyze that in various ways.</p>
 </section>
 <section id="sampling-methods" class="level3">
 <h3 class="anchored" data-anchor-id="sampling-methods">Sampling Methods</h3>
 <p>The C++ standard library follows a common design pattern for the facilities in its <a href="https://en.cppreference.com/w/cpp/header/random"><code>&lt;random&gt;</code></a> header. It maintains a strict separation between the classes that produce random bits and others that use those bits.</p>
 <p>Uniform random bit generators produce streams of <em>uniformly</em> distributed output words (usually 32-bit or 64-bit unsigned integers). Other classes and functions shape those core streams to simulate a desired distribution over some field of interest (for example, to generate variates from a uniform distribution of reals in the range 0 to 1).</p>
 <p>The idea is reasonable enough. You can swap out the uniform random bit generator for a better one and continue to use the other functions without change.</p>
-<p>However, this interface is quite complicated for the end user — particularly for a user that has no idea, or interest in, how all the generator/distribution machinery works. Perhaps you google “<code>c++ random number generator</code>” and get advice to use the <a href="https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine"><code>std::mersenne_twister_engine</code></a> class. However, that just produces those unsigned output words that are useless by themselves. To simulate something as simple as a die roll, you must feed the thing into some other class and use that to get the required effect.</p>
+<p>However, this interface is quite complicated for the end user — particularly for a user with no idea, or interest in, how all the generator/distribution machinery works. Perhaps you google “<code>c++ random number generator</code>” and get advice to use the <a href="https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine"><code>std::mersenne_twister_engine</code></a> class. However, that produces those unsigned output words that are useless by themselves. To simulate something as simple as a die roll, you must feed the thing into some other class and use that to get the required effect.</p>
 <p>For this reason, we enrich our <em>xoshiro/xoroshiro</em> classes with some utility methods that interface directly with the various distribution classes in the standard <a href="https://en.cppreference.com/w/cpp/header/random"><code>&lt;random&gt;</code></a> header. That dice roll becomes something as simple as:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>xso<span class="op">::</span>rng gen<span class="op">;</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"Six sided dice roll: "</span> <span class="op">&lt;&lt;</span> gen<span class="op">.</span>roll<span class="op">()</span> <span class="op">&lt;&lt;</span> <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Similarly, you can ask one of our generators to flip a coin or shuffle the elements in a container.</p>
-<p>Perhaps most importantly the generators directly support the idea of <em>sampling</em>. This includes pulling samples from a range, from a container, or an arbitrary distribution.</p>
+<p>Most importantly, the generators directly support the idea of <em>sampling</em>. This includes pulling samples from a range, container, or an arbitrary distribution.</p>
 <p>Here are some examples:</p>
 <div class="sourceCode" id="annotated-cell-5"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-5-1" class="code-annotation-target"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> gen<span class="op">.</span>sample<span class="op">(</span><span class="dv">1</span><span class="op">,</span> <span class="dv">10</span><span class="op">)</span>   <span class="op">&lt;&lt;</span> <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">;</span></span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-5-2" class="code-annotation-target"><a href="#annotated-cell-5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> gen<span class="op">.</span>sample<span class="op">(</span><span class="fl">1.</span><span class="op">,</span> <span class="fl">10.</span><span class="op">)</span> <span class="op">&lt;&lt;</span> <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">;</span></span>
@@ -660,7 +660,7 @@ Arbitrary jumps do not need <code>bit</code>
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-5" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-5" data-code-lines="1" data-code-annotation="1">Prints a random integer from <span class="math inline">\([1,10]\)</span> where each integer is equally likely to occur.</span>
+<span data-code-cell="annotated-cell-5" data-code-lines="1" data-code-annotation="1">Prints a random integer from <span class="math inline">\([1,10]\)</span>, where each integer is equally likely to occur.</span>
 </dd>
 <dt data-target-cell="annotated-cell-5" data-target-annotation="2">2</dt>
 <dd>
@@ -752,18 +752,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -795,7 +784,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp("https:\/\/nessan\.github\.io\/xoshiro");
@@ -803,7 +814,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {

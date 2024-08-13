@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.555">
+<meta name="generator" content="quarto-1.5.56">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>xoshiro/xoroshiro PRNG’s - The xso::generator Class</title>
+<title>The xso::generator Class – xoshiro/xoroshiro PRNG's</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -111,7 +111,7 @@ gtag('js', new Date());
 gtag('config', 'G-XV29LHZDKD', { 'anonymize_ip': true});
 </script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
@@ -141,11 +141,11 @@ window.Quarto = {
 };
 </script>
 
-<meta property="og:title" content="xoshiro/xoroshiro PRNG’s - The xso::generator Class">
+<meta property="og:title" content="The xso::generator Class – xoshiro/xoroshiro PRNG’s">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://nessan.github.io/xoshiro/pages/assets/images/logo.png">
 <meta property="og:site_name" content="xoshiro/xoroshiro PRNG's">
-<meta name="twitter:title" content="xoshiro/xoroshiro PRNG’s - The xso::generator Class">
+<meta name="twitter:title" content="The xso::generator Class – xoshiro/xoroshiro PRNG’s">
 <meta name="twitter:description" content="">
 <meta name="twitter:image" content="https://nessan.github.io/xoshiro/pages/assets/images/logo.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -166,7 +166,7 @@ window.Quarto = {
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -200,7 +200,7 @@ window.Quarto = {
 <span class="menu-text">Jumps</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-more" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-more" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">More</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-more">    
@@ -223,7 +223,7 @@ window.Quarto = {
   </li>
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
     <a href="https://github.com/nessan/xoshiro" title="GitHub repo" class="quarto-navigation-tool px-1" aria-label="GitHub repo"><i class="bi bi-github"></i></a>
     <a href="https://twitter.com/nezzan" title="" class="quarto-navigation-tool px-1" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
 </div>
@@ -231,10 +231,10 @@ window.Quarto = {
     </nav>
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <a class="flex-grow-1 no-decor" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
           <h1 class="quarto-secondary-nav-title">The <code>xso::generator</code> Class</h1>
         </a>     
     </div>
@@ -255,9 +255,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
  <span class="menu-text">Generators</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -303,9 +303,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
  <span class="menu-text">States</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -345,9 +345,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
  <span class="menu-text">Scramblers</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -375,9 +375,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
  <span class="menu-text">Stream Partitioning</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -405,9 +405,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
  <span class="menu-text">Technical Notes</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -440,7 +440,7 @@ window.Quarto = {
   <li><a href="#non-member-functions" id="toc-non-member-functions" class="nav-link" data-scroll-target="#non-member-functions">Non-member Functions</a>
   <ul class="collapse">
   <li><a href="#always-available" id="toc-always-available" class="nav-link" data-scroll-target="#always-available">Always Available</a></li>
-  <li><a href="#dependent-on-the-bit-library" id="toc-dependent-on-the-bit-library" class="nav-link" data-scroll-target="#dependent-on-the-bit-library">Dependent on the <code>bit</code> Library</a></li>
+  <li><a href="#depending-on-the-bit-library" id="toc-depending-on-the-bit-library" class="nav-link" data-scroll-target="#depending-on-the-bit-library">Depending on the <code>bit</code> Library</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/nessan/xoshiro/edit/main/docs/pages/generator.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nessan/xoshiro/issues/new/choose" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -486,14 +486,14 @@ window.Quarto = {
 <!-- Articles and Wikipedia pages -->
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p><code>xso::generator</code> is the template class that can be used to make <strong>any</strong> <em>xoshiro/xoroshiro</em> variant. It connects a <a href="../pages/State.html"><code>State</code></a> with an <a href="../pages/Scrambler.html"><code>Scrambler</code></a> to create a pseudorandom number generator.</p>
+<p><code>xso::generator</code> is the template class that can be used to make <strong>any</strong> <em>xoshiro/xoroshiro</em> variant. It connects a <a href="../pages/State.html"><code>State</code></a> with a <a href="../pages/Scrambler.html"><code>Scrambler</code></a> to create a pseudorandom number generator.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Most users should just use one of the predefined type aliases
+Most users should use one of the predefined type aliases
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -592,7 +592,7 @@ An <code>xso::generator</code> can be used anywhere a <code>State</code> is expe
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Any <code>xso::generator</code> satisfies all requirements of the <a href="../pages/State.html"><code>State</code></a> concept. This is useful as some functions work naturally on a <code>State</code> but you can just pass the <code>generator</code> along in its place as a proxy.</p>
+<p>Any <code>xso::generator</code> satisfies all requirements of the <a href="../pages/State.html"><code>State</code></a> concept. This is useful as some functions work naturally on a <code>State</code>, but you can pass the <code>generator</code> along in its place as a proxy.</p>
 </div>
 </div>
 <p>The <code>xso::generator</code> expects the <code>Scrambler</code> to implement the following methods:</p>
@@ -621,7 +621,7 @@ An <code>xso::generator</code> can be used anywhere a <code>State</code> is expe
 </tbody>
 </table>
 </div>
-<p>These types and methods are used by the <code>generator</code> as described next.</p>
+<p>The generator uses these types and methods as described next.</p>
 </section>
 </section>
 <section id="class-types-and-methods" class="level2">
@@ -754,12 +754,7 @@ An <code>xso::generator</code> can be used anywhere a <code>State</code> is expe
 <h2 class="anchored" data-anchor-id="non-member-functions">Non-member Functions</h2>
 <section id="always-available" class="level3">
 <h3 class="anchored" data-anchor-id="always-available">Always Available</h3>
-<div class="table-responsive">
-<table class="table-bordered table-striped table-hover caption-top table">
-<colgroup>
-<col style="width: 40%">
-<col style="width: 60%">
-</colgroup>
+<table class="caption-top table">
 <thead>
 <tr class="header">
 <th>Function</th>
@@ -773,7 +768,7 @@ An <code>xso::generator</code> can be used anywhere a <code>State</code> is expe
 </tr>
 <tr class="even">
 <td><a href="../pages/jump.html"><code>jump</code></a></td>
-<td>This function uses the output of <code>jump_coefficients</code> to efficiently jump ta <code>generator</code> or <code>State</code> ahead by a potentially huge number of steps.</td>
+<td>This function uses the output of <code>jump_coefficients</code> to efficiently jump a <code>generator</code> or <code>State</code> ahead by a potentially huge number of steps.</td>
 </tr>
 <tr class="odd">
 <td><a href="../pages/formatter.html"><code>stream&lt;&lt;</code></a></td>
@@ -783,21 +778,19 @@ An <code>xso::generator</code> can be used anywhere a <code>State</code> is expe
 <td><a href="../pages/formatter.html"><code>formatter</code></a></td>
 <td>Connect the <code>generator</code>, <code>State</code>, and <code>Scrambler</code> classes to <a href="https://en.cppreference.com/w/cpp/utility/format/format"><code>std::format</code></a> and friends.</td>
 </tr>
+<tr class="odd">
+<td>: {.bordered .striped .hover .responsive tbl-colwidths=“[40,60]”}</td>
+<td></td>
+</tr>
 </tbody>
 </table>
-</div>
 </section>
-<section id="dependent-on-the-bit-library" class="level3">
-<h3 class="anchored" data-anchor-id="dependent-on-the-bit-library">Dependent on the <code>bit</code> Library</h3>
-<p>If the <a href="https://nessan.github.io/bit"><code>bit</code></a> library is available <em>extra</em> non-member functions are defined.</p>
-<p><code>bit</code> is a C++ library for doing linear algebra over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a> the simplest field of two elements <span class="math inline">\(\{0,1\}\)</span> where the usual arithmetic operations are performed mod 2. The <code>bit</code> library is header only so easily incorporated into any application.</p>
-<p>If it is available then <code>xoshiro.h</code> defines some extra functions:</p>
-<div class="table-responsive">
-<table class="table-bordered table-striped table-hover caption-top table">
-<colgroup>
-<col style="width: 40%">
-<col style="width: 60%">
-</colgroup>
+<section id="depending-on-the-bit-library" class="level3">
+<h3 class="anchored" data-anchor-id="depending-on-the-bit-library">Depending on the <code>bit</code> Library</h3>
+<p>If the <a href="https://nessan.github.io/bit"><code>bit</code></a> library is available, extra non-member functions will be defined.</p>
+<p><code>bit</code> is a C++ library for doing linear algebra over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a> the simplest field of two elements <span class="math inline">\(\{0,1\}\)</span>, where the usual arithmetic operations are performed mod 2. The <code>bit</code> library is header only, so it is easily incorporated into any application.</p>
+<p>If it is available, then <code>xoshiro.h</code> defines some extra functions:</p>
+<table class="caption-top table">
 <thead>
 <tr class="header">
 <th>Function</th>
@@ -819,11 +812,14 @@ An <code>xso::generator</code> can be used anywhere a <code>State</code> is expe
 </tr>
 <tr class="even">
 <td><a href="../pages/bit.html#performing-jumps"><code>jump</code></a></td>
-<td>Uses a jump polynomial to efficiently jump a <code>State</code> ahead in its stream.</td>
+<td>Uses a jump-polynomial to jump a State ahead in its stream efficiently.</td>
+</tr>
+<tr class="odd">
+<td>: {.bordered .striped .hover .responsive tbl-colwidths=“[40,60]”}</td>
+<td></td>
 </tr>
 </tbody>
 </table>
-</div>
 
 
 </section>
@@ -865,18 +861,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -908,7 +893,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp("https:\/\/nessan\.github\.io\/xoshiro");
@@ -916,7 +923,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {

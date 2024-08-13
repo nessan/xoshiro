@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.555">
+<meta name="generator" content="quarto-1.5.56">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>xoshiro/xoroshiro PRNG’s - The xso::partition Class</title>
+<title>The xso::partition Class – xoshiro/xoroshiro PRNG's</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -111,7 +111,7 @@ gtag('js', new Date());
 gtag('config', 'G-XV29LHZDKD', { 'anonymize_ip': true});
 </script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
@@ -141,11 +141,11 @@ window.Quarto = {
 };
 </script>
 
-<meta property="og:title" content="xoshiro/xoroshiro PRNG’s - The xso::partition Class">
+<meta property="og:title" content="The xso::partition Class – xoshiro/xoroshiro PRNG’s">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://nessan.github.io/xoshiro/pages/assets/images/logo.png">
 <meta property="og:site_name" content="xoshiro/xoroshiro PRNG's">
-<meta name="twitter:title" content="xoshiro/xoroshiro PRNG’s - The xso::partition Class">
+<meta name="twitter:title" content="The xso::partition Class – xoshiro/xoroshiro PRNG’s">
 <meta name="twitter:description" content="">
 <meta name="twitter:image" content="https://nessan.github.io/xoshiro/pages/assets/images/logo.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -166,7 +166,7 @@ window.Quarto = {
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -200,7 +200,7 @@ window.Quarto = {
 <span class="menu-text">Jumps</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-more" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-more" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">More</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-more">    
@@ -223,7 +223,7 @@ window.Quarto = {
   </li>
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
     <a href="https://github.com/nessan/xoshiro" title="GitHub repo" class="quarto-navigation-tool px-1" aria-label="GitHub repo"><i class="bi bi-github"></i></a>
     <a href="https://twitter.com/nezzan" title="" class="quarto-navigation-tool px-1" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
 </div>
@@ -231,10 +231,10 @@ window.Quarto = {
     </nav>
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <a class="flex-grow-1 no-decor" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
           <h1 class="quarto-secondary-nav-title">The <code>xso::partition</code> Class</h1>
         </a>     
     </div>
@@ -255,9 +255,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
  <span class="menu-text">Generators</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -303,9 +303,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
  <span class="menu-text">States</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -345,9 +345,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
  <span class="menu-text">Scramblers</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -375,9 +375,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
  <span class="menu-text">Stream Partitioning</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -405,9 +405,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
  <span class="menu-text">Technical Notes</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -499,7 +499,7 @@ window.Quarto = {
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="template-parameter" class="level3">
 <h3 class="anchored" data-anchor-id="template-parameter">Template Parameter</h3>
-<p>The template parameter <code>RNG</code> should satisfy the requirements of a <a href="../pages/State.html"><code>State</code></a> type. In particular, it should have a working class method <a href="../pages/characteristic_coefficients.html"><code>characteristic_coefficients</code></a>.</p>
+<p>The template parameter <code>RNG</code> should satisfy the requirements of a <a href="../pages/State.html"><code>State</code></a> type. In particular, it should have a class method <a href="../pages/characteristic_coefficients.html"><code>characteristic_coefficients</code></a> that works.</p>
 </section>
 </section>
 <section id="instance-methods" class="level2">
@@ -508,13 +508,13 @@ window.Quarto = {
 <section id="construction" class="level3">
 <h3 class="anchored" data-anchor-id="construction">Construction</h3>
 <div class="sourceCode" id="cb2"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>partition<span class="op">(</span><span class="at">const</span> State<span class="op">&amp;</span> gen<span class="op">,</span> <span class="bu">std::</span>size_t n_partitions<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Here <code>gen</code> is a parent generator or <code>State</code> and we want to partition its random state stream into <code>n_partitions</code> non-overlapping sub-streams. Each of those will be <code>owned</code> by a copy of <code>gen</code> that is seeded with the correct starting state for the sub-stream.</p>
+<p>Here, gen is a parent generator or State, and we want to partition its random state stream into <code>n_partitions</code> non-overlapping sub-streams. Each of those will be <code>owned</code> by a copy of <code>gen</code>, seeded with the correct starting state for the sub-stream.</p>
 <p>The constructor computes an appropriate jump size <span class="math inline">\(J\)</span> that depends on the <code>n_partitions</code> argument. It then uses the <code>State</code> characteristic coefficients to compute an appropriate <em>jump polynomial</em> for jumps of size <span class="math inline">\(J\)</span>.</p>
 </section>
 <section id="the-next-method" class="level3">
 <h3 class="anchored" data-anchor-id="the-next-method">The <code>next()</code> Method</h3>
 <div class="sourceCode" id="cb3"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>State next<span class="op">();</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This returns a new <code>State</code> that is a copy of the parent <code>gen</code> but seeded at a the start of the next partition. The returned <code>RNG</code> will be the same as <code>gen</code> with its state jumped along by ome multiple of <span class="math inline">\(J\)</span> steps</p>
+<p>This returns a new <code>State</code> that is a copy of the parent <code>gen</code> but seeded at the start of the next partition. The returned <code>RNG</code> will be the same as <code>gen</code>, with its state jumped along by some multiple of <span class="math inline">\(J\)</span> steps</p>
 </section>
 </section>
 <section id="example" class="level2">
@@ -547,22 +547,22 @@ window.Quarto = {
 </dd>
 <dt data-target-cell="annotated-cell-4" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-cell="annotated-cell-4" data-code-lines="8" data-code-annotation="4">And we’re off spawning an independent job for each core handing each its own sub-stream generator to work with.</span>
+<span data-code-cell="annotated-cell-4" data-code-lines="8" data-code-annotation="4">And we’re off spawning an independent job for each core, handing each its own sub-stream generator to work with.</span>
 </dd>
 </dl>
-<p>In this sketch we start by determining how many cores we have available for the simulation. That may be a fixed number or perhaps there is some function that determines the number on the fly. For the sake of this example let’s suppose that <code>n_cores</code> comes back as 100.</p>
-<p>We want to partition the random number stream from <code>gen</code> into 100 pieces and hand each core its own sub-stream to work with. So we set up an <code>xso::partition</code> object to do just that.</p>
-<p>The loop spawns jobs where each one is given its own random number generator. The generators come from calling the <code>partition.next()</code> method. The <code>xso::partition</code> class ensures that these generators really are identical to the original <code>gen</code> except that they are seeded appropriately far along to the next sub-stream.</p>
-<p>The parent generator has 256 bits of state so its random state stream has <span class="math inline">\(2^{256}\)</span> slots. This means that all the sub-streams still have vast number of random numbers to use up before there is any chance of getting overlaps.</p>
+<p>In the sketch, we first determine how many cores are available for the simulation. That may be a fixed number, or some function determines the number on the fly. For the sake of this example, n_cores comes back as 100.</p>
+<p>We want to partition the random number stream from <code>gen</code> into 100 pieces and hand each core its own sub-stream to work with. So, we set up an <code>xso::partition</code> object to do just that.</p>
+<p>The loop spawns jobs where each one is given its own random number generator. The generators come from calling the <code>partition.next()</code> method. The <code>xso::partition</code> class ensures that these generators are identical to the original `gen, except that they are seeded appropriately far along to the next sub-stream.</p>
+<p>The parent generator has 256 bits of state, so its random state stream has <span class="math inline">\(2^{256}\)</span> slots. This means that all the sub-streams still have a vast number of random deviates to use up before there is any chance of getting overlaps.</p>
 </section>
 <section id="implementation-note" class="level2">
 <h2 class="anchored" data-anchor-id="implementation-note">Implementation Note</h2>
-<p>In the example above we are using a random number generator <code>xso::rng</code> which has 256 bits of state. Those generators will step through an enormous <span class="math inline">\(2^{256}\)</span> states before repeating the cycle.</p>
-<p>We have 100 cores available for parallel computation. Ideally then we want to partition the random number stream from <code>gen</code> into a 100 pieces and hand each core its own non overlapping sub-stream of size: <span class="math display">\[
+<p>In the example above, we use a random number generator xso::rng, which has 256 state bits. Those generators will step through an enormous <span class="math inline">\(2^{256}\)</span> states before repeating the cycle.</p>
+<p>We have 100 cores available for parallel computation. Ideally, we want to partition the random number stream from <code>gen</code> into 100 pieces and hand each core its own non-overlapping sub-stream of size: <span class="math display">\[
 \frac{2^{256}}{100}.
-\]</span> However, that number will overflow any normal 32-bit or 64-bit integer! Instead the <code>partition</code> class will actually create some number of sub-stream that is a <em>power of two</em> close to, but larger than 100. In this case that power will be 7 as <span class="math inline">\(2^7 = 128 \ge 100\)</span>.</p>
-<p>The number of created non-overlapping partitions is then actually 128 instead of 100.</p>
-<p>We only use 100 of the 128 as we spawn independent jobs so each partition is therefore slightly smaller than the ideal and of course we are not using any of the final 28 partitions at all. However, each of the sub-streams still has some <span class="math inline">\(2^{256 - 7} = 2^{249}\)</span> random numbers available. That is vastly more than a job on any present day computer will ever consume so the “wastage” is completely insignificant.</p>
+\]</span> However, that number will overflow any normal 32-bit or 64-bit integer! Instead, the partition class will create <span class="math inline">\(N =2^p\)</span> sub-streams, where <span class="math inline">\(N\)</span> is a <em>power of two</em> close to, but larger than 100. In this case, that power will be 7 as <span class="math inline">\(2^7 = 128 \ge 100\)</span>.</p>
+<p>The number of created non-overlapping partitions is 128 instead of 100.</p>
+<p>We only use 100 of the 128 as we spawn independent jobs, so each partition is therefore slightly smaller than the ideal, and of course, we are not using any of the final 28 partitions at all. However, each of the sub-streams still has some <span class="math inline">\(2^{256 - 7} = 2^{249}\)</span> available random numbers. That is vastly more than a job on any present-day computer will ever consume, so the “wastage” is completely insignificant.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -573,7 +573,7 @@ The corresponding <em>precomputed</em> characteristic coefficients must be avail
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This class requires that <code>State</code> has its <em>pre-computed</em> characteristic coefficients available. This is true for all our <a href="../pages/type-aliases.html">type aliased</a> recommended generators.</p>
+<p>This class requires the <code>State</code> to have its pre-computed* characteristic coefficients available. This is true for all our <a href="../pages/type-aliases.html">type aliased</a> recommended generators.</p>
 </div>
 </div>
 <section id="see-also" class="level3">
@@ -624,18 +624,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -667,7 +656,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp("https:\/\/nessan\.github\.io\/xoshiro");
@@ -675,7 +686,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {

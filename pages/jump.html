@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.555">
+<meta name="generator" content="quarto-1.5.56">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>xoshiro/xoroshiro PRNG’s - xso::generator — Jumps</title>
+<title>xso::generator — Jumps – xoshiro/xoroshiro PRNG's</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -110,7 +110,7 @@ gtag('js', new Date());
 gtag('config', 'G-XV29LHZDKD', { 'anonymize_ip': true});
 </script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
@@ -140,11 +140,11 @@ window.Quarto = {
 };
 </script>
 
-<meta property="og:title" content="xoshiro/xoroshiro PRNG’s - xso::generator — Jumps">
+<meta property="og:title" content="xso::generator — Jumps – xoshiro/xoroshiro PRNG’s">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://nessan.github.io/xoshiro/pages/assets/images/logo.png">
 <meta property="og:site_name" content="xoshiro/xoroshiro PRNG's">
-<meta name="twitter:title" content="xoshiro/xoroshiro PRNG’s - xso::generator — Jumps">
+<meta name="twitter:title" content="xso::generator — Jumps – xoshiro/xoroshiro PRNG’s">
 <meta name="twitter:description" content="">
 <meta name="twitter:image" content="https://nessan.github.io/xoshiro/pages/assets/images/logo.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -165,7 +165,7 @@ window.Quarto = {
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -199,7 +199,7 @@ window.Quarto = {
 <span class="menu-text">Jumps</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-more" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-more" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">More</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-more">    
@@ -222,7 +222,7 @@ window.Quarto = {
   </li>
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
     <a href="https://github.com/nessan/xoshiro" title="GitHub repo" class="quarto-navigation-tool px-1" aria-label="GitHub repo"><i class="bi bi-github"></i></a>
     <a href="https://twitter.com/nezzan" title="" class="quarto-navigation-tool px-1" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
 </div>
@@ -230,10 +230,10 @@ window.Quarto = {
     </nav>
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <a class="flex-grow-1 no-decor" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
           <h1 class="quarto-secondary-nav-title"><code>xso::generator</code> — Jumps</h1>
         </a>     
     </div>
@@ -254,9 +254,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
  <span class="menu-text">Generators</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -302,9 +302,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
  <span class="menu-text">States</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -344,9 +344,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
  <span class="menu-text">Scramblers</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -374,9 +374,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
  <span class="menu-text">Stream Partitioning</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -404,9 +404,9 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
  <span class="menu-text">Technical Notes</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -475,21 +475,21 @@ window.Quarto = {
 <!-- The `utilities` library used in some example code -->
 <!-- Other software etc. -->
 <!-- Articles and Wikipedia pages -->
-<p>We have a non-member jump function to rapidly move any recommended <em>xoshiro/xoroshiro</em> generator or <code>State</code> very far ahead in its random number stream.</p>
+<p>We have a non-member jump function to rapidly move any recommended <em>xoshiro/xoroshiro</em> generator or <code>State</code> far ahead in its random number stream.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span><span class="kw">typename</span> State<span class="op">&gt;</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>xso<span class="op">::</span>jump<span class="op">(</span>State<span class="op">&amp;</span> state<span class="op">,</span> <span class="at">const</span> <span class="bu">std::</span>array<span class="op">&lt;</span><span class="kw">typename</span> State<span class="op">::</span><span class="dt">word_type</span><span class="op">,</span> State<span class="op">::</span>word_count<span class="op">()&gt;&amp;</span> jump_coeff<span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol type="1">
 <li>This jumps the generator using the <code>jump_coeff</code> argument.</li>
 </ol>
-<p>The template parameter <code>State</code> type can be either a full <a href="../pages/generator.html"><code>xso::generator</code></a> or <a href="../pages/State.html"><code>State</code></a> class as both have the methods needed for the function to succeed.</p>
-<p>To jump <span class="math inline">\(J\)</span> steps ahead in the stream you first call <code>jump_coefficients&lt;State&gt;(J)</code> which returns an appropriate set of jump polynomial coefficients that you can use as the final argument in this <code>jump</code> function. See the documentation for <a href="../pages/jump_coefficients.html"><code>jump_coefficients</code></a>.</p>
+<p>The template parameter <code>State</code> type can be either a full <a href="../pages/generator.html"><code>xso::generator</code></a> or <a href="../pages/State.html"><code>State</code></a> class, as both have the methods needed for the function to succeed.</p>
+<p>To jump <span class="math inline">\(J\)</span> steps ahead in the stream, you first call jump_coefficients<state>(J), which returns an appropriate set of jump polynomial coefficients that you can use as the final argument in this <code>jump</code> function. See the documentation for <a href="../pages/jump_coefficients.html"><code>jump_coefficients</code></a>.</state></p>
 <section id="recommended-generators" class="level2">
 <h2 class="anchored" data-anchor-id="recommended-generators">Recommended Generators</h2>
 <p>The method for efficiently jumping the state by arbitrary and possibly huge numbers of steps is fully described <a href="../pages/jump-technique.html">here</a>.</p>
-<p>To use it you need to have access to the generator’s <a href="../pages/characteristic_coefficients.html">characteristic polynomial</a>. With that available you can compute <em>jump polynomials</em> for any jump size <span class="math inline">\(J\)</span>.</p>
+<p>To use it, you need access to the generator’s <a href="../pages/characteristic_coefficients.html">characteristic polynomial</a>. With that available, you can compute <em>jump polynomials</em> for any jump size <span class="math inline">\(J\)</span>.</p>
 <p>The header file <code>xoshiro.h</code> contains <em>pre-canned</em> characteristic polynomial coefficients for <em>all</em> our <a href="../pages/type-aliases.html">type aliased</a> <em>xoshiro/xoroshiro</em> generators. This means that, out of the box, the library supports jumping any of those generators by arbitrary numbers of steps.</p>
-<p>By calling the <code>jump</code> method repeatedly you can create many independent copies of a single-parent generator.</p>
+<p>By using the jump method repeatedly, you can create many independent copies of a single-parent generator.</p>
 <p><span class="bt">Example:</span></p>
 <div class="sourceCode" id="annotated-cell-2"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><span id="annotated-cell-2-1"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;xoshiro.h&gt;</span></span>
 <span id="annotated-cell-2-2"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
@@ -524,28 +524,28 @@ window.Quarto = {
 <span data-code-cell="annotated-cell-2" data-code-lines="9" data-code-annotation="5"><code>g3</code> is a copy of <code>g0</code> with its state jumped forward by <span class="math inline">\(3 \times 2^{100}\)</span> steps.</span>
 </dd>
 </dl>
-<p>In practice, you are likely to create these generators in a loop that spawns independent jobs each running on a separate compute engine/core. Each job will own a copy of the random number generator jumped ahead to a new sub-stream that is large enough to never overlap with its neighbors.</p>
+<p>In practice, you can create these generators in a loop that spawns independent jobs on a separate compute engine/core. Each job will own a copy of the random number generator jumped ahead to a new sub-stream that is large enough to never overlap with its neighbours.</p>
 <p>The <a href="../pages/partition.html"><code>xso::partition</code></a> class makes this sort of sub-stream partitioning easy to do.</p>
 </section>
 <section id="other-generator-variants" class="level2">
 <h2 class="anchored" data-anchor-id="other-generator-variants">Other Generator Variants</h2>
-<p>This <code>xso::jump</code> and <code>xso::jump_coefficients</code> functions rely on the <em>pre-canned</em> characteristic polynomials that are embedded in the <code>xoshiro.h</code>. All our <a href="../pages/type-aliases.html">type aliased</a> generators have their characteristic polynomial precomputed in that header file. This means that we support jumping any of those generators by an <em>arbitrary</em> number of steps.</p>
-<p>If instead, you are using some other variant of <em>xoshiro/xoroshiro</em> you can still get its characteristic polynomial and jump polynomials by employing the extra, header-only, <a href="https://nessan.github.io/bit"><code>bit</code></a> library. That is a package for <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a> which can compute the needed characteristic polynomials for the generator’s transition matrix. Once the <code>bit</code> library is included then the <code>xoshiro.h</code> header file defines some extra non-member functions that can compute those characteristic and jump polynomials.</p>
+<p>These <code>xso::jump</code> and <code>xso::jump_coefficients</code> functions rely on the <em>pre-canned</em> characteristic polynomials embedded in the <code>xoshiro.h</code>. All our <a href="../pages/type-aliases.html">type aliased</a> generators have their characteristic polynomial precomputed in that header file. This means we support jumping any of those generators by arbitrary steps.</p>
+<p>If, instead, you are using some other variant of xoshiro/xoroshiro, you can still get its characteristic polynomial and jump polynomials by employing the extra, header-only, <a href="https://nessan.github.io/bit"><code>bit</code></a> library. That is a package for <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a>, which can compute the needed characteristic polynomials for the generator’s transition matrix. Once the <code>bit</code> library is included, then the <code>xoshiro.h</code> header file defines extra non-member functions that can compute those characteristic and jump polynomials.</p>
 <p>See the documentation for these functions <a href="https://nessan.github.io/bit">here</a>.</p>
 </section>
 <section id="motivation-for-jumping" class="level2">
 <h2 class="anchored" data-anchor-id="motivation-for-jumping">Motivation for Jumping</h2>
-<p>Monte Carlo analyses and their kin that employ random number generators are, in theory at least, easy to parallelize.</p>
-<p>For example, if you have 128 compute cores available, you can start 128 separate analyses each with its own random number generator. These run in parallel and you aggregate the <em>independent</em> results as they come in.</p>
-<p>Of course, having confidence in one type of generator is hard enough let alone 128 of them. For that reason, we generally stick to using a single well-understood, well-tested generator and create 128 copies started with different seeds. However, if you just pick the 128 seeds “at random” there can be significant overlaps in, and correlations between, the resulting output streams. Those unknowable effects will pollute any conclusions you draw from the results of the supposedly independent simulations.</p>
+<p>In theory, Monte Carlo analyses and their kin that employ random number generators are easy to parallelize.</p>
+<p>For example, if you have 128 compute cores available, you can start 128 separate analyses, each with its own random number generator. These run in parallel, and you aggregate the <em>independent</em> results as they come in.</p>
+<p>Of course, having confidence in one type of generator is hard enough, let alone 128. Therefore, we generally use a single well-understood, well-tested generator and create 128 copies started with different seeds. However, if you pick the 128 seeds “at random,” there can be significant overlaps and correlations between the resulting output streams. Those unknowable effects will pollute any conclusions you draw from the results of the supposedly independent simulations.</p>
 <p>Instead of picking 128 different seeds at random, an alternative approach is to pick a single seed <span class="math inline">\(s_0\)</span> and then <em>partition</em> the resulting stream of random numbers into 128 <em>sub-streams</em>.</p>
-<p>For example, you need to run <code>xsg::rng64()</code> some <span class="math inline">\(2^{256}\)</span> times before the stream repeats. That is an enormous number — a simulation on any current computer will only ever consume a small fraction of that stream. Therefore we can afford to break it into sub-streams and then use those across our parallel computation.</p>
-<p>In our example, we have 128 available compute cores and have thoughtfully picked a single seed state <span class="math inline">\(s_0\)</span> for <code>xso::rng64</code>. From that seed <span class="math inline">\(s_0\)</span> there stretches a stream of <span class="math inline">\(2^{256}\)</span> states <span class="math inline">\(\left\{s_0, s_1, s_2, \cdots \right\}\)</span>. We want to split this parent stream into 128 equal non-overlapping sub-streams. Each sub-stream will have size: <span class="math display">\[
+<p>For example, you need to run <code>xsg::rng64()</code> some <span class="math inline">\(2^{256}\)</span> times before the stream repeats. That is an enormous number — a simulation on any current computer will only ever consume a small fraction of that stream. Therefore, we can break it into sub-streams and then use those across our parallel computation.</p>
+<p>In our example, we have 128 available compute cores and have thoughtfully picked a single seed state <span class="math inline">\(s_0\)</span> for <code>xso::rng64</code>. From that seed <span class="math inline">\(s_0\)</span> there stretches a stream of <span class="math inline">\(2^{256}\)</span> states <span class="math inline">\(\left\{s_0, s_1, s_2, \cdots \right\}\)</span>. We want to split this parent stream into 128 equal non-overlapping sub-streams. Each sub-stream will have the following size: <span class="math display">\[
     \frac{2^{256}}{128} = \frac{2^{256}}{2^7} = 2^{259}
 \]</span> which is still vast!</p>
-<p>However, to parallelize the computation we cannot have the 128 simulators all reference a single bottleneck random number generator!</p>
-<p>Instead, we want to create the non-overlapping sub-streams <em>lazily</em> by just instantiating 128 copies of the generator. The first is seeded with <span class="math inline">\(s_0\)</span>, the next is seeded some <span class="math inline">\(2^{259}\)</span> slots along, the next another <span class="math inline">\(2^{259}\)</span> slots along from that, and so on. Each of the 128 simulations has its generator that just happens to return partitions of a single parent stream and therefore should have nice independence properties.</p>
-<p>The key to making this work is to be able to <em>efficiently</em> jump ahead in the state stream. In our example, we need to go from any state <span class="math inline">\(s\)</span> to another state that is <span class="math inline">\(2^{259}\)</span> steps along from <span class="math inline">\(s\)</span> in the random state stream. And that is exactly what all our various <code>jump</code> methods and functions accomplish.</p>
+<p>However, to parallelize the computation, we cannot have the 128 simulators all reference a single bottleneck random number generator!</p>
+<p>Instead, we want to create the non-overlapping sub-streams <em>lazily</em> by just instantiating 128 copies of the generator. The first is seeded with <span class="math inline">\(s_0\)</span>, the next is seeded some <span class="math inline">\(2^{259}\)</span> slots along, the next another <span class="math inline">\(2^{259}\)</span> slots along from that, and so on. Each of the 128 simulations has its generator that happens to return partitions of a single parent stream and, therefore, should have nice independence properties.</p>
+<p>The key to making this work is to efficiently jump ahead in the state stream. In our example, we need to go from any state <span class="math inline">\(s\)</span> to another state that is <span class="math inline">\(2^{259}\)</span> steps along from <span class="math inline">\(s\)</span> in the random state stream. And that is exactly what all our various <code>jump</code> methods and functions accomplish.</p>
 <p>These <code>jump</code> methods are vastly more efficient than using the <a href="../pages/discard.html"><code>discard</code></a> method. Moreover, they can accommodate jump sizes like <span class="math inline">\(N = 2^{259}\)</span> which will overflow even the <em>argument type</em> for <code>discard(N)</code> before that method ever gets going!</p>
 </section>
 <section id="see-also" class="level2">
@@ -597,18 +597,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -640,7 +629,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp("https:\/\/nessan\.github\.io\/xoshiro");
@@ -648,7 +659,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
