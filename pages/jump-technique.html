@@ -69,10 +69,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -144,10 +146,6 @@ window.Quarto = {
 <meta property="og:description" content="">
 <meta property="og:image" content="https://nessan.github.io/xoshiro/pages/assets/images/logo.png">
 <meta property="og:site_name" content="xoshiro/xoroshiro PRNG's">
-<meta name="twitter:title" content="Efficient Jump Ahead Methods for Some RNGs – xoshiro/xoroshiro PRNG’s">
-<meta name="twitter:description" content="">
-<meta name="twitter:image" content="https://nessan.github.io/xoshiro/pages/assets/images/logo.png">
-<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-sidebar floating nav-fixed">
@@ -214,7 +212,7 @@ window.Quarto = {
  <span class="dropdown-text">Report a Bug</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://github.com/nessan/xoshiro/discussions"><i class="bi bi-chat-right-text" role="img">
+    <a class="dropdown-item" href="mailto:nzznfitz+gh@icloud.com"><i class="bi bi-chat-right-text" role="img">
 </i> 
  <span class="dropdown-text">Ask a Question</span></a>
   </li>  
@@ -224,7 +222,7 @@ window.Quarto = {
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
     <a href="https://github.com/nessan/xoshiro" title="GitHub repo" class="quarto-navigation-tool px-1" aria-label="GitHub repo"><i class="bi bi-github"></i></a>
-    <a href="https://twitter.com/nezzan" title="" class="quarto-navigation-tool px-1" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -466,26 +464,13 @@ window.Quarto = {
 </header>
 
 
-<!-- Links and shortcuts used throughout the documentation -->
+<!-- Math shortcuts we use -->
 <!-- Math shortcuts we use frequently in the documentation -->
 <div class="hidden">
 <p><span class="math display">\[
 \newcommand{\FF}{\mathbb{F}_2}
 \newcommand{\bold}[1]{\mathbf{#1}}
 \newcommand{\mod}[2]{ {#1 \, \mathrm{mod} \, #2}}
-\]</span></p>
-</div>
-<!-- Our library -->
-<!-- Extras that are defined if `bit` is available -->
-<!-- Library concepts and technical notes -->
-<!-- The standard library -->
-<!-- The `bit` library -->
-<!-- The `utilities` library used in some example code -->
-<!-- Other software etc. -->
-<!-- Articles and Wikipedia pages -->
-<!-- Math shortcuts we use -->
-<div class="hidden">
-<p><span class="math display">\[
 \newcommand{\seq}[2][n]{ #2_0 #2_1 \ldots #2_{#1-1} }
 \newcommand{\sseq}[2][n]{ \left[#2_0 #2_1 \ldots #2_{#1-1}\right] }
 \]</span></p>
@@ -523,8 +508,8 @@ window.Quarto = {
 <section id="linear-transition-functions" class="level2">
 <h2 class="anchored" data-anchor-id="linear-transition-functions">Linear Transition Functions</h2>
 <p>Surprisingly, the state transition function <span class="math inline">\(t\)</span> for many popular RNGs can be written as a <em>linear</em> transformation when the state is viewed as a vector over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a> the simplest <a href="https://en.wikipedia.org/wiki/Finite_field">Galois Field</a> with two elements.</p>
-<p>GF(2) also known as <span class="math inline">\(\FF\)</span> is just a mathematical way of talking about <em>bits</em>.</p>
-<p><span class="math inline">\(\FF\)</span> has just two elements 0 and 1 and all the usual arithmetic operations are carried out mod 2 to keep everything closed in <span class="math inline">\(\{0,1\}\)</span>. You can easily verify that addition in <span class="math inline">\(\FF\)</span> becomes <code>XOR</code> and multiplication becomes <code>AND</code>. It is also useful to know that you can replace any minus signs with pluses and divisions by multiplications.</p>
+<p>GF(2) also known as <span class="math inline">\(\mathbb{F}_2\)</span> is just a mathematical way of talking about <em>bits</em>.</p>
+<p><span class="math inline">\(\mathbb{F}_2\)</span> has just two elements 0 and 1 and all the usual arithmetic operations are carried out mod 2 to keep everything closed in <span class="math inline">\(\{0,1\}\)</span>. You can easily verify that addition in <span class="math inline">\(\mathbb{F}_2\)</span> becomes <code>XOR</code> and multiplication becomes <code>AND</code>. It is also useful to know that you can replace any minus signs with pluses and divisions by multiplications.</p>
 <p>In our specific <em>xoshiro</em> example above we saw that the generator works internally on an array of four 64-bit unsigned words and the transition function <span class="math inline">\(t\)</span> performs a small number of bit-shift, <code>XOR</code>, and bit-rotation operations on and between those four words.</p>
 <p>The four 64-bit words can also be thought of as a single 256-element bit-vector: <span class="math display">\[
     \bold{s} \in \FF^{256}.
@@ -562,7 +547,7 @@ I &amp; \cal{L}^{17} &amp; I &amp; 0 \\
 0 &amp; \cal{R}^{45} &amp; 0 &amp; \cal{R}^{45}
 \end{bmatrix}
 \]</span> Here each word block is a <span class="math inline">\(64 \times 64\)</span> sub-bit-matrix and <span class="math inline">\(I\)</span> is the <span class="math inline">\(64 \times 64\)</span> identity bit-matrix.</p>
-<p>More details can be found for this <em>xoshiro</em> and several other variants in the <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">original paper</a>. However, bear in mind that the paper’s authors think of <span class="math inline">\(\bold{s}\)</span> as a <em>row</em> vector and the transition as <span class="math inline">\(\bold{s} \gets \bold{s} \cdot T\)</span> That means their version of <span class="math inline">\(T\)</span> matrix is transposed from the one shown here.</p>
+<p>More details can be found for this <em>xoshiro</em> and several other variants in the [original paper]<a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">paper</a>. However, bear in mind that the paper’s authors think of <span class="math inline">\(\bold{s}\)</span> as a <em>row</em> vector and the transition as <span class="math inline">\(\bold{s} \gets \bold{s} \cdot T\)</span> That means their version of <span class="math inline">\(T\)</span> matrix is transposed from the one shown here.</p>
 <section id="computing-the-transition-matrix" class="level3">
 <h3 class="anchored" data-anchor-id="computing-the-transition-matrix">Computing the Transition Matrix</h3>
 <p>In the case of <em>xoshiro</em> we have an explicit representation of the transition matrix <span class="math inline">\(T\)</span> in terms of simple sub-matrices and one can indeed use those blocks to build up <span class="math inline">\(T\)</span> in code.</p>
@@ -579,7 +564,7 @@ Usefulness of the transition matrix
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>It is worth noting that while the transition matrix can be used to advance the state, the required matrix-vector product, even using a linear algebra package like <a href="https://nessan.github.io/bit"><code>bit</code></a> that is optimized for <span class="math inline">\(\FF\)</span>, is much slower than using code like the <code>step()</code> method shown above.</p>
+<p>It is worth noting that while the transition matrix can be used to advance the state, the required matrix-vector product, even using a linear algebra package like <a href="https://nessan.github.io/bit"><code>bit</code></a> that is optimized for <span class="math inline">\(\mathbb{F}_2\)</span>, is much slower than using code like the <code>step()</code> method shown above.</p>
 </div>
 </div>
 <p>The <span class="math inline">\(\bold{s} \gets T \cdot \bold{s}\)</span> view of things is only useful for doing analysis or when we think about making large-scale jumps ahead in the stream as we will show next.</p>
@@ -603,21 +588,21 @@ Usefulness of the transition matrix
 \]</span> This means that if we want to advance the state by say <span class="math inline">\(N\)</span> steps we can do so by computing <span class="math display">\[
 \bold{s} \gets T^N \cdot \bold{s}.
 \]</span> Unfortunately, even if <span class="math inline">\(T\)</span> is sparse and “special” like the <span class="math inline">\(T\)</span> above for <em>xoshiro</em>, <span class="math inline">\(T^N\)</span> is unlikely to have a readily written down form.</p>
-<p>Nevertheless, if we use a linear algebra package like <a href="https://nessan.github.io/bit"><code>bit</code></a> that is optimized for <span class="math inline">\(\FF\)</span> and which uses the well-known square and multiply algorithm to minimize the operation count when evaluating matrix powers this simple compute-the-power method can be somewhat competitive for large enough <span class="math inline">\(N\)</span> at least for generators that aren’t off the scale in terms of the size of the state space.</p>
+<p>Nevertheless, if we use a linear algebra package like <a href="https://nessan.github.io/bit"><code>bit</code></a> that is optimized for <span class="math inline">\(\mathbb{F}_2\)</span> and which uses the well-known square and multiply algorithm to minimize the operation count when evaluating matrix powers this simple compute-the-power method can be somewhat competitive for large enough <span class="math inline">\(N\)</span> at least for generators that aren’t off the scale in terms of the size of the state space.</p>
 </section>
 <section id="the-characteristic-polynomial" class="level3">
 <h3 class="anchored" data-anchor-id="the-characteristic-polynomial">The Characteristic Polynomial</h3>
-<p>However, we can do much better by following the method first developed by <a href="http://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/ARTICLES/jumpf2-printed.pdf%5BHaramoto%20et%20al.%5D">Haramoto et al.</a>.</p>
+<p>However, we can do much better by following the method first developed by [Haramoto et al.]<a href="http://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/ARTICLES/jumpf2-printed.pdf%5BHaramoto%20et%20al.%5D">Haramoto</a>.</p>
 <p>If there are <span class="math inline">\(n\)</span> bits in the state then the transition matrix <span class="math inline">\(T\)</span> is some non-singular <span class="math inline">\(n \times n\)</span> bit-matrix.</p>
-<p>Let <span class="math inline">\(c(x)\)</span> be the <a href="https://en.wikipedia.org/wiki/Characteristic_polynomial">characteristic polynomial</a> for <span class="math inline">\(T\)</span> which we can write as <span class="math display">\[
+<p>Let <span class="math inline">\(c(x)\)</span> be the ?VAR for <span class="math inline">\(T\)</span> which we can write as <span class="math display">\[
 c(x) = c_n x^n + c_{n-1} x^{n-1} + \cdots+c_1 x + c_0
-\]</span> where the argument <span class="math inline">\(x\)</span> and each polynomial coefficient <span class="math inline">\(c_i\)</span> is in <span class="math inline">\(\FF\)</span>.</p>
+\]</span> where the argument <span class="math inline">\(x\)</span> and each polynomial coefficient <span class="math inline">\(c_i\)</span> is in <span class="math inline">\(\mathbb{F}_2\)</span>.</p>
 <p>The fast jump ahead method hinges on the observation that we can write any polynomial as some multiple of <span class="math inline">\(c(x)\)</span> plus a lower degree remainder term.</p>
 <p>In particular, for an arbitrary power <span class="math inline">\(N\)</span>, we will express the polynomial <span class="math inline">\(x^N\)</span> as <span class="math display">\[
 x^N = q(x) c(x) + r(x)
 \]</span> where the degree of the remainder <span class="math inline">\(r(x)\)</span> is less than <span class="math inline">\(n\)</span> so we can write <span class="math display">\[
 r(x) = r_{n-1} x^{n-1} + r_{n-2} x^{n-2} + \cdots+r_1 x + r_0
-\]</span> for some set of coefficients <span class="math inline">\(r_i\)</span> in <span class="math inline">\(\FF\)</span>.</p>
+\]</span> for some set of coefficients <span class="math inline">\(r_i\)</span> in <span class="math inline">\(\mathbb{F}_2\)</span>.</p>
 <p>This also works for bit-matrix arguments which means we can express <span class="math inline">\(T^N\)</span> as <span class="math display">\[
 T^N = q(T)c(T) + r(T).
 \]</span> But the <a href="https://en.wikipedia.org/wiki/Cayley–Hamilton_theorem">Cayley Hamilton</a> theorem tells us that every matrix satisfies its own characteristic polynomial which means that <span class="math inline">\(c(T) = 0\)</span>.</p>
@@ -648,7 +633,7 @@ Similarly, <span class="math inline">\(T^2 \cdot \bold{s}\)</span> can be evalua
 <ol type="1">
 <li>As we saw above, we can construct <span class="math inline">\(T\)</span> column by column without any deep knowledge of the structure of the generator. Assuming it is indeed linear then one call of the <code>step</code> method for a seed state that is a unit bit-vector will return one column of <span class="math inline">\(T\)</span>. Our generators don’t work on <em>bit-vectors</em> directly but the <code>bit</code> library lets you go from <em>bits</em> to <em>words</em> and vice-versa.</li>
 <li>We can use <a href="http://web.tecnico.ulisboa.pt/~mcasquilho/compute/com/,eigen/FaddeevaDanil.pdf">Danilevsky’s algorithm</a> to extract the characteristic polynomial for <span class="math inline">\(T\)</span>. That is already implemented in the <code>bit</code> library and the function will never overflow.</li>
-<li>The <code>bit</code> library also has an algorithm to compute <span class="math inline">\(\mod{x^N}{c(x)}\)</span> over <span class="math inline">\(\FF\)</span> for very large <span class="math inline">\(N\)</span>.</li>
+<li>The <code>bit</code> library also has an algorithm to compute <span class="math inline">\(\mod{x^N}{c(x)}\)</span> over <span class="math inline">\(\mathbb{F}_2\)</span> for very large <span class="math inline">\(N\)</span>.</li>
 <li>Finally, as noted above, <span class="math inline">\(r(T) \cdot \bold{s}\)</span> can be computed with <span class="math inline">\(n-1\)</span> calls to the <code>step</code> method and, in the cases of interest, <span class="math inline">\(n\)</span> is very small relative to the jump size <span class="math inline">\(N\)</span> i.e.&nbsp;<span class="math inline">\(n \ll N\)</span>.</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -726,6 +711,150 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
   toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
   const icon = "";
   const anchorJS = new window.AnchorJS();
   anchorJS.options = {
@@ -1130,12 +1259,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>Copyright (c) Nessan Fitzmaurice</p>
+<p>© 2022 Nessan ∙ Made with <a href="https://quarto.org">Quarto</a></p>
 </div>   
     <div class="nav-footer-center">
-<p>Project is under the MIT License</p>
-<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/nessan/xoshiro/edit/main/docs/pages/jump-technique.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nessan/xoshiro/issues/new/choose" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
-    <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
     <a class="nav-link" href="https://github.com/nessan/xoshiro">
@@ -1144,13 +1270,16 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </a>
   </li>  
     <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/nezzan">
-      <i class="bi bi-twitter" role="img" aria-label="Twitter">
+    <a class="nav-link" href="mailto:nzznfitz+gh@icloud.com">
+      <i class="bi bi-envelope" role="img" aria-label="EMail address">
 </i> 
     </a>
   </li>  
 </ul>
-    </div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/nessan/xoshiro/edit/main/docs/pages/jump-technique.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nessan/xoshiro/issues/new/choose" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p><a href="https://opensource.org/license/mit">MIT Licensed</a></p>
+</div>
   </div>
 </footer>
 
