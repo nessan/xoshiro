@@ -547,7 +547,7 @@ I &amp; \cal{L}^{17} &amp; I &amp; 0 \\
 0 &amp; \cal{R}^{45} &amp; 0 &amp; \cal{R}^{45}
 \end{bmatrix}
 \]</span> Here each word block is a <span class="math inline">\(64 \times 64\)</span> sub-bit-matrix and <span class="math inline">\(I\)</span> is the <span class="math inline">\(64 \times 64\)</span> identity bit-matrix.</p>
-<p>More details can be found for this <em>xoshiro</em> and several other variants in the [original paper]<a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">paper</a>. However, bear in mind that the paper’s authors think of <span class="math inline">\(\bold{s}\)</span> as a <em>row</em> vector and the transition as <span class="math inline">\(\bold{s} \gets \bold{s} \cdot T\)</span> That means their version of <span class="math inline">\(T\)</span> matrix is transposed from the one shown here.</p>
+<p>More details can be found for this <em>xoshiro</em> and several other variants in the original <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">paper</a>. However, bear in mind that the paper’s authors think of <span class="math inline">\(\bold{s}\)</span> as a <em>row</em> vector and the transition as <span class="math inline">\(\bold{s} \gets \bold{s} \cdot T\)</span> That means their version of <span class="math inline">\(T\)</span> matrix is transposed from the one shown here.</p>
 <section id="computing-the-transition-matrix" class="level3">
 <h3 class="anchored" data-anchor-id="computing-the-transition-matrix">Computing the Transition Matrix</h3>
 <p>In the case of <em>xoshiro</em> we have an explicit representation of the transition matrix <span class="math inline">\(T\)</span> in terms of simple sub-matrices and one can indeed use those blocks to build up <span class="math inline">\(T\)</span> in code.</p>
@@ -592,7 +592,7 @@ Usefulness of the transition matrix
 </section>
 <section id="the-characteristic-polynomial" class="level3">
 <h3 class="anchored" data-anchor-id="the-characteristic-polynomial">The Characteristic Polynomial</h3>
-<p>However, we can do much better by following the method first developed by [Haramoto et al.]<a href="http://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/ARTICLES/jumpf2-printed.pdf%5BHaramoto%20et%20al.%5D">Haramoto</a>.</p>
+<p>However, we can do much better by following the method first developed by <a href="http://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/ARTICLES/jumpf2-printed.pdf%5BHaramoto%20et%20al.%5D">Haramoto</a>.</p>
 <p>If there are <span class="math inline">\(n\)</span> bits in the state then the transition matrix <span class="math inline">\(T\)</span> is some non-singular <span class="math inline">\(n \times n\)</span> bit-matrix.</p>
 <p>Let <span class="math inline">\(c(x)\)</span> be the {wiki.haracteristic-polynomial} for <span class="math inline">\(T\)</span> which we can write as <span class="math display">\[
 c(x) = c_n x^n + c_{n-1} x^{n-1} + \cdots+c_1 x + c_0
