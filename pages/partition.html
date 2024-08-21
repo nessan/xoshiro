@@ -531,7 +531,7 @@ window.Quarto = {
 <span data-code-cell="annotated-cell-4" data-code-lines="8" data-code-annotation="4">And we’re off spawning an independent job for each core, handing each its own sub-stream generator to work with.</span>
 </dd>
 </dl>
-<p>In the sketch, we first determine how many cores are available for the simulation. That may be a fixed number, or some function determines the number on the fly. For the sake of this example, n_cores comes back as 100.</p>
+<p>In the sketch, we first determine how many cores are available for the simulation. That may be a fixed number, or some function determines the number on the fly. For the sake of this example, suppose that <code>n_cores</code> comes back as 100.</p>
 <p>We want to partition the random number stream from <code>gen</code> into 100 pieces and hand each core its own sub-stream to work with. So, we set up an <code>xso::partition</code> object to do just that.</p>
 <p>The loop spawns jobs where each one is given its own random number generator. The generators come from calling the <code>partition.next()</code> method. The <code>xso::partition</code> class ensures that these generators are identical to the original `gen, except that they are seeded appropriately far along to the next sub-stream.</p>
 <p>The parent generator has 256 bits of state, so its random state stream has <span class="math inline">\(2^{256}\)</span> slots. This means that all the sub-streams still have a vast number of random deviates to use up before there is any chance of getting overlaps.</p>
