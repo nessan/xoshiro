@@ -559,7 +559,7 @@ Library versions
 </section>
 <section id="implementation" class="level2">
 <h2 class="anchored" data-anchor-id="implementation">Implementation</h2>
-<p><code>C</code> versions of the generators are available on the author’s [website]<a href="https://prng.di.unimi.it">xoshiro/xoroshiro</a>. Wrapping those routines to conform to the [std::uniform_random_bit_generator] concept is trivial.</p>
+<p><code>C</code> versions of the generators are available on the <a href="https://prng.di.unimi.it">xoshiro/xoroshiro</a> website. Wrapping those routines to conform to the <a href="https://en.cppreference.com/w/cpp/numeric/random/uniform_random_bit_generator"><code>std::uniform_random_bit_generator</code></a> concept is trivial.</p>
 <p>However, our implementation in <code>xoshiro.h</code> is distinguished in several other ways:</p>
 <section id="generality" class="level3">
 <h3 class="anchored" data-anchor-id="generality">Generality</h3>
@@ -606,17 +606,17 @@ Arbitrary jumps do not need <code>bit</code>
 </section>
 <section id="extra-analysis" class="level3">
 <h3 class="anchored" data-anchor-id="extra-analysis">Extra Analysis</h3>
-<p>Extra non-member functions for generator analysis are defined if the [`<code>bit</code>] library is available.</p>
+<p>Extra non-member functions for generator analysis are defined if the <a href="https://nessan.github.io/bit"><code>bit</code></a> library is available.</p>
 <p><code>bit</code> is a C++ library for doing linear algebra over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a> the simplest field of two elements <span class="math inline">\(\{0,1\}\)</span>, where the usual arithmetic operations are performed mod 2. The <code>bit</code> library is header-only, so it can be easily incorporated into any application.</p>
 <p>If it is available, then <code>xoshiro.h</code> defines some extra functions that let you access the generator’s <em>transition matrix</em> and use/analyze that in various ways.</p>
 </section>
 <section id="sampling-methods" class="level3">
 <h3 class="anchored" data-anchor-id="sampling-methods">Sampling Methods</h3>
-<p>The C++ standard library follows a common design pattern for the facilities in its <a href="https://en.cppreference.com/w/cpp/header/random"><code>&lt;random&gt;</code></a> header. It maintains a strict separation between the classes that produce random bits and others that use those bits.</p>
+<p>The C++ standard library follows a common design pattern for the facilities in its <a href="https://en.cppreference.com/w/cpp/header/random"><code>random</code></a> header. It maintains a strict separation between the classes that produce random bits and others that use those bits.</p>
 <p>Uniform random bit generators produce streams of <em>uniformly</em> distributed output words (usually 32-bit or 64-bit unsigned integers). Other classes and functions shape those core streams to simulate a desired distribution over some field of interest (for example, to generate variates from a uniform distribution of reals in the range 0 to 1).</p>
 <p>The idea is reasonable enough. You can swap out the uniform random bit generator for a better one and continue to use the other functions without change.</p>
 <p>However, this interface is quite complicated for the end user — particularly for a user with no idea, or interest in, how all the generator/distribution machinery works. Perhaps you google “<code>c++ random number generator</code>” and get advice to use the <a href="https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine"><code>std::mersenne_twister_engine</code></a> class. However, that produces those unsigned output words that are useless by themselves. To simulate something as simple as a die roll, you must feed the thing into some other class and use that to get the required effect.</p>
-<p>For this reason, we enrich our <em>xoshiro/xoroshiro</em> classes with some utility methods that interface directly with the various distribution classes in the standard <a href="https://en.cppreference.com/w/cpp/header/random"><code>&lt;random&gt;</code></a> header. That dice roll becomes something as simple as:</p>
+<p>For this reason, we enrich our <em>xoshiro/xoroshiro</em> classes with some utility methods that interface directly with the various distribution classes in the standard <a href="https://en.cppreference.com/w/cpp/header/random"><code>random</code></a> header. That dice roll becomes something as simple as:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>xso<span class="op">::</span>rng gen<span class="op">;</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"Six sided dice roll: "</span> <span class="op">&lt;&lt;</span> gen<span class="op">.</span>roll<span class="op">()</span> <span class="op">&lt;&lt;</span> <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Similarly, you can ask one of our generators to flip a coin or shuffle the elements in a container.</p>

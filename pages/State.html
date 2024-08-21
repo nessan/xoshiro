@@ -714,7 +714,7 @@ Restrictions on <code>N</code>
 c(x) = x^n + p(x),
 \]</span> where the degree of <span class="math inline">\(p\)</span> is less than <span class="math inline">\(n\)</span>: <span class="math display">\[
 p(x) = p_0 + p_1 x + \cdots p_{n-1} x^{n-1}.
-\]</span> This is useful because, as discussed [here]<a href="../pages/jump-technique.html">jump technique</a>, if we know the polynomial <span class="math inline">\(p(x)\)</span>, then we can very efficiently advance the state by enormous numbers of steps.</p>
+\]</span> This is useful because, as discussed on the <a href="../pages/jump-technique.html">jump technique</a> page, if we know the polynomial <span class="math inline">\(p(x)\)</span>, then we can very efficiently advance the state by enormous numbers of steps.</p>
 <p>We have precomputed the coefficients of the polynomial <span class="math inline">\(p(x)\)</span> for all our type aliased recommended state engines and stored them in a compact word form that is returned by the <code>characteristic_coefficients</code> class method.</p>
 <p>The compact word form is simply a static <a href="https://en.cppreference.com/w/cpp/container/array"><code>std::array</code></a> that holds <code>n</code> bits that make up the <span class="math inline">\(n\)</span> coefficients <span class="math inline">\(p_0, p_1, \ldots, p_{n-1}\)</span> of <span class="math inline">\(p(x)\)</span>. These pre-computed arrays are embedded in the <code>xoshiro.h</code> header file.</p>
 <div class="callout callout-style-default callout-warning callout-titled">

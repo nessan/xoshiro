@@ -455,7 +455,7 @@ window.Quarto = {
 
 <p>We specialize the <a href="https://en.cppreference.com/w/cpp/utility/format/formatter"><code>std::formatter</code></a> class to connect any <a href="../pages/generator.html"><code>xso::generator</code></a>, <a href="../pages/State.html"><code>State</code></a>, or <a href="../pages/Scrambler.html"><code>Scrambler</code></a> class to <a href="https://en.cppreference.com/w/cpp/utility/format/format"><code>std::format</code></a> and friends.</p>
 <p>All of our classes have a class method <code>xso_name()</code> that returns a suitable name string.</p>
-<p>We define a C++ [concept]<a href="https://en.cppreference.com/w/cpp/language/constraints"><code>&lt;concepts&gt;</code></a> to capture that common feature:</p>
+<p>We define a C++ <code>concept</code> to capture that common feature:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span><span class="kw">typename</span> T<span class="op">&gt;</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">concept</span> has_xso_name_class_method <span class="op">=</span> <span class="kw">requires</span> <span class="op">{</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span> T<span class="op">::</span>xso_name<span class="op">()</span> <span class="op">}</span> <span class="op">-&gt;</span> <span class="bu">std::</span>convertible_to<span class="op">&lt;</span><span class="bu">std::</span>string<span class="op">&gt;;</span></span>
