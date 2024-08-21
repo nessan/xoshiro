@@ -470,10 +470,10 @@ window.Quarto = {
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p><code>xoshiro.h</code> is a single header file, C++ implementation of the <em>complete</em> family of <a href="https://prng.di.unimi.it">xoshiro/xoroshiro</a> pseudorandom uniform number generators.</p>
-<p>David Blackman and Sebastiano Vigna introduced these efficient, linear pseudorandom number generators, which have relatively small states but display excellent statistical properties nonetheless. This <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">paper</a> provides the full mathematical details.</p>
-<p>The generators satisfy C++’s <a href="https://en.cppreference.com/w/cpp/numeric/random/uniform_random_bit_generator"><code>std::uniform_random_bit_generator</code></a> concept and can drive any of the distributions defined in the standard library.</p>
-<p>We provide efficient jump-ahead methods for <em>arbitrary</em> jump sizes, making them particularly suitable for parallel processing applications. They are excellent replacements for the “standard” <em>Mersenne Twister</em> generator.</p>
+<p>David Blackman and Sebastiano Vigna introduced the <a href="https://prng.di.unimi.it">xoshiro/xoroshiro</a> pseudorandom number generators, which are very efficient and, though they have relatively small states, display excellent statistical properties. The full mathematical details are to be found in their <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">paper</a>.</p>
+<p><code>xoshiro.h</code> is a single header file, C++ implementation of the <em>complete</em> family of these generators.</p>
+<p>The implementations satisfy C++’s <a href="https://en.cppreference.com/w/cpp/numeric/random/uniform_random_bit_generator"><code>std::uniform_random_bit_generator</code></a> concept and can drive any of the distributions defined in the standard library.</p>
+<p>We provide efficient jump-ahead methods for <em>arbitrary</em> jump sizes, making these generators particularly suitable for parallel processing applications. They are excellent replacements for the “standard” <em>Mersenne Twister</em> generator.</p>
 <p>While the implementation is very general, there are simple type aliases for specific preferred instantiations that are known to work well in most situations.</p>
 </section>
 <section id="installation" class="level2">
@@ -501,8 +501,8 @@ Library versions
 </section>
 <section id="example" class="level2">
 <h2 class="anchored" data-anchor-id="example">Example</h2>
-<p>Here is a simple example: We use the <em>default xoshiro</em> generator to sample a normal distribution from the standard library.</p>
-<p>We have copied the sample code from <a href="https://en.cppreference.com/w/cpp/numeric/random/normal_distribution"><code>std::normal_distribution</code></a> webpage and used <code>xso::rng</code> as a drop-in replacement for <code>std::mersenne_twister_engine</code>.</p>
+<p>Here is a simple example where we use the <em>default xoshiro</em> generator <code>xso::rng</code> to sample a normal distribution from the standard library.</p>
+<p>This is identical to the code shown on the <a href="https://en.cppreference.com/w/cpp/numeric/random/normal_distribution"><code>std::normal_distribution</code></a> webpage except that we use <code>xso::rng</code> as a drop-in replacement for the <code>std::mersenne_twister_engine</code>.</p>
 <div class="sourceCode" id="annotated-cell-2"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-2-1" class="code-annotation-target"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;xoshiro.h&gt;</span></span>
 <span id="annotated-cell-2-2"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;random&gt;</span></span>
 <span id="annotated-cell-2-3"><a href="#annotated-cell-2-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;map&gt;</span></span>
@@ -558,7 +558,7 @@ Library versions
 <section id="implementation" class="level2">
 <h2 class="anchored" data-anchor-id="implementation">Implementation</h2>
 <p><code>C</code> versions of the generators are available on the <a href="https://prng.di.unimi.it">xoshiro/xoroshiro</a> website. Wrapping those routines to conform to the <a href="https://en.cppreference.com/w/cpp/numeric/random/uniform_random_bit_generator"><code>std::uniform_random_bit_generator</code></a> concept is trivial.</p>
-<p>However, our implementation in <code>xoshiro.h</code> is distinguished in several other ways:</p>
+<p>Our implementation in <code>xoshiro.h</code> is distinguished in several other ways:</p>
 <section id="generality" class="level3">
 <h3 class="anchored" data-anchor-id="generality">Generality</h3>
 <p>Using the code in <code>xoshiro.h</code> you can create <em>any</em> member of the <em>xoshiro/xoroshiro</em> family.</p>
@@ -582,12 +582,18 @@ No compromise on speed
 <section id="simplicity" class="level3">
 <h3 class="anchored" data-anchor-id="simplicity">Simplicity</h3>
 <p>While you can instantiate <em>any</em> generator in the <em>xoshiro/xoroshiro</em> family, we also recognize that only a limited number of those generators have been properly vetted for suitability as being “good”.</p>
-<p>Therefore, we provide <em>type aliases</em> for the recommended default generators you should use in most cases.</p>
+<p>Therefore, we provide recommended <a href="../pages/type-aliases.html">type aliased</a> default generators you should use in most cases.</p>
 </section>
 <section id="arbitrary-jumps" class="level3">
 <h3 class="anchored" data-anchor-id="arbitrary-jumps">Arbitrary Jumps</h3>
 <p>We provide methods to advance a generator by <em>arbitrary</em> and potentially huge numbers of steps. This contrasts with the <code>C</code> versions, which only define a limited number of jump possibilities.</p>
 <p>Very large jumps <em>partition</em> a single random number stream into non-overlapping sub-streams. In parallel processing applications, the sub-streams drive independent jobs running on different compute cores.</p>
+</section>
+<section id="extra-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="extra-analysis">Extra Analysis</h3>
+<p>Extra non-member functions for generator analysis are defined if the <a href="https://nessan.github.io/bit"><code>bit</code></a> library is available.</p>
+<p><code>bit</code> is a C++ library for doing linear algebra over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a> the simplest Galois field of two elements <span class="math inline">\(\{0,1\}\)</span>, where the usual arithmetic operations are performed mod 2. The <code>bit</code> library is header-only, so it can be easily incorporated into any application.</p>
+<p>If it is available, then <code>xoshiro.h</code> defines some extra functions that let you access the generator’s <em>transition matrix</em> and use/analyze that in various ways.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -602,23 +608,18 @@ Arbitrary jumps do not need <code>bit</code>
 </div>
 </div>
 </section>
-<section id="extra-analysis" class="level3">
-<h3 class="anchored" data-anchor-id="extra-analysis">Extra Analysis</h3>
-<p>Extra non-member functions for generator analysis are defined if the <a href="https://nessan.github.io/bit"><code>bit</code></a> library is available.</p>
-<p><code>bit</code> is a C++ library for doing linear algebra over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a> the simplest field of two elements <span class="math inline">\(\{0,1\}\)</span>, where the usual arithmetic operations are performed mod 2. The <code>bit</code> library is header-only, so it can be easily incorporated into any application.</p>
-<p>If it is available, then <code>xoshiro.h</code> defines some extra functions that let you access the generator’s <em>transition matrix</em> and use/analyze that in various ways.</p>
-</section>
 <section id="sampling-methods" class="level3">
 <h3 class="anchored" data-anchor-id="sampling-methods">Sampling Methods</h3>
-<p>The C++ standard library follows a common design pattern for the facilities in its <a href="https://en.cppreference.com/w/cpp/header/random"><code>random</code></a> header. It maintains a strict separation between the classes that produce random bits and others that use those bits.</p>
+<p>The C++ standard library follows a common design pattern for the facilities in its standard <a href="https://en.cppreference.com/w/cpp/header/random"><code>random</code></a> header. It maintains a strict separation between the classes that produce random bits and others that use those bits.</p>
 <p>Uniform random bit generators produce streams of <em>uniformly</em> distributed output words (usually 32-bit or 64-bit unsigned integers). Other classes and functions shape those core streams to simulate a desired distribution over some field of interest (for example, to generate variates from a uniform distribution of reals in the range 0 to 1).</p>
 <p>The idea is reasonable enough. You can swap out the uniform random bit generator for a better one and continue to use the other functions without change.</p>
-<p>However, this interface is quite complicated for the end user — particularly for a user with no idea, or interest in, how all the generator/distribution machinery works. Perhaps you google “<code>c++ random number generator</code>” and get advice to use the <a href="https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine"><code>std::mersenne_twister_engine</code></a> class. However, that produces those unsigned output words that are useless by themselves. To simulate something as simple as a die roll, you must feed the thing into some other class and use that to get the required effect.</p>
-<p>For this reason, we enrich our <em>xoshiro/xoroshiro</em> classes with some utility methods that interface directly with the various distribution classes in the standard <a href="https://en.cppreference.com/w/cpp/header/random"><code>random</code></a> header. That dice roll becomes something as simple as:</p>
+<p>However, this interface is quite complicated for the end user — particularly for a user with no idea, or interest in, how all the generator/distribution machinery works.</p>
+<p>Perhaps she googles “<code>c++ random number generator</code>” and get advice to use the <a href="https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine"><code>std::mersenne_twister_engine</code></a> class. However, by itself, that class only produces unsigned output words that are useless by themselves. To simulate something as simple as a die roll, she must feed the thing into some other class and use that to get the required effect.</p>
+<p>For this reason, we enrich our <em>xoshiro/xoroshiro</em> classes with some utility methods that interface <em>directly</em> with the various distribution classes in the standard <a href="https://en.cppreference.com/w/cpp/header/random"><code>random</code></a> header. That dice roll becomes something as simple as:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>xso<span class="op">::</span>rng gen<span class="op">;</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"Six sided dice roll: "</span> <span class="op">&lt;&lt;</span> gen<span class="op">.</span>roll<span class="op">()</span> <span class="op">&lt;&lt;</span> <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Similarly, you can ask one of our generators to flip a coin or shuffle the elements in a container.</p>
-<p>Most importantly, the generators directly support the idea of <em>sampling</em>. This includes pulling samples from a range, container, or an arbitrary distribution.</p>
+<p>Our generators also directly support <em>sampling</em>. This includes pulling samples from a range, container, or an arbitrary distribution.</p>
 <p>Here are some examples:</p>
 <div class="sourceCode" id="annotated-cell-5"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-5-1" class="code-annotation-target"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> gen<span class="op">.</span>sample<span class="op">(</span><span class="dv">1</span><span class="op">,</span> <span class="dv">10</span><span class="op">)</span>   <span class="op">&lt;&lt;</span> <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">;</span></span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-5-2" class="code-annotation-target"><a href="#annotated-cell-5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> gen<span class="op">.</span>sample<span class="op">(</span><span class="fl">1.</span><span class="op">,</span> <span class="fl">10.</span><span class="op">)</span> <span class="op">&lt;&lt;</span> <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">;</span></span>
