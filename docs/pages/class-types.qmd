@@ -1,0 +1,69 @@
+---
+title: "`xso::generator` --- Class Types and Methods"
+---
+
+## Class Types
+
+The `xso::generator<State, Scrambler>` class defines the following types:
+
+Type                    | Definition
+----------------------- | -----------------------------------------------------
+`state_type`            | This is the `State` template parameter.
+`scrambler_type`        | This is the `Scrambler` template parameter.
+`word_type`             | This is the `State::word_type`.
+`result_type`           | This is the `State::word_type`.
+: {.bordered .hover .responsive tbl-colwidths="[20,80]"}
+
+[Notes:]{.pt}
+
+1. The `word_type` is either a 32-bit or 64-bit unsigned integer.
+2. The `result_type` should be defined by the `Scrambler`,  but for our generators and many others, the `result_type` is always identical to the `word_type`.
+
+## Class Methods
+
+The `xso::generator<State, Scrambler>` class defines the following class methods:
+
+Class Method         | Return Type   | Description
+-------------------- | --------------| ------------------------------------------
+`word_count()`       | `std::size_t` | Returns the number of *words* of state.
+`bit_count()`        | `std::size_t` | Returns the number of *bits* of state.
+`min()`              | `result_type` | Returns the smallest possible output word.
+`max()`              | `result_type` | Returns the largest possible output word.
+`xso_name()`         | `std::string` | Returns a string that can be used as a name for this generator.
+: {.bordered .hover .responsive tbl-colwidths="[15, 15,60]"}
+
+[Notes:]{.pt}
+
+1. These are all declared as `static constexpr`.
+2. The trivial `min()` and `max()` methods are needed to satisfy the {std.uniform_random_bit_generator} concept.
+3. The `xso_name()` method combines the results of the `State::xso_name()` and the `Scrambler::xso_name()` class methods to produce an overall "name" for this generator that incorporates the various template parameters it depends on.
+
+## Example
+
+[Example: Print some generator parameters]{.bt}
+```cpp
+#include <xoshiro.h>
+int main()
+{
+    using rng = xso::rng;
+    std::cout << "Generator Name:        " << rng::xso_name() << '\n';
+    std::cout << "State:                 " << rng::state_engine_type::xso_name() << '\n';
+    std::cout << "Scrambler:             " << rng::output_function_type::xso_name() << '\n';
+    std::cout << "Number of state words: " << rng::word_count() << '\n';
+    std::cout << "Number of state bits:  " << rng::bit_count() << '\n';
+}
+```
+
+[Output:]{.bt}
+```bash
+Generator Name:         xoshiro<4x64,17,45>star_star<5,7,1>
+State:                  xoshiro<4x64,17,45>
+Scrambler:              star_star<5,7,1>
+Number of state words:  4
+Number of state bits:   256
+```
+
+### See Also
+
+{State}       \
+{Scrambler}

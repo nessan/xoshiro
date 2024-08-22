@@ -1,0 +1,70 @@
+---
+title: "`Scrambler`"
+---
+
+## Introduction
+
+A `Scrambler` reduces the current {State} to a single output word, which in our case will always be a 32-bit or 64-bit unsigned integer.
+
+Our {generator} class takes a `State` and a `Scrambler` template parameter. \
+The requirements for the former are discussed on the {State} page.
+
+The requirements for the `Scrambler` are rather simple:
+
+### Required Methods
+
+Item                             | Description
+-------------------------------- | -------------------------
+ `xso_name()`                    | Class method that should return a name for the output function.
+ `operator()(const auto& state)` | Instance method that reduces the passed state to a single output word.
+: {.bordered .hover .responsive tbl-colwidths="[40,60]"}
+
+## Our Scrambler Classes
+
+We provide four scrambler classes in the `xso` namespace:
+
+```cpp
+template<auto S, std::size_t w>                     // <1>
+struct xso::star;
+
+template<auto S, auto R, auto T, std::size_t w>     // <2>
+struct xso::star_star;
+
+template<std::size_t w0, std::size_t w1>            // <3>
+struct xso::plus;
+
+template<auto R, std::size_t w0, std::size_t w1>    // <4>
+struct xso::plus_plus;
+```
+1. Functor: `state[w] * S`
+2. Functor: `std::rotl(state[w] * S, R) * T`
+3. Functor: `state[w0] + state[w1]`
+4. Functor: `std::rotl(state[w0] + state[w1], R) + state[w0]`
+
+### Template Parameters
+
+Parameter       | Description
+--------------- | ----------------------------------------------------------
+`w`, `w0`, `w1` | Indices for specific words of state to work on/scramble.
+`S`, `T`        | Scaling parameters.
+`R`             | Rotation parameter.
+: {.bordered .hover .responsive tbl-colwidths="[20,80]"}
+
+## Methods
+
+Item                            | Description
+------------------------------- | -------------------------
+`operator()(const auto& state)` | Returns the values given above.
+`xso_name()`                    | Class method that returns a name for the output function, which incorporates all the template parameters.
+: {.bordered .hover .responsive tbl-colwidths="[40,60]"}|
+
+[Notes:]{.pt}
+
+1. The name returned by the `xso_name()` class method might look like `star_star<5,7,9,1>`.
+2. The names for the output functions match the ones used in this original {paper}.
+
+
+### See Also
+
+{State} \
+{generator}

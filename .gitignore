@@ -1,0 +1,36 @@
+# Set up the folders/files that should never go into the git repository.
+
+# The Mac Finder produces a metadata file in directories that is noise
+.DS_Store
+
+# My specific Visual Code setup is only useful to me
+.vscode/
+
+# Ditto for the IntelliJ setup which I have used very occasionally
+.idea/
+
+# Occasionally build with Visual Studio which puts its artifacts into an out directory
+out/
+
+# Otherwise we build using CMake on a Unix system and force artifacts to go into "build" folders
+build*
+build*/
+
+# Some local scratch files are kept in private directories that need not go into git
+private/
+
+# The documentation website uses Quarto and we don't need to version its cache or what it builds.
+.quarto/
+_site/
+
+# Jupyter checkpoint directories need not go into git
+.ipynb_checkpoints/
+
+# Generally don't want to check Node.js modules into the remote repo -- just the recipes for installing them.
+node_modules/
+
+# The old documentation website used Antora and various things it builds/installs need not be in the remote repo
+antora/*/.cache/
+antora/*/playbook-remote
+antora/*/build/
+/.luarc.json

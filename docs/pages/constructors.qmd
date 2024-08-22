@@ -1,0 +1,131 @@
+---
+title: "`xso::generator` --- Constructors"
+---
+
+Constructors for an *xoshiro/xoroshiro* random number generator.
+
+```cpp
+explicit generator();                                   // <1>
+
+explicit generator(word_type seed);                     // <2>
+
+template<typename Iter>
+explicit generator(Iter b, Iter e);       // <3>
+```
+1. The default constructor fully seeds the generator primarily from a {std.random_device}.
+2. Constructs a generator quickly and repeatably from a single unsigned integer.
+3. Constructs a generator by copying in words from an iteration.
+
+[Notes:]{.pt}
+
+1. The default constructor seeds the underlying state *fully* from a default entropy source by multiple calls to {std.random_device}.
+Reportedly, some implementations of that standard facility are not great, so we also mix a scrambled call to a high-resolution clock for one of the state words.
+1. Seeding generators with multiple words of state from a single word is never ideal. \
+Nevertheless, it is often handy to be able to do exactly this when you are trying to prototype a simulation of some sort.  For that stage of development, being able to run and rerun things with an easily constructed "fixed" random number stream is very useful. \
+To mitigate some of the worst features of this type of construction, the implementation uses a scrambled version of the one input word as a seed to a simple, small state but pretty effective {SplitMix} random number generator. That generator then creates a full state array for the *xoshiro/xoshiro* in question.
+1. If you do construct a generator by passing in an iteration of words then be sure that the values are not all zero as that is a fixed point for these generators.
+
+[Example: Default construction]{.bt}
+```cpp
+#include <xoshiro.h>
+int main()
+{
+    using rng = xso::rng;
+    rng f, g;                                   // <1>
+    std::cout << "f(): " << f() << '\n';        // <2>
+    std::cout << "g(): " << g() << "\n\n";
+
+    std::array<typename rng::word_type, rng::word_count()> state;
+    f.get_state(state.begin());                 // <3>
+
+    xso::rng h(state.cbegin(), state.cend());   // <4>
+    std::cout << "f(): " << f() << '\n';        // <5>
+    std::cout << "h(): " << h() << '\n';
+}
+```
+1. Two default constructed generators `f` and `g`are fully and randomly seeded.
+2. We print one output from each generator and expect those to be different.
+3. We then capture the current state from the `f` generator.
+4. We construct a third generator `h` seeded from that captured state.
+5. We print one output from `f` and `h` and expect those to be identical.
+
+[Output: The specific outputs will vary from run to run]{.bt}
+```bash
+f(): 1887568754843356615        # <1>
+g(): 287576570925641124
+
+f(): 16125400203545409679       # <2>
+h(): 16125400203545409679
+```
+<.> Different values as expected from calls to `f()` and `g()`.
+<.> Identical values as expected from calls to `f()` and `h()`.
+
+[Example: Construction from a single seed word]{.bt}
+```cpp
+#include <xoshiro.h>
+int main()
+{
+    xso::rng64 g0(1);   // <1>
+    xso::rng64 g1(2);
+    std::cout << "Calls to two nearby seeded xso::rng64 generators:\n";
+    for (std::size_t i = 0; i < 5; ++i)
+        std::cout << "Call " << i << ": " << g0() << "\t" << g1() << '\n';
+
+    g0.seed(123);       // <2>
+    g1.seed(123);
+    std::cout << "\nCalls to two identically seeded xso::rng64 generators:\n";
+    for (std::size_t i = 0; i < 5; ++i)
+        std::cout << "Call " << i << ": " << g0() << "\t" << g1() << '\n';
+}
+```
+1. Create two *xoshiro* generators with very similar seeds and print the results of a few calls.
+2. Reseed both generators with the same seed and again print the results of a few calls.
+
+[Output: The specific outputs will vary from run to run]{.bt}
+```bash
+Calls to two nearby seeded xso::rng64 generators:           # <1>
+Call 0: 17411061279518156131    4890025243076846858
+Call 1: 17949023749619734469    9084667301668848462
+Call 2: 175122747298038362      1296031388660499858
+Call 3: 5372970870250148463     5968655099240147287
+Call 4: 10829287877746345362    18045567523022708517
+
+Calls to two identically seeded xso::rng64 generators:      # <2>
+Call 0: 12981287971670330679    12981287971670330679
+Call 1: 7116868237474176081     7116868237474176081
+Call 2: 7843178069876964882     7843178069876964882
+Call 3: 2023445265056700755     2023445265056700755
+Call 4: 2199654306148732348     2199654306148732348
+```
+1. Note that while the seeds were very close the generated outputs are not!
+2. With identical seeds we get identical outputs.
+
+[Example: Seeding from all zeros is a bad idea]{.bt}
+```cpp
+#include <xoshiro.h>
+int main()
+{
+    typename xso::rng::state_type seed_array;
+    seed_array.fill(0);
+    xso::rng gen(seed_array);
+    for(std::size_t i = 0; i < 10; ++i) std::cout << "Iteration " << i << " returns: " << gen() << '\n';
+}
+```
+
+[Output: The outputs will always be 0.]{.bt}
+```bash
+Iteration 0 returns: 0
+Iteration 1 returns: 0
+Iteration 2 returns: 0
+Iteration 3 returns: 0
+Iteration 4 returns: 0
+Iteration 5 returns: 0
+Iteration 6 returns: 0
+Iteration 7 returns: 0
+Iteration 8 returns: 0
+Iteration 9 returns: 0
+```
+
+### See Also
+
+{seed}

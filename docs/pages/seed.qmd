@@ -1,0 +1,32 @@
+---
+title: "`xso::generator` --- Write Access to the State"
+---
+
+We have methods that set the state in various ways:
+
+```cpp
+void seed();                                           // <1>
+
+constexpr void seed(word_type seed);                   // <2>
+
+template<typename Iter>
+constexpr void seed(Iter b, Iter e);     // <3>
+```
+1. Sets the state primarily from a {std.random_device}.
+2. Sets the state quickly and repeatably from a single unsigned `seed` integer.
+3. Sets the state by copying all the words from an iteration.
+
+[Notes:]{.pt}
+
+1. The term "seeding" is very commonly used in the context of random number generation.
+2. The no-argument version of `seed` sets the underlying state *fully* from a default source of entropy by multiple calls to {std.random_device}.
+Reportedly, some implementations of that standard facility are not great, so we also mix in a scrambled call to a high-resolution clock for one of the state words.
+3. Seeding generators with multiple words of state from a single word is never ideal. \
+Nevertheless, it is often handy to be able to do exactly this when you are trying to prototype a simulation of some sort.  For that stage of development, being able to run and rerun things with an easily constructed "fixed" random number stream is very useful. \
+To mitigate some of the worst features of this type of construction, the implementation uses a scrambled version of the one input word as a seed to a simple, small state but pretty effective {SplitMix} random number generator. That generator then creates a full state array for the *xoshiro/xoshiro* in question.
+1. If you do construct a generator by passing in an initial state array then be sure that the values are not all zero as that is a fixed point for these generators.
+
+### See Also
+
+{constructors} \
+{get_state}

@@ -1,0 +1,24 @@
+/*-- scss:defaults --*/
+
+// Import google fonts
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap");
+
+// Set the main font and the mono-spaced one
+$font-family-sans-serif: "Roboto", sans-serif !default;
+$font-family-monospace: "Roboto Mono", monospace !default;
+
+// Go with lighter/smaller fonts for some elements ...
+$headings-font-weight: 400 !default;
+:is(h1, h2, h3, h4, h5, h6) {
+    font-weight: 400;
+}
+code {
+    font-size: 0.95em;
+}
+table {
+    font-size: 0.9em;
+}
+table code {
+    font-size: 14px;
+}

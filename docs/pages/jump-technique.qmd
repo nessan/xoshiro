@@ -1,0 +1,308 @@
+---
+title: "Efficient Jump Ahead Methods for Some RNGs"
+---
+
+<!-- Math shortcuts we use -->
+{{< include /pages/_latex-macros.qmd >}}
+
+## Introduction
+
+The heart of all random number generators is the method that produces a stream of *uniformly* distributed output words --- usually 32-bit or 64-bit unsigned integers.
+That core stream is used by other functions to simulate any desired distribution over the field of interest, for example, to simulate a uniform distribution of reals in the range 0 to 1.
+
+For some generators, the core step can be broken down into two stages.
+In the first, the generator’s current *state*  $\bold{s}$ is iteratively advanced in some fashion, and, in the second, that new state is passed through a function $\phi(\bold{s})$ to get an output of the desired size:
+$$
+\begin{gather}
+    \bold{s} \gets t(\bold{s}),     \\
+    o        \gets \phi(\bold{s}).
+\end{gather}
+$$
+Here $t$ is the *transition function* which advances the state, and $\phi$ is the output function, sometimes referred to as the *scrambler*, that reduces the state to a single output word $o$.
+
+The output function doesn’t change the current state but mangles it in some fashion to project the higher dimensional state to the desired lower number of bits of output.
+At a minimum, the state will have the same number of bits as an output word and generally "good" generators will have more bits of state than that.
+
+Useful generators produce streams of output words with desirable statistical properties.
+For example, uniformly distributed across the output space, having a high degree of unpredictability, etc.
+A full mathematical analysis of an RNG is typically very difficult but various empirical test suites have been developed that directly examine the output streams looking for statistical weaknesses.
+
+Of course, a good generator must also be *efficient*.
+In many practical applications, the generator will be expected to produce a vast number of outputs so speed is important.
+
+For this reason, most RNGs internally treat the state as some finite collection of computer words (for a lot of architectures that will be 64-bit words or perhaps 32-bit words) and the transition function is designed to mix those words up in a manner that makes use of a small number of basic computer operations like `XOR` instructions and so on.
+
+For example, one well-regarded RNG for 64-bit outputs is a particular variant of *xoshiro*.
+In this RNG the state is internally stored as a collection of four 64-bit words (256 total bits of state).
+
+If that array is `{s[0],s[1],s[2],s[3]}` then the state step/transition function $t$ is:
+```cpp
+void step()
+{
+    const std::uint64_t tmp = s[1] << 17;
+    s[2] ^= s[0];
+    s[3] ^= s[1];
+    s[1] ^= s[2];
+    s[0] ^= s[3];
+    s[2] ^= tmp;
+    s[3] = std::rotl(s[3], 45);
+}
+```
+So a single bit-shift operation, five `XOR` operations, and a final bitwise left-rotation.
+Not a lot of computation and all of it is fundamentally efficient.
+
+The step function can be coupled with various simple scramblers to produce the desired output.
+One $\phi(\bold{s})$ that is used is:
+```cpp
+std::uint64_t operator()(const std::uint64_t *s) { return std::rotl(s[1] * 5, 7) * 9; }
+```
+The total amount of code here is tiny and this RNG will be pretty efficient.
+Of course, verifying its quality is another matter.
+
+## Linear Transition Functions
+
+Surprisingly, the state transition function $t$ for many popular RNGs can be written as a *linear* transformation when the state is viewed as a vector over {GF2} the simplest {Galois-Field} with two elements.
+
+GF(2) also known as {f2} is just a mathematical way of talking about *bits*.
+
+{f2} has just two elements 0 and 1 and all the usual arithmetic operations are carried out mod 2 to keep everything closed in $\{0,1\}$.
+You can easily verify that addition in {f2} becomes `XOR` and multiplication becomes `AND`.
+It is also useful to know that you can replace any minus signs with pluses and divisions by multiplications.
+
+In our specific *xoshiro* example above we saw that the generator works internally on an array of four 64-bit unsigned words and the transition function $t$ performs a small number of bit-shift, `XOR`, and bit-rotation operations on and between those four words.
+
+The four 64-bit words can also be thought of as a single 256-element bit-vector:
+$$
+    \bold{s} \in \FF^{256}.
+$$
+Remember that any `XOR` operation between 64-bit words can be thought of as an addition in $\FF^{64}$ when the words are treated as 64-element bit-vectors.
+
+We also note that bit-shifting a 64-bit number one place to the left can be thought of as pre-multiplying the word’s 64 bits with a $64 \times 64$ left *bit shift* matrix (i.e. the bit-matrix that is all zeros except for ones on the principal sub-diagonal):
+$$
+\cal{L} =
+\begin{bmatrix}
+0      & 0      & 0      & \ldots & 0      & 0      & 0      \\
+1      & 0      & 0      & \ldots & 0      & 0      & 0      \\
+0      & 1      & 0      & \ldots & 0      & 0      & 0      \\
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+0      & 0      & 0      & \ldots & 1      & 0      & 0      \\
+0      & 0      & 0      & \ldots & 0      & 1      & 0
+\end{bmatrix}
+$$
+
+Similarly rotating a 64-bit word one place to the left can be thought of as pre-multiplying the word’s 64 bits with a $64 \times 64$ left *bit rotation* matrix (i.e. the bit-matrix that is all zeros except for ones on the principal sub-diagonal and a one in the upper right corner):
+$$
+\cal{R} =
+\begin{bmatrix}
+0      & 0      & 0      & \ldots & 0      & 0      & 1      \\
+1      & 0      & 0      & \ldots & 0      & 0      & 0      \\
+0      & 1      & 0      & \ldots & 0      & 0      & 0      \\
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+0      & 0      & 0      & \ldots & 1      & 0      & 0      \\
+0      & 0      & 0      & \ldots & 0      & 1      & 0
+\end{bmatrix}
+$$
+
+Using these facts it is not hard to verify that we can cast the `step` method above as:
+$$
+\bold{s} \gets T \cdot \bold{s}
+$$
+where $T$ is a square $256 \times 256$ element bit-matrix which can also be seen as the following $4 \times 4$ *word* matrix:
+$$
+T  =
+\begin{bmatrix}
+I & I            & 0 & I \\
+I & I            & I & 0 \\
+I & \cal{L}^{17} & I & 0 \\
+0 & \cal{R}^{45} & 0 & \cal{R}^{45}
+\end{bmatrix}
+$$
+Here each word block is a $64 \times 64$ sub-bit-matrix and $I$ is the $64 \times 64$ identity bit-matrix.
+
+More details can be found for this *xoshiro* and several other variants in the original {paper}.
+However, bear in mind that the paper’s authors think of $\bold{s}$ as a *row* vector and the transition as $\bold{s} \gets \bold{s} \cdot T$
+That means their version of $T$ matrix is transposed from the one shown here.
+
+### Computing the Transition Matrix
+
+In the case of *xoshiro* we have an explicit representation of the transition matrix $T$ in terms of simple sub-matrices and one can indeed use those blocks to build up $T$ in code.
+
+However, it is more practical/convenient to have a general method to construct $T$ for any RNG with a linear transition function for the state.
+
+To do that, think about how $T$ will act on the _unit_ bit-vectors $\bold{u}_i$ which has just one set bit.
+You can easily convince yourself that $T \cdot \bold{u}_i$ pulls out the column $i$ of $T$.
+
+So a general method to fill $T$ simply iterates through all the unit bit-vectors, and for each one translates it back to word space.
+Then those state words are put through a single call of the generator’s `step` method.
+The resulting state words can be translated back to bit space and that bit-vector becomes a column in $T$.
+
+::: {.callout-note}
+# Usefulness of the transition matrix
+It is worth noting that while the transition matrix can be used to advance the state, the required matrix-vector product, even using a linear algebra package like {bit.lib} that is optimized for {f2}, is much slower than using code like the `step()` method shown above.
+:::
+
+The $\bold{s} \gets T \cdot \bold{s}$ view of things is only useful for doing analysis or when we think about making large-scale jumps ahead in the stream as we will show next.
+
+## Jumping Ahead in the Stream
+
+A very useful thing to be able to do with an RNG is to jump very far ahead in the random number stream.
+This allows one to treat a single stream of random numbers as a bunch of disjoint sub-streams that collectively cover a wide spectrum of the state space in a non-overlapping manner.
+Each sub-stream needs to be long enough to run a simulation that by itself will consume a vast number of random numbers so the jumps we are talking about are also huge.
+
+So we want to have sub-streams where each "owns" $N$ random numbers for some very large $N$.
+
+With an appropriate generator, this can be done by first starting it anywhere, then creating a copy of the generator but with the state advanced $N$ times, then making a copy of that generator but with its state advanced a further $N$ times etc.
+
+One simple way to advance $N$ steps is:
+```cpp
+void discard(std::uint64_t N)
+{
+    for(std::uint64_t i = 0; i < N; ++i) step();
+}
+```
+Currently, most of the standard {cpp}  libraries seem to take this naive approach for their RNGs.
+While this is workable for modest values of $N$ it too slow for the actual use cases where we expect $N$ to be very, very large.
+Even the argument type is probably wrong for many of those cases and it might be more useful to think about e.g. $N=2^\nu$ where $\nu$ is the `std::uint64_t` argument.
+
+### Using the Transition Matrix
+
+We have seen that for linear transition RNGs we can cast the state `step` function as the product of a bit-matrix (the *transition* matrix) with the state viewed as a bit-vector:
+$$
+\bold{s} \gets T \cdot \bold{s}.
+$$
+This means that if we want to advance the state by say $N$ steps we can do so by computing
+$$
+\bold{s} \gets T^N \cdot \bold{s}.
+$$
+Unfortunately, even if $T$ is sparse and "special" like the $T$ above for *xoshiro*, $T^N$ is unlikely to have a readily written down form.
+
+Nevertheless, if we use a linear algebra package like {bit.lib} that is optimized for {f2} and which uses the well-known square and multiply algorithm to minimize the operation count when evaluating matrix powers this simple compute-the-power method can be somewhat competitive for large enough $N$ at least for generators that aren’t off the scale in terms of the size of the state space.
+
+### The Characteristic Polynomial
+
+However, we can do much better by following the method first developed by {Haramoto}.
+
+If there are $n$ bits in the state then the transition matrix $T$ is some non-singular $n \times n$ bit-matrix.
+
+Let $c(x)$ be the {characteristic-polynomial} for $T$ which we can write as
+$$
+c(x) = c_n x^n + c_{n-1} x^{n-1} + \cdots+c_1 x + c_0
+$$
+where the argument $x$ and each polynomial coefficient $c_i$ is in {f2}.
+
+The fast jump ahead method hinges on the observation that we can write any polynomial as some multiple of $c(x)$ plus a lower degree remainder term.
+
+In particular, for an arbitrary power $N$, we will express the polynomial $x^N$ as
+$$
+x^N = q(x) c(x) + r(x)
+$$
+where the degree of the remainder $r(x)$ is less than $n$ so we can write
+$$
+r(x) = r_{n-1} x^{n-1} + r_{n-2} x^{n-2} + \cdots+r_1 x + r_0
+$$
+for some set of coefficients $r_i$ in {f2}.
+
+This also works for bit-matrix arguments which means we can express $T^N$ as
+$$
+T^N = q(T)c(T) + r(T).
+$$
+But the {Cayley-Hamilton} theorem tells us that every matrix satisfies its own characteristic polynomial which means that $c(T) = 0$.
+
+It follows that
+$$
+T^N = r(T) = r_{n-1} T^{n-1} + r_{n-2} T^{n-2} + \cdots + r_2 T^2 +  r_1 T + r_0 I
+$$
+where $I$ is the $n \times n$ identity bit-matrix and in cases of interest $n \ll N$.
+
+This bit of magic means that we can compute very large power $T^N$ by doing a much lower-order polynomial sum!
+
+Moreover, we are really after $T^N \cdot \bold{s}$ which now becomes
+$$
+T^N \cdot \bold{s} =
+r(T) \cdot \bold{s} =
+\left( r_{n-1} T^{n-1} + r_{n-2} T^{n-2} + \cdots + r_2 T^2 + r_1 T + r_0 I \right) \cdot \bold{s}
+$$
+But $T \cdot \bold{s}$ is just a single call to the `step` function. \
+Similarly, $T^2 \cdot \bold{s}$ can be evaluated with a second `step` call and so on.
+
+This means that
+$$
+    T^N \cdot \bold{s} = r(T) \cdot \bold{s}
+$$
+can be calculated with just $n-1$ calls to the `step` method.
+This is extremely efficient when $N \gg n$ --- for example, if we want to jump by $N = 2^{100}$ steps and the generator has $n = 256$ bits of state.
+
+### With the `bit` Library
+
+What do we need to implement this idea?
+
+1. A method to construct the transition matrix $T$.
+2. A method to extract its characteristic polynomial $c(x)$.
+3. A method to compute $r(x) = \mod{x^N}{c(x)}$ .
+4. A method to efficiently compute $r(T) \cdot \bold{s}$.
+
+Fortunately, we can fill in these steps by making use of the {bit.lib} library:
+
+1. As we saw above, we can construct $T$ column by column without any deep knowledge of the structure of the generator. Assuming it is indeed linear then one call of the `step` method for a seed state that is a unit bit-vector will return one column of $T$. Our generators don't work on *bit-vectors* directly but the `bit` library lets you go from *bits* to *words* and vice-versa.
+2. We can use {Danilevsky} to extract the characteristic polynomial for $T$. That is already implemented in the `bit` library and the function will never overflow.
+3. The `bit` library also has an algorithm to compute $\mod{x^N}{c(x)}$ over {f2} for very large $N$.
+4. Finally, as noted above, $r(T) \cdot \bold{s}$ can be computed with $n-1$ calls to the `step` method and, in the cases of interest, $n$ is very small relative to the jump size $N$ i.e. $n \ll N$.
+
+::: {.callout-note}
+# Jump polynomial
+In this context, the remainder polynomial $r(x)$ is called a *jump polynomial* and using the steps above we can compute it for arbitrary *xoshiro/xoroshiro* generators and any jump size $N$.
+These jump polynomials will be returned as *bit-vectors* i.e. as `bit::vector` objects.
+:::
+
+### Without the `bit` Library
+
+The {cpp}  {bit.lib} library is header only so it is easily incorporated into any application.
+But we also recognize that is very convenient to have `xoshiro.h` be complete as a standalone file.
+
+Ideally, even without access to the `bit` headers, we would still like to have access to the `jump` methods and also the {partition} class to split a single parent stream of random outputs into a set of non-overlapping sub-streams.
+
+Of course, if we don't have the {bit.lib} library available then we don't have the {bit.matrix} and {bit.vector} classes.
+This means we have no easy way to even represent the generator's transition bit-matrix $T$.
+
+But computing $T$ is just a means to an end.
+We want the *jump polynomial* which for a specific generator and specific jump size $N$ is the polynomial $r(x) = \mod{x^N}{c(x)}$ where $c(x)$ is the characteristic polynomial for the transition matrix associated with the generator in question.
+
+Let's start with that characteristic polynomial.
+
+Using the {bit.lib} library it is easy to compute the coefficients of $c(x)$ for the transition matrix $T$ where
+$$
+    c(x) = c_n x^n + \cdots + c_0.
+$$
+Those coefficients will naturally be represented as a bit-vector with $n+1$ elements.
+
+However, our transition matrices should always be of full rank which implies that $c(x)$ is _monic_ and therefore we always expect $c_n = 1$ and we can always write:
+$$
+c(x) =  x^n + p(x)
+$$
+where the $p(x)$ is a polynomial of degree at most $n-1$:
+$$
+    p(x) = p_{n-1} x^{n-1} + \cdots + p_1 x + p_0
+$$
+So we can store the characteristic polynomial as a bit-vector $\sseq{p}$ which has just $n$ elements.
+That is very handy as we can readily pack those coefficients into an array of ordinary words of the same {state_type} used to store the state itself.
+
+So that is the first part of the puzzle.
+For all the predefined {type-aliased} generators in `xoshiro.h` we have *precomputed* their characteristic polynomials and then embedded the coefficients of the relevant $p(x)$ as an array of words inside the header file.
+
+The {characteristic_coefficients} instance method returns those arrays if they are available or fails at compile time if they aren't.
+
+Of course, getting the characteristic polynomial is also just a means to an end.
+
+Given a jump size $N$, we want to compute the jump polynomial $r(x) \equiv \mod{x^N}{c(x)}$.
+
+Now if $c(x)$ is stored as a bit-vector of its coefficients then the {bit.lib} library has a function that can efficiently compute $r(x)$ and return its coefficients as a bit-vector $\sseq{r}$.
+We have replicated a slightly simplified version of that method in `xoshiro.h`.
+
+The instance method {jump_coefficients} is passed the coefficients of $p(x)$ as the *pre-canned* array of words we mentioned above and it returns the coefficients of $r(x)$ as another array of words.
+
+Finally of course we have the {jump} instance methods that take the jump polynomial as an array of ordinary words and uses that polynomial to efficiently jump the state forward.
+
+::: {.callout-tip}
+# The takeaway
+The main thing to understand is that the single `xoshiro.h` header file has all the pieces in place to jump *any* of its predefined {type-aliased} generators by *arbitrary* numbers of steps $N$ or $2^N$.
+:::

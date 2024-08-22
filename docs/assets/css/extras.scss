@@ -1,0 +1,35 @@
+/*-- scss:rules --*/
+
+// ------------------------------------------------------------------------------------------------
+// Our own rules ...
+// ------------------------------------------------------------------------------------------------
+
+// Block titles [span]{.bt}
+// Markdown: "[Example: blah blah blah]{.bt}".
+// HTML:     "<p><span class="bt">Example: blah blah blah:</span></p>"
+
+// Basic styling
+.bt {
+    color: $link-color;
+    font-size: 1.1em;
+    display: block;
+}
+
+// Block titles preceding code-blocks should be tighter to the code.
+// Selector picks any p with a .bt child that is then followed by a .sourceCode element.
+p:has(> .bt):has(+ .sourceCode) {
+    margin-bottom: -0.7em;
+}
+p:has(> .bt):has(+ dl) {
+    margin-bottom: 0em;
+}
+
+// Paragraph titles [span]{.pt}
+// Markdown: "[Notes]{.bt}".
+// HTML:     "<p><span class="pt">Notes:</span></p>"
+.pt {
+    font-size: 1.1em;
+    font-weight: bold;
+    display: block;
+    margin-bottom: -0.8em;
+}

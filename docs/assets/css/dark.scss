@@ -1,0 +1,35 @@
+/*-- scss:defaults --*/
+
+// Some dark mode overrides
+
+// Base colours
+$body-bg: #181818;
+$body-color: white;
+$link-color: #75aadb;
+
+// Code block colour
+$code-block-bg-alpha: -0.9;
+
+/*-- scss:rules --*/
+
+code {
+    background-color: $body-bg;
+    color: lightgray;
+}
+
+p pre code:not(.sourceCode), li pre code:not(.sourceCode), pre code:not(.sourceCode) {
+    background-color:$body-bg
+}
+
+p code:not(.sourceCode), li code:not(.sourceCode), td code:not(.sourceCode) {
+    background-color: $body-bg;
+    padding: .2em;
+}
+
+div.sidebar.sidebar-navigation.rollup.quarto-sidebar-toggle-contents, nav.sidebar.sidebar-navigation:not(.rollup) {
+    background-color: #26282b;
+}
+
+.sidebar-navigation a {
+    color:white;
+}

@@ -1,0 +1,132 @@
+---
+title: "The `xso::generator` Class"
+---
+
+## Introduction
+
+`xso::generator` is the template class that can be used to make **any** *xoshiro/xoroshiro* variant.
+It connects a {State} with a {Scrambler} to create a pseudorandom number generator.
+
+::: {.callout-tip}
+# Most users should use one of the predefined type aliases
+The `xoshiro.h` header file has several predefined {type-aliased} instantiations of the general template class.
+Use `xso::rng64` and `xso::rng32` to access the recommended default state engines and output functions for 64-bit and 32-bit outputs.
+The overall default `xso::rng` is a synonym for `xso::rng64`.
+:::
+
+## Declaration
+
+The `generator` class is in the `xso` namespace and is declared as follows:
+``` cpp
+namespace xso {
+    template<typename State, typename Scrambler> class generator;
+}
+```
+The {State} holds the bits of state and has methods to get, set, and advance that state. \
+The {Scrambler} is a functor that reduces the state to a single 32-bit or 64-bit unsigned integer output word.
+
+### Template Parameters
+
+The `xso::generator` expects the `State` to implement the following class and instance methods:
+
+[`State`: Required Class Types & Methods]{.pt}
+
+Type/Method                     | Description
+------------------------------- | ---------------------------------------------------
+`word_type`                     | The state consists of words of this type.
+`word_count`                    | Class method that should return the number of *words* of state.
+`bit_count`                     | Class method that should return the number of *bits* of state.
+`xso_name`                      | Class method that should return a name for the engine.
+`characteristic_coefficients`   | Class method that should return the *precomputed* characteristic polynomial.
+: {.bordered .hover .responsive tbl-colwidths="[30,70]"}
+
+[`State`: Required Instance Methods]{.pt}
+
+Method                          | Description
+------------------------------- | ---------------------------------------------------
+`seed`                          | Method to set the state.
+`get_state`                     | Method to copy the current state to a destination.
+`operator[]`                    | Method to provide read-only access to the individual words of state.
+`step`                          | Method to advance the state by one step.
+: {.bordered .hover .responsive tbl-colwidths="[30,70]"}
+
+::: {.callout-note}
+# An `xso::generator` can be used anywhere a `State` is expected
+Any `xso::generator` satisfies all requirements of the {State} concept.
+This is useful as some functions work naturally on a `State`,  but you can pass the `generator` along in its place as a proxy.
+:::
+
+The `xso::generator` expects the `Scrambler` to implement the following methods:
+
+[`Scrambler`: Required Methods]{.pt}
+
+Method                          | Description
+------------------------------- | ---------------------------------------------------
+ `xso_name`                     | Class method that should return a name for the output function.
+ `operator()`                   | Instance method to reduce the passed state to a single word.
+: {.bordered .hover .responsive tbl-colwidths="[30,70]"}
+
+The generator uses these types and methods as described next.
+
+## Class Types and Methods
+
+Type/Method                     | Description
+------------------------------- | ---------------------------------------------------
+{state_type}                    | The`State` template type.
+{scrambler_type}                | The`Scrambler` template type.
+{word_type}                     | The state bits are packed into words of this type.
+{word_count}                    | Returns the number of words of state.
+{bit_count}                     | Returns the number of bits of state.
+{result_type}                   | Each `generator()` call returns a single integer of this type.
+{min}                           | Returns the smallest value the generator can produce.
+{max}                           | Returns the largest value the generator can produce.
+{xso_name}                      | Class method that returns a name for the generator.
+{characteristic_coefficients}   | Class method that returns the *precomputed* characteristic polynomial..
+: {.bordered .hover .responsive tbl-colwidths="[30,70]"}
+
+## Instance Methods
+
+Method                          | Description
+------------------------------- | ---------------------------------------------------
+{constructors}                  | Construct and seed a generator in various ways.
+{seed}                          | Set the generator state in various ways.
+{get_state}                     | Read access to the whole state.
+{operator[]}                    | Read access to one word of state.
+{step}                          | Advance the generator's state by one step.
+{operator()}                    | Reduce the current state to a single `result_type` word and advance by one step.
+{sample}                        | Use the generator to extract a *sample* from various sources.
+{index}                         | Use the generator to pick an index from a range.
+{flip}                          | Use the generator to flip a coin.
+{roll}                          | Use the generator to roll a die.
+{shuffle}                       | Use the generator to shuffle the elements of an iteration or container.
+{discard}                       | Discard some iterations of the generator.
+: {.bordered .striped .hover .responsive tbl-colwidths="[30,70]"}
+
+## Non-member Functions
+
+### Always Available
+
+Function                        | Description
+------------------------------- | ---------------------------------------------------
+{jump_coefficients}             | Compute the coefficients of a *jump polynomial* that can be used to efficiently jump a `generator` or `State` ahead by a potentially huge number of steps.
+{jump}                          | This function uses the output of `jump_coefficients` to efficiently jump a `generator` or `State` ahead by a potentially huge number of steps.
+{stream-out}                    | Stream output for the `generator`, `State`, and `Scrambler` classes.
+{formatter}                     | Connect the `generator`, `State`, and `Scrambler` classes to {std.format} and friends.
+: {.bordered .striped .hover .responsive tbl-colwidths="[30,70]"}
+
+### Depending on the `bit` Library
+
+If the {bit.lib} library is available, extra non-member functions will be defined.
+
+`bit` is a {cpp}  library for doing linear algebra over {GF2} the simplest field of two elements $\{0,1\}$, where the usual arithmetic operations are performed mod 2.
+The `bit` library is header only, so it is easily incorporated into any application.
+
+If it is available, then `xoshiro.h` defines some extra functions:
+
+Function                        | Description
+------------------------------- | ---------------------------------------------------
+{transition_matrix}             | Returns the *transition matrix* for a `State` as a {bit.matrix}.
+{characteristic_polynomial}     | Returns the transition matrix's {characteristic-polynomial} as a {bit.polynomial}.
+{jump_polynomial}               | Returns a *jump polynomial* that can be used to efficiently jump a `State` ahead by a potentially huge number of steps.
+{jump_using_polynomial}         | Use a jump-polynomial to jump a State ahead in its stream efficiently.
+: {.bordered .striped .hover .responsive tbl-colwidths="[30,70]"}

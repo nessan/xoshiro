@@ -1,0 +1,11 @@
+
+<!-- Math shortcuts we use frequently in the documentation -->
+::: {.hidden}
+$$
+\newcommand{\FF}{\mathbb{F}_2}
+\newcommand{\bold}[1]{\mathbf{#1}}
+\newcommand{\mod}[2]{ {#1 \, \mathrm{mod} \, #2}}
+\newcommand{\seq}[2][n]{ #2_0 #2_1 \ldots #2_{#1-1} }
+\newcommand{\sseq}[2][n]{ \left[#2_0 #2_1 \ldots #2_{#1-1}\right] }
+$$
+:::

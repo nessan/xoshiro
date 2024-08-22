@@ -1,0 +1,99 @@
+# Shortcuts and links used throughout the documentation.
+
+# C++ versions.
+cpp: "C&#43;&#43;"
+cpp20: "C&#43;&#43;20"
+cpp23: "C&#43;&#43;23"
+
+# Links to software tools, etc.
+mit-license: "[MIT License](https://opensource.org/license/mit)"
+quarto: "[Quarto](https://quarto.org)"
+repo: "[repository](https://github.com/nessan/xoshiro)"
+docs: "[documentation](https://nessan.github.io/xoshiro)"
+email: "[email](mailto:nzznfitz+gh@icloud.com)"
+
+# Formatted links to our library pages.
+bit_count: "[`bit_count`](/pages/class-types.qmd)"
+characteristic_coefficients: "[`characteristic_coefficients`](/pages/characteristic_coefficients.qmd)"
+characteristic_polynomial: "[`characteristic_polynomial`](/pages/bit.qmd#characteristic-polynomial)"
+constructors: "[`constructors`](/pages/constructors.qmd)"
+discard: "[`discard`](/pages/discard.qmd)"
+flip: "[`flip`](/pages/flip.qmd)"
+formatter: "[`formatter`](/pages/formatter.qmd)"
+generator: "[`xso::generator`](/pages/generator.qmd)"
+get_state: "[`get_state`](/pages/get_state.qmd)"
+index: "[`index`](/pages/sample.qmd)"
+jump_coefficients: "[`jump_coefficients`](/pages/jump_coefficients.qmd)"
+jump_polynomial: "[`jump_polynomial`](/pages/bit.qmd#jump-polynomial)"
+jump_using_polynomial: "[`jump`](/pages/bit.qmd#performing-jumps)"
+jump-technique: "[jump technique](/pages/jump-technique.qmd)"
+jump: "[`jump`](/pages/jump.qmd)"
+max: "[`max`](/pages/class-types.qmd)"
+min: "[`min`](/pages/class-types.qmd)"
+operator[]: "[`operator[]`](/pages/get_state.qmd)"
+operator(): "[`operator()`](/pages/functor.qmd)"
+partition: "[`xso::partition`](/pages/partition.qmd)"
+performing-jumps: "[performing jumps](/pages/bit.qmd#performing-jumps)"
+result_type: "[`result_type`](/pages/class-types.qmd)"
+roll: "[`roll`](/pages/flip.qmd)"
+sample: "[`sample`](/pages/sample.qmd)"
+scrambler_type: "[`scrambler_type`](/pages/class-types.qmd)"
+Scrambler: "[`Scrambler`](/pages/Scrambler.qmd)"
+seed: "[`seed`](/pages/seed.qmd)"
+shuffle: "[`shuffle`](/pages/shuffle.qmd)"
+state_type: "[`state_type`](/pages/class-types.qmd)"
+State: "[`State`](/pages/State.qmd)"
+step: "[`step`](/pages/functor.qmd)"
+stream-out: "[`stream<<`](/pages/formatter.qmd)"
+transition_matrix: "[`transition_matrix`](/pages/bit.qmd#transition-matrix)"
+type-aliased: "[type aliased](/pages/type-aliases.qmd)"
+word_count: "[`word_count`](/pages/class-types.qmd)"
+word_type: "[`word_type`](/pages/class-types.qmd)"
+xso_name: "[`xso_name`](/pages/class-types.qmd)"
+
+# Formatted links to pages for items in the standard library.
+std:
+    array: "[`std::array`](https://en.cppreference.com/w/cpp/container/array)"
+    concept: "[`concept`](https://en.cppreference.com/w/cpp/language/constraints)"
+    format: "[`std::format`](https://en.cppreference.com/w/cpp/utility/format/format)"
+    formatter: "[`std::formatter`](https://en.cppreference.com/w/cpp/utility/format/formatter)"
+    mersenne_twister_engine: "[`std::mersenne_twister_engine`](https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine)"
+    normal_distribution: "[`std::normal_distribution`](https://en.cppreference.com/w/cpp/numeric/random/normal_distribution)"
+    random_device: "[`std::random_device`](https://en.cppreference.com/w/cpp/numeric/random/random_device)"
+    random: "[`random`](https://en.cppreference.com/w/cpp/header/random)"
+    sample: "[`std::sample`](https://en.cppreference.com/w/cpp/algorithm/sample)"
+    seed_seq: "[`std::seed_seq`](https://en.cppreference.com/w/cpp/numeric/random/seed_seq)"
+    shuffle: "[`std::shuffle`](https://en.cppreference.com/w/cpp/algorithm/random_shuffle)"
+    uniform_random_bit_generator: "[`std::uniform_random_bit_generator`](https://en.cppreference.com/w/cpp/numeric/random/uniform_random_bit_generator)"
+    unsigned_integral: "[`std::unsigned_integral`](https://en.cppreference.com/w/cpp/concepts/unsigned_integral)"
+    vector: "[`std::vector`](https://en.cppreference.com/w/cpp/container/vector)"
+
+# Formatted links to pages for items in our `bit` library.
+bit:
+    lib: "[`bit`](https://nessan.github.io/bit)"
+    vector: "[`bit::vector`](https://nessan.github.io/bit/pages/vector/)"
+    matrix: "[`bit::matrix`](https://nessan.github.io/bit/pages/matrix/)"
+    polynomial: "[`bit::polynomial`](https://nessan.github.io/bit/pages/polynomial/)"
+    characteristic_polynomial: "[`bit::characteristic_polynomial`](https://nessan.github.io/bit/pages/matrix/characteristic_polynomial.html)"
+    reduce: "[`bit::polynomial::reduce`](https://nessan.github.io/bit/pages/polynomial/reduce.html)"
+    reduction-technique: "[reduction technique](https://nessan.github.io/bit/pages/notes/reduction.html)"
+
+# Formatted links to pages for items in our `utilities` library.
+utilities:
+    lib: "[`utilities`](https://nessan.github.io/utilities)"
+
+# Wikipedia pages
+characteristic-polynomial: "[characteristic polynomial](https://en.wikipedia.org/wiki/Characteristic_polynomial)"
+Cayley-Hamilton: "[Cayley Hamilton](https://en.wikipedia.org/wiki/Cayley–Hamilton_theorem)"
+Galois-Field: "[Galois Field](https://en.wikipedia.org/wiki/Finite_field)"
+GF2: "[GF(2)](https://en.wikipedia.org/wiki/GF(2))"
+
+# Other articles
+Danilevsky: "[Danilevsky's algorithm](http://web.tecnico.ulisboa.pt/~mcasquilho/compute/com/,eigen/FaddeevaDanil.pdf)"
+Haramoto: "[Haramoto et al.](http://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/ARTICLES/jumpf2-printed.pdf)"
+paper: "[paper](https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf)"
+SplitMix: "[`SplitMix64`](https://dl.acm.org/doi/10.1145/2660193.2660195)"
+xoshiro-xoroshiro: "[xoshiro/xoroshiro](https://prng.di.unimi.it)"
+
+# Latex inlines
+f2: $\mathbb{F}_2$

@@ -1,0 +1,40 @@
+---
+title: "`xso::generator` --- Coin Flips & Dice Rolls"
+---
+
+We have a method that returns the result of flipping a possibly biased coin and another that returns the result of rolling a fair dice with an arbitrary number of sides:
+```cpp
+constexpr bool flip(double p = 0.5);        // <1>
+constexpr int  roll(int n = 6);             // <2>
+```
+1. Returns the result of flipping a coin where `p` is the probability of getting a `true` result.
+2. Returns an integer in the range $[1, n]$, where each number is equally likely to be returned.
+
+[Example:]{.bt}
+
+```cpp
+#include <xoshiro.h>
+int main()
+{
+    xso::rng gen;
+    std::size_t n_trials = 600'000;
+    std::size_t count = 0;
+    for(std::size_t n = 0; n < n_trials; ++n) if(gen.flip()) count++;
+    std::cout << count << " heads from " << n_trials << " fair coin flips.\n";
+
+    count = 0;
+    for(std::size_t n = 0; n < n_trials; ++n) if(gen.roll() == 4) count++;
+    std::cout << count << " fours from " << n_trials << " six-sided dice rolls.\n";
+}
+```
+
+[Output: Varies from run to run]{.bt}
+```bash
+299620 heads from 600000 fair coin flips.
+100061 fours from 600000 six-sided dice rolls.
+```
+
+### See Also
+
+{sample}   \
+{shuffle}
