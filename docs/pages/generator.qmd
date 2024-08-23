@@ -118,7 +118,7 @@ Function                        | Description
 
 If the {bit.lib} library is available, extra non-member functions will be defined.
 
-`bit` is a {cpp}  library for doing linear algebra over {GF2} the simplest field of two elements $\{0,1\}$, where the usual arithmetic operations are performed mod 2.
+`bit` is a {cpp}  library for doing linear algebra over {gf2} the simplest field of two elements $\{0,1\}$, where the usual arithmetic operations are performed mod 2.
 The `bit` library is header only, so it is easily incorporated into any application.
 
 If it is available, then `xoshiro.h` defines some extra functions:

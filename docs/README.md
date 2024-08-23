@@ -24,7 +24,7 @@ In Quarto, the canonical way to refer to a variable is by using the `var` shortc
 
 <!-- Reference links -->
 
-[documentation site]: https://nessan.github.io/bit
+[documentation site]: https://nessan.github.io/xoshiro
 [Quarto]: https://quarto.org
 [Quarto Markdown]: https://quarto.org/pages/authoring/markdown-basics.html
 [`simple-vars`]: https://github.com/nessan/simple-vars

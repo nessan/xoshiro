@@ -86,7 +86,7 @@ utilities:
 characteristic-polynomial: "[characteristic polynomial](https://en.wikipedia.org/wiki/Characteristic_polynomial)"
 Cayley-Hamilton: "[Cayley Hamilton](https://en.wikipedia.org/wiki/Cayley–Hamilton_theorem)"
 Galois-Field: "[Galois Field](https://en.wikipedia.org/wiki/Finite_field)"
-GF2: "[GF(2)](https://en.wikipedia.org/wiki/GF(2))"
+gf2: "[GF(2)](https://en.wikipedia.org/wiki/GF(2))"
 
 # Other articles
 Danilevsky: "[Danilevsky's algorithm](http://web.tecnico.ulisboa.pt/~mcasquilho/compute/com/,eigen/FaddeevaDanil.pdf)"

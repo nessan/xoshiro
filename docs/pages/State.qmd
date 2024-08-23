@@ -95,7 +95,7 @@ Item                               | Description
 
 ## Precomputed Characteristics
 
-If a `State` holds $n$ bits of state, then its transition matrix is a $n \times n$ matrix over {GF2}.
+If a `State` holds $n$ bits of state, then its transition matrix is a $n \times n$ matrix over {gf2}.
 
 The characteristic polynomial for that matrix is a polynomial $c(x)$ of degree $n$ over {f2} which we can write as:
 $$

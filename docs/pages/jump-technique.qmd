@@ -61,7 +61,7 @@ Of course, verifying its quality is another matter.
 
 ## Linear Transition Functions
 
-Surprisingly, the state transition function $t$ for many popular RNGs can be written as a *linear* transformation when the state is viewed as a vector over {GF2} the simplest {Galois-Field} with two elements.
+Surprisingly, the state transition function $t$ for many popular RNGs can be written as a *linear* transformation when the state is viewed as a vector over {gf2} the simplest {Galois-Field} with two elements.
 
 GF(2) also known as {f2} is just a mathematical way of talking about *bits*.
 

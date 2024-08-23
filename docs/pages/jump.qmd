@@ -60,7 +60,7 @@ All our {type-aliased} generators have their characteristic polynomial precomput
 This means we support jumping any of those generators by arbitrary steps.
 
 If, instead, you are using some other variant of xoshiro/xoroshiro, you can still get its characteristic polynomial and jump polynomials by employing the extra, header-only, {bit.lib} library.
-That is a package for {GF2}, which can compute the needed characteristic polynomials for the generator's transition matrix.
+That is a package for {gf2}, which can compute the needed characteristic polynomials for the generator's transition matrix.
 Once the `bit` library is included, then the `xoshiro.h` header file defines extra non-member functions that can compute those characteristic and jump polynomials.
 
 See the documentation for these functions at {bit.lib} website.

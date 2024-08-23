@@ -4,40 +4,16 @@ title: The `xoshiro`Library
 
 ## Introduction
 
-David Blackman and Sebastiano Vigna introduced the {xoshiro-xoroshiro} pseudorandom number generators, which are very efficient and, though they have relatively small states, display excellent statistical properties.
-The full mathematical details are to be found in their {paper}.
+David Blackman and Sebastiano Vigna introduced the {xoshiro-xoroshiro} class of pseudorandom number generators, which are very efficient and, though they have relatively small states, display excellent statistical properties.
+The mathematical details are to be found in their {paper}.
 
 `xoshiro.h` is a single header file, {cpp}  implementation of the *complete* family of these generators.
 
 The implementations satisfy {cpp}'s {std.uniform_random_bit_generator} concept and can drive any of the distributions defined in the standard library.
 
-We provide efficient jump-ahead methods for *arbitrary* jump sizes, making these generators particularly suitable for parallel processing applications. They are excellent replacements for the "standard" _Mersenne Twister_ generator.
+We also provide efficient jump-ahead methods for *arbitrary* jump sizes, making these generators particularly suitable for parallel processing applications. They are excellent replacements for the "standard" _Mersenne Twister_ generator.
 
 While the implementation is very general, there are simple type aliases for specific preferred instantiations that are known to work well in most situations.
-
-## Installation
-
-This library is header-only, so there is nothing to compile & link --- drop the `xoshiro.h` file somewhere convenient, and you are good to go.
-
-Alternatively, if you are using `CMake`, you can use the standard `FetchContent` module by adding a few lines to your project's `CMakeLists.txt` file:
-
-```cmake
-include(FetchContent)
-FetchContent_Declare(xoshiro URL https://github.com/nessan/bit/releases/download/current/xoshiro.zip)
-FetchContent_MakeAvailable(xoshiro)
-```
-
-This command downloads and unpacks an archive of the current version of `xoshiro` to your project's build folder.
-You can then add a dependency on `xoshiro::xoshiro`, a `CMake` alias for `xoshiro`.
-`FetchContent` will automatically ensure the build system knows where to find the downloaded header files and any needed compiler flags.
-
-Used like this, `FetchContent` will only download a minimal library version without any redundant test code, sample programs, documentation files, etc.
-
-::: {.callout-note}
-# Library versions
-The shown `URL` gets the `current` version of the library---whatever is in the main branch.
-For a fixed, stable library version (say release `2.0.0`), use a `URL` parameter like: `https://github.com/nessan/xoshiro/releases/download/2.0.0/xoshiro.zip`.
-:::
 
 ## Example
 
@@ -60,7 +36,7 @@ int main()
     std::normal_distribution d{5.0, 2.0};
     auto random_int = [&d, &gen] { return int(std::round(dist(gen))); };
 
-    // Run lots of trials and create a histogram of the results in integer buckets.
+    // Run many trials and create a histogram of the results in integer buckets.
     std::map<int, int> hist{};
     for (int n = 0; n != 25'000; ++n) ++hist[random_int()];
 
@@ -96,6 +72,30 @@ int main()
 14
 ```
 
+## Installation
+
+This library is header-only, so there is nothing to compile & link --- drop the `xoshiro.h` file somewhere convenient, and you are good to go.
+
+Alternatively, if you are using `CMake`, you can use the standard `FetchContent` module by adding a few lines to your project's `CMakeLists.txt` file:
+
+```cmake
+include(FetchContent)
+FetchContent_Declare(xoshiro URL https://github.com/nessan/bit/releases/download/current/xoshiro.zip)
+FetchContent_MakeAvailable(xoshiro)
+```
+
+This command downloads and unpacks an archive of the current version of `xoshiro` to your project's build folder.
+You can then add a dependency on `xoshiro::xoshiro`, a `CMake` alias for `xoshiro`.
+`FetchContent` will automatically ensure the build system knows where to find the downloaded header files and any needed compiler flags.
+
+Used like this, `FetchContent` will only download a minimal library version without any redundant test code, sample programs, documentation files, etc.
+
+::: {.callout-note}
+# Library versions
+The shown `URL` gets the `current` version of the library --- whatever is in the main branch.
+For a fixed, stable library version (say release `2.0.0`), use a `URL` parameter like: `https://github.com/nessan/xoshiro/releases/download/2.0.0/xoshiro.zip`.
+:::
+
 ## Implementation
 
 `C` versions of the generators are available on the {xoshiro-xoroshiro} website.
@@ -105,7 +105,7 @@ Our implementation in `xoshiro.h` is distinguished in several other ways:
 
 ### Generality
 
-Using the code in `xoshiro.h` you can create *any* member of the *xoshiro/xoroshiro* family.
+Using `xoshiro.h` you can create *any* member of the *xoshiro/xoroshiro* family.
 
 We have {State} classes that are templatized across the number of state bits, and the parameters (labelled `A`, `B`, and `C` in the literature) that determine how the state is advanced from step to step.
 
@@ -120,7 +120,7 @@ For the reasonable optimization levels you are likely to employ in any numerical
 
 ### Simplicity
 
-While you can instantiate *any* generator in the *xoshiro/xoroshiro* family, we also recognize that only a limited number of those generators have been properly vetted for suitability as being "good".
+While you can instantiate *any* generator in the *xoshiro/xoroshiro* family, we also recognize that only a limited number of those generators have been vetted for suitability as being "good".
 
 Therefore, we provide  recommended {type-aliased} default generators you should use in most cases.
 
@@ -129,26 +129,12 @@ Therefore, we provide  recommended {type-aliased} default generators you should 
 We provide methods to advance a generator by *arbitrary* and potentially huge numbers of steps.
 This contrasts with the `C` versions, which only define a limited number of jump possibilities.
 
-Very large jumps *partition* a single random number stream into non-overlapping sub-streams.
+Huge jumps are used to *partition* a single random number stream into non-overlapping sub-streams.
 In parallel processing applications, the sub-streams drive independent jobs running on different compute cores.
-
-### Extra Analysis
-
-Extra non-member functions for generator analysis are defined if the {bit.lib} library is available.
-
-`bit` is a {cpp}  library for doing linear algebra over {GF2} the simplest Galois field of two elements $\{0,1\}$, where the usual arithmetic operations are performed mod 2.
-The `bit` library is header-only, so it can be easily incorporated into any application.
-
-If it is available, then `xoshiro.h` defines some extra functions that let you access the generator's *transition matrix* and use/analyze that in various ways.
-
-::: {.callout-tip}
-# Arbitrary jumps do not need `bit`
-Even if you only use the single `xoshiro.h` header file without incorporating the `bit` library, you can still jump any of the predefined type-aliased *xoshiro/xoroshiro* variants by *arbitrary* numbers of steps.
-:::
 
 ### Sampling Methods
 
-The {cpp} standard library follows a common design pattern for the facilities in its standard {std.random} header.
+The {cpp} standard library follows a typical design pattern for the facilities in its standard {std.random} header.
 It maintains a strict separation between the classes that produce random bits and others that use those bits.
 
 Uniform random bit generators produce streams of *uniformly* distributed output words (usually 32-bit or 64-bit unsigned integers).
@@ -204,6 +190,20 @@ ge.shuffle(u);                              // <6>
 # Other distributions can be used
 Of course, the generators can also still be used as uniform random bit generators.
 The extra sampling methods etc. just make them much more useful out of the box.
+:::
+
+### Extra Analysis
+
+Extra non-member functions for generator analysis are defined if the {bit.lib} library is available.
+
+`bit` is a {cpp}  library for doing linear algebra over {gf2} the simplest Galois field of two elements $\{0,1\}$, where the usual arithmetic operations are performed mod 2.
+The `bit` library is header-only, so it can be easily incorporated into any application.
+
+If it is available, then `xoshiro.h` defines some extra functions that let you access the generator's *transition matrix* and use/analyze that in various ways.
+
+::: {.callout-tip}
+# Arbitrary jumps do not need `bit`
+Even if you only use the single `xoshiro.h` header file without incorporating the `bit` library, you can still jump any of the predefined type-aliased *xoshiro/xoroshiro* variants by *arbitrary* numbers of steps.
 :::
 
 ## Documentation

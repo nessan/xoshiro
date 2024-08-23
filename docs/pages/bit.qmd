@@ -7,7 +7,7 @@ title: "`xso::generator` --- Extra Functions Using `bit`"
 
 ## Introduction
 
-{bit.lib} is a {cpp}  library for doing linear algebra over {GF2} the simplest field of two elements $\{0,1\}$ where the usual arithmetic operations are performed mod 2.
+{bit.lib} is a {cpp}  library for doing linear algebra over {gf2} the simplest field of two elements $\{0,1\}$ where the usual arithmetic operations are performed mod 2.
 The `bit` library is header only so easily incorporated into any application.
 If it is available the `xoshiro.h` header file defines some extra non-member functions:
 
