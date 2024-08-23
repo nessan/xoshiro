@@ -428,15 +428,15 @@ window.Quarto = {
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#installation" id="toc-installation" class="nav-link" data-scroll-target="#installation">Installation</a></li>
   <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example">Example</a></li>
+  <li><a href="#installation" id="toc-installation" class="nav-link" data-scroll-target="#installation">Installation</a></li>
   <li><a href="#implementation" id="toc-implementation" class="nav-link" data-scroll-target="#implementation">Implementation</a>
   <ul class="collapse">
   <li><a href="#generality" id="toc-generality" class="nav-link" data-scroll-target="#generality">Generality</a></li>
   <li><a href="#simplicity" id="toc-simplicity" class="nav-link" data-scroll-target="#simplicity">Simplicity</a></li>
   <li><a href="#arbitrary-jumps" id="toc-arbitrary-jumps" class="nav-link" data-scroll-target="#arbitrary-jumps">Arbitrary Jumps</a></li>
-  <li><a href="#extra-analysis" id="toc-extra-analysis" class="nav-link" data-scroll-target="#extra-analysis">Extra Analysis</a></li>
   <li><a href="#sampling-methods" id="toc-sampling-methods" class="nav-link" data-scroll-target="#sampling-methods">Sampling Methods</a></li>
+  <li><a href="#extra-analysis" id="toc-extra-analysis" class="nav-link" data-scroll-target="#extra-analysis">Extra Analysis</a></li>
   </ul></li>
   <li><a href="#documentation" id="toc-documentation" class="nav-link" data-scroll-target="#documentation">Documentation</a>
   <ul class="collapse">
@@ -470,19 +470,75 @@ window.Quarto = {
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>David Blackman and Sebastiano Vigna introduced the <a href="https://prng.di.unimi.it">xoshiro/xoroshiro</a> pseudorandom number generators, which are very efficient and, though they have relatively small states, display excellent statistical properties. The full mathematical details are to be found in their <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">paper</a>.</p>
+<p>David Blackman and Sebastiano Vigna introduced the <a href="https://prng.di.unimi.it">xoshiro/xoroshiro</a> class of pseudorandom number generators, which are very efficient and, though they have relatively small states, display excellent statistical properties. The mathematical details are to be found in their <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">paper</a>.</p>
 <p><code>xoshiro.h</code> is a single header file, C++ implementation of the <em>complete</em> family of these generators.</p>
 <p>The implementations satisfy C++’s <a href="https://en.cppreference.com/w/cpp/numeric/random/uniform_random_bit_generator"><code>std::uniform_random_bit_generator</code></a> concept and can drive any of the distributions defined in the standard library.</p>
-<p>We provide efficient jump-ahead methods for <em>arbitrary</em> jump sizes, making these generators particularly suitable for parallel processing applications. They are excellent replacements for the “standard” <em>Mersenne Twister</em> generator.</p>
+<p>We also provide efficient jump-ahead methods for <em>arbitrary</em> jump sizes, making these generators particularly suitable for parallel processing applications. They are excellent replacements for the “standard” <em>Mersenne Twister</em> generator.</p>
 <p>While the implementation is very general, there are simple type aliases for specific preferred instantiations that are known to work well in most situations.</p>
+</section>
+<section id="example" class="level2">
+<h2 class="anchored" data-anchor-id="example">Example</h2>
+<p>Here is a simple example where we use the <em>default xoshiro</em> generator <code>xso::rng</code> to sample a normal distribution from the standard library.</p>
+<p>This is identical to the code shown on the <a href="https://en.cppreference.com/w/cpp/numeric/random/normal_distribution"><code>std::normal_distribution</code></a> webpage except that we use <code>xso::rng</code> as a drop-in replacement for the <code>std::mersenne_twister_engine</code>.</p>
+<div class="sourceCode" id="annotated-cell-1"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-1-1" class="code-annotation-target"><a href="#annotated-cell-1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;xoshiro.h&gt;</span></span>
+<span id="annotated-cell-1-2"><a href="#annotated-cell-1-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;random&gt;</span></span>
+<span id="annotated-cell-1-3"><a href="#annotated-cell-1-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;map&gt;</span></span>
+<span id="annotated-cell-1-4"><a href="#annotated-cell-1-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;iomanip&gt;</span></span>
+<span id="annotated-cell-1-5"><a href="#annotated-cell-1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-1-6"><a href="#annotated-cell-1-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
+<span id="annotated-cell-1-7"><a href="#annotated-cell-1-7" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-1-8" class="code-annotation-target"><a href="#annotated-cell-1-8" aria-hidden="true" tabindex="-1"></a>    xso<span class="op">::</span>rng gen<span class="op">;</span></span>
+<span id="annotated-cell-1-9"><a href="#annotated-cell-1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-1-10"><a href="#annotated-cell-1-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// lambda: draws a sample from a normal distribution and rounds it to an integer.</span></span>
+<span id="annotated-cell-1-11"><a href="#annotated-cell-1-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>normal_distribution d<span class="op">{</span><span class="fl">5.0</span><span class="op">,</span> <span class="fl">2.0</span><span class="op">};</span></span>
+<span id="annotated-cell-1-12"><a href="#annotated-cell-1-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> random_int <span class="op">=</span> <span class="op">[&amp;</span>d<span class="op">,</span> <span class="op">&amp;</span>gen<span class="op">]</span> <span class="op">{</span> <span class="cf">return</span> <span class="dt">int</span><span class="op">(</span><span class="bu">std::</span>round<span class="op">(</span>dist<span class="op">(</span>gen<span class="op">)));</span> <span class="op">};</span></span>
+<span id="annotated-cell-1-13"><a href="#annotated-cell-1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-1-14"><a href="#annotated-cell-1-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Run many trials and create a histogram of the results in integer buckets.</span></span>
+<span id="annotated-cell-1-15"><a href="#annotated-cell-1-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>map<span class="op">&lt;</span><span class="dt">int</span><span class="op">,</span> <span class="dt">int</span><span class="op">&gt;</span> hist<span class="op">{};</span></span>
+<span id="annotated-cell-1-16"><a href="#annotated-cell-1-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> n <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> n <span class="op">!=</span> <span class="dv">25'000</span><span class="op">;</span> <span class="op">++</span>n<span class="op">)</span> <span class="op">++</span>hist<span class="op">[</span>random_int<span class="op">()];</span></span>
+<span id="annotated-cell-1-17"><a href="#annotated-cell-1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-1-18"><a href="#annotated-cell-1-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Print that histogram.</span></span>
+<span id="annotated-cell-1-19"><a href="#annotated-cell-1-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="kw">auto</span> <span class="op">[</span>bucket<span class="op">,</span> count<span class="op">]</span> <span class="op">:</span> hist<span class="op">)</span> <span class="op">{</span></span>
+<span id="annotated-cell-1-20"><a href="#annotated-cell-1-20" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> n <span class="op">=</span> <span class="kw">static_cast</span><span class="op">&lt;</span><span class="bu">std::</span>size_t<span class="op">&gt;(</span>count <span class="op">/</span> <span class="dv">100</span><span class="op">);</span></span>
+<span id="annotated-cell-1-21"><a href="#annotated-cell-1-21" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="bu">std::</span>setw<span class="op">(</span><span class="dv">2</span><span class="op">)</span> <span class="op">&lt;&lt;</span> bucket <span class="op">&lt;&lt;</span> <span class="ch">' '</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>string<span class="op">(</span>n<span class="op">,</span> <span class="ch">'*'</span><span class="op">)</span> <span class="op">&lt;&lt;</span> <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">;</span></span>
+<span id="annotated-cell-1-22"><a href="#annotated-cell-1-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="annotated-cell-1-23"><a href="#annotated-cell-1-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-1" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-lines="1" data-code-annotation="1">Everything is in the single <code>xoshiro.h</code> header file. The classes, functions, etc., are all in the <code>xso</code> namespace.</span>
+</dd>
+<dt data-target-cell="annotated-cell-1" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-lines="8" data-code-annotation="2">This type alias for xso::rng64 produces 64-bit outputs from a specific <em>xoshiro</em> generator with 256 bits of state.</span>
+</dd>
+</dl>
+<p><span class="bt">Output:</span></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">-3</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">-2</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">-1</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a> <span class="ex">0</span> <span class="pp">**</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a> <span class="ex">1</span> <span class="pp">*******</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a> <span class="ex">2</span> <span class="pp">****************</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a> <span class="ex">3</span> <span class="pp">*****************************</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a> <span class="ex">4</span> <span class="pp">********************************************</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a> <span class="ex">5</span> <span class="pp">************************************************</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a> <span class="ex">6</span> <span class="pp">********************************************</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a> <span class="ex">7</span> <span class="pp">*****************************</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a> <span class="ex">8</span> <span class="pp">****************</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a> <span class="ex">9</span> <span class="pp">*******</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="ex">10</span> <span class="pp">**</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="ex">11</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="ex">12</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="ex">14</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="installation" class="level2">
 <h2 class="anchored" data-anchor-id="installation">Installation</h2>
 <p>This library is header-only, so there is nothing to compile &amp; link — drop the <code>xoshiro.h</code> file somewhere convenient, and you are good to go.</p>
 <p>Alternatively, if you are using <code>CMake</code>, you can use the standard <code>FetchContent</code> module by adding a few lines to your project’s <code>CMakeLists.txt</code> file:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode cmake code-with-copy"><code class="sourceCode cmake"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">include</span>(<span class="im">FetchContent</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">FetchContent_Declare</span>(xoshiro <span class="ot">URL</span> https://github.com/nessan/bit/releases/download/current/xoshiro.zip)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">FetchContent_MakeAvailable</span>(xoshiro)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode cmake code-with-copy"><code class="sourceCode cmake"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">include</span>(<span class="im">FetchContent</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">FetchContent_Declare</span>(xoshiro <span class="ot">URL</span> https://github.com/nessan/bit/releases/download/current/xoshiro.zip)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">FetchContent_MakeAvailable</span>(xoshiro)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This command downloads and unpacks an archive of the current version of <code>xoshiro</code> to your project’s build folder. You can then add a dependency on <code>xoshiro::xoshiro</code>, a <code>CMake</code> alias for <code>xoshiro</code>. <code>FetchContent</code> will automatically ensure the build system knows where to find the downloaded header files and any needed compiler flags.</p>
 <p>Used like this, <code>FetchContent</code> will only download a minimal library version without any redundant test code, sample programs, documentation files, etc.</p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -495,65 +551,9 @@ Library versions
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The shown <code>URL</code> gets the <code>current</code> version of the library—whatever is in the main branch. For a fixed, stable library version (say release <code>2.0.0</code>), use a <code>URL</code> parameter like: <code>https://github.com/nessan/xoshiro/releases/download/2.0.0/xoshiro.zip</code>.</p>
+<p>The shown <code>URL</code> gets the <code>current</code> version of the library — whatever is in the main branch. For a fixed, stable library version (say release <code>2.0.0</code>), use a <code>URL</code> parameter like: <code>https://github.com/nessan/xoshiro/releases/download/2.0.0/xoshiro.zip</code>.</p>
 </div>
 </div>
-</section>
-<section id="example" class="level2">
-<h2 class="anchored" data-anchor-id="example">Example</h2>
-<p>Here is a simple example where we use the <em>default xoshiro</em> generator <code>xso::rng</code> to sample a normal distribution from the standard library.</p>
-<p>This is identical to the code shown on the <a href="https://en.cppreference.com/w/cpp/numeric/random/normal_distribution"><code>std::normal_distribution</code></a> webpage except that we use <code>xso::rng</code> as a drop-in replacement for the <code>std::mersenne_twister_engine</code>.</p>
-<div class="sourceCode" id="annotated-cell-2"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-2-1" class="code-annotation-target"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;xoshiro.h&gt;</span></span>
-<span id="annotated-cell-2-2"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;random&gt;</span></span>
-<span id="annotated-cell-2-3"><a href="#annotated-cell-2-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;map&gt;</span></span>
-<span id="annotated-cell-2-4"><a href="#annotated-cell-2-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;iomanip&gt;</span></span>
-<span id="annotated-cell-2-5"><a href="#annotated-cell-2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-2-6"><a href="#annotated-cell-2-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
-<span id="annotated-cell-2-7"><a href="#annotated-cell-2-7" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-2-8" class="code-annotation-target"><a href="#annotated-cell-2-8" aria-hidden="true" tabindex="-1"></a>    xso<span class="op">::</span>rng gen<span class="op">;</span></span>
-<span id="annotated-cell-2-9"><a href="#annotated-cell-2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-2-10"><a href="#annotated-cell-2-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// lambda: draws a sample from a normal distribution and rounds it to an integer.</span></span>
-<span id="annotated-cell-2-11"><a href="#annotated-cell-2-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>normal_distribution d<span class="op">{</span><span class="fl">5.0</span><span class="op">,</span> <span class="fl">2.0</span><span class="op">};</span></span>
-<span id="annotated-cell-2-12"><a href="#annotated-cell-2-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> random_int <span class="op">=</span> <span class="op">[&amp;</span>d<span class="op">,</span> <span class="op">&amp;</span>gen<span class="op">]</span> <span class="op">{</span> <span class="cf">return</span> <span class="dt">int</span><span class="op">(</span><span class="bu">std::</span>round<span class="op">(</span>dist<span class="op">(</span>gen<span class="op">)));</span> <span class="op">};</span></span>
-<span id="annotated-cell-2-13"><a href="#annotated-cell-2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-2-14"><a href="#annotated-cell-2-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Run lots of trials and create a histogram of the results in integer buckets.</span></span>
-<span id="annotated-cell-2-15"><a href="#annotated-cell-2-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>map<span class="op">&lt;</span><span class="dt">int</span><span class="op">,</span> <span class="dt">int</span><span class="op">&gt;</span> hist<span class="op">{};</span></span>
-<span id="annotated-cell-2-16"><a href="#annotated-cell-2-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> n <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> n <span class="op">!=</span> <span class="dv">25'000</span><span class="op">;</span> <span class="op">++</span>n<span class="op">)</span> <span class="op">++</span>hist<span class="op">[</span>random_int<span class="op">()];</span></span>
-<span id="annotated-cell-2-17"><a href="#annotated-cell-2-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-2-18"><a href="#annotated-cell-2-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Print that histogram.</span></span>
-<span id="annotated-cell-2-19"><a href="#annotated-cell-2-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="kw">auto</span> <span class="op">[</span>bucket<span class="op">,</span> count<span class="op">]</span> <span class="op">:</span> hist<span class="op">)</span> <span class="op">{</span></span>
-<span id="annotated-cell-2-20"><a href="#annotated-cell-2-20" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> n <span class="op">=</span> <span class="kw">static_cast</span><span class="op">&lt;</span><span class="bu">std::</span>size_t<span class="op">&gt;(</span>count <span class="op">/</span> <span class="dv">100</span><span class="op">);</span></span>
-<span id="annotated-cell-2-21"><a href="#annotated-cell-2-21" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="bu">std::</span>setw<span class="op">(</span><span class="dv">2</span><span class="op">)</span> <span class="op">&lt;&lt;</span> bucket <span class="op">&lt;&lt;</span> <span class="ch">' '</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>string<span class="op">(</span>n<span class="op">,</span> <span class="ch">'*'</span><span class="op">)</span> <span class="op">&lt;&lt;</span> <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">;</span></span>
-<span id="annotated-cell-2-22"><a href="#annotated-cell-2-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="annotated-cell-2-23"><a href="#annotated-cell-2-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
-<dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="1" data-code-annotation="1">Everything is in the single <code>xoshiro.h</code> header file. The classes, functions, etc., are all in the <code>xso</code> namespace.</span>
-</dd>
-<dt data-target-cell="annotated-cell-2" data-target-annotation="2">2</dt>
-<dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="8" data-code-annotation="2">This type alias for xso::rng64 produces 64-bit outputs from a specific <em>xoshiro</em> generator with 256 bits of state.</span>
-</dd>
-</dl>
-<p><span class="bt">Output:</span></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">-3</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">-2</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">-1</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a> <span class="ex">0</span> <span class="pp">**</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a> <span class="ex">1</span> <span class="pp">*******</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a> <span class="ex">2</span> <span class="pp">****************</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a> <span class="ex">3</span> <span class="pp">*****************************</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a> <span class="ex">4</span> <span class="pp">********************************************</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a> <span class="ex">5</span> <span class="pp">************************************************</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a> <span class="ex">6</span> <span class="pp">********************************************</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a> <span class="ex">7</span> <span class="pp">*****************************</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a> <span class="ex">8</span> <span class="pp">****************</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a> <span class="ex">9</span> <span class="pp">*******</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="ex">10</span> <span class="pp">**</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="ex">11</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="ex">12</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="ex">14</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="implementation" class="level2">
 <h2 class="anchored" data-anchor-id="implementation">Implementation</h2>
@@ -561,7 +561,7 @@ Library versions
 <p>Our implementation in <code>xoshiro.h</code> is distinguished in several other ways:</p>
 <section id="generality" class="level3">
 <h3 class="anchored" data-anchor-id="generality">Generality</h3>
-<p>Using the code in <code>xoshiro.h</code> you can create <em>any</em> member of the <em>xoshiro/xoroshiro</em> family.</p>
+<p>Using <code>xoshiro.h</code> you can create <em>any</em> member of the <em>xoshiro/xoroshiro</em> family.</p>
 <p>We have <a href="../pages/State.html"><code>State</code></a> classes that are templatized across the number of state bits, and the parameters (labelled <code>A</code>, <code>B</code>, and <code>C</code> in the literature) that determine how the state is advanced from step to step.</p>
 <p><a href="../pages/Scrambler.html"><code>Scrambler</code></a> classes are templatized across the other parameters (labelled <code>R</code>, <code>S</code>, and <code>T</code> in the literature) that determine how the higher dimensional state is scrambled/reduced to single 32-bit or 64-bit output words.</p>
 <p>This means you can instantiate <em>any</em> generator in the <em>xoshiro/xoroshiro</em> family.</p>
@@ -581,36 +581,17 @@ No compromise on speed
 </section>
 <section id="simplicity" class="level3">
 <h3 class="anchored" data-anchor-id="simplicity">Simplicity</h3>
-<p>While you can instantiate <em>any</em> generator in the <em>xoshiro/xoroshiro</em> family, we also recognize that only a limited number of those generators have been properly vetted for suitability as being “good”.</p>
+<p>While you can instantiate <em>any</em> generator in the <em>xoshiro/xoroshiro</em> family, we also recognize that only a limited number of those generators have been vetted for suitability as being “good”.</p>
 <p>Therefore, we provide recommended <a href="../pages/type-aliases.html">type aliased</a> default generators you should use in most cases.</p>
 </section>
 <section id="arbitrary-jumps" class="level3">
 <h3 class="anchored" data-anchor-id="arbitrary-jumps">Arbitrary Jumps</h3>
 <p>We provide methods to advance a generator by <em>arbitrary</em> and potentially huge numbers of steps. This contrasts with the <code>C</code> versions, which only define a limited number of jump possibilities.</p>
-<p>Very large jumps <em>partition</em> a single random number stream into non-overlapping sub-streams. In parallel processing applications, the sub-streams drive independent jobs running on different compute cores.</p>
-</section>
-<section id="extra-analysis" class="level3">
-<h3 class="anchored" data-anchor-id="extra-analysis">Extra Analysis</h3>
-<p>Extra non-member functions for generator analysis are defined if the <a href="https://nessan.github.io/bit"><code>bit</code></a> library is available.</p>
-<p><code>bit</code> is a C++ library for doing linear algebra over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a> the simplest Galois field of two elements <span class="math inline">\(\{0,1\}\)</span>, where the usual arithmetic operations are performed mod 2. The <code>bit</code> library is header-only, so it can be easily incorporated into any application.</p>
-<p>If it is available, then <code>xoshiro.h</code> defines some extra functions that let you access the generator’s <em>transition matrix</em> and use/analyze that in various ways.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Arbitrary jumps do not need <code>bit</code>
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Even if you only use the single <code>xoshiro.h</code> header file without incorporating the <code>bit</code> library, you can still jump any of the predefined type-aliased <em>xoshiro/xoroshiro</em> variants by <em>arbitrary</em> numbers of steps.</p>
-</div>
-</div>
+<p>Huge jumps are used to <em>partition</em> a single random number stream into non-overlapping sub-streams. In parallel processing applications, the sub-streams drive independent jobs running on different compute cores.</p>
 </section>
 <section id="sampling-methods" class="level3">
 <h3 class="anchored" data-anchor-id="sampling-methods">Sampling Methods</h3>
-<p>The C++ standard library follows a common design pattern for the facilities in its standard <a href="https://en.cppreference.com/w/cpp/header/random"><code>random</code></a> header. It maintains a strict separation between the classes that produce random bits and others that use those bits.</p>
+<p>The C++ standard library follows a typical design pattern for the facilities in its standard <a href="https://en.cppreference.com/w/cpp/header/random"><code>random</code></a> header. It maintains a strict separation between the classes that produce random bits and others that use those bits.</p>
 <p>Uniform random bit generators produce streams of <em>uniformly</em> distributed output words (usually 32-bit or 64-bit unsigned integers). Other classes and functions shape those core streams to simulate a desired distribution over some field of interest (for example, to generate variates from a uniform distribution of reals in the range 0 to 1).</p>
 <p>The idea is reasonable enough. You can swap out the uniform random bit generator for a better one and continue to use the other functions without change.</p>
 <p>However, this interface is quite complicated for the end user — particularly for a user with no idea, or interest in, how all the generator/distribution machinery works.</p>
@@ -671,6 +652,25 @@ Other distributions can be used
 </div>
 <div class="callout-body-container callout-body">
 <p>Of course, the generators can also still be used as uniform random bit generators. The extra sampling methods etc. just make them much more useful out of the box.</p>
+</div>
+</div>
+</section>
+<section id="extra-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="extra-analysis">Extra Analysis</h3>
+<p>Extra non-member functions for generator analysis are defined if the <a href="https://nessan.github.io/bit"><code>bit</code></a> library is available.</p>
+<p><code>bit</code> is a C++ library for doing linear algebra over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a> the simplest Galois field of two elements <span class="math inline">\(\{0,1\}\)</span>, where the usual arithmetic operations are performed mod 2. The <code>bit</code> library is header-only, so it can be easily incorporated into any application.</p>
+<p>If it is available, then <code>xoshiro.h</code> defines some extra functions that let you access the generator’s <em>transition matrix</em> and use/analyze that in various ways.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Arbitrary jumps do not need <code>bit</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Even if you only use the single <code>xoshiro.h</code> header file without incorporating the <code>bit</code> library, you can still jump any of the predefined type-aliased <em>xoshiro/xoroshiro</em> variants by <em>arbitrary</em> numbers of steps.</p>
 </div>
 </div>
 </section>
