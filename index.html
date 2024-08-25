@@ -75,6 +75,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/quarto-contrib/admonitions-1.0.0/admonitions.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -111,6 +112,7 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-XV29LHZDKD', { 'anonymize_ip': true});
 </script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -543,19 +545,13 @@ window.Quarto = {
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">FetchContent_MakeAvailable</span>(xoshiro)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This command downloads and unpacks an archive of the current version of <code>xoshiro</code> to your project’s build folder. You can then add a dependency on <code>xoshiro::xoshiro</code>, a <code>CMake</code> alias for <code>xoshiro</code>. <code>FetchContent</code> will automatically ensure the build system knows where to find the downloaded header files and any needed compiler flags.</p>
 <p>Used like this, <code>FetchContent</code> will only download a minimal library version without any redundant test code, sample programs, documentation files, etc.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Library versions
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The shown <code>URL</code> gets the <code>current</code> version of the library — whatever is in the main branch. For a fixed, stable library version (say release <code>2.0.0</code>), use a <code>URL</code> parameter like: <code>https://github.com/nessan/xoshiro/releases/download/2.0.0/xoshiro.zip</code>.</p>
-</div>
-</div>
+<div class="admonition note">
+    <table><tbody><tr>
+    <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
+    <td class="content">
+    
+The shown <code>URL</code> gets the <code>current</code> version of the library — whatever is in the main branch. For a fixed, stable library version (say release <code>2.0.0</code>), use a <code>URL</code> parameter like: <code>https://github.com/nessan/xoshiro/releases/download/2.0.0/xoshiro.zip</code>.
+</td></tr></tbody></table></div>
 </section>
 <section id="implementation" class="level2">
 <h2 class="anchored" data-anchor-id="implementation">Implementation</h2>
@@ -567,19 +563,13 @@ Library versions
 <p>We have <a href="./pages/State.html"><code>State</code></a> classes that are templatized across the number of state bits, and the parameters (labelled <code>A</code>, <code>B</code>, and <code>C</code> in the literature) that determine how the state is advanced from step to step.</p>
 <p><a href="./pages/Scrambler.html"><code>Scrambler</code></a> classes are templatized across the other parameters (labelled <code>R</code>, <code>S</code>, and <code>T</code> in the literature) that determine how the higher dimensional state is scrambled/reduced to single 32-bit or 64-bit output words.</p>
 <p>This means you can instantiate <em>any</em> generator in the <em>xoshiro/xoroshiro</em> family.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-No compromise on speed
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>For the reasonable optimization levels you are likely to employ in any numerical code, the C++ versions perform identically to the simpler-looking <code>C</code> versions linked above.</p>
-</div>
-</div>
+<div class="admonition note">
+    <table><tbody><tr>
+    <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
+    <td class="content">
+    
+For the reasonable optimization levels you are likely to employ in any numerical code, the C++ versions perform identically to the simpler-looking <code>C</code> versions linked above.
+</td></tr></tbody></table></div>
 </section>
 <section id="simplicity" class="level3">
 <h3 class="anchored" data-anchor-id="simplicity">Simplicity</h3>
@@ -643,38 +633,26 @@ No compromise on speed
 <span data-code-cell="annotated-cell-5" data-code-lines="13" data-code-annotation="6">Shuffles the elements of <code>u</code>.</span>
 </dd>
 </dl>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Other distributions can be used
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Of course, the generators can also still be used as uniform random bit generators. The extra sampling methods etc. just make them much more useful out of the box.</p>
-</div>
-</div>
+<div class="admonition note">
+    <table><tbody><tr>
+    <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
+    <td class="content">
+    
+Of course, the generators can also still be used as uniform random bit generators. The extra sampling methods etc. just make them much more useful out of the box.
+</td></tr></tbody></table></div>
 </section>
 <section id="extra-analysis" class="level3">
 <h3 class="anchored" data-anchor-id="extra-analysis">Extra Analysis</h3>
 <p>Extra non-member functions for generator analysis are defined if the <a href="https://nessan.github.io/bit"><code>bit</code></a> library is available.</p>
 <p><code>bit</code> is a C++ library for doing linear algebra over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a> the simplest Galois field of two elements <span class="math inline">\(\{0,1\}\)</span>, where the usual arithmetic operations are performed mod 2. The <code>bit</code> library is header-only, so it can be easily incorporated into any application.</p>
 <p>If it is available, then <code>xoshiro.h</code> defines some extra functions that let you access the generator’s <em>transition matrix</em> and use/analyze that in various ways.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Arbitrary jumps do not need <code>bit</code>
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Even if you only use the single <code>xoshiro.h</code> header file without incorporating the <code>bit</code> library, you can still jump any of the predefined type-aliased <em>xoshiro/xoroshiro</em> variants by <em>arbitrary</em> numbers of steps.</p>
-</div>
-</div>
+<div class="admonition note">
+    <table><tbody><tr>
+    <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
+    <td class="content">
+    
+Even if you only use the single <code>xoshiro.h</code> header file without incorporating the <code>bit</code> library, you can still jump any of the predefined type-aliased <em>xoshiro/xoroshiro</em> variants by <em>arbitrary</em> numbers of steps.
+</td></tr></tbody></table></div>
 </section>
 </section>
 <section id="documentation" class="level2">

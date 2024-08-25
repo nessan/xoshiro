@@ -518,19 +518,7 @@ window.Quarto = {
 <span data-code-cell="annotated-cell-2" data-code-lines="1" data-code-annotation="1">Returns a single variate from the distribution <code>dist</code> e.g.&nbsp;from a <a href="https://en.cppreference.com/w/cpp/numeric/random/normal_distribution"><code>std::normal_distribution</code></a> instance.</span>
 </dd>
 </dl>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-The distribution concept
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>It is convenient to have many sampling methods, all named sample(…), and C++ allows this through overloading. The specific <code>sample</code> version invoked depends on the type of arguments passed. To make this work, we must distinguish between a container like a <code>std::vector</code> and a distribution like a <a href="https://en.cppreference.com/w/cpp/numeric/random/normal_distribution"><code>std::normal_distribution</code></a>. The <code>xso::Distribution</code> concept is a minimal way to identify the distributions defined in the standard library. It relies on all distribution classes having an embedded <code>typename</code> defining a <code>param_type</code>. None of the standard container classes have that.</p>
-</div>
-</div>
+<p>NOTE It is convenient to have many sampling methods, all named sample(…), and C++ allows this through overloading. The specific <code>sample</code> version invoked depends on the type of arguments passed. To make this work, we must distinguish between a container like a <code>std::vector</code> and a distribution like a <a href="https://en.cppreference.com/w/cpp/numeric/random/normal_distribution"><code>std::normal_distribution</code></a>. The <code>xso::Distribution</code> concept is a minimal way to identify the distributions defined in the standard library. It relies on all distribution classes having an embedded <code>typename</code> defining a <code>param_type</code>. None of the standard container classes have that.</p>
 </section>
 <section id="examples" class="level3">
 <h3 class="anchored" data-anchor-id="examples">Examples</h3>

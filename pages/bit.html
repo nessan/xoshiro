@@ -75,6 +75,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/quarto-contrib/admonitions-1.0.0/admonitions.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -111,6 +112,7 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-XV29LHZDKD', { 'anonymize_ip': true});
 </script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -472,33 +474,21 @@ window.Quarto = {
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p><a href="https://nessan.github.io/bit"><code>bit</code></a> is a C++ library for doing linear algebra over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a> the simplest field of two elements <span class="math inline">\(\{0,1\}\)</span> where the usual arithmetic operations are performed mod 2. The <code>bit</code> library is header only so easily incorporated into any application. If it is available the <code>xoshiro.h</code> header file defines some extra non-member functions:</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Incorporating <code>bit</code>
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The extra functions are defined only if the compiler flag <code>BIT</code> is set.<br>
-See the <code>CMakeLists.txt</code> file at the root of the <code>xoshiro</code> repo for an example of how to automatically download the needed <code>bit</code> headers and incorporate them into a project.</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Functions work on either a <code>State</code> <em>or</em> an <code>xso::generator</code>
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Any <code>xso::generator</code> satisfies all requirements of the <a href="../pages/State.html"><code>State</code></a> concept.</p>
-</div>
-</div>
+<div class="admonition tip">
+    <table><tbody><tr>
+    <td class="icon"> <i class="fa icon-tip" title="Tip"></i></td>
+    <td class="content">
+    
+The extra functions are defined only if the compiler flag <code>BIT</code> is set.<br>
+See the <code>CMakeLists.txt</code> file at the root of the <code>xoshiro</code> repo for an example of how to automatically download the needed <code>bit</code> headers and incorporate them into a project.
+</td></tr></tbody></table></div>
+<div class="admonition note">
+    <table><tbody><tr>
+    <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
+    <td class="content">
+    
+Any <code>xso::generator</code> satisfies all requirements of the <a href="../pages/State.html"><code>State</code></a> concept.
+</td></tr></tbody></table></div>
 </section>
 <section id="transition-matrix" class="level2">
 <h2 class="anchored" data-anchor-id="transition-matrix">Transition Matrix</h2>
@@ -552,19 +542,13 @@ Note that any <code>xso::generator</code> also satisfies the <code>State</code> 
 c(x) = c_0 + c_1 x + \cdots + c_n x^n.
 \]</span> This is a polynomial over <span class="math inline">\(\mathbb{F}_2\)</span> so <span class="math inline">\(c_i \in \{0, 1\}\)</span> for <span class="math inline">\(i = 0, \ldots, n\)</span>.</p>
 <p>We have a method to extract this polynomial and return it as a <code>bit::polynomial</code> of size <span class="math inline">\(n+1\)</span>.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-The characteristic polynomial will be monic
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>All our transition matrices will be of <em>full rank</em> and the characteristic polynomial will have degree <span class="math inline">\(n\)</span>. So <span class="math inline">\(c(x)\)</span> is <em>monic</em> and we always have <span class="math inline">\(c_n = 1\)</span>.</p>
-</div>
-</div>
+<div class="admonition note">
+    <table><tbody><tr>
+    <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
+    <td class="content">
+    
+All our transition matrices will be of <em>full rank</em> and the characteristic polynomial will have degree <span class="math inline">\(n\)</span>. So <span class="math inline">\(c(x)\)</span> is <em>monic</em> and we always have <span class="math inline">\(c_n = 1\)</span>.
+</td></tr></tbody></table></div>
 <p><span class="bt">Example: The characteristic polynomial for <code>xso::rng32</code></span></p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;xoshiro.h&gt;</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
@@ -580,19 +564,13 @@ The characteristic polynomial will be monic
 <span data-code-cell="annotated-cell-6" data-code-lines="1" data-code-annotation="1">Note that the polynomial is <em>monic</em> as <span class="math inline">\(c_{128} = 1\)</span>.</span>
 </dd>
 </dl>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Embedded characteristic polynomial coefficients
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The <code>xoshiro.h</code> header file contains the characteristic polynomial coefficients for all the predefined <a href="../pages/type-aliases.html">type aliased</a> generators. Those coefficients are packed into standard arrays of ordinary words where the leading <span class="math inline">\(c_n = 1\)</span> coefficient is dropped. See the [<code>characteristic_coefficient</code>] class method documentation for more details.</p>
-</div>
-</div>
+<div class="admonition note">
+    <table><tbody><tr>
+    <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
+    <td class="content">
+    
+The <code>xoshiro.h</code> header file contains the characteristic polynomial coefficients for all the predefined <a href="../pages/type-aliases.html">type aliased</a> generators. Those coefficients are packed into standard arrays of ordinary words where the leading <span class="math inline">\(c_n = 1\)</span> coefficient is dropped. See the [<code>characteristic_coefficient</code>] class method documentation for more details.
+</td></tr></tbody></table></div>
 </section>
 <section id="jump-polynomial" class="level2">
 <h2 class="anchored" data-anchor-id="jump-polynomial">Jump Polynomial</h2>
@@ -610,19 +588,13 @@ The <code>c</code> argument should be the <code>bit::polynomial</code> returned 
 <p>As explained in the <a href="../pages/jump-technique.html">jump technique</a> page, the <em>jump polynomial</em> that can advance a state engine by <span class="math inline">\(N\)</span> steps is given by: <span class="math display">\[
 r(x) = \mod{x^N}{c(x)},
 \]</span> where <span class="math inline">\(c(x)\)</span> is the engine’s characteristic polynomial, which is degree <span class="math inline">\(n\)</span> so <span class="math inline">\(r(x)\)</span> has degree of at most <span class="math inline">\(n-1\)</span>. The <code>xso::jump_polynomial</code> function returns the coefficients of <span class="math inline">\(r(x)\)</span> as <code>bit::polynomial</code> that can, in turn, be used as the argument to the non-member <code>xso::jump</code> function described next.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Very large jumps
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>We often want to jump by an <span class="math inline">\(N \gg 1\)</span> that is too large to fit into a 64-bit word. By setting <code>N</code> to 100 and the <code>N_is_pow2</code> argument to <code>true</code>, you can get the coefficients of the jump polynomial for <span class="math inline">\(N = 2^{100}\)</span> steps.</p>
-</div>
-</div>
+<div class="admonition tip">
+    <table><tbody><tr>
+    <td class="icon"> <i class="fa icon-tip" title="Tip"></i></td>
+    <td class="content">
+    
+We often want to jump by an <span class="math inline">\(N \gg 1\)</span> that is too large to fit into a 64-bit word. By setting <code>N</code> to 100 and the <code>N_is_pow2</code> argument to <code>true</code>, you can get the coefficients of the jump polynomial for <span class="math inline">\(N = 2^{100}\)</span> steps.
+</td></tr></tbody></table></div>
 <p><span class="bt">Example: A jump polynomial for <code>xso::rng32</code> and <span class="math inline">\(N=2^{100}\)</span> steps</span></p>
 <div class="sourceCode" id="annotated-cell-8"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><span id="annotated-cell-8-1"><a href="#annotated-cell-8-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;xoshiro.h&gt;</span></span>
 <span id="annotated-cell-8-2"><a href="#annotated-cell-8-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span></span>

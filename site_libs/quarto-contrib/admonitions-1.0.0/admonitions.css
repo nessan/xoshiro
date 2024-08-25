@@ -1,0 +1,78 @@
+/* More or less the same as AsciiDoc admonitions */
+
+.admonition > table {
+    width: 100%;
+    margin-bottom: 1.25em;
+    word-wrap: normal;
+    border-collapse: separate;
+    border: 0;
+    background: none;
+}
+
+.admonition > table tr th,
+.admonition > table tr td {
+    padding: 0.5625em 0.625em;
+    font-size: inherit;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.admonition > table tr td {
+    line-height: 1.6;
+}
+
+.admonition > table td.icon {
+    text-align: center;
+    width: 80px;
+}
+.admonition > table td.icon img {
+    max-width: none;
+}
+.admonition > table td.icon .title {
+    font-weight: bold;
+    font-family: "Open Sans", "DejaVu Sans", sans-serif;
+    text-transform: uppercase;
+}
+
+.admonition > table td.content {
+    padding-left: 1.125em;
+    padding-right: 1.25em;
+    border-left: 1px solid #dddddf;
+    color: rgba(0, 0, 0, 0.6);
+    word-wrap: anywhere;
+}
+
+.admonition > table td.content > :last-child > :last-child {
+    margin-bottom: 0;
+}
+
+.admonition td.icon [class^="fa icon-"] {
+    font-size: 2.5em;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    cursor: default;
+}
+
+.admonition td.icon .icon-note::before {
+    content: "\f05a";
+    color: #19407c;
+}
+
+.admonition td.icon .icon-tip::before {
+    content: "\f0eb";
+    text-shadow: 1px 1px 2px rgba(155, 155, 0, 0.8);
+    color: #111;
+}
+
+.admonition td.icon .icon-warning::before {
+    content: "\f071";
+    color: #bf6900;
+}
+
+.admonition td.icon .icon-caution::before {
+    content: "\f06d";
+    color: #bf3400;
+}
+
+.admonition td.icon .icon-important::before {
+    content: "\f06a";
+    color: #bf0000;
+}

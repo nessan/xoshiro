@@ -76,6 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/quarto-contrib/admonitions-1.0.0/admonitions.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -112,6 +113,7 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-XV29LHZDKD', { 'anonymize_ip': true});
 </script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -544,19 +546,13 @@ window.Quarto = {
 \]</span> However, that number will overflow any normal 32-bit or 64-bit integer! Instead, the partition class will create <span class="math inline">\(N =2^p\)</span> sub-streams, where <span class="math inline">\(N\)</span> is a <em>power of two</em> close to, but larger than 100. In this case, that power will be 7 as <span class="math inline">\(2^7 = 128 \ge 100\)</span>.</p>
 <p>The number of created non-overlapping partitions is 128 instead of 100.</p>
 <p>We only use 100 of the 128 as we spawn independent jobs, so each partition is therefore slightly smaller than the ideal, and of course, we are not using any of the final 28 partitions at all. However, each of the sub-streams still has some <span class="math inline">\(2^{256 - 7} = 2^{249}\)</span> available random numbers. That is vastly more than a job on any present-day computer will ever consume, so the “wastage” is completely insignificant.</p>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-The corresponding <em>precomputed</em> characteristic coefficients must be available
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>This class requires the <code>State</code> to have its pre-computed* characteristic coefficients available. This is true for all our <a href="../pages/type-aliases.html">type aliased</a> recommended generators.</p>
-</div>
-</div>
+<div class="admonition warning">
+    <table><tbody><tr>
+    <td class="icon"> <i class="fa icon-warning" title="Warning"></i></td>
+    <td class="content">
+    
+This class requires the <code>State</code> to have its pre-computed* characteristic coefficients available. This is true for all our <a href="../pages/type-aliases.html">type aliased</a> recommended generators.
+</td></tr></tbody></table></div>
 <section id="see-also" class="level3">
 <h3 class="anchored" data-anchor-id="see-also">See Also</h3>
 <p><a href="../pages/characteristic_coefficients.html"><code>characteristic_coefficients</code></a><br>

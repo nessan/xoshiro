@@ -76,6 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/quarto-contrib/admonitions-1.0.0/admonitions.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -112,6 +113,7 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-XV29LHZDKD', { 'anonymize_ip': true});
 </script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -546,19 +548,13 @@ It expects that <code>State</code> to implement the following class and instance
 </tbody>
 </table>
 </div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-An <code>xso::generator</code> can be used anywhere a <code>State</code> is expected
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Any <code>xso::generator</code> satisfies all requirements of the <a href="../pages/State.html"><code>State</code></a> concept. This is useful as some functions work naturally on a <code>State</code>, but you can pass the <code>generator</code> along in its place as a proxy.</p>
-</div>
-</div>
+<div class="admonition note">
+    <table><tbody><tr>
+    <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
+    <td class="content">
+    
+Any <code>xso::generator</code> satisfies all requirements of the <a href="../pages/State.html"><code>State</code></a> concept. This is useful as some functions work naturally on a <code>State</code>, but you can pass the <code>generator</code> along in its place as a proxy.
+</td></tr></tbody></table></div>
 </section>
 </section>
 <section id="our-state-classes" class="level2">
@@ -610,19 +606,13 @@ In practice either <code>std::uint32_t</code> or <code>std::uint64_t</code>.</td
 </tbody>
 </table>
 </div>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Restrictions on <code>N</code>
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The <code>xso::xoroshiro</code> engine can have arbitrary size — i.e.&nbsp;the <code>N</code> parameter can be anything, and its <code>step</code> method will still work. However, the <code>xso::xoshiro</code> engine has a hand-coded <code>step</code> method, which currently only works for the two cases, <code>N</code> = 4, and <code>N</code> = 8.</p>
-</div>
-</div>
+<div class="admonition important">
+    <table><tbody><tr>
+    <td class="icon"> <i class="fa icon-important" title="Important"></i></td>
+    <td class="content">
+    
+The <code>xso::xoroshiro</code> engine can have arbitrary size — i.e.&nbsp;the <code>N</code> parameter can be anything, and its <code>step</code> method will still work. However, the <code>xso::xoshiro</code> engine has a hand-coded <code>step</code> method, which currently only works for the two cases, <code>N</code> = 4, and <code>N</code> = 8.
+</td></tr></tbody></table></div>
 </section>
 </section>
 <section id="class-types-and-methods" class="level2">
@@ -717,19 +707,13 @@ p(x) = p_0 + p_1 x + \cdots p_{n-1} x^{n-1}.
 \]</span> This is useful because, as discussed on the <a href="../pages/jump-technique.html">jump technique</a> page, if we know the polynomial <span class="math inline">\(p(x)\)</span>, then we can very efficiently advance the state by enormous numbers of steps.</p>
 <p>We have precomputed the coefficients of the polynomial <span class="math inline">\(p(x)\)</span> for all our type aliased recommended state engines and stored them in a compact word form that is returned by the <code>characteristic_coefficients</code> class method.</p>
 <p>The compact word form is simply a static <a href="https://en.cppreference.com/w/cpp/container/array"><code>std::array</code></a> that holds <code>n</code> bits that make up the <span class="math inline">\(n\)</span> coefficients <span class="math inline">\(p_0, p_1, \ldots, p_{n-1}\)</span> of <span class="math inline">\(p(x)\)</span>. These pre-computed arrays are embedded in the <code>xoshiro.h</code> header file.</p>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Only have precomputed <span class="math inline">\(p(x)\)</span> for some engines
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The library has these static arrays built in for all the recommended state engines. Calling the <code>characteristic_coefficients</code> method for an <em>arbitrary</em> <code>State</code> will throw an error.</p>
-</div>
-</div>
+<div class="admonition warning">
+    <table><tbody><tr>
+    <td class="icon"> <i class="fa icon-warning" title="Warning"></i></td>
+    <td class="content">
+    
+The library has these static arrays built in for all the recommended state engines. Calling the <code>characteristic_coefficients</code> method for an <em>arbitrary</em> <code>State</code> will throw an error.
+</td></tr></tbody></table></div>
 <section id="see-also" class="level3">
 <h3 class="anchored" data-anchor-id="see-also">See Also</h3>
 <p><a href="../pages/Scrambler.html"><code>Scrambler</code></a><br>

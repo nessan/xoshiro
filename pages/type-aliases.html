@@ -42,6 +42,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/quarto-contrib/admonitions-1.0.0/admonitions.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -78,6 +79,7 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-XV29LHZDKD', { 'anonymize_ip': true});
 </script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -396,10 +398,7 @@ window.Quarto = {
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
   <li><a href="#recommended-generators" id="toc-recommended-generators" class="nav-link" data-scroll-target="#recommended-generators">Recommended Generators</a></li>
-  <li><a href="#analyzed-generators" id="toc-analyzed-generators" class="nav-link" data-scroll-target="#analyzed-generators">Analyzed Generators</a>
-  <ul class="collapse">
-  <li><a href="#see-also" id="toc-see-also" class="nav-link" data-scroll-target="#see-also">See Also</a></li>
-  </ul></li>
+  <li><a href="#analyzed-generators" id="toc-analyzed-generators" class="nav-link" data-scroll-target="#analyzed-generators">Analyzed Generators</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/nessan/xoshiro/edit/main/docs/pages/type-aliases.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nessan/xoshiro/issues/new/choose" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -643,27 +642,18 @@ window.Quarto = {
 </tbody>
 </table>
 <p>The naming convention should be fairly obvious — <code>xoshiro</code> or <code>xoroshiro</code> followed by the number of words of state and the size of those words, followed by some information about the type of output function that is used. The specific choices for the <code>A</code>, <code>B</code>, <code>C</code>, <code>R</code>, <code>S</code>, and <code>T</code> parameters are shown in the final two columns of the table.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Namespace
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>All the type aliases, engines, and output functions above are actually in the <code>xso</code> namespace — that has been dropped in the table for the sake of brevity.</p>
-</div>
-</div>
-<section id="see-also" class="level3">
-<h3 class="anchored" data-anchor-id="see-also">See Also</h3>
+<div class="admonition note">
+    <table><tbody><tr>
+    <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
+    <td class="content">
+    
+All the type aliases, engines, and output functions above are actually in the <code>xso</code> namespace — that has been dropped in the table for the sake of brevity. ### See Also
+</td></tr></tbody></table></div>
 <p><a href="../pages/generator.html"><code>xso::generator</code></a><br>
 <a href="../pages/State.html"><code>State</code></a><br>
 <a href="../pages/Scrambler.html"><code>Scrambler</code></a></p>
 
 
-</section>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->

@@ -75,6 +75,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/quarto-contrib/admonitions-1.0.0/admonitions.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -111,6 +112,7 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-XV29LHZDKD', { 'anonymize_ip': true});
 </script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -554,19 +556,13 @@ I &amp; \cal{L}^{17} &amp; I &amp; 0 \\
 <p>However, it is more practical/convenient to have a general method to construct <span class="math inline">\(T\)</span> for any RNG with a linear transition function for the state.</p>
 <p>To do that, think about how <span class="math inline">\(T\)</span> will act on the <em>unit</em> bit-vectors <span class="math inline">\(\bold{u}_i\)</span> which has just one set bit. You can easily convince yourself that <span class="math inline">\(T \cdot \bold{u}_i\)</span> pulls out the column <span class="math inline">\(i\)</span> of <span class="math inline">\(T\)</span>.</p>
 <p>So a general method to fill <span class="math inline">\(T\)</span> simply iterates through all the unit bit-vectors, and for each one translates it back to word space. Then those state words are put through a single call of the generator’s <code>step</code> method. The resulting state words can be translated back to bit space and that bit-vector becomes a column in <span class="math inline">\(T\)</span>.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Usefulness of the transition matrix
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>It is worth noting that while the transition matrix can be used to advance the state, the required matrix-vector product, even using a linear algebra package like <a href="https://nessan.github.io/bit"><code>bit</code></a> that is optimized for <span class="math inline">\(\mathbb{F}_2\)</span>, is much slower than using code like the <code>step()</code> method shown above.</p>
-</div>
-</div>
+<div class="admonition note">
+    <table><tbody><tr>
+    <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
+    <td class="content">
+    
+It is worth noting that while the transition matrix can be used to advance the state, the required matrix-vector product, even using a linear algebra package like <a href="https://nessan.github.io/bit"><code>bit</code></a> that is optimized for <span class="math inline">\(\mathbb{F}_2\)</span>, is much slower than using code like the <code>step()</code> method shown above.
+</td></tr></tbody></table></div>
 <p>The <span class="math inline">\(\bold{s} \gets T \cdot \bold{s}\)</span> view of things is only useful for doing analysis or when we think about making large-scale jumps ahead in the stream as we will show next.</p>
 </section>
 </section>
@@ -636,19 +632,13 @@ Similarly, <span class="math inline">\(T^2 \cdot \bold{s}\)</span> can be evalua
 <li>The <code>bit</code> library also has an algorithm to compute <span class="math inline">\(\mod{x^N}{c(x)}\)</span> over <span class="math inline">\(\mathbb{F}_2\)</span> for very large <span class="math inline">\(N\)</span>.</li>
 <li>Finally, as noted above, <span class="math inline">\(r(T) \cdot \bold{s}\)</span> can be computed with <span class="math inline">\(n-1\)</span> calls to the <code>step</code> method and, in the cases of interest, <span class="math inline">\(n\)</span> is very small relative to the jump size <span class="math inline">\(N\)</span> i.e.&nbsp;<span class="math inline">\(n \ll N\)</span>.</li>
 </ol>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Jump polynomial
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>In this context, the remainder polynomial <span class="math inline">\(r(x)\)</span> is called a <em>jump polynomial</em> and using the steps above we can compute it for arbitrary <em>xoshiro/xoroshiro</em> generators and any jump size <span class="math inline">\(N\)</span>. These jump polynomials will be returned as <em>bit-vectors</em> i.e.&nbsp;as <code>bit::vector</code> objects.</p>
-</div>
-</div>
+<div class="admonition note">
+    <table><tbody><tr>
+    <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
+    <td class="content">
+    
+In this context, the remainder polynomial <span class="math inline">\(r(x)\)</span> is called a <em>jump polynomial</em> and using the steps above we can compute it for arbitrary <em>xoshiro/xoroshiro</em> generators and any jump size <span class="math inline">\(N\)</span>. These jump polynomials will be returned as <em>bit-vectors</em> i.e.&nbsp;as <code>bit::vector</code> objects.
+</td></tr></tbody></table></div>
 </section>
 <section id="without-the-bit-library" class="level3">
 <h3 class="anchored" data-anchor-id="without-the-bit-library">Without the <code>bit</code> Library</h3>
@@ -672,19 +662,13 @@ c(x) =  x^n + p(x)
 <p>Now if <span class="math inline">\(c(x)\)</span> is stored as a bit-vector of its coefficients then the <a href="https://nessan.github.io/bit"><code>bit</code></a> library has a function that can efficiently compute <span class="math inline">\(r(x)\)</span> and return its coefficients as a bit-vector <span class="math inline">\(\sseq{r}\)</span>. We have replicated a slightly simplified version of that method in <code>xoshiro.h</code>.</p>
 <p>The instance method <a href="../pages/jump_coefficients.html"><code>jump_coefficients</code></a> is passed the coefficients of <span class="math inline">\(p(x)\)</span> as the <em>pre-canned</em> array of words we mentioned above and it returns the coefficients of <span class="math inline">\(r(x)\)</span> as another array of words.</p>
 <p>Finally of course we have the <a href="../pages/jump.html"><code>jump</code></a> instance methods that take the jump polynomial as an array of ordinary words and uses that polynomial to efficiently jump the state forward.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-The takeaway
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The main thing to understand is that the single <code>xoshiro.h</code> header file has all the pieces in place to jump <em>any</em> of its predefined <a href="../pages/type-aliases.html">type aliased</a> generators by <em>arbitrary</em> numbers of steps <span class="math inline">\(N\)</span> or <span class="math inline">\(2^N\)</span>.</p>
-</div>
-</div>
+<div class="admonition important">
+    <table><tbody><tr>
+    <td class="icon"> <i class="fa icon-important" title="Important"></i></td>
+    <td class="content">
+    
+The main thing to understand is that the single <code>xoshiro.h</code> header file has all the pieces in place to jump <em>any</em> of its predefined <a href="../pages/type-aliases.html">type aliased</a> generators by <em>arbitrary</em> numbers of steps <span class="math inline">\(N\)</span> or <span class="math inline">\(2^N\)</span>.
+</td></tr></tbody></table></div>
 
 
 </section>
