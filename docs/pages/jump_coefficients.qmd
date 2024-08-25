@@ -19,11 +19,8 @@ The template parameter `State` type can be either a full {generator} or {State} 
 These functions return the coefficients of a polynomial that will jump the generator or `State` ahead by either $J = N$ or $J = 2^N$ steps.
 By default $J = N$ but if the final argument is `true,` then $J = 2^N$ which allows for huge jumps like $J = 2^{100}$ that would overflow normal integer arguments.
 
-::: {.callout-warning}
-# The corresponding *precomputed* characteristic coefficients must be available
-Calls to this method will fail if the `State` does not have its pre-computed* characteristic coefficients embedded in the `xoshiro.h` header file.
+WARNING: Calls to this method will fail if the `State` does not have its pre-computed* characteristic coefficients embedded in the `xoshiro.h` header file.
 Calls will succeed for all the {type-aliased} recommended generators.
-:::
 
 The jump polynomial is returned as a set of coefficients packed into a {std.array} of words.
 That array can be passed to the {jump} function to perform multiple jumps of size $J$.

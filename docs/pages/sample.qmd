@@ -46,15 +46,12 @@ constexpr auto sample(Distribution auto &dist);                     // <1>
 ```
 1. Returns a single variate from the distribution `dist` e.g. from a {std.normal_distribution} instance.
 
-::: {.callout-note}
-# The distribution concept
-It is convenient to have many sampling methods, all named sample(...), and {cpp}  allows this through overloading.
+NOTE It is convenient to have many sampling methods, all named sample(...), and {cpp}  allows this through overloading.
 The specific `sample` version invoked depends on the type of arguments passed.
 To make this work, we must distinguish between a container like a `std::vector` and a distribution like a {std.normal_distribution}.
 The `xso::Distribution` concept is a minimal way to identify the distributions defined in the standard library.
 It relies on all distribution classes having an embedded `typename` defining a `param_type`.
 None of the standard container classes have that.
-:::
 
 ### Examples
 

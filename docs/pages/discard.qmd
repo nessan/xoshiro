@@ -9,11 +9,8 @@ constexpr void discard(std::uint64_t n);    // <1>
 ```
 1. Calls the {step} method `n` times without recording any output.
 
-::: {.callout-note}
-# This is dumb method!
-The `discard()` method is a slow and *dumb* approach to advancing the state ahead in its orbit.
+CAUTION: The `discard()` method is a slow and *dumb* approach to advancing the state ahead in its orbit.
 For large values of `n`, the same thing is achieved much more efficiently by using the {jump} methods.
-:::
 
 [Example:]{.bt}
 ```cpp

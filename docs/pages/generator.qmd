@@ -7,12 +7,9 @@ title: "The `xso::generator` Class"
 `xso::generator` is the template class that can be used to make **any** *xoshiro/xoroshiro* variant.
 It connects a {State} with a {Scrambler} to create a pseudorandom number generator.
 
-::: {.callout-tip}
-# Most users should use one of the predefined type aliases
-The `xoshiro.h` header file has several predefined {type-aliased} instantiations of the general template class.
+TIP: The `xoshiro.h` header file has several predefined {type-aliased} instantiations of the general template class.
 Use `xso::rng64` and `xso::rng32` to access the recommended default state engines and output functions for 64-bit and 32-bit outputs.
 The overall default `xso::rng` is a synonym for `xso::rng64`.
-:::
 
 ## Declaration
 
@@ -50,11 +47,8 @@ Method                          | Description
 `step`                          | Method to advance the state by one step.
 : {.bordered .hover .responsive tbl-colwidths="[30,70]"}
 
-::: {.callout-note}
-# An `xso::generator` can be used anywhere a `State` is expected
-Any `xso::generator` satisfies all requirements of the {State} concept.
+NOTE: Any `xso::generator` satisfies all requirements of the {State} concept.
 This is useful as some functions work naturally on a `State`,  but you can pass the `generator` along in its place as a proxy.
-:::
 
 The `xso::generator` expects the `Scrambler` to implement the following methods:
 

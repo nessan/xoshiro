@@ -136,10 +136,7 @@ So a general method to fill $T$ simply iterates through all the unit bit-vectors
 Then those state words are put through a single call of the generator’s `step` method.
 The resulting state words can be translated back to bit space and that bit-vector becomes a column in $T$.
 
-::: {.callout-note}
-# Usefulness of the transition matrix
-It is worth noting that while the transition matrix can be used to advance the state, the required matrix-vector product, even using a linear algebra package like {bit.lib} that is optimized for {f2}, is much slower than using code like the `step()` method shown above.
-:::
+NOTE: It is worth noting that while the transition matrix can be used to advance the state, the required matrix-vector product, even using a linear algebra package like {bit.lib} that is optimized for {f2}, is much slower than using code like the `step()` method shown above.
 
 The $\bold{s} \gets T \cdot \bold{s}$ view of things is only useful for doing analysis or when we think about making large-scale jumps ahead in the stream as we will show next.
 
@@ -248,11 +245,8 @@ Fortunately, we can fill in these steps by making use of the {bit.lib} library:
 3. The `bit` library also has an algorithm to compute $\mod{x^N}{c(x)}$ over {f2} for very large $N$.
 4. Finally, as noted above, $r(T) \cdot \bold{s}$ can be computed with $n-1$ calls to the `step` method and, in the cases of interest, $n$ is very small relative to the jump size $N$ i.e. $n \ll N$.
 
-::: {.callout-note}
-# Jump polynomial
-In this context, the remainder polynomial $r(x)$ is called a *jump polynomial* and using the steps above we can compute it for arbitrary *xoshiro/xoroshiro* generators and any jump size $N$.
+NOTE: In this context, the remainder polynomial $r(x)$ is called a *jump polynomial* and using the steps above we can compute it for arbitrary *xoshiro/xoroshiro* generators and any jump size $N$.
 These jump polynomials will be returned as *bit-vectors* i.e. as `bit::vector` objects.
-:::
 
 ### Without the `bit` Library
 
@@ -302,7 +296,4 @@ The instance method {jump_coefficients} is passed the coefficients of $p(x)$ as 
 
 Finally of course we have the {jump} instance methods that take the jump polynomial as an array of ordinary words and uses that polynomial to efficiently jump the state forward.
 
-::: {.callout-tip}
-# The takeaway
-The main thing to understand is that the single `xoshiro.h` header file has all the pieces in place to jump *any* of its predefined {type-aliased} generators by *arbitrary* numbers of steps $N$ or $2^N$.
-:::
+IMPORTANT: The main thing to understand is that the single `xoshiro.h` header file has all the pieces in place to jump *any* of its predefined {type-aliased} generators by *arbitrary* numbers of steps $N$ or $2^N$.

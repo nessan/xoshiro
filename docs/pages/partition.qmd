@@ -102,11 +102,8 @@ We only use 100 of the 128 as we spawn independent jobs, so each partition is th
 However, each of the sub-streams still has some $2^{256 - 7} = 2^{249}$ available random numbers.
 That is vastly more than a job on any present-day computer will ever consume, so the "wastage" is completely insignificant.
 
-::: {.callout-warning}
-# The corresponding *precomputed* characteristic coefficients must be available
-This class requires the `State` to have its pre-computed* characteristic coefficients available.
+WARNING: This class requires the `State` to have its pre-computed* characteristic coefficients available.
 This is true for all our {type-aliased} recommended generators.
-:::
 
 ### See Also
 

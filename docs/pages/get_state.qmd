@@ -13,11 +13,8 @@ constexpr void get_state(Iter dst) const;        // <2>
 1. Read-only access to the word `i` of state.
 2. Copies the whole state into the destination `dst`.
 
-::: {.callout-warning}
-# No range checking
-The index `i` should be less than `word_count()`.
-Calls with larger values of `i` will result in undefined behavior.
-:::
+WARNING: The index `i` should be less than `word_count()`.
+Calls with larger values of `i` will result in undefined behaviour.
 
 [Example:]{.bt}
 ```cpp

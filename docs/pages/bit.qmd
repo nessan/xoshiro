@@ -11,16 +11,10 @@ title: "`xso::generator` --- Extra Functions Using `bit`"
 The `bit` library is header only so easily incorporated into any application.
 If it is available the `xoshiro.h` header file defines some extra non-member functions:
 
-::: {.callout-tip}
-# Incorporating `bit`
-The extra functions are defined only if the compiler flag `BIT` is set. \
+TIP: The extra functions are defined only if the compiler flag `BIT` is set. \
 See the `CMakeLists.txt` file at the root of the `xoshiro` repo for an example of how to automatically download the needed `bit` headers and incorporate them into a project.
-:::
 
-::: {.callout-note}
-# Functions work on either a `State` *or* an `xso::generator`
-Any `xso::generator` satisfies all requirements of the {State} concept.
-:::
+NOTE: Any `xso::generator` satisfies all requirements of the {State} concept.
 
 ## Transition Matrix
 
@@ -87,11 +81,8 @@ This is a polynomial over {f2} so $c_i \in \{0, 1\}$ for $i = 0, \ldots, n$.
 
 We have a method to extract this polynomial and return it as a `bit::polynomial` of size $n+1$.
 
-::: {.callout-note}
-# The characteristic polynomial will be monic
-All our transition matrices will be of *full rank* and the characteristic polynomial will have degree $n$.
+NOTE: All our transition matrices will be of *full rank* and the characteristic polynomial will have degree $n$.
 So $c(x)$ is *monic* and we always have $c_n = 1$.
-:::
 
 [Example: The characteristic polynomial for `xso::rng32`]{.bt}
 ```cpp
@@ -109,12 +100,9 @@ c(x) = 1 + x^10 + x^11 + x^12 + x^13 + x^14 + x^15 + x^19 + x^20 + x^25 + x^26 +
 ```
 1. Note that the polynomial is *monic* as $c_{128} = 1$.
 
-::: {.callout-note}
-# Embedded characteristic polynomial coefficients
-The `xoshiro.h` header file contains the characteristic polynomial coefficients for all the predefined {type-aliased} generators.
+NOTE: The `xoshiro.h` header file contains the characteristic polynomial coefficients for all the predefined {type-aliased} generators.
 Those coefficients are packed into standard arrays of ordinary words where the leading $c_n = 1$ coefficient is dropped.
 See the [`characteristic_coefficient`] class method documentation for more details.
-:::
 
 ## Jump Polynomial
 
@@ -134,11 +122,8 @@ $$
 where $c(x)$ is the engine's characteristic polynomial, which is degree $n$ so  $r(x)$ has degree of at most $n-1$.
 The `xso::jump_polynomial` function returns the coefficients of $r(x)$  as `bit::polynomial` that can, in turn, be used as the argument to the non-member `xso::jump` function described next.
 
-::: {.callout-tip}
-# Very large jumps
-We often want to jump by an $N \gg 1$ that is too large to fit into a 64-bit word.
+TIP: We often want to jump by an $N \gg 1$ that is too large to fit into a 64-bit word.
 By setting `N` to 100 and the `N_is_pow2` argument to `true`, you can get the coefficients of the jump polynomial for $N = 2^{100}$ steps.
-:::
 
 [Example: A jump polynomial for `xso::rng32` and $N=2^{100}$ steps]{.bt}
 ```cpp

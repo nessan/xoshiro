@@ -6,8 +6,10 @@ project:
 
 # Extensions:
 # simple-vars: Lets us reference variables as `{name}`  instead of the wordier `{{< var name >}}`
+# admonitions: A simpler alternative to Quarto callout blocks.
 filters:
     - simple-vars
+    - admonitions
 
 format:
     html:

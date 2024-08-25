@@ -90,11 +90,8 @@ You can then add a dependency on `xoshiro::xoshiro`, a `CMake` alias for `xoshir
 
 Used like this, `FetchContent` will only download a minimal library version without any redundant test code, sample programs, documentation files, etc.
 
-::: {.callout-note}
-# Library versions
-The shown `URL` gets the `current` version of the library --- whatever is in the main branch.
+NOTE: The shown `URL` gets the `current` version of the library --- whatever is in the main branch.
 For a fixed, stable library version (say release `2.0.0`), use a `URL` parameter like: `https://github.com/nessan/xoshiro/releases/download/2.0.0/xoshiro.zip`.
-:::
 
 ## Implementation
 
@@ -113,10 +110,7 @@ We have {State} classes that are templatized across the number of state bits, an
 
 This means you can instantiate *any* generator in the *xoshiro/xoroshiro* family.
 
-::: {.callout-note}
-# No compromise on speed
-For the reasonable optimization levels you are likely to employ in any numerical code, the {cpp}  versions perform identically to the simpler-looking `C` versions linked above.
-:::
+NOTE: For the reasonable optimization levels you are likely to employ in any numerical code, the {cpp}  versions perform identically to the simpler-looking `C` versions linked above.
 
 ### Simplicity
 
@@ -186,11 +180,8 @@ ge.shuffle(u);                              // <6>
 5. Fills an array `u` with 5 elements drawn from `v` without replacement.
 6. Shuffles the elements of `u`.
 
-::: {.callout-tip}
-# Other distributions can be used
-Of course, the generators can also still be used as uniform random bit generators.
+NOTE: Of course, the generators can also still be used as uniform random bit generators.
 The extra sampling methods etc. just make them much more useful out of the box.
-:::
 
 ### Extra Analysis
 
@@ -201,10 +192,7 @@ The `bit` library is header-only, so it can be easily incorporated into any appl
 
 If it is available, then `xoshiro.h` defines some extra functions that let you access the generator's *transition matrix* and use/analyze that in various ways.
 
-::: {.callout-tip}
-# Arbitrary jumps do not need `bit`
-Even if you only use the single `xoshiro.h` header file without incorporating the `bit` library, you can still jump any of the predefined type-aliased *xoshiro/xoroshiro* variants by *arbitrary* numbers of steps.
-:::
+NOTE: Even if you only use the single `xoshiro.h` header file without incorporating the `bit` library, you can still jump any of the predefined type-aliased *xoshiro/xoroshiro* variants by *arbitrary* numbers of steps.
 
 ## Documentation
 

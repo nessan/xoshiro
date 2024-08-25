@@ -30,11 +30,8 @@ Method                      | Description
 `step`                      | Method to advance the state by one step.
 : {.bordered .hover .responsive tbl-colwidths="[40,60]"}
 
-::: {.callout-note}
-# An `xso::generator` can be used anywhere a `State` is expected
-Any `xso::generator` satisfies all requirements of the {State} concept.
+NOTE: Any `xso::generator` satisfies all requirements of the {State} concept.
 This is useful as some functions work naturally on a `State`,  but you can pass the `generator` along in its place as a proxy.
-:::
 
 ## Our State Classes
 
@@ -60,11 +57,8 @@ Parameter                   | Description
 `A`, `B`, `C`               | Parameters used in the engine's `step` method that advances the state.
 : {.bordered .hover .responsive tbl-colwidths="[20,80]"}
 
-::: {.callout-warning}
-# Restrictions on `N`
-The `xso::xoroshiro` engine can have arbitrary size --- i.e. the `N` parameter can be anything, and its `step` method will still work.
+IMPORTANT: The `xso::xoroshiro` engine can have arbitrary size --- i.e. the `N` parameter can be anything, and its `step` method will still work.
 However, the `xso::xoshiro` engine has a hand-coded `step` method, which currently only works for the two cases, `N` = 4, and `N` = 8.
-:::
 
 ## Class Types and Methods
 
@@ -112,11 +106,8 @@ We have precomputed the coefficients of the polynomial $p(x)$ for all our type a
 The compact word form is simply a static  {std.array} that holds `n` bits that make up the $n$ coefficients $p_0, p_1, \ldots, p_{n-1}$ of $p(x)$.
 These pre-computed arrays are embedded in the `xoshiro.h` header file.
 
-::: {.callout-warning}
-# Only have precomputed $p(x)$ for some engines
-The library has these static arrays built in for all the recommended state engines.
+WARNING: The library has these static arrays built in for all the recommended state engines.
 Calling the `characteristic_coefficients` method for an *arbitrary* `State` will throw an error.
-:::
 
 ### See Also
 

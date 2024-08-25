@@ -62,13 +62,9 @@ Beyond the recommended and simplest type aliases above, we also provide rational
 The naming convention should be fairly obvious --- `xoshiro` or `xoroshiro` followed by the number of words of state and the size of those words, followed by some information about the type of output function that is used.
 The specific choices for the `A`, `B`, `C`, `R`, `S`, and `T` parameters are shown in the final two columns of the table.
 
-::: {.callout-note}
-# Namespace
-All the type aliases, engines, and output functions above are actually in the `xso` namespace --- that has been dropped in the table for the sake of brevity.
-:::
-
+NOTE: All the type aliases, engines, and output functions above are actually in the `xso` namespace --- that has been dropped in the table for the sake of brevity.
 ### See Also
 
 {generator} \
-{State}          \
+{State}     \
 {Scrambler}

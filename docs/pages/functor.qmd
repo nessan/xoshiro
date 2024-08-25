@@ -12,9 +12,7 @@ constexpr void        step();               // <2>
 This operator is required by the {std.uniform_random_bit_generator} concept.
 1. This sub-operation of the operator()() method advances the state by one step without producing any output.
 
-::: {.callout-tip}
-For the most part, users will rely on `operator()(), which calls `step`, as part of its process.
-:::
+TIP: For the most part, users will rely on `operator()(), which calls `step`, as part of its process.
 
 [Example: Run a randomly seeded generator for several trials]{.bt}
 
