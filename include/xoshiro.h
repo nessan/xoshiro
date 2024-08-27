@@ -1135,9 +1135,9 @@ jump(State& state, const bit::polynomial<Block, Allocator>& jump_poly)
     state.seed(sum.cbegin(), sum.cend());
 }
 
-#endif // BIT
-
 } // namespace xso
+
+#endif // BIT
 
 /// @brief A concept that matches any type that has an accessible `xso_name()` class `method.
 template<typename T>
