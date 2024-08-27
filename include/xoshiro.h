@@ -1,5 +1,5 @@
 /// @brief An implementation of the xoshiro/xoroshiro family of pseudorandom number generators.
-/// @link  https://nssn.github.io/xoshiro has the complete documentation.
+/// @link  https://nessan.github.io/xoshiro has the complete documentation.
 ///
 /// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nessan.fitzmaurice@me.com>
 /// SPDX-License-Identifier: MIT
