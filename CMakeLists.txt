@@ -19,8 +19,8 @@ target_sources(${PROJECT_NAME} INTERFACE
 
 # This library can do more if we allow a dependency on `bit`-- a C++ library for working in GF(2).
 # See the documentation at https://nessan.github.io/bit.
-set(BIT OFF CACHE INTERNAL "Use the `bit` library for extra functionality?")
-if (BIT)
+option(DOWNLOAD_BIT "Download the `bit` library for extra functionality?" OFF)
+if (DOWNLOAD_BIT)
 
     # Fetch a minimal archive of the `bit` library from a remote repo.
     include(FetchContent)
