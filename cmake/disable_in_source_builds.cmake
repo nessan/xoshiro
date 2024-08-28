@@ -19,3 +19,6 @@ function(disable_in_source_builds)
     endif()
 
 endfunction()
+
+# Immediately run the function -- hust including this file should run it.
+disable_in_source_builds()

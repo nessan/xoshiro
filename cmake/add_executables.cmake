@@ -69,7 +69,7 @@ function(add_executables dir)
     foreach(source_file ${sources})
 
         # File "Foo03.cpp" is expected to yield target "Foo03" in the target variable
-        get_filename_component(target ${source_file} NAME_WLE)
+        cmake_path(GET source_file STEM target)
 
         # Might have a target naming conflict (test program Foo linking to library Foo)
         check_target(${target} clean_target)
