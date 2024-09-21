@@ -12,6 +12,7 @@ function(fetch_content)
     FetchContent_Declare(${ARGV}
         GIT_SHALLOW 1
         GIT_PROGRESS TRUE
+        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
         SYSTEM
     )
     FetchContent_MakeAvailable(${ARGV0})
