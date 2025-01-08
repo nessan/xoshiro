@@ -159,14 +159,14 @@ ge.shuffle(u);                              // <6>
 
 1. Prints a random integer from $[1,10]$,  where each integer is equally likely to occur.
 2. Prints a random real from a uniform distribution over $[1,10)$
-3. Prints a random variate from a normal distribution with mean 70 and standard deviation 15.
+3. Prints a random variate from a normal distribution with a mean of 70 and a standard deviation of 15.
 4. Fills an array `v` with ten random variates from that same distribution.
 5. Fills an array `u` with five elements drawn from `v` without replacement.
 6. Shuffles the elements of `u`.
 
 ### Extra Analysis
 
-Extra non-member functions for generator analysis are defined if the [``bit`][] library is available.
+Extra non-member functions for generator analysis are defined if the [`bit`][] library is available.
 
 `bit` is a `C++` library for doing linear algebra over [GF(2)][] the simplest field of two elements $\{0,1\}$, where the usual arithmetic operations are performed mod 2.
 The `bit` library is header only and is easily incorporated into any application.
