@@ -1,91 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://nessan.github.io/xoshiro/pages/class-types.html</loc>
+    <lastmod>2026-01-23T13:52:59.772Z</lastmod>
+  </url>
+  <url>
     <loc>https://nessan.github.io/xoshiro/pages/formatter.html</loc>
-    <lastmod>2025-08-28T15:50:59.415Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nessan.github.io/xoshiro/pages/jump.html</loc>
-    <lastmod>2025-08-28T15:50:59.416Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nessan.github.io/xoshiro/pages/bit.html</loc>
-    <lastmod>2025-08-28T15:50:59.415Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nessan.github.io/xoshiro/pages/flip.html</loc>
-    <lastmod>2025-08-28T15:50:59.415Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nessan.github.io/xoshiro/pages/characteristic_coefficients.html</loc>
-    <lastmod>2025-08-28T15:50:59.415Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nessan.github.io/xoshiro/pages/jump_coefficients.html</loc>
-    <lastmod>2025-08-28T15:50:59.416Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nessan.github.io/xoshiro/pages/get_state.html</loc>
-    <lastmod>2025-08-28T15:50:59.415Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nessan.github.io/xoshiro/pages/State.html</loc>
-    <lastmod>2025-08-28T15:50:59.414Z</lastmod>
+    <lastmod>2026-01-23T13:52:59.772Z</lastmod>
   </url>
   <url>
     <loc>https://nessan.github.io/xoshiro/pages/seed.html</loc>
-    <lastmod>2025-08-28T15:50:59.416Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nessan.github.io/xoshiro/pages/type-aliases.html</loc>
-    <lastmod>2025-08-28T15:50:59.416Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nessan.github.io/xoshiro/pages/generator.html</loc>
-    <lastmod>2025-08-28T15:50:59.415Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nessan.github.io/xoshiro/index.html</loc>
-    <lastmod>2025-08-28T15:50:59.415Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nessan.github.io/xoshiro/pages/discard.html</loc>
-    <lastmod>2025-08-28T15:50:59.415Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nessan.github.io/xoshiro/pages/class-types.html</loc>
-    <lastmod>2025-08-28T15:50:59.415Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nessan.github.io/xoshiro/pages/partition.html</loc>
-    <lastmod>2025-08-28T15:50:59.416Z</lastmod>
+    <lastmod>2026-01-23T13:52:59.773Z</lastmod>
   </url>
   <url>
     <loc>https://nessan.github.io/xoshiro/pages/sample.html</loc>
-    <lastmod>2025-08-28T15:50:59.416Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nessan.github.io/xoshiro/pages/shuffle.html</loc>
-    <lastmod>2025-08-28T15:50:59.416Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nessan.github.io/xoshiro/pages/functor.html</loc>
-    <lastmod>2025-08-28T15:50:59.415Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nessan.github.io/xoshiro/pages/index.html</loc>
-    <lastmod>2025-08-28T15:50:59.415Z</lastmod>
-  </url>
-  <url>
-    <loc>https://nessan.github.io/xoshiro/pages/jump-technique.html</loc>
-    <lastmod>2025-08-28T15:50:59.415Z</lastmod>
+    <lastmod>2026-01-23T13:52:59.773Z</lastmod>
   </url>
   <url>
     <loc>https://nessan.github.io/xoshiro/pages/Scrambler.html</loc>
-    <lastmod>2025-08-28T15:50:59.414Z</lastmod>
+    <lastmod>2026-01-23T13:52:59.772Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nessan.github.io/xoshiro/pages/type-aliases.html</loc>
+    <lastmod>2026-01-23T13:52:59.773Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nessan.github.io/xoshiro/pages/jump-technique.html</loc>
+    <lastmod>2026-01-23T13:52:59.773Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nessan.github.io/xoshiro/pages/bit.html</loc>
+    <lastmod>2026-01-23T13:52:59.772Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nessan.github.io/xoshiro/pages/index.html</loc>
+    <lastmod>2026-01-23T13:52:59.773Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nessan.github.io/xoshiro/pages/partition.html</loc>
+    <lastmod>2026-01-23T13:52:59.773Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nessan.github.io/xoshiro/pages/State.html</loc>
+    <lastmod>2026-01-23T13:52:59.772Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nessan.github.io/xoshiro/index.html</loc>
+    <lastmod>2026-01-23T13:52:59.773Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nessan.github.io/xoshiro/pages/shuffle.html</loc>
+    <lastmod>2026-01-23T13:52:59.773Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nessan.github.io/xoshiro/pages/functor.html</loc>
+    <lastmod>2026-01-23T13:52:59.772Z</lastmod>
   </url>
   <url>
     <loc>https://nessan.github.io/xoshiro/pages/constructors.html</loc>
-    <lastmod>2025-08-28T15:50:59.415Z</lastmod>
+    <lastmod>2026-01-23T13:52:59.772Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nessan.github.io/xoshiro/pages/characteristic_coefficients.html</loc>
+    <lastmod>2026-01-23T13:52:59.772Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nessan.github.io/xoshiro/pages/flip.html</loc>
+    <lastmod>2026-01-23T13:52:59.772Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nessan.github.io/xoshiro/pages/jump_coefficients.html</loc>
+    <lastmod>2026-01-23T13:52:59.773Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nessan.github.io/xoshiro/pages/get_state.html</loc>
+    <lastmod>2026-01-23T13:52:59.772Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nessan.github.io/xoshiro/pages/jump.html</loc>
+    <lastmod>2026-01-23T13:52:59.773Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nessan.github.io/xoshiro/pages/discard.html</loc>
+    <lastmod>2026-01-23T13:52:59.772Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nessan.github.io/xoshiro/pages/generator.html</loc>
+    <lastmod>2026-01-23T13:52:59.772Z</lastmod>
   </url>
 </urlset>
