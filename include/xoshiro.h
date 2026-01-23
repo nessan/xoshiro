@@ -6,6 +6,7 @@
 #pragma once
 
 #include <array>
+#include <algorithm>
 #include <bit>
 #include <cassert>
 #include <chrono>
