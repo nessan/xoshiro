@@ -6,8 +6,7 @@
 
 template<typename New, typename Old>
 void
-compare(New& x, Old& c)
-{
+compare(New& x, Old& c) {
     // Print the names of the generators we are working on
     std::print("Comparing {} with {}\n", utilities::type(c), x);
 
@@ -35,7 +34,7 @@ compare(New& x, Old& c)
     auto new_secs = sw.lap();
 
     // Check the two generators are still the same by looking at the next output of each.
-    verify(x() == c.next(), "MISMATCH");
+    always_confirm(x() == c.next(), "MISMATCH");
 
     // All OK so print the timing info -- expect the "C" versions to be faster as they have pre-canned jumps.
     // However, both versions will be very fast and our jumps can be anything not just the pre-canned ones.
@@ -44,8 +43,7 @@ compare(New& x, Old& c)
 }
 
 int
-main()
-{
+main() {
     // Make those large generated random numbers at least somewhat readable.
     utilities::pretty_print_thousands();
 

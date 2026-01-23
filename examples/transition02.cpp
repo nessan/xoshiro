@@ -8,8 +8,7 @@
 /// @brief Time how long the transition matrix approach takes versus the conventional step() method.
 template<typename State>
 void
-run(State& engine, std::size_t n_trials)
-{
+run(State& engine, std::size_t n_trials) {
     // Print the name of the generator we are working on
     std::print("{}\n", engine);
 
@@ -19,7 +18,8 @@ run(State& engine, std::size_t n_trials)
     // Some constants etc.
     using word_type = typename State::word_type;
     constexpr std::size_t n_words = State::word_count();
-    constexpr std::size_t n_bits = State::bit_count();;
+    constexpr std::size_t n_bits = State::bit_count();
+    ;
 
     // Storage where we can go back and forth between bit-space and word-space.
     std::array<word_type, n_words> state;
@@ -52,7 +52,7 @@ run(State& engine, std::size_t n_trials)
     for (std::size_t i = 0; i < State::word_count(); ++i) words[i] = engine[i];
 
     // Check to see whether the two versions match.
-    verify(state == words, "MISMATCH state = {}, words = {}", state, words);
+    always_confirm(state == words, "MISMATCH state = {}, words = {}", state, words);
 
     // All OK so print the timing information.
     double ratio = t_secs / g_secs;
@@ -60,8 +60,7 @@ run(State& engine, std::size_t n_trials)
 }
 
 int
-main()
-{
+main() {
     // Our generators
     xso::xoroshiro_2x32_star       x01;
     xso::xoroshiro_2x32_star_star  x02;

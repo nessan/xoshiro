@@ -8,8 +8,7 @@
 /// @brief Check that T.s gives back the same as step(s) for one of our State's. T is the transition matrix
 template<typename State>
 void
-run_check(State& engine)
-{
+run_check(State& engine) {
     // Print the name of the engine we are working on.
     std::print("{}\n", engine);
 
@@ -19,7 +18,8 @@ run_check(State& engine)
     // Some constants etc.
     using word_type = typename State::word_type;
     constexpr std::size_t n_words = State::word_count();
-    constexpr std::size_t n_bits = State::bit_count();;
+    constexpr std::size_t n_bits = State::bit_count();
+    ;
 
     // Storage where we can go back and forth between bit-space and word-space.
     std::array<word_type, n_words> state;
@@ -41,15 +41,14 @@ run_check(State& engine)
     for (std::size_t i = 0; i < n_words; ++i) words[i] = engine[i];
 
     // Check to see whether the two versions match.
-    verify(state == words, "MISMATCH state = {}, words = {}", state, words);
+    always_confirm(state == words, "MISMATCH state = {}, words = {}", state, words);
 
     // All good
     std::print("Transition Matrix and and engine.step() MATCH!\n\n");
 }
 
 int
-main()
-{
+main() {
     // Our generators
     xso::xoroshiro_2x32_star       x01;
     xso::xoroshiro_2x32_star_star  x02;

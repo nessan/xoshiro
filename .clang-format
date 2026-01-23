@@ -1,10 +1,21 @@
-﻿---
+---
 # We use clang-format to keep C++ code styling consistent
 # The rules for our specific style are delineated here
 AccessModifierOffset: "-4"
-AlignConsecutiveMacros: "true"
-# AlignConsecutiveAssignments: "true"
-AlignConsecutiveDeclarations: "true"
+AlignConsecutiveMacros:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: false
+  AlignCompound: false
+  AlignFunctionPointers: false
+  PadOperators: true
+AlignConsecutiveDeclarations:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: false
+  AlignCompound: false
+  AlignFunctionPointers: false
+  PadOperators: true
 AlignEscapedNewlines: Left
 AllowShortBlocksOnASingleLine: "true"
 AllowShortCaseLabelsOnASingleLine: "true"
@@ -12,8 +23,8 @@ AllowShortFunctionsOnASingleLine: All
 AllowShortIfStatementsOnASingleLine: WithoutElse
 AllowShortLoopsOnASingleLine: "true"
 AlwaysBreakAfterReturnType: TopLevelDefinitions
-AlwaysBreakTemplateDeclarations: "Yes"
-BreakBeforeBraces: Stroustrup
+AlwaysBreakTemplateDeclarations: Yes
+BreakBeforeBraces: Attach
 BreakBeforeTernaryOperators: "true"
 BreakConstructorInitializers: AfterColon
 BreakInheritanceList: AfterColon
@@ -26,6 +37,6 @@ IndentPPDirectives: BeforeHash
 IndentWidth: "4"
 PointerAlignment: Left
 NamespaceIndentation: Inner
-SortIncludes: false
+SortIncludes: "false"
 SortUsingDeclarations: "true"
 SpaceAfterTemplateKeyword: "false"

@@ -8,8 +8,7 @@
 
 template<typename State>
 void
-check()
-{
+check() {
     // What are we working on?
     std::print("Checking {}:\n", State::xso_name());
 
@@ -48,7 +47,8 @@ check()
         c.reduce(J, J_is_pow2).coefficients().export_bits(bit_r);
 
         // Check the two results match.
-        verify(xso_r == bit_r, "For jump J = {:L}.\nxso::reduce -> {::#x}\nbit::reduce -> {::#x}\n", J, xso_r, bit_r);
+        always_confirm(xso_r == bit_r, "For jump J = {:L}.\nxso::reduce -> {::#x}\nbit::reduce -> {::#x}\n", J, xso_r,
+                       bit_r);
     }
 
     // The all match.
@@ -56,8 +56,7 @@ check()
 }
 
 int
-main()
-{
+main() {
     // Make those large generated random numbers at least somewhat readable.
     utilities::pretty_print_thousands();
 

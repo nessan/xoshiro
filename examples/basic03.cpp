@@ -39,7 +39,7 @@ compare(New& x, Old& c)
     auto x_secs = sw.lap();
 
     // Check to see whether the two versions match.
-    verify(rc == rx, "Generator mismatch! rc = {}, rx = {}\n", rc, rx);
+    always_confirm(rc == rx, "Generator mismatch! rc = {}, rx = {}\n", rc, rx);
 
     // All OK so print the timing info.
     std::print("{:L} calls took (old, new): {:.2f}s, {:.2f}s\n\n", n_trials, c_secs, x_secs);

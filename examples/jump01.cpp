@@ -6,8 +6,7 @@
 
 template<typename New, typename Old>
 void
-compare(New& x, Old& c)
-{
+compare(New& x, Old& c) {
     // Print the names of the generators we are working on
     std::print("Comparing {} with {}\n", utilities::type(c), x);
 
@@ -23,22 +22,21 @@ compare(New& x, Old& c)
     xso::jump(x, xso::jump_coefficients<New>(n_bits / 2, true));
 
     // Check the two generators are still the same by looking at the next output of each.
-    verify(x() == c.next(), "MISMATCH on jump J = 2^(0.50*n_bits)");
+    always_confirm(x() == c.next(), "MISMATCH on jump J = 2^(0.50*n_bits)");
 
     // Jump the two versions from there by 2^(0.75*n_bits) steps.
     c.long_jump();
     xso::jump(x, xso::jump_coefficients<New>(3 * n_bits / 4, true));
 
     // Check the two generators are still the same by looking at the next output of each.
-    verify(x() == c.next(), "MISMATCH on jump J = 2^(0.75*n_bits)");
+    always_confirm(x() == c.next(), "MISMATCH on jump J = 2^(0.75*n_bits)");
 
     // All OK
     std::print("jump() & long-jump() MATCH!\n\n");
 }
 
 int
-main()
-{
+main() {
     // Make those large generated random numbers at least somewhat readable.
     utilities::pretty_print_thousands();
 

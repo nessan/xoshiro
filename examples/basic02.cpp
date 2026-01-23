@@ -9,8 +9,7 @@
 /// @copyright Copyright (c) 2023 Nessan Fitzmaurice
 template<typename New, typename Old>
 void
-compare(New& x, Old& c)
-{
+compare(New& x, Old& c) {
     // Print the names of the generators we are working on
     std::print("Comparing {} with {}\n", utilities::type(c), x);
 
@@ -19,15 +18,14 @@ compare(New& x, Old& c)
 
     // Basic Test: Run the two versions of the generator for a number of trials and check the outputs match
     std::size_t n_trials = 10;
-    for (size_t i = 0; i < n_trials; ++i) verify(x() == c.next(), "MISMATCH on trial {}", i);
+    for (size_t i = 0; i < n_trials; ++i) always_confirm(x() == c.next(), "MISMATCH on trial {}", i);
 
     // All OK.
     std::print("Success - all {} trials MATCHED!\n\n", n_trials);
 }
 
 int
-main()
-{
+main() {
     // Make those large generated random numbers at least somewhat readable.
     utilities::pretty_print_thousands();
 

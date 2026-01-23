@@ -10,8 +10,7 @@
 /// @brief We will compute r(x) = x^J mod c(x) two ways where J = N or J = 2^N.
 template<typename State>
 void
-check(std::size_t N, bool N_is_pow2 = false)
-{
+check(std::size_t N, bool N_is_pow2 = false) {
     // What are we working on?
     std::print("Calling `reduce({:L}, {})` two ways for {}:\n", N, N_is_pow2, State::xso_name());
 
@@ -54,15 +53,15 @@ check(std::size_t N, bool N_is_pow2 = false)
     auto bit_secs = sw.lap();
 
     // Check the two results match.
-    verify(xso_r == bit_r, "For jump N = {:L}.\nxso::reduce -> {::#x}\nbit::reduce -> {::#x}\n", N, xso_r, bit_r);
+    always_confirm(xso_r == bit_r, "For jump N = {:L}.\nxso::reduce -> {::#x}\nbit::reduce -> {::#x}\n", N, xso_r,
+                   bit_r);
 
     // All OK so print the timing info.
     std::print("{:L} reduce calls took (xso, bit): {:.2f}s, {:.2f}s\n\n", n_trials, xso_secs, bit_secs);
 }
 
 int
-main()
-{
+main() {
     // Make those large generated random numbers at least somewhat readable.
     utilities::pretty_print_thousands();
 

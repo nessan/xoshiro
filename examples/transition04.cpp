@@ -10,8 +10,7 @@
 
 template<typename State>
 void
-compare(State& x)
-{
+compare(State& x) {
     // stopwatch to time the two versions
     utilities::stopwatch sw;
 
@@ -21,7 +20,8 @@ compare(State& x)
     // Some constants etc.
     using word_type = typename State::word_type;
     constexpr std::size_t n_words = State::word_count();
-    constexpr std::size_t n_bits = State::bit_count();;
+    constexpr std::size_t n_bits = State::bit_count();
+    ;
 
     // First consider jumping by N = 2^(n_bits/2) slots.
     std::size_t power = n_bits / 2;
@@ -72,7 +72,7 @@ compare(State& x)
     matrix_secs = sw.lap();
 
     // Check the two generators are still the same by looking at the next output of each.
-    verify(x() == y(), "MISMATCH");
+    always_confirm(x() == y(), "MISMATCH");
 
     // All OK so print the timing info on polynomial jumps vs matrix jumps ...
     std::print("Number of jump aheads performed:       {:<6L}\n", n_jumps);
@@ -82,8 +82,7 @@ compare(State& x)
 }
 
 int
-main()
-{
+main() {
     // Make those large generated random numbers at least somewhat readable.
     utilities::pretty_print_thousands();
 

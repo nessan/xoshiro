@@ -10,14 +10,13 @@
 
 template<typename State>
 void
-characteristic_polynomial()
-{
+characteristic_polynomial() {
     // Which engines are we working on?
     std::print("State: {}\n", State::xso_name());
 
     // Get the characteristic bit::polynomial c(x) & make sure it is monic.
     auto c = xso::characteristic_polynomial<State>();
-    verify(c.monic(), "Characteristic polynomial high coefficient is NOT 1");
+    always_confirm(c.monic(), "Characteristic polynomial high coefficient is NOT 1");
 
     // Find p(x) where c(x) = x^n + p(x) and deg[p(x)] < n.
     auto p = c.sub(c.size() - 1);
@@ -32,8 +31,7 @@ characteristic_polynomial()
 }
 
 int
-main()
-{
+main() {
     // Compute the characteristic polynomials for our state-engines of interest
     characteristic_polynomial<xso::xoshiro_4x32>();
     characteristic_polynomial<xso::xoshiro_4x64>();

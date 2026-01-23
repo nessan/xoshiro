@@ -8,7 +8,7 @@
 ///
 /// The only other change we made was in the Xoroshiro 1024 bit versions -- the originals default initialized the cycle
 /// variable `p` to zero. To make those algorithms consistent with our Xoroshiro implementations we instead initialize
-/// that same variable p  to 15. This means that on the first call we mix s[0] and s[15] and then on in a cycle from
+/// that same variable p to 15. This means that on the first call we mix s[0] and s[15] and then on in a cycle from
 /// there. The original starts by mixing s[1] and s[0] and on in the cycle from there -- a trivial off-by-one change.
 ///
 /// @copyright The originals all carry the following copyright notice ...

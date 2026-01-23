@@ -5,8 +5,7 @@
 
 template<typename State>
 void
-run(State& engine, std::size_t J)
-{
+run(State& engine, std::size_t J) {
     // What are we working on?
     std::print("Jumping/discarding {:L} states for {}:\n", J, engine);
 
@@ -29,7 +28,7 @@ run(State& engine, std::size_t J)
     auto discard_secs = sw.lap();
 
     // Check the two generators are the same by looking at the next output of each.
-    verify(engine() == tmp(), "MISMATCH for jump size {:L}", J);
+    always_confirm(engine() == tmp(), "MISMATCH for jump size {:L}", J);
 
     // All OK so rint the timing info.
     auto ratio = discard_secs / jump_secs;
@@ -37,8 +36,7 @@ run(State& engine, std::size_t J)
 }
 
 int
-main()
-{
+main() {
     // Print large numbers with commas
     utilities::pretty_print_thousands();
 
