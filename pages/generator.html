@@ -608,7 +608,7 @@ window.Quarto = {
   <li><a href="#non-member-functions" id="toc-non-member-functions" class="nav-link" data-scroll-target="#non-member-functions">Non-member Functions</a>
   <ul class="collapse">
   <li><a href="#always-available" id="toc-always-available" class="nav-link" data-scroll-target="#always-available">Always Available</a></li>
-  <li><a href="#depending-on-the-bit-library" id="toc-depending-on-the-bit-library" class="nav-link" data-scroll-target="#depending-on-the-bit-library">Depending on the <code>bit</code> Library</a></li>
+  <li><a href="#depending-on-the-gf2-library" id="toc-depending-on-the-gf2-library" class="nav-link" data-scroll-target="#depending-on-the-gf2-library">Depending on the <code>gf2</code> Library</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/nessan/xoshiro/edit/main/docs/pages/generator.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nessan/xoshiro/issues/new/choose" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -927,10 +927,10 @@ Any <code>xso::generator</code> satisfies all requirements of the <a href="../pa
 </table>
 </div>
 </section>
-<section id="depending-on-the-bit-library" class="level3">
-<h3 class="anchored" data-anchor-id="depending-on-the-bit-library">Depending on the <code>bit</code> Library</h3>
-<p>If the <a href="https://nessan.github.io/bit"><code>bit</code></a> library is available, extra non-member functions will be defined.</p>
-<p><code>bit</code> is a C++ library for doing linear algebra over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a> the simplest field of two elements <span class="math inline">\(\{0,1\}\)</span>, where the usual arithmetic operations are performed mod 2. The <code>bit</code> library is header only, so it is easily incorporated into any application.</p>
+<section id="depending-on-the-gf2-library" class="level3">
+<h3 class="anchored" data-anchor-id="depending-on-the-gf2-library">Depending on the <code>gf2</code> Library</h3>
+<p>If the <a href="https://nessan.github.io/gf2"><code>gf2</code></a> library is available, extra non-member functions will be defined.</p>
+<p><code>gf2</code> is a C++ library for doing linear algebra over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a> the simplest field of two elements <span class="math inline">\(\{0,1\}\)</span>, where the usual arithmetic operations are performed mod 2. The <code>gf2</code> library is header only, so it is easily incorporated into any application.</p>
 <p>If it is available, then <code>xoshiro.h</code> defines some extra functions:</p>
 <div class="table-responsive">
 <table class="table-bordered table-striped table-hover caption-top table">
@@ -946,19 +946,19 @@ Any <code>xso::generator</code> satisfies all requirements of the <a href="../pa
 </thead>
 <tbody>
 <tr class="odd">
-<td><a href="../pages/bit.html#transition-matrix"><code>transition_matrix</code></a></td>
-<td>Returns the <em>transition matrix</em> for a <code>State</code> as a <a href="https://nessan.github.io/bit/pages/matrix/"><code>bit::matrix</code></a>.</td>
+<td><a href="../pages/gf2.html#transition-matrix"><code>transition_matrix</code></a></td>
+<td>Returns the <em>transition matrix</em> for a <code>State</code> as a <a href="https://nessan.github.io/gf2/md_docs_2pages_2BitMatrix.html"><code>gf2::BitMatrix</code></a>.</td>
 </tr>
 <tr class="even">
-<td><a href="../pages/bit.html#characteristic-polynomial"><code>characteristic_polynomial</code></a></td>
-<td>Returns the transition matrix’s <a href="https://en.wikipedia.org/wiki/Characteristic_polynomial">characteristic polynomial</a> as a <a href="https://nessan.github.io/bit/pages/polynomial/"><code>bit::polynomial</code></a>.</td>
+<td><a href="../pages/gf2.html#characteristic-polynomial"><code>characteristic_polynomial</code></a></td>
+<td>Returns the transition matrix’s <a href="https://en.wikipedia.org/wiki/Characteristic_polynomial">characteristic polynomial</a> as a <a href="https://nessan.github.io/gf2/md_docs_2pages_2BitPolynomial.html"><code>gf2::BitPolynomial</code></a>.</td>
 </tr>
 <tr class="odd">
-<td><a href="../pages/bit.html#jump-polynomial"><code>jump_polynomial</code></a></td>
+<td><a href="../pages/gf2.html#jump-polynomial"><code>jump_polynomial</code></a></td>
 <td>Returns a <em>jump polynomial</em> that can be used to efficiently jump a <code>State</code> ahead by a potentially huge number of steps.</td>
 </tr>
 <tr class="even">
-<td><a href="../pages/bit.html#performing-jumps"><code>jump</code></a></td>
+<td><a href="../pages/gf2.html#performing-jumps"><code>jump</code></a></td>
 <td>Use a jump-polynomial to jump a State ahead in its stream efficiently.</td>
 </tr>
 </tbody>

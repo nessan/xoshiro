@@ -606,8 +606,8 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#using-the-transition-matrix" id="toc-using-the-transition-matrix" class="nav-link" data-scroll-target="#using-the-transition-matrix">Using the Transition Matrix</a></li>
   <li><a href="#the-characteristic-polynomial" id="toc-the-characteristic-polynomial" class="nav-link" data-scroll-target="#the-characteristic-polynomial">The Characteristic Polynomial</a></li>
-  <li><a href="#with-the-bit-library" id="toc-with-the-bit-library" class="nav-link" data-scroll-target="#with-the-bit-library">With the <code>bit</code> Library</a></li>
-  <li><a href="#without-the-bit-library" id="toc-without-the-bit-library" class="nav-link" data-scroll-target="#without-the-bit-library">Without the <code>bit</code> Library</a></li>
+  <li><a href="#with-the-gf2-library" id="toc-with-the-gf2-library" class="nav-link" data-scroll-target="#with-the-gf2-library">With the <code>gf2</code> Library</a></li>
+  <li><a href="#without-the-gf2-library" id="toc-without-the-gf2-library" class="nav-link" data-scroll-target="#without-the-gf2-library">Without the <code>gf2</code> Library</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/nessan/xoshiro/edit/main/docs/pages/jump-technique.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nessan/xoshiro/issues/new/choose" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -730,7 +730,7 @@ I &amp; \cal{L}^{17} &amp; I &amp; 0 \\
     <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
     <td class="content">
     
-It is worth noting that while the transition matrix can be used to advance the state, the required matrix-vector product, even using a linear algebra package like <a href="https://nessan.github.io/bit"><code>bit</code></a> that is optimized for <span class="math inline">\(\mathbb{F}_2\)</span>, is much slower than using code like the <code>step()</code> method shown above.
+It is worth noting that while the transition matrix can be used to advance the state, the required matrix-vector product, even using a linear algebra package like <a href="https://nessan.github.io/gf2"><code>gf2</code></a> that is optimized for <span class="math inline">\(\mathbb{F}_2\)</span>, is much slower than using code like the <code>step()</code> method shown above.
 </td></tr></tbody></table></div>
 <p>The <span class="math inline">\(\bold{s} \gets T \cdot \bold{s}\)</span> view of things is only useful for doing analysis or when we think about making large-scale jumps ahead in the stream as we will show next.</p>
 </section>
@@ -753,7 +753,7 @@ It is worth noting that while the transition matrix can be used to advance the s
 \]</span> This means that if we want to advance the state by say <span class="math inline">\(N\)</span> steps we can do so by computing <span class="math display">\[
 \bold{s} \gets T^N \cdot \bold{s}.
 \]</span> Unfortunately, even if <span class="math inline">\(T\)</span> is sparse and “special” like the <span class="math inline">\(T\)</span> above for <em>xoshiro</em>, <span class="math inline">\(T^N\)</span> is unlikely to have a readily written down form.</p>
-<p>Nevertheless, if we use a linear algebra package like <a href="https://nessan.github.io/bit"><code>bit</code></a> that is optimized for <span class="math inline">\(\mathbb{F}_2\)</span> and which uses the well-known square and multiply algorithm to minimize the operation count when evaluating matrix powers this simple compute-the-power method can be somewhat competitive for large enough <span class="math inline">\(N\)</span> at least for generators that aren’t off the scale in terms of the size of the state space.</p>
+<p>Nevertheless, if we use a linear algebra package like <a href="https://nessan.github.io/gf2"><code>gf2</code></a> that is optimized for <span class="math inline">\(\mathbb{F}_2\)</span> and which uses the well-known square and multiply algorithm to minimize the operation count when evaluating matrix powers this simple compute-the-power method can be somewhat competitive for large enough <span class="math inline">\(N\)</span> at least for generators that aren’t off the scale in terms of the size of the state space.</p>
 </section>
 <section id="the-characteristic-polynomial" class="level3">
 <h3 class="anchored" data-anchor-id="the-characteristic-polynomial">The Characteristic Polynomial</h3>
@@ -785,8 +785,8 @@ Similarly, <span class="math inline">\(T^2 \cdot \bold{s}\)</span> can be evalua
     T^N \cdot \bold{s} = r(T) \cdot \bold{s}
 \]</span> can be calculated with just <span class="math inline">\(n-1\)</span> calls to the <code>step</code> method. This is extremely efficient when <span class="math inline">\(N \gg n\)</span> — for example, if we want to jump by <span class="math inline">\(N = 2^{100}\)</span> steps and the generator has <span class="math inline">\(n = 256\)</span> bits of state.</p>
 </section>
-<section id="with-the-bit-library" class="level3">
-<h3 class="anchored" data-anchor-id="with-the-bit-library">With the <code>bit</code> Library</h3>
+<section id="with-the-gf2-library" class="level3">
+<h3 class="anchored" data-anchor-id="with-the-gf2-library">With the <code>gf2</code> Library</h3>
 <p>What do we need to implement this idea?</p>
 <ol type="1">
 <li>A method to construct the transition matrix <span class="math inline">\(T\)</span>.</li>
@@ -794,11 +794,11 @@ Similarly, <span class="math inline">\(T^2 \cdot \bold{s}\)</span> can be evalua
 <li>A method to compute <span class="math inline">\(r(x) = \mod{x^N}{c(x)}\)</span> .</li>
 <li>A method to efficiently compute <span class="math inline">\(r(T) \cdot \bold{s}\)</span>.</li>
 </ol>
-<p>Fortunately, we can fill in these steps by making use of the <a href="https://nessan.github.io/bit"><code>bit</code></a> library:</p>
+<p>Fortunately, we can fill in these steps by making use of the <a href="https://nessan.github.io/gf2"><code>gf2</code></a> library:</p>
 <ol type="1">
-<li>As we saw above, we can construct <span class="math inline">\(T\)</span> column by column without any deep knowledge of the structure of the generator. Assuming it is indeed linear then one call of the <code>step</code> method for a seed state that is a unit bit-vector will return one column of <span class="math inline">\(T\)</span>. Our generators don’t work on <em>bit-vectors</em> directly but the <code>bit</code> library lets you go from <em>bits</em> to <em>words</em> and vice-versa.</li>
-<li>We can use <a href="http://web.tecnico.ulisboa.pt/~mcasquilho/compute/com/,eigen/FaddeevaDanil.pdf">Danilevsky’s algorithm</a> to extract the characteristic polynomial for <span class="math inline">\(T\)</span>. That is already implemented in the <code>bit</code> library and the function will never overflow.</li>
-<li>The <code>bit</code> library also has an algorithm to compute <span class="math inline">\(\mod{x^N}{c(x)}\)</span> over <span class="math inline">\(\mathbb{F}_2\)</span> for very large <span class="math inline">\(N\)</span>.</li>
+<li>As we saw above, we can construct <span class="math inline">\(T\)</span> column by column without any deep knowledge of the structure of the generator. Assuming it is indeed linear then one call of the <code>step</code> method for a seed state that is a unit bit-vector will return one column of <span class="math inline">\(T\)</span>. Our generators don’t work on <em>bit-vectors</em> directly but the <code>gf2</code> library lets you go from <em>bits</em> to <em>words</em> and vice-versa.</li>
+<li>We can use <a href="http://web.tecnico.ulisboa.pt/~mcasquilho/compute/com/,eigen/FaddeevaDanil.pdf">Danilevsky’s algorithm</a> to extract the characteristic polynomial for <span class="math inline">\(T\)</span>. That is already implemented in the <code>gf2</code> library and the function will never overflow.</li>
+<li>The <code>gf2</code> library also has an algorithm to compute <span class="math inline">\(\mod{x^N}{c(x)}\)</span> over <span class="math inline">\(\mathbb{F}_2\)</span> for very large <span class="math inline">\(N\)</span>.</li>
 <li>Finally, as noted above, <span class="math inline">\(r(T) \cdot \bold{s}\)</span> can be computed with <span class="math inline">\(n-1\)</span> calls to the <code>step</code> method and, in the cases of interest, <span class="math inline">\(n\)</span> is very small relative to the jump size <span class="math inline">\(N\)</span> i.e.&nbsp;<span class="math inline">\(n \ll N\)</span>.</li>
 </ol>
 <div class="admonition note">
@@ -806,17 +806,17 @@ Similarly, <span class="math inline">\(T^2 \cdot \bold{s}\)</span> can be evalua
     <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
     <td class="content">
     
-In this context, the remainder polynomial <span class="math inline">\(r(x)\)</span> is called a <em>jump polynomial</em> and using the steps above we can compute it for arbitrary <em>xoshiro/xoroshiro</em> generators and any jump size <span class="math inline">\(N\)</span>. These jump polynomials will be returned as <em>bit-vectors</em> i.e.&nbsp;as <code>bit::vector</code> objects.
+In this context, the remainder polynomial <span class="math inline">\(r(x)\)</span> is called a <em>jump polynomial</em> and using the steps above we can compute it for arbitrary <em>xoshiro/xoroshiro</em> generators and any jump size <span class="math inline">\(N\)</span>. These jump polynomials will be returned as <em>bit-vectors</em> i.e.&nbsp;as <code>gf2::BitVector</code> objects.
 </td></tr></tbody></table></div>
 </section>
-<section id="without-the-bit-library" class="level3">
-<h3 class="anchored" data-anchor-id="without-the-bit-library">Without the <code>bit</code> Library</h3>
-<p>The C++ <a href="https://nessan.github.io/bit"><code>bit</code></a> library is header only so it is easily incorporated into any application. But we also recognize that is very convenient to have <code>xoshiro.h</code> be complete as a standalone file.</p>
-<p>Ideally, even without access to the <code>bit</code> headers, we would still like to have access to the <code>jump</code> methods and also the <a href="../pages/partition.html"><code>xso::partition</code></a> class to split a single parent stream of random outputs into a set of non-overlapping sub-streams.</p>
-<p>Of course, if we don’t have the <a href="https://nessan.github.io/bit"><code>bit</code></a> library available then we don’t have the <a href="https://nessan.github.io/bit/pages/matrix/"><code>bit::matrix</code></a> and <a href="https://nessan.github.io/bit/pages/vector/"><code>bit::vector</code></a> classes. This means we have no easy way to even represent the generator’s transition bit-matrix <span class="math inline">\(T\)</span>.</p>
+<section id="without-the-gf2-library" class="level3">
+<h3 class="anchored" data-anchor-id="without-the-gf2-library">Without the <code>gf2</code> Library</h3>
+<p>The C++ <a href="https://nessan.github.io/gf2"><code>gf2</code></a> library is header only so it is easily incorporated into any application. But we also recognize that is very convenient to have <code>xoshiro.h</code> be complete as a standalone file.</p>
+<p>Ideally, even without access to the <code>gf2</code> headers, we would still like to have access to the <code>jump</code> methods and also the <a href="../pages/partition.html"><code>xso::partition</code></a> class to split a single parent stream of random outputs into a set of non-overlapping sub-streams.</p>
+<p>Of course, if we don’t have the <a href="https://nessan.github.io/gf2"><code>gf2</code></a> library available then we don’t have the <a href="https://nessan.github.io/gf2/md_docs_2pages_2BitMatrix.html"><code>gf2::BitMatrix</code></a> and <a href="https://nessan.github.io/gf2/md_docs_2pages_2BitVector.html"><code>gf2::BitVector</code></a> classes. This means we have no easy way to even represent the generator’s transition bit-matrix <span class="math inline">\(T\)</span>.</p>
 <p>But computing <span class="math inline">\(T\)</span> is just a means to an end. We want the <em>jump polynomial</em> which for a specific generator and specific jump size <span class="math inline">\(N\)</span> is the polynomial <span class="math inline">\(r(x) = \mod{x^N}{c(x)}\)</span> where <span class="math inline">\(c(x)\)</span> is the characteristic polynomial for the transition matrix associated with the generator in question.</p>
 <p>Let’s start with that characteristic polynomial.</p>
-<p>Using the <a href="https://nessan.github.io/bit"><code>bit</code></a> library it is easy to compute the coefficients of <span class="math inline">\(c(x)\)</span> for the transition matrix <span class="math inline">\(T\)</span> where <span class="math display">\[
+<p>Using the <a href="https://nessan.github.io/gf2"><code>gf2</code></a> library it is easy to compute the coefficients of <span class="math inline">\(c(x)\)</span> for the transition matrix <span class="math inline">\(T\)</span> where <span class="math display">\[
     c(x) = c_n x^n + \cdots + c_0.
 \]</span> Those coefficients will naturally be represented as a bit-vector with <span class="math inline">\(n+1\)</span> elements.</p>
 <p>However, our transition matrices should always be of full rank which implies that <span class="math inline">\(c(x)\)</span> is <em>monic</em> and therefore we always expect <span class="math inline">\(c_n = 1\)</span> and we can always write: <span class="math display">\[
@@ -828,7 +828,7 @@ c(x) =  x^n + p(x)
 <p>The <a href="../pages/characteristic_coefficients.html"><code>characteristic_coefficients</code></a> instance method returns those arrays if they are available or fails at compile time if they aren’t.</p>
 <p>Of course, getting the characteristic polynomial is also just a means to an end.</p>
 <p>Given a jump size <span class="math inline">\(N\)</span>, we want to compute the jump polynomial <span class="math inline">\(r(x) \equiv \mod{x^N}{c(x)}\)</span>.</p>
-<p>Now if <span class="math inline">\(c(x)\)</span> is stored as a bit-vector of its coefficients then the <a href="https://nessan.github.io/bit"><code>bit</code></a> library has a function that can efficiently compute <span class="math inline">\(r(x)\)</span> and return its coefficients as a bit-vector <span class="math inline">\(\sseq{r}\)</span>. We have replicated a slightly simplified version of that method in <code>xoshiro.h</code>.</p>
+<p>Now if <span class="math inline">\(c(x)\)</span> is stored as a bit-vector of its coefficients then the <a href="https://nessan.github.io/gf2"><code>gf2</code></a> library has a function that can efficiently compute <span class="math inline">\(r(x)\)</span> and return its coefficients as a bit-vector <span class="math inline">\(\sseq{r}\)</span>. We have replicated a slightly simplified version of that method in <code>xoshiro.h</code>.</p>
 <p>The instance method <a href="../pages/jump_coefficients.html"><code>jump_coefficients</code></a> is passed the coefficients of <span class="math inline">\(p(x)\)</span> as the <em>pre-canned</em> array of words we mentioned above and it returns the coefficients of <span class="math inline">\(r(x)\)</span> as another array of words.</p>
 <p>Finally of course we have the <a href="../pages/jump.html"><code>jump</code></a> instance methods that take the jump polynomial as an array of ordinary words and uses that polynomial to efficiently jump the state forward.</p>
 <div class="admonition important">

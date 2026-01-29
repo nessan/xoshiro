@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>xso::generator — Extra Functions Using bit – xoshiro/xoroshiro PRNG's</title>
+<title>xso::generator — Extra Functions Using gf2 – xoshiro/xoroshiro PRNG's</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -149,7 +149,7 @@ window.Quarto = {
 };
 </script>
 
-<meta property="og:title" content="xso::generator — Extra Functions Using bit – xoshiro/xoroshiro PRNG’s">
+<meta property="og:title" content="xso::generator — Extra Functions Using gf2 – xoshiro/xoroshiro PRNG’s">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://nessan.github.io/xoshiro/pages/assets/images/logo.png">
 <meta property="og:site_name" content="xoshiro/xoroshiro PRNG's">
@@ -402,7 +402,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><code>xso::generator</code> — Extra Functions Using <code>bit</code></h1>
+          <h1 class="quarto-secondary-nav-title"><code>xso::generator</code> — Extra Functions Using <code>gf2</code></h1>
         </a>     
     </div>
   </nav>
@@ -604,7 +604,7 @@ window.Quarto = {
   <li><a href="#performing-jumps" id="toc-performing-jumps" class="nav-link" data-scroll-target="#performing-jumps">Performing Jumps</a></li>
   <li><a href="#see-also" id="toc-see-also" class="nav-link" data-scroll-target="#see-also">See Also</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/nessan/xoshiro/edit/main/docs/pages/bit.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nessan/xoshiro/issues/new/choose" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/nessan/xoshiro/edit/main/docs/pages/gf2.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nessan/xoshiro/issues/new/choose" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -612,7 +612,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><code>xso::generator</code> — Extra Functions Using <code>bit</code></h1>
+<h1 class="title d-none d-lg-block"><code>xso::generator</code> — Extra Functions Using <code>gf2</code></h1>
 </div>
 
 
@@ -642,14 +642,14 @@ window.Quarto = {
 </div>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p><a href="https://nessan.github.io/bit"><code>bit</code></a> is a C++ library for doing linear algebra over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a> the simplest field of two elements <span class="math inline">\(\{0,1\}\)</span> where the usual arithmetic operations are performed mod 2. The <code>bit</code> library is header only so easily incorporated into any application. If it is available the <code>xoshiro.h</code> header file defines some extra non-member functions:</p>
+<p><a href="https://nessan.github.io/gf2"><code>gf2</code></a> is a C++ library for doing linear algebra over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a> the simplest field of two elements <span class="math inline">\(\{0,1\}\)</span> where the usual arithmetic operations are performed mod 2. The <code>gf2</code> library is header only so easily incorporated into any application. If it is available the <code>xoshiro.h</code> header file defines some extra non-member functions:</p>
 <div class="admonition tip">
     <table><tbody><tr>
     <td class="icon"> <i class="fa icon-tip" title="Tip"></i></td>
     <td class="content">
     
 The extra functions are defined only if the compiler flag <code>BIT</code> is set.<br>
-See the <code>CMakeLists.txt</code> file at the root of the <code>xoshiro</code> repo for an example of how to automatically download the needed <code>bit</code> headers and incorporate them into a project.
+See the <code>CMakeLists.txt</code> file at the root of the <code>xoshiro</code> repo for an example of how to automatically download the needed <code>gf2</code> headers and incorporate them into a project.
 </td></tr></tbody></table></div>
 <div class="admonition note">
     <table><tbody><tr>
@@ -667,7 +667,7 @@ Any <code>xso::generator</code> satisfies all requirements of the <a href="../pa
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-1" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-1" data-code-lines="3" data-code-annotation="1">Returns the transition matrix for a <a href="../pages/State.html"><code>State</code></a> as a <code>bit::matrix</code>.<br>
+<span data-code-cell="annotated-cell-1" data-code-lines="3" data-code-annotation="1">Returns the transition matrix for a <a href="../pages/State.html"><code>State</code></a> as a <code>gf2::BitMatrix</code>.<br>
 Note that any <code>xso::generator</code> also satisfies the <code>State</code> concept.</span>
 </dd>
 </dl>
@@ -675,7 +675,7 @@ Note that any <code>xso::generator</code> also satisfies the <code>State</code> 
 \bold{s} \gets T \cdot \bold{s}.
 \]</span> If there are <span class="math inline">\(n\)</span> bits of state, then in this view, <span class="math inline">\(\bold{s}\)</span> is a bit-vector of size <span class="math inline">\(n\)</span>, and <span class="math inline">\(T\)</span> is a <span class="math inline">\(n \times n\)</span> bit-matrix. For example, the <code>State</code> underlying the <code>xso::rng64</code> generator has 256 bits of state so <span class="math inline">\(\bold{s}\)</span> is a <span class="math inline">\(256\)</span> element bit-vector and <span class="math inline">\(T\)</span> is a <span class="math inline">\(256 \times 256\)</span> bit-matrix.</p>
 <p>In practice, the state bit-vector is stored as an array of ordinary words and the transition matrix <span class="math inline">\(T\)</span> is only implicitly defined by the <a href="../pages/functor.html"><code>step</code></a> method which works directly on those state words. There are no references to either bit-vectors or bit-matrices.</p>
-<p>However, using the <code>bit</code> library, which efficiently performs linear algebra over <span class="math inline">\(\mathbb{F}_2\)</span>, we can get an explicit representation of <span class="math inline">\(T\)</span> as a <code>bit::matrix</code>.</p>
+<p>However, using the <code>gf3</code> library, which efficiently performs linear algebra over <span class="math inline">\(\mathbb{F}_2\)</span>, we can get an explicit representation of <span class="math inline">\(T\)</span> as a <code>gf2::BitMatrix</code>.</p>
 <p><span class="bt">Example: The transition matrix for <code>xso::rng32</code></span></p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;xoshiro.h&gt;</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
@@ -704,13 +704,13 @@ Note that any <code>xso::generator</code> also satisfies the <code>State</code> 
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-4" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-4" data-code-lines="3" data-code-annotation="1">Returns the characteristic polynomial of the <code>State</code>’s transition matrix as a <code>bit::polynomial</code>.</span>
+<span data-code-cell="annotated-cell-4" data-code-lines="3" data-code-annotation="1">Returns the characteristic polynomial of the <code>State</code>’s transition matrix as a <code>gf2::BitPolynomial</code>.</span>
 </dd>
 </dl>
 <p>The <span class="math inline">\(n \times n\)</span> transition matrix <span class="math inline">\(T\)</span> has a characteristic polynomial <span class="math inline">\(c(x)\)</span> of degree <span class="math inline">\(n\)</span>: <span class="math display">\[
 c(x) = c_0 + c_1 x + \cdots + c_n x^n.
 \]</span> This is a polynomial over <span class="math inline">\(\mathbb{F}_2\)</span> so <span class="math inline">\(c_i \in \{0, 1\}\)</span> for <span class="math inline">\(i = 0, \ldots, n\)</span>.</p>
-<p>We have a method to extract this polynomial and return it as a <code>bit::polynomial</code> of size <span class="math inline">\(n+1\)</span>.</p>
+<p>We have a method to extract this polynomial and return it as a <code>gf2::BitPolynomial</code> of size <span class="math inline">\(n+1\)</span>.</p>
 <div class="admonition note">
     <table><tbody><tr>
     <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
@@ -746,17 +746,17 @@ The <code>xoshiro.h</code> header file contains the characteristic polynomial co
 <p>The <code>State</code> characteristic polynomial is primarily used to compute a <em>jump polynomial</em> that can rapidly move the engine ahead by <span class="math inline">\(N\)</span> steps where <span class="math inline">\(N\)</span> can be huge — e.g.&nbsp;<span class="math inline">\(N = 2^{100}\)</span>.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-7"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><span id="annotated-cell-7-1"><a href="#annotated-cell-7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">template</span><span class="op">&lt;</span><span class="bu">std::</span>unsigned_integral Block<span class="op">,</span> <span class="kw">typename</span> Allocator<span class="op">&gt;</span></span>
 <span id="annotated-cell-7-2"><a href="#annotated-cell-7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">auto</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-7-3" class="code-annotation-target"><a href="#annotated-cell-7-3" aria-hidden="true" tabindex="-1"></a>jump_polynomial<span class="op">(</span><span class="at">const</span> bit<span class="op">::</span>polynomial<span class="op">&lt;</span>Block<span class="op">,</span> Allocator<span class="op">&gt;&amp;</span> c<span class="op">,</span> <span class="bu">std::</span>size_t N<span class="op">,</span> <span class="dt">bool</span> N_is_pow2 <span class="op">=</span> <span class="kw">false</span><span class="op">);</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-7-3" class="code-annotation-target"><a href="#annotated-cell-7-3" aria-hidden="true" tabindex="-1"></a>jump_polynomial<span class="op">(</span><span class="at">const</span> gf2<span class="op">::</span>BitPolynomial<span class="op">&lt;</span>Block<span class="op">,</span> Allocator<span class="op">&gt;&amp;</span> c<span class="op">,</span> <span class="bu">std::</span>size_t N<span class="op">,</span> <span class="dt">bool</span> N_is_pow2 <span class="op">=</span> <span class="kw">false</span><span class="op">);</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-7" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-7" data-code-lines="3" data-code-annotation="1">Returns a <code>bit::polynomial</code> that can rapidly move the <code>State</code> ahead by <span class="math inline">\(N\)</span> or <span class="math inline">\(2^N\)</span> steps.<br>
-The <code>c</code> argument should be the <code>bit::polynomial</code> returned by the <code>characteristic_polynomial()</code> function.</span>
+<span data-code-cell="annotated-cell-7" data-code-lines="3" data-code-annotation="1">Returns a <code>gf2::BitPolynomial</code> that can rapidly move the <code>State</code> ahead by <span class="math inline">\(N\)</span> or <span class="math inline">\(2^N\)</span> steps.<br>
+The <code>c</code> argument should be the <code>gf2::BitPolynomial</code> returned by the <code>characteristic_polynomial()</code> function.</span>
 </dd>
 </dl>
 <p>As explained in the <a href="../pages/jump-technique.html">jump technique</a> page, the <em>jump polynomial</em> that can advance a state engine by <span class="math inline">\(N\)</span> steps is given by: <span class="math display">\[
 r(x) = \mod{x^N}{c(x)},
-\]</span> where <span class="math inline">\(c(x)\)</span> is the engine’s characteristic polynomial, which is degree <span class="math inline">\(n\)</span> so <span class="math inline">\(r(x)\)</span> has degree of at most <span class="math inline">\(n-1\)</span>. The <code>xso::jump_polynomial</code> function returns the coefficients of <span class="math inline">\(r(x)\)</span> as <code>bit::polynomial</code> that can, in turn, be used as the argument to the non-member <code>xso::jump</code> function described next.</p>
+\]</span> where <span class="math inline">\(c(x)\)</span> is the engine’s characteristic polynomial, which is degree <span class="math inline">\(n\)</span> so <span class="math inline">\(r(x)\)</span> has degree of at most <span class="math inline">\(n-1\)</span>. The <code>xso::jump_polynomial</code> function returns the coefficients of <span class="math inline">\(r(x)\)</span> as <code>gf2::BitPolynomial</code> that can, in turn, be used as the argument to the non-member <code>xso::jump</code> function described next.</p>
 <div class="admonition tip">
     <table><tbody><tr>
     <td class="icon"> <i class="fa icon-tip" title="Tip"></i></td>
@@ -789,11 +789,11 @@ We often want to jump by an <span class="math inline">\(N \gg 1\)</span> that is
 </section>
 <section id="performing-jumps" class="level2">
 <h2 class="anchored" data-anchor-id="performing-jumps">Performing Jumps</h2>
-<p>You can use the <a href="../pages/bit.html#jump-polynomial"><code>jump_polynomial</code></a> function described above to compute an appropriate <em>jump polynomial</em> over <span class="math inline">\(\mathbb{F}_2\)</span> for <em>any</em> jump size and <em>any</em> <em>xoshiro/xoroshiro</em> generator.</p>
+<p>You can use the <a href="../pages/gf2.html#jump-polynomial"><code>jump_polynomial</code></a> function described above to compute an appropriate <em>jump polynomial</em> over <span class="math inline">\(\mathbb{F}_2\)</span> for <em>any</em> jump size and <em>any</em> <em>xoshiro/xoroshiro</em> generator.</p>
 <p>We have a function that uses that polynomial to implement the <a href="../pages/jump-technique.html">jump technique</a>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-10"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><span id="annotated-cell-10-1"><a href="#annotated-cell-10-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span><span class="kw">typename</span> State<span class="op">&gt;</span></span>
 <span id="annotated-cell-10-2"><a href="#annotated-cell-10-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-10-3" class="code-annotation-target"><a href="#annotated-cell-10-3" aria-hidden="true" tabindex="-1"></a>jump<span class="op">(</span>State <span class="op">&amp;</span>state<span class="op">,</span> <span class="at">const</span> bit<span class="op">::</span>polynomial<span class="op">&lt;&gt;&amp;</span> jump_poly<span class="op">);</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-10-3" class="code-annotation-target"><a href="#annotated-cell-10-3" aria-hidden="true" tabindex="-1"></a>jump<span class="op">(</span>State <span class="op">&amp;</span>state<span class="op">,</span> <span class="at">const</span> gf2<span class="op">::</span>BitPolynomial<span class="op">&lt;&gt;&amp;</span> jump_poly<span class="op">);</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-10" data-target-annotation="1">1</dt>
 <dd>
@@ -1294,7 +1294,7 @@ We often want to jump by an <span class="math inline">\(N \gg 1\)</span> that is
     </a>
   </li>  
 </ul>
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/nessan/xoshiro/edit/main/docs/pages/bit.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nessan/xoshiro/issues/new/choose" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/nessan/xoshiro/edit/main/docs/pages/gf2.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nessan/xoshiro/issues/new/choose" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p><a href="https://opensource.org/license/mit">MIT Licensed</a></p>
 </div>

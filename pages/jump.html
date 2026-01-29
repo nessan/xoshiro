@@ -680,8 +680,8 @@ window.Quarto = {
 <section id="other-generator-variants" class="level2">
 <h2 class="anchored" data-anchor-id="other-generator-variants">Other Generator Variants</h2>
 <p>These <code>xso::jump</code> and <code>xso::jump_coefficients</code> functions rely on the <em>pre-canned</em> characteristic polynomials embedded in the <code>xoshiro.h</code>. All our <a href="../pages/type-aliases.html">type aliased</a> generators have their characteristic polynomial precomputed in that header file. This means we support jumping any of those generators by arbitrary steps.</p>
-<p>If, instead, you are using some other variant of xoshiro/xoroshiro, you can still get its characteristic polynomial and jump polynomials by employing the extra, header-only, <a href="https://nessan.github.io/bit"><code>bit</code></a> library. That is a package for <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a>, which can compute the needed characteristic polynomials for the generator’s transition matrix. Once the <code>bit</code> library is included, then the <code>xoshiro.h</code> header file defines extra non-member functions that can compute those characteristic and jump polynomials.</p>
-<p>See the documentation for these functions at <a href="https://nessan.github.io/bit"><code>bit</code></a> website.</p>
+<p>If, instead, you are using some other variant of xoshiro/xoroshiro, you can still get its characteristic polynomial and jump polynomials by employing the extra, header-only, <a href="https://nessan.github.io/gf2"><code>gf2</code></a> library. That is a package for <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a>, which can compute the needed characteristic polynomials for the generator’s transition matrix. Once the <code>gf2</code> library is included, then the <code>xoshiro.h</code> header file defines extra non-member functions that can compute those characteristic and jump polynomials.</p>
+<p>See the documentation for these functions at <a href="https://nessan.github.io/gf2"><code>gf2</code></a> website.</p>
 </section>
 <section id="motivation-for-jumping" class="level2">
 <h2 class="anchored" data-anchor-id="motivation-for-jumping">Motivation for Jumping</h2>
@@ -703,10 +703,10 @@ window.Quarto = {
 <p><a href="../pages/characteristic_coefficients.html"><code>characteristic_coefficients</code></a><br>
 <a href="../pages/jump_coefficients.html"><code>jump_coefficients</code></a><br>
 <a href="../pages/partition.html"><code>xso::partition</code></a><br>
-<a href="https://nessan.github.io/bit/pages/matrix/characteristic_polynomial.html"><code>bit::characteristic_polynomial</code></a><br>
-<a href="https://nessan.github.io/bit/pages/polynomial/reduce.html"><code>bit::polynomial::reduce</code></a></p>
+<a href="https://nessan.github.io/gf2/md_docs_2pages_2BitMatrix.html#characteristic-polynomials">gf2::BitMatrix::characteristic_polynomial`</a><br>
+<a href="https://nessan.github.io/gf2/md_docs_2pages_2BitPolynomial.html#modular-reduction"><code>gf2::BitPolynomial::reduce</code></a></p>
 <p><a href="../pages/jump-technique.html">jump technique</a><br>
-<a href="https://nessan.github.io/bit/pages/notes/reduction.html">reduction technique</a></p>
+<a href="https://nessan.github.io/gf2/Reduction.html">reduction technique</a></p>
 
 
 </section>

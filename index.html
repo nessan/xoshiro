@@ -710,7 +710,7 @@ window.Quarto = {
 <p>This library is header-only, so there is nothing to compile &amp; link — drop the <code>xoshiro.h</code> file somewhere convenient, and you are good to go.</p>
 <p>Alternatively, if you are using <code>CMake</code>, you can use the standard <code>FetchContent</code> module by adding a few lines to your project’s <code>CMakeLists.txt</code> file:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode cmake code-with-copy"><code class="sourceCode cmake"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">include</span>(<span class="im">FetchContent</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">FetchContent_Declare</span>(xoshiro <span class="ot">URL</span> https://github.com/nessan/bit/releases/download/current/xoshiro.zip)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">FetchContent_Declare</span>(xoshiro <span class="ot">URL</span> https://github.com/nessan/xoshiro/releases/download/current/xoshiro.zip)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">FetchContent_MakeAvailable</span>(xoshiro)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This command downloads and unpacks an archive of the current version of <code>xoshiro</code> to your project’s build folder. You can then add a dependency on <code>xoshiro::xoshiro</code>, a <code>CMake</code> alias for <code>xoshiro</code>. <code>FetchContent</code> will automatically ensure the build system knows where to find the downloaded header files and any needed compiler flags.</p>
 <p>Used like this, <code>FetchContent</code> will only download a minimal library version without any redundant test code, sample programs, documentation files, etc.</p>
@@ -812,15 +812,15 @@ Of course, the generators can also still be used as uniform random bit generator
 </section>
 <section id="extra-analysis" class="level3">
 <h3 class="anchored" data-anchor-id="extra-analysis">Extra Analysis</h3>
-<p>Extra non-member functions for generator analysis are defined if the <a href="https://nessan.github.io/bit"><code>bit</code></a> library is available.</p>
-<p><code>bit</code> is a C++ library for doing linear algebra over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a> the simplest Galois field of two elements <span class="math inline">\(\{0,1\}\)</span>, where the usual arithmetic operations are performed mod 2. The <code>bit</code> library is header-only, so it can be easily incorporated into any application.</p>
+<p>Extra non-member functions for generator analysis are defined if the <a href="https://nessan.github.io/gf2"><code>gf2</code></a> library is available.</p>
+<p><code>gf2</code> is a C++ library for doing linear algebra over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a> the simplest Galois field of two elements <span class="math inline">\(\{0,1\}\)</span>, where the usual arithmetic operations are performed mod 2. The <code>gf2</code> library is header-only, so it can be easily incorporated into any application.</p>
 <p>If it is available, then <code>xoshiro.h</code> defines some extra functions that let you access the generator’s <em>transition matrix</em> and use/analyze that in various ways.</p>
 <div class="admonition note">
     <table><tbody><tr>
     <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
     <td class="content">
     
-Even if you only use the single <code>xoshiro.h</code> header file without incorporating the <code>bit</code> library, you can still jump any of the predefined type-aliased <em>xoshiro/xoroshiro</em> variants by <em>arbitrary</em> numbers of steps.
+Even if you only use the single <code>xoshiro.h</code> header file without incorporating the <code>gf2</code> library, you can still jump any of the predefined type-aliased <em>xoshiro/xoroshiro</em> variants by <em>arbitrary</em> numbers of steps.
 </td></tr></tbody></table></div>
 </section>
 </section>
