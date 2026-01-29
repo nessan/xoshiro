@@ -1,8 +1,13 @@
-/// @brief Compare jumping one of our xoshiro/xoroshiro classes with the equivalent "C" version.
-/// @note  The "C" versions use precomputed jump polynomials so we need to factor that into the timings.
-/// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
-/// SPDX-License-Identifier: MIT
-#include "common.h"
+// Compare jumping one of our xoshiro/xoroshiro classes with the equivalent "C" version.
+// The "C" versions use precomputed jump polynomials and in this test we factor that into the timings.
+//
+// This needs to be run with a reasonable level of compiler optimization to be meaningful.
+//
+// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
+// SPDX-License-Identifier: MIT
+
+#include <xoshiro.h>
+#include <utilities/utilities.h>
 #include "vigna.h"
 
 template<typename New, typename Old>

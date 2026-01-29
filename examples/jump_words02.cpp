@@ -1,15 +1,15 @@
-/// @brief Compute a range of jump polynomials in word form for one of our xoshiro/xoroshiro engines.
-/// @note  Uses the `bit` library.
-/// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
-/// SPDX-License-Identifier: MIT
-#include "common.h"
-#include <bit/bit.h>
+// Compute a range of jump polynomials in word form for one of our xoshiro/xoroshiro engines.
+// This uses the `gf2` library.
+//
+// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
+// SPDX-License-Identifier: MIT
+#include <xoshiro.h>
+#include <gf2/gf2.h>
 
-/// @brief Print a std::array of unsigned integers in a hex format surrounded by braces.
+// Print a std::array of unsigned integers in a hex format surrounded by braces.
 template<typename T, std::size_t N>
 void
-hex_print_array(std::array<T, N>& v)
-{
+hex_print_array(std::array<T, N>& v) {
     std::cout << "{";
     for (std::size_t i = 0; i < N; ++i) {
         std::print("{:#18x}", v[i]);
@@ -18,19 +18,18 @@ hex_print_array(std::array<T, N>& v)
     std::cout << "}";
 }
 
-/// @brief Precompute some standard jump polynomials in word form for one of our xoshiro/xoroshiro engines.
-/// If the engine has n_bits of state then its period is 2^n_bits (well 2^n_bits - 1 really).
-/// We want to chunk that orbit up into N equal sized non-overlapping sub-streams where N = 2, 2^2, 2^3, ..., 2^20.
-/// The first sub-stream starts at s0, the next at s1 etc.  Our jump polynomials get you from s0 to s1 ...
-/// The polynomials are output in a format suitable for pasting into a C++ header file.
+// Precompute some standard jump polynomials in word form for one of our xoshiro/xoroshiro engines.
+// If the engine has n_bits of state then its period is 2^n_bits (well 2^n_bits - 1 really).
+// We want to chunk that orbit up into N equal sized non-overlapping sub-streams where N = 2, 2^2, 2^3, ..., 2^20.
+// The first sub-stream starts at s0, the next at s1 etc.  Our jump polynomials get you from s0 to s1 ...
+// The polynomials are output in a format suitable for pasting into a C++ header file.
 template<typename State>
 void
-compute_jump_words(std::size_t n_lo, std::size_t n_hi)
-{
+compute_jump_words(std::size_t n_lo, std::size_t n_hi) {
     // Print the name of the State class we are working on.
     std::print("Jump polynomials in words for: {}\n", State::xso_name());
 
-    // Precompute the engine's characteristic bit::polynomial.
+    // Precompute the engine's characteristic gf2::BitPolynomial.
     auto c = xso::characteristic_polynomial<State>();
 
     // How many bits are there in the state?
@@ -50,8 +49,8 @@ compute_jump_words(std::size_t n_lo, std::size_t n_hi)
 
         // Jump amount: N = 2^n_bits / 2^n = 2^(n_bits - n)
         std::size_t power_two = n_bits - n;
-        auto        jump_poly = xso::jump_polynomial(c, power_two, true).coefficients();
-        jump_poly.export_bits(jump_words);
+        auto        jump_coeffs = xso::jump_polynomial(c, power_two, true).coefficients();
+        jump_coeffs.to_words(jump_words.begin());
 
         // Dump this jump polynomial as one element of the entire array of jump polynomials
         std::cout << "    ";
@@ -65,8 +64,7 @@ compute_jump_words(std::size_t n_lo, std::size_t n_hi)
 }
 
 int
-main()
-{
+main() {
     // Compute some jump polynomials for our type-aliases specific state-engines.
     // For parallel processing we wish to split the orbit of the state-engine into equal sized non-overlapping
     // sub-streams. So one full stream starting at state s0 becomes say 2 sub-stream where the first starts at s0 and

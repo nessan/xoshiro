@@ -1,7 +1,10 @@
-/// @brief Statistical check on the production of random uniforms/variates samples.
-/// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
-/// SPDX-License-Identifier: MIT
-#include "common.h"
+// Statistical check on the production of random uniforms/variates samples.
+//
+// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
+// SPDX-License-Identifier: MIT
+
+#include <xoshiro.h>
+#include <utilities/utilities.h>
 
 int main()
 {

@@ -1,7 +1,12 @@
-/// @brief Timing comparison between our jumps and using the pre-canned ones in the equivalent "C" version.
-/// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
-/// SPDX-License-Identifier: MIT
-#include "common.h"
+// Timing comparison between our jumps and using the pre-canned ones in the equivalent "C" version.
+// This should be run with a reasonable level of compiler optimization to be meaningful.
+//
+// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
+// SPDX-License-Identifier: MIT
+
+
+#include <xoshiro.h>
+#include <utilities/utilities.h>
 #include "vigna.h"
 
 template<typename New, typename Old>
@@ -13,7 +18,6 @@ compare(New& x, Old& c) {
     // Some constants etc.
     constexpr std::size_t n_words = New::word_count();
     constexpr std::size_t n_bits = New::bit_count();
-    ;
 
     // Make sure we start both generators with identical states ...
     for (std::size_t i = 0; i < n_words; ++i) c.s[i] = x[i];
@@ -44,7 +48,6 @@ compare(New& x, Old& c) {
 
 int
 main() {
-    // Make those large generated random numbers at least somewhat readable.
     utilities::pretty_print_thousands();
 
     // Our versions of the generators

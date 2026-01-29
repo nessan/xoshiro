@@ -1,5 +1,5 @@
 ---
-title: "`xso::generator` --- Extra Functions Using `bit`"
+title: "`xso::generator` --- Extra Functions Using `gf2`"
 ---
 
 <!-- Math shortcuts we use -->
@@ -7,12 +7,12 @@ title: "`xso::generator` --- Extra Functions Using `bit`"
 
 ## Introduction
 
-{bit.lib} is a {cpp}  library for doing linear algebra over {gf2} the simplest field of two elements $\{0,1\}$ where the usual arithmetic operations are performed mod 2.
-The `bit` library is header only so easily incorporated into any application.
+{gf2.lib} is a {cpp}  library for doing linear algebra over {GF2} the simplest field of two elements $\{0,1\}$ where the usual arithmetic operations are performed mod 2.
+The `gf2` library is header only so easily incorporated into any application.
 If it is available the `xoshiro.h` header file defines some extra non-member functions:
 
 TIP: The extra functions are defined only if the compiler flag `BIT` is set. \
-See the `CMakeLists.txt` file at the root of the `xoshiro` repo for an example of how to automatically download the needed `bit` headers and incorporate them into a project.
+See the `CMakeLists.txt` file at the root of the `xoshiro` repo for an example of how to automatically download the needed `gf2` headers and incorporate them into a project.
 
 NOTE: Any `xso::generator` satisfies all requirements of the {State} concept.
 
@@ -23,7 +23,7 @@ template<typename State>
 auto
 transition_matrix();        // <1>
 ```
-1. Returns the transition matrix for a {State} as a `bit::matrix`. \
+1. Returns the transition matrix for a {State} as a `gf2::BitMatrix`. \
 Note that any `xso::generator` also satisfies the `State` concept.
 
 As we explain in the {jump-technique} page one can always view the `State`'s {step} function as being the product of a transition bit-matrix $T$ with the state bit-vector $\bold{s}$
@@ -36,7 +36,7 @@ For example, the `State` underlying the `xso::rng64` generator has 256 bits of s
 In practice, the state bit-vector is stored as an array of ordinary words and the transition matrix $T$ is only implicitly defined by the {step} method which works directly on those state words.
 There are no references to either bit-vectors or bit-matrices.
 
-However, using the `bit` library, which efficiently performs linear algebra over {f2}, we can get an explicit representation of $T$ as a `bit::matrix`.
+However, using the `gf3` library, which efficiently performs linear algebra over {f2}, we can get an explicit representation of $T$ as a `gf2::BitMatrix`.
 
 [Example: The transition matrix for `xso::rng32`]{.bt}
 ```cpp
@@ -71,7 +71,7 @@ template<typename State>
 auto
 characteristic_polynomial();    // <1>
 ```
-1. Returns the characteristic polynomial of the `State`'s transition matrix as a `bit::polynomial`.
+1. Returns the characteristic polynomial of the `State`'s transition matrix as a `gf2::BitPolynomial`.
 
 The $n \times n$ transition matrix $T$ has a characteristic polynomial $c(x)$ of degree $n$:
 $$
@@ -79,7 +79,7 @@ c(x) = c_0 + c_1 x + \cdots + c_n x^n.
 $$
 This is a polynomial over {f2} so $c_i \in \{0, 1\}$ for $i = 0, \ldots, n$.
 
-We have a method to extract this polynomial and return it as a `bit::polynomial` of size $n+1$.
+We have a method to extract this polynomial and return it as a `gf2::BitPolynomial` of size $n+1$.
 
 NOTE: All our transition matrices will be of *full rank* and the characteristic polynomial will have degree $n$.
 So $c(x)$ is *monic* and we always have $c_n = 1$.
@@ -110,17 +110,17 @@ The `State` characteristic polynomial is primarily used to compute a *jump polyn
 ```cpp
 template<std::unsigned_integral Block, typename Allocator>
 auto
-jump_polynomial(const bit::polynomial<Block, Allocator>& c, std::size_t N, bool N_is_pow2 = false);    // <1>
+jump_polynomial(const gf2::BitPolynomial<Block, Allocator>& c, std::size_t N, bool N_is_pow2 = false);    // <1>
 ```
-1. Returns a `bit::polynomial` that can rapidly move the `State` ahead by $N$ or $2^N$ steps. \
-The `c` argument should be the `bit::polynomial` returned by the `characteristic_polynomial()` function.
+1. Returns a `gf2::BitPolynomial` that can rapidly move the `State` ahead by $N$ or $2^N$ steps. \
+The `c` argument should be the `gf2::BitPolynomial` returned by the `characteristic_polynomial()` function.
 
 As explained in the {jump-technique} page, the *jump polynomial* that can advance a state engine by $N$ steps is given by:
 $$
 r(x) = \mod{x^N}{c(x)},
 $$
 where $c(x)$ is the engine's characteristic polynomial, which is degree $n$ so  $r(x)$ has degree of at most $n-1$.
-The `xso::jump_polynomial` function returns the coefficients of $r(x)$  as `bit::polynomial` that can, in turn, be used as the argument to the non-member `xso::jump` function described next.
+The `xso::jump_polynomial` function returns the coefficients of $r(x)$  as `gf2::BitPolynomial` that can, in turn, be used as the argument to the non-member `xso::jump` function described next.
 
 TIP: We often want to jump by an $N \gg 1$ that is too large to fit into a 64-bit word.
 By setting `N` to 100 and the `N_is_pow2` argument to `true`, you can get the coefficients of the jump polynomial for $N = 2^{100}$ steps.
@@ -152,7 +152,7 @@ We have a function that uses that polynomial to implement the {jump-technique}:
 ```cpp
 <typename State>
 void
-jump(State &state, const bit::polynomial<>& jump_poly);     // <1>
+jump(State &state, const gf2::BitPolynomial<>& jump_poly);     // <1>
 ```
 1. Jumps `state` ahead using the jump polynomial `jump_poly`.
 

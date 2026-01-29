@@ -74,15 +74,13 @@ public:
     /// @brief Construct and seed from an iteration of words which are all copied into the state.
     /// @note  The words shouldn't all be zeros.
     template<typename Iter>
-    explicit generator(Iter b, Iter e)
-    {
+    explicit generator(Iter b, Iter e) {
         seed(b, e);
     }
 
     /// @brief Sets the full state to random starting values.
     /// @note  This will produce a high quality stream of random outputs that are different on each run.
-    void seed()
-    {
+    void seed() {
         // We will use std::random_device as the principal source of entropy.
         std::random_device dev;
 
@@ -90,8 +88,7 @@ public:
         std::array<word_type, word_count()> full_state;
         if constexpr (sizeof(word_type) <= sizeof(std::random_device::result_type)) {
             for (auto& word : full_state) word = static_cast<word_type>(dev());
-        }
-        else {
+        } else {
             for (auto& word : full_state) word = static_cast<word_type>(static_cast<uint64_t>(dev()) << 32 | dev());
         }
 
@@ -109,8 +106,7 @@ public:
 
     /// @brief Fill the state quickly but probably @b not well from a single unsigned integer value.
     /// @note  Seeding from a single value is an easy way to get repeatable random streams.
-    constexpr void seed(word_type seed)
-    {
+    constexpr void seed(word_type seed) {
         // Scramble the bits in the single seed we were given.
         auto sm64_state = murmur_scramble64(seed);
 
@@ -123,8 +119,7 @@ public:
     /// @brief Set the state from an iteration of words which are all copied into the state.
     /// @note  The words shouldn't all be zeros.
     template<typename Iter>
-    constexpr void seed(Iter b, Iter e)
-    {
+    constexpr void seed(Iter b, Iter e) {
         m_state.seed(b, e);
     }
 
@@ -133,8 +128,7 @@ public:
 
     /// @brief Reduce the current state to get a single @c result_type and then prep for the next call.
     /// @note  This method is required by the @c UniformRandomBitGenerator concept.
-    constexpr result_type operator()()
-    {
+    constexpr result_type operator()() {
         result_type retval = m_scrambler(m_state);
         step();
         return retval;
@@ -145,40 +139,35 @@ public:
 
     /// @brief Read-only access to the whole state which we copy into @c dst
     template<typename Iter>
-    constexpr void get_state(Iter dst) const
-    {
+    constexpr void get_state(Iter dst) const {
         m_state.get_state(dst);
     }
 
     /// @brief Returns a single integer value from a uniform distribution over @c [a,b].
     /// @note  No error checking is done and the behaviour is undefined if a > b.
     template<std::integral T>
-    constexpr T sample(T a, T b)
-    {
+    constexpr T sample(T a, T b) {
         return std::uniform_int_distribution<T>{a, b}(*this);
     }
 
     /// @brief Returns a single real value from a uniform distribution over @c [a,b).
     /// @note  No error checking is done and the behaviour is undefined if a > b.
     template<std::floating_point T>
-    constexpr T sample(T a, T b)
-    {
+    constexpr T sample(T a, T b) {
         return std::uniform_real_distribution<T>{a, b}(*this);
     }
 
     /// @brief Returns a single index from a uniform distribution over @c [0,len).
     /// @note  No error checking is done and the behaviour is undefined if len = 0.
     template<std::integral T>
-    constexpr T index(T len)
-    {
+    constexpr T index(T len) {
         return sample(T{0}, len - 1);
     }
 
     /// @brief Returns a single value from an iteration -- all elements are equally likely to be returned.
     /// @note  No error checking is done and the behaviour is undefined if e < b.
     template<std::input_iterator T>
-    constexpr auto sample(T b, T e)
-    {
+    constexpr auto sample(T b, T e) {
         // Edge case?
         auto len = std::distance(b, e);
         if (len < 2) return *b;
@@ -191,8 +180,7 @@ public:
 
     /// @brief Returns a single value from a container -- all elements are equally likely to be returned.
     template<typename Container>
-    constexpr auto sample(const Container& container)
-    {
+    constexpr auto sample(const Container& container) {
         return sample(std::cbegin(container), std::cend(container));
     }
 
@@ -200,16 +188,14 @@ public:
     /// @note  See the documentation for @c std::sample(...) for more details.
     /// @note  No error checking is done and the behaviour is undefined if e < b.
     template<std::input_iterator Src, typename Dst>
-    constexpr Dst sample(Src b, Src e, Dst dst, std::unsigned_integral auto n)
-    {
+    constexpr Dst sample(Src b, Src e, Dst dst, std::unsigned_integral auto n) {
         return std::sample(b, e, dst, n, *this);
     }
 
     /// @brief Pick @c n elements from a container without replacement & put the chosen samples in @c dst.
     /// @note  See the documentation for @c std::sample(...) for more details.
     template<typename Src, typename Dst>
-    constexpr auto sample(const Src& src, Dst dst, std::unsigned_integral auto n)
-    {
+    constexpr auto sample(const Src& src, Dst dst, std::unsigned_integral auto n) {
         return sample(std::cbegin(src), std::cend(src), dst, n);
     }
 
@@ -221,8 +207,7 @@ public:
     /// @param dist The distribution in question e.g. a @c std::normal_distribution object.
     /// @param dst  An iterator to the start of where we put the samples.
     template<typename Iter>
-    constexpr Iter sample(Distribution auto& dist, Iter dst, std::unsigned_integral auto n)
-    {
+    constexpr Iter sample(Distribution auto& dist, Iter dst, std::unsigned_integral auto n) {
         while (n-- != 0) *dst++ = dist(*this);
         return dst;
     }
@@ -237,22 +222,19 @@ public:
     /// @brief Shuffles the elements in an iteration.
     /// @note  No error checking is done and the behaviour is undefined if e < b.
     template<std::random_access_iterator Iter>
-    constexpr void shuffle(Iter b, Iter e)
-    {
+    constexpr void shuffle(Iter b, Iter e) {
         std::shuffle(b, e, *this);
     }
 
     /// @brief Shuffles the elements of a container
     template<typename Container>
-    constexpr void shuffle(Container& container)
-    {
+    constexpr void shuffle(Container& container) {
         return shuffle(std::begin(container), std::end(container));
     }
 
     /// @brief Discard the next @c z iterations in the random number sequence.
     /// @note  We can do much better for large @c z by using one of the @c jump methods.
-    void discard(std::uint64_t z)
-    {
+    void discard(std::uint64_t z) {
         for (std::uint64_t i = 0; i < z; ++i) step();
     }
 
@@ -260,8 +242,7 @@ public:
     ///         fill @c dst with the @b precomputed coefficients for p(x) = p_0 + p_1 x + ... + p_{n-1}.
     /// @throws If the @c State has no precomputed characteristic coefficients this fails.
     template<typename Iter>
-    static constexpr void characteristic_coefficients(Iter dst)
-    {
+    static constexpr void characteristic_coefficients(Iter dst) {
         return State::characteristic_coefficients(dst);
     }
 
@@ -272,8 +253,7 @@ private:
     /// @brief  The SplitMix64 random number generator -- a simple generator with 64 bits of state.
     /// @param  state The current value of the 64-bit state which is altered by this function.
     /// @return A 64-bit unsigned random output.
-    static constexpr std::uint64_t split_mix64(std::uint64_t& state)
-    {
+    static constexpr std::uint64_t split_mix64(std::uint64_t& state) {
         std::uint64_t z = (state += 0x9e3779b97f4a7c15);
         z = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9;
         z = (z ^ (z >> 27)) * 0x94d049bb133111eb;
@@ -282,8 +262,7 @@ private:
     };
 
     /// @brief Uses the murmur algorithm to return a word that is a scrambled version of the 64 input bits.
-    static constexpr std::uint64_t murmur_scramble64(std::uint64_t x)
-    {
+    static constexpr std::uint64_t murmur_scramble64(std::uint64_t x) {
         x ^= x >> 33;
         x *= 0xff51afd7ed558ccdL;
         x ^= x >> 33;
@@ -293,8 +272,7 @@ private:
     }
 
     /// @brief Uses the murmur algorithm to return a word that is a scrambled version of the 32 input bits.
-    static constexpr std::uint32_t murmur_scramble32(std::uint32_t x)
-    {
+    static constexpr std::uint32_t murmur_scramble32(std::uint32_t x) {
         x *= 0xcc9e2d51;
         x = (x << 15) | (x >> 17);
         x *= 0x1b873593;
@@ -325,8 +303,7 @@ public:
     static constexpr std::size_t bit_count() { return N * std::numeric_limits<T>::digits; }
 
     /// @brief Returns a name for this state.
-    static constexpr auto xso_name()
-    {
+    static constexpr auto xso_name() {
         return std::format("xoshiro<{}x{},{},{}>", N, std::numeric_limits<T>::digits, A, B);
     }
 
@@ -335,21 +312,18 @@ public:
 
     /// @brief Read-only access to the whole state which we copy into @c dst.
     template<typename Iter>
-    constexpr void get_state(Iter dst) const
-    {
+    constexpr void get_state(Iter dst) const {
         std::copy(m_state.cbegin(), m_state.cend(), dst);
     }
 
     /// @brief Set the state from an iteration of words which shouldn't be all zeros.
     template<typename Iter>
-    constexpr void seed(Iter b, Iter e)
-    {
+    constexpr void seed(Iter b, Iter e) {
         std::copy(b, e, m_state.begin());
     }
 
     /// @brief Advance the state by one step.
-    constexpr void step()
-    {
+    constexpr void step() {
         if constexpr (N == 4) {
             auto tmp = m_state[1] << A;
             m_state[2] ^= m_state[0];
@@ -358,8 +332,7 @@ public:
             m_state[0] ^= m_state[3];
             m_state[2] ^= tmp;
             m_state[3] = std::rotl(m_state[3], B);
-        }
-        else if constexpr (N == 8) {
+        } else if constexpr (N == 8) {
             auto tmp = m_state[1] << A;
             m_state[2] ^= m_state[0];
             m_state[5] ^= m_state[1];
@@ -371,8 +344,7 @@ public:
             m_state[6] ^= m_state[7];
             m_state[6] ^= tmp;
             m_state[7] = std::rotl(m_state[7], B);
-        }
-        else {
+        } else {
             // There is no discernible pattern to the way xoshiro works as the number of words of state increases.
             // The step() method for each N has to be hard coded -- this contrasts to xoroshiro state.
             // So if we get to here we don't have a formula that works to advance the state and need to fail out.
@@ -385,23 +357,19 @@ public:
     /// @param  dst We fill this destination with the the precomputed coefficients of @b p(x)
     /// @throws If there are no precomputed characteristic coefficients we throw an error.
     template<typename Iter>
-    static constexpr void characteristic_coefficients(Iter dst)
-    {
+    static constexpr void characteristic_coefficients(Iter dst) {
         // In practice we have precomputed the p(x) polynomial for just a few xoshiro's with specific parameters.
         if constexpr (std::is_same_v<T, uint32_t> && N == 4 && A == 9 && B == 11) {
             std::array<T, N> p = {0xde18fc01, 0x1b489db6, 0x6254b1, 0xfc65a2};
             std::copy(p.cbegin(), p.cend(), dst);
-        }
-        else if constexpr (std::is_same_v<T, uint64_t> && N == 4 && A == 17 && B == 45) {
+        } else if constexpr (std::is_same_v<T, uint64_t> && N == 4 && A == 17 && B == 45) {
             std::array<T, N> p = {0x9d116f2bb0f0f001, 0x280002bcefd1a5e, 0x4b4edcf26259f85, 0x3c03c3f3ecb19};
             std::copy(p.cbegin(), p.cend(), dst);
-        }
-        else if constexpr (std::is_same_v<T, uint64_t> && N == 8 && A == 11 && B == 21) {
+        } else if constexpr (std::is_same_v<T, uint64_t> && N == 8 && A == 11 && B == 21) {
             std::array<T, N> p = {0xcf3cff0c00000001, 0x7fdc78d886f00c63, 0xf05e63fca6d7b781, 0x7a67058e7bbab6f0,
                                   0xf11eef832e32518f, 0x51ba7c47edc758ad, 0x8f2d27268ce4b20b, 0x500055d8b77f};
             std::copy(p.cbegin(), p.cend(), dst);
-        }
-        else {
+        } else {
             throw std::invalid_argument("xoshiro characteristic polynomial not pre-computed for given parameters!");
         }
     }
@@ -426,8 +394,7 @@ public:
     static constexpr std::size_t bit_count() { return N * std::numeric_limits<T>::digits; }
 
     /// @brief Returns a name for this state.
-    static constexpr auto xso_name()
-    {
+    static constexpr auto xso_name() {
         return std::format("xoroshiro<{}x{},{},{},{}>", N, std::numeric_limits<T>::digits, A, B, C);
     }
 
@@ -438,23 +405,20 @@ public:
     /// @brief Read-only access to the whole state which we copy into @c dst.
     /// @note  For larger values of N we are using the state array as a ring buffer which needs to be untangled!
     template<typename Iter>
-    constexpr void get_state(Iter dst) const
-    {
+    constexpr void get_state(Iter dst) const {
         // Need to untangle the ring buffer we are using to store the state.
         for (std::size_t i = 0; i < N; ++i, ++dst) *dst = operator[](i);
     }
 
     /// @brief Set the state from an iteration of words which shouldn't be all zeros.
     template<typename Iter>
-    constexpr void seed(Iter b, Iter e)
-    {
+    constexpr void seed(Iter b, Iter e) {
         std::copy(b, e, m_state.begin());
         m_final = N - 1;
     }
 
     /// @brief Advance the state by one step.
-    constexpr void step()
-    {
+    constexpr void step() {
         // Depending on the word_count of N we either do an explicit or implicit array shuffle of the state array.
         if constexpr (N == 2)
             simple_step();
@@ -466,28 +430,23 @@ public:
     /// @param  dst We fill this destination with the the precomputed coefficients of @b p(x)
     /// @throws If there are no precomputed characteristic coefficients we throw an error.
     template<typename Iter>
-    static constexpr void characteristic_coefficients(Iter dst)
-    {
+    static constexpr void characteristic_coefficients(Iter dst) {
         if constexpr (std::is_same_v<T, uint32_t> && N == 2 && A == 26 && B == 9 && C == 13) {
             std::array<T, N> p = {0x6e2286c1, 0x53be9da};
             std::copy(p.cbegin(), p.cend(), dst);
-        }
-        else if constexpr (std::is_same_v<T, uint64_t> && N == 2 && A == 24 && B == 16 && C == 37) {
+        } else if constexpr (std::is_same_v<T, uint64_t> && N == 2 && A == 24 && B == 16 && C == 37) {
             std::array<T, N> p = {0x95b8f76579aa001, 0x8828e513b43d5};
             std::copy(p.cbegin(), p.cend(), dst);
-        }
-        else if constexpr (std::is_same_v<T, uint64_t> && N == 2 && A == 49 && B == 21 && C == 28) {
+        } else if constexpr (std::is_same_v<T, uint64_t> && N == 2 && A == 49 && B == 21 && C == 28) {
             std::array<T, N> p = {0x8dae70779760b081, 0x31bcf2f855d6e5};
             std::copy(p.cbegin(), p.cend(), dst);
-        }
-        else if constexpr (std::is_same_v<T, uint64_t> && N == 16 && A == 25 && B == 27 && C == 36) {
+        } else if constexpr (std::is_same_v<T, uint64_t> && N == 16 && A == 25 && B == 27 && C == 36) {
             std::array<T, N> p = {0x5cfeb8cc48ddb211, 0xb73e379d035a06dd, 0x17d5100a20a0350e, 0x7550223f68f98cac,
                                   0x29d373b5c5ed3459, 0x3689b412ef70de48, 0xa1d3b6ee079a7cc6, 0x9bf0b669abd100f8,
                                   0x955c84e105f60997, 0x6ca140c61889cddd, 0xabaf68c5fc3a0e4a, 0xa46134526b83adc5,
                                   0x710704d05683d63,  0x580d080b44b606a2, 0x8040a0580158a1,   0x800081};
             std::copy(p.cbegin(), p.cend(), dst);
-        }
-        else {
+        } else {
             throw std::invalid_argument("xoroshiro characteristic polynomial not pre-computed for given parameters!");
         }
     }
@@ -498,8 +457,7 @@ private:
 
     /// @brief Step the state forward using a straight-forward move all the state words approach.
     /// @note  This is an alternative to the clever_step() and is used for small values of @c N.
-    constexpr void simple_step()
-    {
+    constexpr void simple_step() {
         // Capture the current values in the first and final words of state
         T s0 = m_state[0];
         T s1 = m_state[N - 1];
@@ -517,8 +475,7 @@ private:
 
     /// @brief Step the state forward where we shuffle array indices instead of the state words.
     /// @note  This is an alternative to the simple_step() and is used for larger values of @c N.
-    constexpr void clever_step()
-    {
+    constexpr void clever_step() {
         // Which indices point to the current final & first words of state
         std::size_t i_final = m_final;
         std::size_t i_first = (m_final + 1) % N;
@@ -646,15 +603,14 @@ namespace xso::internal {
 
 // Polynomial Reduction:
 // Start with internal functions that are used to compute x^J mod c(x) where c(x) = x^n + p(x) and degree[p] < n.
-// Re-implements the more general `bit::polynomial::reduce` method -- see https://nessan.gitbub.io/bit.
-// Repeated here to make `xoshiro/xoroshiro` complete w/o any need to reference the `bit` library.
+// Re-implements the more general `gf2::BitPolynomial::reduce` method -- see https://nessan.gitbub.io/gf2.
+// Repeated here to make `xoshiro/xoroshiro` complete w/o any need to reference the `gf2` library.
 
 /// @brief  Riffle a word into two other words containing the bits from @c src interleaved with zeros.
 /// @return With an 8-bit word @c src = `abcdefgh`, on return @c lo = `a0b0c0d0 and @c hi = `e0f0g0h0`.
 template<std::unsigned_integral word_type>
 constexpr void
-riffle(word_type src, word_type& lo, word_type& hi)
-{
+riffle(word_type src, word_type& lo, word_type& hi) {
     // Constants
     constexpr std::size_t bits_per_word = std::numeric_limits<word_type>::digits;
     constexpr std::size_t half_bits = bits_per_word / 2;
@@ -679,8 +635,7 @@ riffle(word_type src, word_type& lo, word_type& hi)
 /// @note   You can reuse @c src for the output array @c lo -- the call @c riffle(src,src,hi) will work fine.
 template<std::unsigned_integral word_type, std::size_t N>
 constexpr void
-riffle(const std::array<word_type, N>& src, std::array<word_type, N>& lo, std::array<word_type, N>& hi)
-{
+riffle(const std::array<word_type, N>& src, std::array<word_type, N>& lo, std::array<word_type, N>& hi) {
     // We will riffle each word in src into two other words x & y
     word_type x, y;
 
@@ -692,13 +647,11 @@ riffle(const std::array<word_type, N>& src, std::array<word_type, N>& lo, std::a
             // Both x & y go in hi -- note that if 2i + 1 - N > 0 then 2i - N is >= 0.
             hi[2 * i - N] = x;
             hi[2 * i + 1 - N] = y;
-        }
-        else if (2 * i + 1 == N) {
+        } else if (2 * i + 1 == N) {
             // Straddling situation where y goes in the first word of hi and x in the last word of lo.
             lo[N - 1] = x;
             hi[0] = y;
-        }
-        else {
+        } else {
             // Need to pop both x & y into the lo array.
             lo[2 * i] = x;
             lo[2 * i + 1] = y;
@@ -710,14 +663,13 @@ riffle(const std::array<word_type, N>& src, std::array<word_type, N>& lo, std::a
 /// @param  p We are passed the coefficients of @b p(x) packed into an an array.
 /// @param  J_is_pow2 If true we compute x^(2^J) mod c(x) -- allows e.g. e = 2^100 which overflows a @c std::size_t
 /// @return We return the coefficients of r(x) = x^e mod c(x) in the same type of array as @c p.
-/// @note   linters will (reasonably) complain that the complexity of this method is rather high!
+/// @note   Linting will (reasonably) complain that the complexity of this method is rather high!
 template<std::unsigned_integral T, std::size_t N>
 constexpr std::array<T, N>
-reduce(const std::array<T, N>& p, std::size_t J, bool J_is_pow2)
-{
-    // This is similar in spirit/algorithm to `bit::polynomial::reduce` method -- see https://nessan.github.io/bit
+reduce(const std::array<T, N>& p, std::size_t J, bool J_is_pow2) {
+    // This is similar in spirit/algorithm to `gf2::BitPolynomial::reduce` method -- see https://nessan.github.io/gf2
     // This version is less general as it assumes that the degree of c(x) is a multiple of 32 + 1.
-    // NOTE: The `bit` version is more factored and more readable (this method's complexity is high).
+    // NOTE: The `gf2` version is more factored and more readable (this method's complexity is high).
 
     // Constant we use to indicate "no such position"/"not found" and a couple of others.
     constexpr auto npos = static_cast<std::size_t>(-1);
@@ -879,8 +831,7 @@ namespace xso {
 /// @throw  If the @c State has no precomputed characteristic coefficients this fails.
 template<typename State>
 std::array<typename State::word_type, State::word_count()>
-jump_coefficients(std::size_t N, bool N_is_pow2 = false)
-{
+jump_coefficients(std::size_t N, bool N_is_pow2 = false) {
     // Retrieve the coefficients of p(x) from the State.
     std::array<typename State::word_type, State::word_count()> p;
     State::characteristic_coefficients(p.begin());
@@ -897,8 +848,7 @@ jump_coefficients(std::size_t N, bool N_is_pow2 = false)
 /// @throw  If the @c State has no precomputed characteristic coefficients this fails.
 template<typename State>
 std::array<typename State::word_type, State::word_count()>
-jump_coefficients(const State&, std::size_t N, bool N_is_pow2 = false)
-{
+jump_coefficients(const State&, std::size_t N, bool N_is_pow2 = false) {
     // The first argument is only used to determine the `State` type.
     return jump_coefficients<State>(N, N_is_pow2);
 }
@@ -909,8 +859,7 @@ jump_coefficients(const State&, std::size_t N, bool N_is_pow2 = false)
 /// @note  You get the @c jump_coeff array by first calling the @c jump_coefficients method for the jump in question.
 template<typename State>
 void
-jump(State& state, const std::array<typename State::word_type, State::word_count()>& jump_coeff)
-{
+jump(State& state, const std::array<typename State::word_type, State::word_count()>& jump_coeff) {
     using word_type = typename State::word_type;
     constexpr std::size_t word_count = State::word_count();
 
@@ -962,8 +911,7 @@ public:
     /// @brief Constrict a partition for the passed generator/state.
     /// @param state        The parent generator/state already seeded to some starting point for its state.
     /// @param n_partitions The number of non-overlapping partitions we will split the parent state stream into.
-    partition(const State& state, std::size_t n_partitions) : m_state{state}
-    {
+    partition(const State& state, std::size_t n_partitions) : m_state{state} {
         // Make sure the requested number of partitions makes sense -- silently fix any issues.
         if (n_partitions == 0) n_partitions = 1;
 
@@ -987,8 +935,7 @@ public:
     /// @brief  Get the next sub-stream.
     /// @return A new generator seeded at the start of the next sub-stream of the parent random number
     /// stream.
-    State next()
-    {
+    State next() {
         // We already have a pre-baked generator seeded at the right spot ready to go.
         State retval = m_state;
 
@@ -1008,21 +955,55 @@ private:
 
 } // namespace xso
 
+/// @brief A concept that matches any type that has an accessible `xso_name()` class `method.
+template<typename T>
+concept has_xso_name_class_method = requires {
+    { T::xso_name() } -> std::convertible_to<std::string>;
+};
+
+/// @brief Connect our classes to @c std::format and friends by specializing the @c std:formatter struct.
+/// @note  This uses the fact that our classes have a class method @c xso_name() that returns a string.
+/// @note  Specializations of @c std::formatter are always in the @c std namespace.
+template<has_xso_name_class_method T>
+struct std::formatter<T> {
+
+    /// @brief Parse the format specifier -- currently only handle the default empty specifier
+    constexpr auto parse(const std::format_parse_context& ctx) {
+        auto it = ctx.begin();
+        assert(it == ctx.end() || *it == '}');
+        return it;
+    }
+
+    /// @brief Push out a formatted xso::generator using its @c xso_name(...) method.
+    template<class FormatContext>
+    auto format(const T&, FormatContext& ctx) const {
+        return std::format_to(ctx.out(), "{}", T::xso_name());
+    }
+};
+
+/// @brief The usual output stream operator for an xso::generator, State, or Scrambler.
+template<has_xso_name_class_method T>
+std::ostream&
+operator<<(std::ostream& s, const T&) {
+    s << T::xso_name();
+    return s;
+}
+
 // --------------------------------------------------------------------------------------------------------------------
-// Some extra functionality that depends on the `bit` library ...
+// Some extra functionality that depends on the `gf2` library ...
 // --------------------------------------------------------------------------------------------------------------------
-#ifdef BIT
+#ifdef GF2
 
 // clang-format off
-#include <bit/bit.h>
+#include <gf2/gf2.h>
 // clang-format on
+
 namespace xso {
 
-/// @brief Returns the transition matrix for a state/generator type as a @c bit::matrix.
+/// @brief Returns the transition matrix for a state/generator type as a `gf2::BitMatrix`.
 template<typename State>
 auto
-transition_matrix()
-{
+transition_matrix() {
     // The state bits are packed into words of this type (in practice, 32 or 64 bit unsigneds).
     using word_type = typename State::word_type;
 
@@ -1030,97 +1011,88 @@ transition_matrix()
     constexpr std::size_t n_words = State::word_count();
     constexpr std::size_t n_bits = State::bit_count();
 
-    /// Some bit types we use.
-    using matrix_type = bit::matrix<>;
-    using vector_type = bit::vector<>;
-
     // The transition matrix will be a square n_bits x n_bits matrix over GF(2).
-    matrix_type retval{n_bits, n_bits};
+    gf2::BitMatrix<word_type> retval{n_bits, n_bits};
 
     // Some work-space in word and bit space
-    using array_type = std::array<word_type, n_words>;
-    array_type  words;
-    vector_type bits{n_bits};
+    std::array<word_type, n_words> words;
+    gf2::BitVector<word_type>      bits{n_bits};
 
-    // Create an state instance (this can be a State or a full generator -- just needs to support a few methods).
+    // Create a state instance (this can be a `State` or a full generator -- just needs to support a few methods).
     State state;
 
-    // We get the columns of the transition matrix by looking  at the action of step() on all the unit states.
+    // We get the columns of the transition matrix by looking  at the action of `step()` on all the unit states.
     for (std::size_t k = 0; k < n_bits; ++k) {
 
         // Create the k'th unit state (i.e. the state just has the k'th bit set and all others are zero)
-        bits.reset();
-        bits.set(k);
+        bits.set_all(false);
+        bits.set(k, true);
 
-        // Seed the state from that k'th unit state -- first translating the bits to words.
-        bits.export_bits(words);
+        // Translate that unit bit-vector into an array of words.
+        for (auto i = 0uz; i < n_words; ++i) words[i] = bits.word(i);
+
+        // Seed the state those words.
         state.seed(words.cbegin(), words.cend());
 
-        // Advance that k'th unit state one step.
+        // Advance the state one step.
         state.step();
 
-        // Grab the resulting state as an array of words and convert that to a bit-vector
-        state.get_state(words.begin());
-        bits.import_bits(words);
+        // Translate the new state to bit-space.
+        for (auto i = 0uz; i < n_words; ++i) bits.set_word(i, state[i]);
 
-        // Store those bits into column k of the transition matrix.
-        // Note that columnar access for a bit::matrix must be done element by element.
+        // Store those bits into column `k` of the transition matrix.
+        // NOTE:  Columnar access for a gf2::BitMatrix must be done element by element.
         for (std::size_t i = 0; i < n_bits; ++i) retval(i, k) = bits[i];
     }
 
     return retval;
 }
 
-/// @brief Returns the transition matrix for a state/generator type as a @c bit::matrix.
-/// @note  This version allows calls like @c xso::transition_matrix(rng)
+/// @brief Returns the transition matrix for a state/generator type as a `gf2::BitMatrix`.
+/// @note  This lets us call `xso::transition_matrix(rng)` where we ignore the argument but use its type.
 template<typename State>
 auto
-transition_matrix(const State&)
-{
+transition_matrix(const State&) {
     // The argument is only used to determine the `State` type.
     return transition_matrix<State>();
 }
 
-/// @brief Returns the characteristic polynomial for a state/generator type as a @c bit::polynomial.
-/// @note  If the transition matrix is n x n then the return will have word_count n+1 and should be monic.
+/// @brief Returns the characteristic polynomial for a state/generator type as a `gf2::BitPolynomial`.
+/// @note  If the transition matrix is `n x n` then the return will have degree `n + 1` and should be monic.
 template<typename State>
 auto
-characteristic_polynomial()
-{
+characteristic_polynomial() {
     auto T = transition_matrix<State>();
-    return bit::characteristic_polynomial(T);
+    return T.characteristic_polynomial();
 }
 
-/// @brief Returns the characteristic polynomial for a state/generator type as a @c bit::polynomial.
-/// @note  This version allows calls like @c xso::characteristic_polynomial(rng)
+/// @brief Returns the characteristic polynomial for a state/generator type as a `gf2::BitPolynomial`.
+/// @note  This lets us call `xso::characteristic_polynomial(rng)` where we ignore the argument but use its type.
 template<typename State>
 auto
-characteristic_polynomial(const State&)
-{
+characteristic_polynomial(const State&) {
     // The argument is only used to determine the `State` type.
     return characteristic_polynomial<State>();
 }
 
-/// @brief  Returns a jump polynomial that moves a state/generator type @c J steps ahead in its random number stream.
-/// @param  c The precomputed characteristic polynomial for a state/generator type as a @c bit::polynomial
-/// @param  N We want to jump by J = N steps or J = 2^N steps (for really huge jumps).
-/// @param  N_is_pow2 If true we want to jump by 2^N steps -- allows for say J = 2^100 which overflows normal ints.
-/// @return Returns the jump polynomial x^J mod c(x) as a @c bit::polynomial
-template<std::unsigned_integral Block, typename Allocator>
+/// @brief  Returns a jump polynomial that moves a state/generator type `J` steps ahead in its random number stream.
+/// @param  c The precomputed characteristic polynomial for a state/generator type as a `gf2::BitPolynomial`
+/// @param  N We want to jump by J = N steps or `J = 2^N` steps (for really huge jumps).
+/// @param  N_is_pow2 If true we want to jump by `2^N` steps -- allows for say `J = 2^100` which overflows normal ints.
+/// @return Returns the jump polynomial `x^J mod c(x)` as a `gf2::BitPolynomial`.
+template<std::unsigned_integral Block>
 auto
-jump_polynomial(const bit::polynomial<Block, Allocator>& c, std::size_t N, bool N_is_pow2 = false)
-{
-    // The bit-polynomial class has a method to compute x^J mod c(x).
-    return c.reduce(N, N_is_pow2);
+jump_polynomial(const gf2::BitPolynomial<Block>& c, std::size_t N, bool N_is_pow2 = false) {
+    // The bit-polynomial class has a method to compute `x^J mod c(x)`.
+    return c.reduce_x_to_the(N, N_is_pow2);
 }
 
-/// @brief Jumps a state/generator ahead in its random number stream by @c J steps.
-/// @param jump_poly The precomputed bit-polynomial x^J mod c(x) where c(x) is the characteristic polynomial.
-/// @note  You get @c jump_poly by first calling the @c jump_polynomial method for the jump in question.
-template<typename State, std::unsigned_integral Block, typename Allocator>
+/// @brief Jumps a state/generator ahead in its random number stream by `J` steps.
+/// @param jump_poly The precomputed bit-polynomial `x^J mod c(x)` where `c(x)` is the characteristic polynomial.
+/// @note  You get `jump_poly` by first calling the `jump_polynomial` method for the jump in question.
+template<typename State, std::unsigned_integral Block>
 void
-jump(State& state, const bit::polynomial<Block, Allocator>& jump_poly)
-{
+jump(State& state, const gf2::BitPolynomial<Block>& jump_poly) {
     std::array<typename State::word_type, State::word_count()> sum;
 
     // Computing [r_0 + r_1 T + ... + r_{m-1} T^{m-1}].s where s is the current state and r is the jump polynomial.
@@ -1138,41 +1110,4 @@ jump(State& state, const bit::polynomial<Block, Allocator>& jump_poly)
 
 } // namespace xso
 
-#endif // BIT
-
-/// @brief A concept that matches any type that has an accessible `xso_name()` class `method.
-template<typename T>
-concept has_xso_name_class_method = requires {
-    { T::xso_name() } -> std::convertible_to<std::string>;
-};
-
-/// @brief Connect our classes to @c std::format and friends by specializing the @c std:formatter struct.
-/// @note  This uses the fact that our classes have a class method @c xso_name() that returns a string.
-/// @note  Specializations of @c std::formatter are always in the @c std namespace.
-template<has_xso_name_class_method T>
-struct std::formatter<T> {
-
-    /// @brief Parse the format specifier -- currently only handle the default empty specifier
-    constexpr auto parse(const std::format_parse_context& ctx)
-    {
-        auto it = ctx.begin();
-        assert(it == ctx.end() || *it == '}');
-        return it;
-    }
-
-    /// @brief Push out a formatted xso::generator using its @c xso_name(...) method.
-    template<class FormatContext>
-    auto format(const T&, FormatContext& ctx) const
-    {
-        return std::format_to(ctx.out(), "{}", T::xso_name());
-    }
-};
-
-/// @brief The usual output stream operator for an xso::generator, State, or Scrambler.
-template<has_xso_name_class_method T>
-std::ostream&
-operator<<(std::ostream& s, const T&)
-{
-    s << T::xso_name();
-    return s;
-}
+#endif // GF2

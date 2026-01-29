@@ -1,7 +1,10 @@
-/// @brief Basic check that the xso::partition class compiles etc.
-/// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
-/// SPDX-License-Identifier: MIT
-#include "common.h"
+// Basic check that the xso::partition class compiles etc.
+//
+// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
+// SPDX-License-Identifier: MIT
+
+#include <xoshiro.h>
+#include <utilities/utilities.h>
 
 /// @brief Partition the input rng stream into n pieces.  Run a few calls for each of those.
 template<typename PRNG>

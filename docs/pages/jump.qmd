@@ -59,11 +59,11 @@ These `xso::jump` and `xso::jump_coefficients` functions rely on the *pre-canned
 All our {type-aliased} generators have their characteristic polynomial precomputed in that header file.
 This means we support jumping any of those generators by arbitrary steps.
 
-If, instead, you are using some other variant of xoshiro/xoroshiro, you can still get its characteristic polynomial and jump polynomials by employing the extra, header-only, {bit.lib} library.
-That is a package for {gf2}, which can compute the needed characteristic polynomials for the generator's transition matrix.
-Once the `bit` library is included, then the `xoshiro.h` header file defines extra non-member functions that can compute those characteristic and jump polynomials.
+If, instead, you are using some other variant of xoshiro/xoroshiro, you can still get its characteristic polynomial and jump polynomials by employing the extra, header-only, {gf2.lib} library.
+That is a package for {GF2}, which can compute the needed characteristic polynomials for the generator's transition matrix.
+Once the `gf2` library is included, then the `xoshiro.h` header file defines extra non-member functions that can compute those characteristic and jump polynomials.
 
-See the documentation for these functions at {bit.lib} website.
+See the documentation for these functions at {gf2.lib} website.
 
 ## Motivation for Jumping
 
@@ -110,8 +110,8 @@ Moreover, they can accommodate jump sizes like $N = 2^{259}$ which will overflow
 {characteristic_coefficients}               \
 {jump_coefficients}                         \
 {partition}                                 \
-{bit.characteristic_polynomial}             \
-{bit.reduce}
+{gf2.characteristic_polynomial}             \
+{gf2.reduce}
 
 {jump-technique}                            \
-{bit.reduction-technique}
+{gf2.reduction-technique}

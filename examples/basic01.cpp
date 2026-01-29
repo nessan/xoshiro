@@ -1,13 +1,14 @@
-/// @brief Run all the predefined type aliased xoshiro/xoroshiro generators through a few iterations.
-/// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
-/// SPDX-License-Identifier: MIT
-#include "common.h"
+// Run all the predefined type aliased xoshiro/xoroshiro generators through a few iterations.
+//
+// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
+// SPDX-License-Identifier: MIT
+
+#include <xoshiro.h>
 
 /// @brief Run a random number generator through a a few trials
 template<typename RNG>
 void
-run(RNG& rng, std::size_t n_trials = 5)
-{
+run(RNG& rng, std::size_t n_trials = 5) {
     std::size_t result_bits = std::numeric_limits<typename RNG::result_type>::digits;
     std::print("{} calls to {} yields the following {}-bit unsigneds:\n", n_trials, rng, result_bits);
     for (std::size_t i = 0; i < n_trials; ++i) std::print("{}; ", rng());
@@ -15,8 +16,7 @@ run(RNG& rng, std::size_t n_trials = 5)
 }
 
 int
-main()
-{
+main() {
     // All our type aliased generators
     xso::xoroshiro_2x32_star       x01;
     xso::xoroshiro_2x32_star_star  x02;

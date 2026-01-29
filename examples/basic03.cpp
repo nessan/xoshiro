@@ -1,12 +1,16 @@
-/// @brief Runs a timing comparison between our xoshiro and the equivalent "C" versions from the author's website.
-/// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
-/// SPDX-License-Identifier: MIT
-#include "common.h"
+// Runs a timing comparison between our xoshiro and the equivalent "C" versions from the author's website.
+// This needs to be run with a reasonable level of compiler optimization to be meaningful.
+//
+// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
+// SPDX-License-Identifier: MIT
+
+#include <xoshiro.h>
+#include <utilities/utilities.h>
 #include "vigna.h"
 
-/// @brief Compare one of our xoshiro/Xoroshiro classes with the equivalent "C" version in a timing test
-/// Starting from the same state we run a large number of trials to compare timing between the new and original versions
-/// @note This needs to be run with a reasonable level of compiler optimization to be meaningful.
+
+// Compare one of our xoshiro/xoroshiro classes with the equivalent "C" version in a timing test
+// Starting from the same state we run a large number of trials to compare timing between the new and original versions
 template<typename New, typename Old>
 void
 compare(New& x, Old& c)
@@ -48,7 +52,6 @@ compare(New& x, Old& c)
 int
 main()
 {
-    // Make those large generated random numbers at least somewhat readable.
     utilities::pretty_print_thousands();
 
     // Our versions of the generators

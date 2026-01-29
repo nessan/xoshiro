@@ -1,7 +1,10 @@
-/// @brief Runs a basic comparison between our xoshiro and the "C" versions more or less from the author's website.
-/// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
-/// SPDX-License-Identifier: MIT
-#include "common.h"
+// Runs a basic comparison between our xoshiro and the "C" versions more or less from the author's website.
+//
+// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
+// SPDX-License-Identifier: MIT
+
+#include <xoshiro.h>
+#include <utilities/utilities.h>
 #include "vigna.h"
 
 /// @brief Compare one of our xoshiro/xoroshiro classes with its equivalent "C" version,
@@ -26,7 +29,6 @@ compare(New& x, Old& c) {
 
 int
 main() {
-    // Make those large generated random numbers at least somewhat readable.
     utilities::pretty_print_thousands();
 
     // Our versions of the generators

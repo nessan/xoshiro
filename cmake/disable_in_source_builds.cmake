@@ -1,10 +1,10 @@
-# -----------------------------------------------------------------------------
-# @brief Dsable in-source builds. A classic!
-# @link  https://nessan.github.io/cmake/
+# ---------------------------------------------------------------------------------------------------------------------
+# Disable in-source builds. A classic!
+# See: https://nessan.github.io/cmake/
 #
 # SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nessan.fitzmaurice@me.com>
 # SPDX-License-Identifier: MIT
-# -----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 function(disable_in_source_builds)
 
     if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
@@ -20,5 +20,5 @@ function(disable_in_source_builds)
 
 endfunction()
 
-# Immediately run the function -- hust including this file should run it.
+# Immediately run the function -- just including this file should run it.
 disable_in_source_builds()

@@ -1,12 +1,16 @@
-/// @brief When is faster to use the transition matrix to jump ahead in a stream vs. just running the engine.step()
-/// method and discarding the result until we get to where we want to be.
-/// @note  Uses the `bit` library.
-/// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
-/// SPDX-License-Identifier: MIT
-#include "common.h"
-#include <bit/bit.h>
+// When is faster to use the transition matrix to jump ahead in a stream vs. just running the engine.step() method and
+// discarding the result until we get to where we want to be.
+//
+// This uses the `gf2` library and should be run in release mode.
+//
+// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
+// SPDX-License-Identifier: MIT
 
-/// @brief When we get to O(n_bits^3) discards the transition matrix multiply starts to beat the simple discard().
+#include <xoshiro.h>
+#include <utilities/utilities.h>
+#include <gf2/gf2.h>
+
+// When we get to O(n_bits^3) discards the transition matrix multiply starts to beat the simple discard().
 template<typename State>
 void
 run(State& engine) {
@@ -17,15 +21,14 @@ run(State& engine) {
     using word_type = typename State::word_type;
     constexpr std::size_t n_words = State::word_count();
     constexpr std::size_t n_bits = State::bit_count();
-    ;
 
     // Storage where we can go back and forth between bit-space and word-space.
     std::array<word_type, n_words> state;
-    bit::vector                    bits{n_bits};
+    gf2::BitVector<word_type>      bits{n_bits};
 
     // Copy the current state to a bit-vector.
     for (std::size_t i = 0; i < n_words; ++i) state[i] = engine[i];
-    bits.import_bits(state);
+    bits.copy(state.begin(), state.end());
 
     // Optimal point is some factor of the state bit count.
     std::size_t n_discard = 8 * n_bits * n_bits * n_bits;
@@ -36,13 +39,13 @@ run(State& engine) {
     // Version 1: Raise the transition matrix to the appropriate power to get ahead in the stream.
     sw.click();
     auto T = xso::transition_matrix<State>();
-    T = bit::pow(T, n_discard);
-    bits = bit::dot(T, bits);
+    T = T.to_the(n_discard);
+    bits = gf2::dot(T, bits);
     sw.click();
     auto t_secs = sw.lap();
 
     // Convert the bit-vector version back to word form so we can compare things later.
-    bits.export_bits(state);
+    bits.to_words(state.begin());
 
     // Version 2: Naively discard generated numbers until we get to where we need to be in the stream.
     sw.click();
@@ -64,6 +67,8 @@ run(State& engine) {
 
 int
 main() {
+    utilities::pretty_print_thousands();
+
     // Our generators
     xso::xoroshiro_2x32_star       x01;
     xso::xoroshiro_2x32_star_star  x02;
@@ -82,9 +87,6 @@ main() {
     xso::xoroshiro_16x64_star      x15;
     xso::xoroshiro_16x64_star_star x16;
     xso::xoroshiro_16x64_plus_plus x17;
-
-    // Print large numbers with commas
-    utilities::pretty_print_thousands();
 
     run(x01);
     run(x02);

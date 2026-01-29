@@ -1,18 +1,23 @@
-/// @brief Just how slow is it to generate random numbers from a transition matrix?
-/// @note  Uses the `bit` library.
-/// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
-/// SPDX-License-Identifier: MIT
-#include "common.h"
-#include <bit/bit.h>
+// Just how slow is it to generate random numbers from a transition matrix?
+// The test should be run in release mode for meaningful timings.
+//
+// This uses the `gf2` library.
+//
+// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
+// SPDX-License-Identifier: MIT
 
-/// @brief Time how long the transition matrix approach takes versus the conventional step() method.
+#include <xoshiro.h>
+#include <utilities/utilities.h>
+#include <gf2/gf2.h>
+
+// Time how long the transition matrix approach takes versus the conventional step() method.
 template<typename State>
 void
 run(State& engine, std::size_t n_trials) {
     // Print the name of the generator we are working on
     std::print("{}\n", engine);
 
-    // Get the transition matrix for this State as a bit::matrix.
+    // Get the transition matrix for this State as a gf2::BitMatrix.
     auto T = xso::transition_matrix<State>();
 
     // Some constants etc.
@@ -23,23 +28,23 @@ run(State& engine, std::size_t n_trials) {
 
     // Storage where we can go back and forth between bit-space and word-space.
     std::array<word_type, n_words> state;
-    bit::vector                    bits{n_bits};
+    gf2::BitVector<word_type>      bits{n_bits};
 
     // Copy the current state to a bit-vector.
     for (std::size_t i = 0; i < n_words; ++i) state[i] = engine[i];
-    bits.import_bits(state);
+    bits.copy(state.begin(), state.end());
 
     // stopwatch to time the two versions
     utilities::stopwatch sw;
 
     // Compute lots of random numbers using the transition matrix approach
     sw.click();
-    for (std::size_t i = 0; i < n_trials; ++i) bits = bit::dot(T, bits);
+    for (std::size_t i = 0; i < n_trials; ++i) bits = gf2::dot(T, bits);
     sw.click();
     auto t_secs = sw.lap();
 
     // Convert the final bit-vector back to a words so we can check them later.
-    bits.export_bits(state);
+    bits.to_words(state.begin());
 
     // Compute lots of random numbers in the usual manner.
     sw.click();
@@ -61,6 +66,8 @@ run(State& engine, std::size_t n_trials) {
 
 int
 main() {
+    utilities::pretty_print_thousands();
+
     // Our generators
     xso::xoroshiro_2x32_star       x01;
     xso::xoroshiro_2x32_star_star  x02;
@@ -82,9 +89,6 @@ main() {
 
     // Number of trials to run
     std::size_t n_trials = 20'000;
-
-    // Print large numbers with commas
-    utilities::pretty_print_thousands();
 
     run(x01, n_trials);
     run(x02, n_trials);

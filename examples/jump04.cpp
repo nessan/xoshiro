@@ -1,7 +1,13 @@
-/// @brief Timing comparison between our jumps and the pre-canned long-jumps in the equivalent "C" version.
-/// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
-/// SPDX-License-Identifier: MIT
-#include "common.h"
+// Timing comparison between our jumps and the pre-canned long-jumps in the equivalent "C" version.
+// The`xso` version has to actually compute the jump coefficients so will be slower.
+//
+// This should be run with a reasonable level of compiler optimization to be meaningful.
+//
+// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
+// SPDX-License-Identifier: MIT
+
+#include <xoshiro.h>
+#include <utilities/utilities.h>
 #include "vigna.h"
 
 template<typename New, typename Old>
@@ -13,7 +19,6 @@ compare(New& x, Old& c) {
     // Some constants etc.
     constexpr std::size_t n_words = New::word_count();
     constexpr std::size_t n_bits = New::bit_count();
-    ;
 
     // Make sure we start both generators with identical states ...
     for (std::size_t i = 0; i < n_words; ++i) c.s[i] = x[i];
@@ -25,26 +30,25 @@ compare(New& x, Old& c) {
     sw.click();
     c.long_jump();
     sw.click();
-    auto old_secs = sw.lap();
+    auto old_ms = 1000 * sw.lap();
 
     // Our version of the jump ...
     sw.click();
     xso::jump(x, xso::jump_coefficients<New>(3 * n_bits / 4, true));
     sw.click();
-    auto new_secs = sw.lap();
+    auto new_ms = 1000 * sw.lap();
 
     // Check the two generators are still the same by looking at the next output of each.
     always_confirm(x() == c.next(), "MISMATCH");
 
     // All OK so print the timing info -- expect the "C" versions to be faster as they have pre-canned jumps.
     // However, both versions will be very fast and our jumps can be anything not just the pre-canned ones.
-    auto ratio = new_secs / old_secs;
-    std::print("Times: (new, old) = ({:4.3f}s, {:4.3f}s) => ratio = {:3.0Lf}\n\n", new_secs, old_secs, ratio);
+    auto ratio = new_ms / old_ms;
+    std::print("Times: (new, old) = ({:4.3f}ms, {:4.3f}ms) => ratio = {:3.0Lf}\n\n", new_ms, old_ms, ratio);
 }
 
 int
 main() {
-    // Make those large generated random numbers at least somewhat readable.
     utilities::pretty_print_thousands();
 
     // Our versions of the generators

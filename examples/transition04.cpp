@@ -1,12 +1,13 @@
-/// @brief Compare two ways of jumping one of our xoshiro/xoroshiro classes.
-///        Using the jump polynomial vs. using T^n where T is the transition matrix.
-/// @note  This function uses the @c bit library.
-///
-/// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
-/// SPDX-License-Identifier: MIT
-#include "common.h"
+// Compare two ways of jumping the xoshiro/xoroshiro classes: jump-polynomial vs T^n where T is the transition matrix.
+// This uses the `gf2` library and should be run in release mode.
+//
+// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
+// SPDX-License-Identifier: MIT
+
+#include <xoshiro.h>
+#include <utilities/utilities.h>
+#include <gf2/gf2.h>
 #include "vigna.h"
-#include <bit/bit.h>
 
 template<typename State>
 void
@@ -21,7 +22,6 @@ compare(State& x) {
     using word_type = typename State::word_type;
     constexpr std::size_t n_words = State::word_count();
     constexpr std::size_t n_bits = State::bit_count();
-    ;
 
     // First consider jumping by N = 2^(n_bits/2) slots.
     std::size_t power = n_bits / 2;
@@ -31,16 +31,16 @@ compare(State& x) {
     auto r = xso::jump_coefficients<State>(power, true);
     sw.click();
     auto polynomial_secs = sw.lap();
-    std::print("Time to compute jump_polynomial({:3}):  {:<6.1Lf}ms\n", power, 1000 * polynomial_secs);
+    std::print("Time to compute jump_polynomial({:<3}):  {:<6.1Lf}ms\n", power, 1000 * polynomial_secs);
 
     // Time the alternative direct matrix approach where we raise the transition matrix to power N.
     sw.click();
     auto T = xso::transition_matrix<State>();
-    T = bit::pow2(T, power);
+    T = T.to_the(power, true);
     sw.click();
     auto matrix_secs = sw.lap();
-    std::print("Time to compute bit::pow2(T, {:3}):     {:<6.1Lf}ms\n", power, 1000 * matrix_secs);
-    std::print("Ratio:                                 {:<6.1Lf}\n", matrix_secs / polynomial_secs);
+    std::print("Time to compute  T^2^{:<3}:              {:<6.1Lf}ms\n", power, 1000 * matrix_secs);
+    std::print("Ratio:                                 {:<6.0Lf}\n", matrix_secs / polynomial_secs);
 
     // Need a copy of the generator to use for the matrix multiply approach.
     auto y = x;
@@ -58,32 +58,33 @@ compare(State& x) {
     // Need some work storage to go between word-space and bit-space
     // Storage where we can go back and forth between bit-space and word-space.
     std::array<word_type, n_words> words;
-    bit::vector                    bits{n_bits};
+    words.fill(0);
+    gf2::BitVector<word_type>      bits{n_bits};
 
     // And off we go ...
     for (std::size_t n = 0; n < n_jumps; ++n) {
         for (std::size_t i = 0; i < n_words; ++i) words[i] = y[i];
-        bits.import_bits(words);
-        bits = bit::dot(T, bits);
-        bits.export_bits(words);
+        bits.copy(words.begin(), words.end());
+        bits = gf2::dot(T, bits);
+        words.fill(0);
+        bits.to_words(words.begin());
         y.seed(words.cbegin(), words.cend());
     }
     sw.click();
     matrix_secs = sw.lap();
-
-    // Check the two generators are still the same by looking at the next output of each.
-    always_confirm(x() == y(), "MISMATCH");
 
     // All OK so print the timing info on polynomial jumps vs matrix jumps ...
     std::print("Number of jump aheads performed:       {:<6L}\n", n_jumps);
     std::print("Polynomial method took:                {:<6.3Lf}ms\n", polynomial_secs);
     std::print("Matrix multiply method took:           {:<6.3Lf}ms\n", matrix_secs);
     std::print("Ratio or those two methods:            {:<6.1Lf}\n\n", matrix_secs / polynomial_secs);
+
+    // Check the two generators are still the same by looking at the next output of each.
+    always_confirm(x() == y(), "MISMATCH");
 }
 
 int
 main() {
-    // Make those large generated random numbers at least somewhat readable.
     utilities::pretty_print_thousands();
 
     // Our versions of the generators

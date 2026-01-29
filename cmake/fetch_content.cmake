@@ -1,10 +1,10 @@
-# -----------------------------------------------------------------------------
-# @brief Wrapper around FetchContent.
-# @link  https://nessan.github.io/cmake/
+# ---------------------------------------------------------------------------------------------------------------------
+# Wrapper around FetchContent.
+# See: https://nessan.github.io/cmake/
 #
 # SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nessan.fitzmaurice@me.com>
 # SPDX-License-Identifier: MIT
-# -----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 function(fetch_content)
     include(FetchContent)
     set(FETCHCONTENT_QUIET FALSE)

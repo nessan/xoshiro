@@ -1,37 +1,40 @@
-/// @brief Extract the transition matrices for our generators and check they work as expected.
-/// @note  Uses the `bit` library.
-/// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
-/// SPDX-License-Identifier: MIT
-#include "common.h"
-#include <bit/bit.h>
+// Extract the transition matrices for our generators and check they work as expected.
+// This uses the `gf2` library.
+//
+// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
+// SPDX-License-Identifier: MIT
 
-/// @brief Check that T.s gives back the same as step(s) for one of our State's. T is the transition matrix
+#include <xoshiro.h>
+#include <utilities/utilities.h>
+#include <gf2/gf2.h>
+
+// Check that T.s gives back the same as step(s) for one of our State's. T is the transition matrix
 template<typename State>
 void
 run_check(State& engine) {
     // Print the name of the engine we are working on.
     std::print("{}\n", engine);
 
-    // Get the transition matrix for this State as a bit::matrix
+    // Get the transition matrix for this State as a gf2::BitMatrix
     auto T = xso::transition_matrix(engine);
 
     // Some constants etc.
     using word_type = typename State::word_type;
     constexpr std::size_t n_words = State::word_count();
     constexpr std::size_t n_bits = State::bit_count();
-    ;
 
     // Storage where we can go back and forth between bit-space and word-space.
     std::array<word_type, n_words> state;
-    bit::vector                    bits{n_bits};
+    gf2::BitVector<word_type>      bits{n_bits};
 
     // Copy the current state to a bit-vector.
-    for (std::size_t i = 0; i < n_words; ++i) state[i] = engine[i];
-    bits.import_bits(state);
+    for (std::size_t i = 0; i < n_words; ++i) bits.set_word(i, engine[i]);
 
-    // Step the state using the transition matrix approach & convert the bits to words.
-    bits = bit::dot(T, bits);
-    bits.export_bits(state);
+    // Step the state using the transition matrix approach
+    bits = gf2::dot(T, bits);
+
+    // Export the new state back to word space
+    for (std::size_t i = 0; i < n_words; ++i) state[i] = bits.word(i);
 
     // Step the state in the more traditional manner.
     engine.step();
@@ -49,6 +52,8 @@ run_check(State& engine) {
 
 int
 main() {
+    utilities::pretty_print_thousands();
+
     // Our generators
     xso::xoroshiro_2x32_star       x01;
     xso::xoroshiro_2x32_star_star  x02;
@@ -67,9 +72,6 @@ main() {
     xso::xoroshiro_16x64_star      x15;
     xso::xoroshiro_16x64_star_star x16;
     xso::xoroshiro_16x64_plus_plus x17;
-
-    // Print large numbers with commas
-    utilities::pretty_print_thousands();
 
     run_check(x01);
     run_check(x02);

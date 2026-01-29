@@ -74,7 +74,7 @@ Alternatively, if you are using `CMake`, you can use the standard `FetchContent`
 
 ```cmake
 include(FetchContent)
-FetchContent_Declare(xoshiro URL https://github.com/nessan/bit/releases/download/current/xoshiro.zip)
+FetchContent_Declare(xoshiro URL https://github.com/nessan/xoshiro/releases/download/current/xoshiro.zip)
 FetchContent_MakeAvailable(xoshiro)
 ```
 
@@ -166,10 +166,10 @@ ge.shuffle(u);                              // <6>
 
 ### Extra Analysis
 
-Extra non-member functions for generator analysis are defined if the [`bit`][] library is available.
+Extra non-member functions for generator analysis are defined if the [`gf2][] library is available.
 
-`bit` is a `C++` library for doing linear algebra over [GF(2)][] the simplest field of two elements $\{0,1\}$, where the usual arithmetic operations are performed mod 2.
-The `bit` library is header only and is easily incorporated into any application.
+`gf2` is a `C++` library for doing linear algebra over [GF(2)][] the simplest field of two elements $\{0,1\}$, where the usual arithmetic operations are performed mod 2.
+The `gf2` library is header only and is easily incorporated into any application.
 
 If it is available, then `xoshiro.h` defines some extra functions that let you access the generator's _transition matrix_ and use/analyse it in various ways.
 
@@ -195,5 +195,5 @@ You can use this software under the [MIT license](https://opensource.org/license
 [`std::normal_distribution`]: https://en.cppreference.com/w/cpp/numeric/random/normal_distribution
 [`<random>`]: https://en.cppreference.com/w/cpp/header/random
 [`std::mersenne_twister_engine`]: https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine
-[`bit`]: https://nessan.github.io/bit
+[`gf2`]: https://nessan.github.io/gf2
 [GF(2)]: https://en.wikipedia.org/wiki/GF(2)

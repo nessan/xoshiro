@@ -1,7 +1,11 @@
-/// @brief For each of our type aliased state-engines compare jumping vs discarding for some fixed jump size n
-/// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
-/// SPDX-License-Identifier: MIT
-#include "common.h"
+// For each of our type aliased state-engines compare jumping vs discarding for some fixed jump size n.
+// We do some timing so this needs to be compiled with optimization enabled.
+//
+// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
+// SPDX-License-Identifier: MIT
+
+#include <xoshiro.h>
+#include <utilities/utilities.h>
 
 template<typename State>
 void
@@ -37,7 +41,6 @@ run(State& engine, std::size_t J) {
 
 int
 main() {
-    // Print large numbers with commas
     utilities::pretty_print_thousands();
 
     // Our generators

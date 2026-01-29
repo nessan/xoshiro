@@ -108,19 +108,19 @@ Function                        | Description
 {formatter}                     | Connect the `generator`, `State`, and `Scrambler` classes to {std.format} and friends.
 : {.bordered .striped .hover .responsive tbl-colwidths="[30,70]"}
 
-### Depending on the `bit` Library
+### Depending on the `gf2` Library
 
-If the {bit.lib} library is available, extra non-member functions will be defined.
+If the {gf2.lib} library is available, extra non-member functions will be defined.
 
-`bit` is a {cpp}  library for doing linear algebra over {gf2} the simplest field of two elements $\{0,1\}$, where the usual arithmetic operations are performed mod 2.
-The `bit` library is header only, so it is easily incorporated into any application.
+`gf2` is a {cpp}  library for doing linear algebra over {GF2} the simplest field of two elements $\{0,1\}$, where the usual arithmetic operations are performed mod 2.
+The `gf2` library is header only, so it is easily incorporated into any application.
 
 If it is available, then `xoshiro.h` defines some extra functions:
 
 Function                        | Description
 ------------------------------- | ---------------------------------------------------
-{transition_matrix}             | Returns the *transition matrix* for a `State` as a {bit.matrix}.
-{characteristic_polynomial}     | Returns the transition matrix's {characteristic-polynomial} as a {bit.polynomial}.
+{transition_matrix}             | Returns the *transition matrix* for a `State` as a {gf2.matrix}.
+{characteristic_polynomial}     | Returns the transition matrix's {characteristic-polynomial} as a {gf2.polynomial}.
 {jump_polynomial}               | Returns a *jump polynomial* that can be used to efficiently jump a `State` ahead by a potentially huge number of steps.
 {jump_using_polynomial}         | Use a jump-polynomial to jump a State ahead in its stream efficiently.
 : {.bordered .striped .hover .responsive tbl-colwidths="[30,70]"}

@@ -1,7 +1,10 @@
-/// @brief Check that our computed jump coefficients match the pre-canned ones in the "C" versions.
-/// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
-/// SPDX-License-Identifier: MIT
-#include "common.h"
+// Check that our computed jump coefficients match the pre-canned ones in the "C" versions.
+//
+// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
+// SPDX-License-Identifier: MIT
+
+#include <xoshiro.h>
+#include <utilities/utilities.h>
 #include "vigna.h"
 
 template<typename New, typename Old>

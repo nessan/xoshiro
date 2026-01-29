@@ -61,7 +61,7 @@ Of course, verifying its quality is another matter.
 
 ## Linear Transition Functions
 
-Surprisingly, the state transition function $t$ for many popular RNGs can be written as a *linear* transformation when the state is viewed as a vector over {gf2} the simplest {Galois-Field} with two elements.
+Surprisingly, the state transition function $t$ for many popular RNGs can be written as a *linear* transformation when the state is viewed as a vector over {GF2} the simplest {Galois-Field} with two elements.
 
 GF(2) also known as {f2} is just a mathematical way of talking about *bits*.
 
@@ -136,7 +136,7 @@ So a general method to fill $T$ simply iterates through all the unit bit-vectors
 Then those state words are put through a single call of the generator’s `step` method.
 The resulting state words can be translated back to bit space and that bit-vector becomes a column in $T$.
 
-NOTE: It is worth noting that while the transition matrix can be used to advance the state, the required matrix-vector product, even using a linear algebra package like {bit.lib} that is optimized for {f2}, is much slower than using code like the `step()` method shown above.
+NOTE: It is worth noting that while the transition matrix can be used to advance the state, the required matrix-vector product, even using a linear algebra package like {gf2.lib} that is optimized for {f2}, is much slower than using code like the `step()` method shown above.
 
 The $\bold{s} \gets T \cdot \bold{s}$ view of things is only useful for doing analysis or when we think about making large-scale jumps ahead in the stream as we will show next.
 
@@ -173,7 +173,7 @@ $$
 $$
 Unfortunately, even if $T$ is sparse and "special" like the $T$ above for *xoshiro*, $T^N$ is unlikely to have a readily written down form.
 
-Nevertheless, if we use a linear algebra package like {bit.lib} that is optimized for {f2} and which uses the well-known square and multiply algorithm to minimize the operation count when evaluating matrix powers this simple compute-the-power method can be somewhat competitive for large enough $N$ at least for generators that aren’t off the scale in terms of the size of the state space.
+Nevertheless, if we use a linear algebra package like {gf2.lib} that is optimized for {f2} and which uses the well-known square and multiply algorithm to minimize the operation count when evaluating matrix powers this simple compute-the-power method can be somewhat competitive for large enough $N$ at least for generators that aren’t off the scale in terms of the size of the state space.
 
 ### The Characteristic Polynomial
 
@@ -229,7 +229,7 @@ $$
 can be calculated with just $n-1$ calls to the `step` method.
 This is extremely efficient when $N \gg n$ --- for example, if we want to jump by $N = 2^{100}$ steps and the generator has $n = 256$ bits of state.
 
-### With the `bit` Library
+### With the `gf2` Library
 
 What do we need to implement this idea?
 
@@ -238,24 +238,24 @@ What do we need to implement this idea?
 3. A method to compute $r(x) = \mod{x^N}{c(x)}$ .
 4. A method to efficiently compute $r(T) \cdot \bold{s}$.
 
-Fortunately, we can fill in these steps by making use of the {bit.lib} library:
+Fortunately, we can fill in these steps by making use of the {gf2.lib} library:
 
-1. As we saw above, we can construct $T$ column by column without any deep knowledge of the structure of the generator. Assuming it is indeed linear then one call of the `step` method for a seed state that is a unit bit-vector will return one column of $T$. Our generators don't work on *bit-vectors* directly but the `bit` library lets you go from *bits* to *words* and vice-versa.
-2. We can use {Danilevsky} to extract the characteristic polynomial for $T$. That is already implemented in the `bit` library and the function will never overflow.
-3. The `bit` library also has an algorithm to compute $\mod{x^N}{c(x)}$ over {f2} for very large $N$.
+1. As we saw above, we can construct $T$ column by column without any deep knowledge of the structure of the generator. Assuming it is indeed linear then one call of the `step` method for a seed state that is a unit bit-vector will return one column of $T$. Our generators don't work on *bit-vectors* directly but the `gf2` library lets you go from *bits* to *words* and vice-versa.
+2. We can use {Danilevsky} to extract the characteristic polynomial for $T$. That is already implemented in the `gf2` library and the function will never overflow.
+3. The `gf2` library also has an algorithm to compute $\mod{x^N}{c(x)}$ over {f2} for very large $N$.
 4. Finally, as noted above, $r(T) \cdot \bold{s}$ can be computed with $n-1$ calls to the `step` method and, in the cases of interest, $n$ is very small relative to the jump size $N$ i.e. $n \ll N$.
 
 NOTE: In this context, the remainder polynomial $r(x)$ is called a *jump polynomial* and using the steps above we can compute it for arbitrary *xoshiro/xoroshiro* generators and any jump size $N$.
-These jump polynomials will be returned as *bit-vectors* i.e. as `bit::vector` objects.
+These jump polynomials will be returned as *bit-vectors* i.e. as `gf2::BitVector` objects.
 
-### Without the `bit` Library
+### Without the `gf2` Library
 
-The {cpp}  {bit.lib} library is header only so it is easily incorporated into any application.
+The {cpp} {gf2.lib} library is header only so it is easily incorporated into any application.
 But we also recognize that is very convenient to have `xoshiro.h` be complete as a standalone file.
 
-Ideally, even without access to the `bit` headers, we would still like to have access to the `jump` methods and also the {partition} class to split a single parent stream of random outputs into a set of non-overlapping sub-streams.
+Ideally, even without access to the `gf2` headers, we would still like to have access to the `jump` methods and also the {partition} class to split a single parent stream of random outputs into a set of non-overlapping sub-streams.
 
-Of course, if we don't have the {bit.lib} library available then we don't have the {bit.matrix} and {bit.vector} classes.
+Of course, if we don't have the {gf2.lib} library available then we don't have the {gf2.matrix} and {gf2.vector} classes.
 This means we have no easy way to even represent the generator's transition bit-matrix $T$.
 
 But computing $T$ is just a means to an end.
@@ -263,7 +263,7 @@ We want the *jump polynomial* which for a specific generator and specific jump s
 
 Let's start with that characteristic polynomial.
 
-Using the {bit.lib} library it is easy to compute the coefficients of $c(x)$ for the transition matrix $T$ where
+Using the {gf2.lib} library it is easy to compute the coefficients of $c(x)$ for the transition matrix $T$ where
 $$
     c(x) = c_n x^n + \cdots + c_0.
 $$
@@ -289,7 +289,7 @@ Of course, getting the characteristic polynomial is also just a means to an end.
 
 Given a jump size $N$, we want to compute the jump polynomial $r(x) \equiv \mod{x^N}{c(x)}$.
 
-Now if $c(x)$ is stored as a bit-vector of its coefficients then the {bit.lib} library has a function that can efficiently compute $r(x)$ and return its coefficients as a bit-vector $\sseq{r}$.
+Now if $c(x)$ is stored as a bit-vector of its coefficients then the {gf2.lib} library has a function that can efficiently compute $r(x)$ and return its coefficients as a bit-vector $\sseq{r}$.
 We have replicated a slightly simplified version of that method in `xoshiro.h`.
 
 The instance method {jump_coefficients} is passed the coefficients of $p(x)$ as the *pre-canned* array of words we mentioned above and it returns the coefficients of $r(x)$ as another array of words.

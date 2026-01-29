@@ -17,21 +17,21 @@ target_sources(${PROJECT_NAME} INTERFACE
     TYPE        HEADERS
     BASE_DIRS   include/)
 
-# This library can do more if we allow a dependency on `bit`-- a C++ library for working in GF(2).
-# See the documentation at https://nessan.github.io/bit.
-option(DOWNLOAD_BIT "Download the `bit` library for extra functionality?" OFF)
-if (DOWNLOAD_BIT)
+# This library can do more if we allow a dependency on `gf2`-- a C++ library for working in GF(2).
+# See the documentation at https://nessan.github.io/gf2.
+option(GF2 "Download the `gf2` library for extra functionality?" OFF)
+if (GF2)
 
-    # Fetch a minimal archive of the `bit` library from a remote repo.
+    # Fetch a minimal archive of the `gf2` library from a remote repo.
     include(FetchContent)
-    FetchContent_Declare(bit URL https://github.com/nessan/bit/releases/download/current/bit.zip)
-    FetchContent_MakeAvailable(bit)
+    FetchContent_Declare(gf2 URL https://github.com/nessan/gf2/releases/download/current/gf2.zip)
+    FetchContent_MakeAvailable(gf2)
 
-    # Set a flag to let our library know we have access to the `bit` library.
-    target_compile_definitions(${PROJECT_NAME} INTERFACE BIT)
+    # Set a flag to let our library know we have access to the `gf2` library.
+    target_compile_definitions(${PROJECT_NAME} INTERFACE GF2)
 
-    # Add the `bit` dependency and make it transitive so anyone downstream also adds the dependency.
-    target_link_libraries(${PROJECT_NAME} INTERFACE bit::bit)
+    # Add the `gf2` dependency and make it transitive so anyone downstream also adds the dependency.
+    target_link_libraries(${PROJECT_NAME} INTERFACE gf2::gf2)
 
 endif()
 
@@ -56,15 +56,17 @@ if (PROJECT_IS_TOP_LEVEL)
     include(fetch_content)
     fetch_content(utilities URL https://github.com/nessan/utilities/releases/download/current/utilities.zip)
 
-    # Our example programs use the header-only `bit` library.
-    fetch_content(bit URL https://github.com/nessan/bit/releases/download/current/bit.zip)
+    # Our example programs use the header-only `gf2` library.
+    fetch_content(gf2 URL https://github.com/nessan/gf2/releases/download/current/gf2.zip)
 
-    # Set a flag to let `xoshiro.h` know we have access to the `bit` library.
-    target_compile_definitions(${PROJECT_NAME} INTERFACE BIT)
+    # Set a flag to let `xoshiro.h` know we have access to the `gf2` library.
+    target_compile_definitions(${PROJECT_NAME} INTERFACE GF2)
 
     # Walk through the examples/ directory and build a target for each .cpp file with appropriate linkage.
     # We have a CMake module that makes that traversal straightforward.
     include(add_executables)
-    add_executables(examples ${PROJECT_NAME}::${PROJECT_NAME} bit::bit utilities::utilities)
+    add_executables(${CMAKE_SOURCE_DIR}/examples
+        COMBINED_TARGET "all_examples"
+        LIBRARIES ${PROJECT_NAME}::${PROJECT_NAME} gf2::gf2 utilities::utilities)
 
 endif()

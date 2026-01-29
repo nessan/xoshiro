@@ -1,22 +1,22 @@
-# -----------------------------------------------------------------------------
-# @brief Set some commonly used compiler warning flags etc.
-# @link  https://nessan.github.io/cmake/
+# ---------------------------------------------------------------------------------------------------------------------
+# Set some commonly used compiler warning flags etc.
+# See: https://nessan.github.io/cmake
 #
-# SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nessan.fitzmaurice@me.com>
+# SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
 # SPDX-License-Identifier: MIT
-# -----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 
-# Get CMake to export all the compile commands in a JSON file. That is useable
-# by editors such as VSCode to determine header locations etc.
+# We always ask CMake to export all its compile commands to a JSON file.
+# That is useable by editors such as VSCode to determine header locations etc.
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Get CMake to ask the comiler to add some color to our lives!
+# Get CMake to ask the compiler to add some color to our lives!
 set(CMAKE_COLOR_DIAGNOSTICS ON)
 
-# By default gets the compiler performs extra checks.
+# By default, we want the compiler to perform extra checks.
 option(WARNINGS_ARE_PICKY "Make the compiler extra picky!" ON)
 
-# By default the compiler will treat any warning as a hard error and stop compilation.
+# By default, we want the compiler to treat any warning as a hard error and stop compilation.
 option(WARNINGS_ARE_ERRORS "Make the compiler barf completely if it encounters any warning!" ON)
 
 # The main event ...
@@ -41,11 +41,8 @@ function(compiler_init target_name)
           /w14547 # 'operator': operator before comma has no effect; expected operator with side-effect
           /w14549 # 'operator': operator before comma has no effect; did you intend 'operator'?
           /w14555 # expression has no effect; expected expression with side- effect
-          /w14619 # pragma warning: there is no warning number 'number'
           /w14640 # Enable warning on thread un-safe static member initialization
-          /w14826 # Conversion from 'type1' to 'type_2' is sign-extended. This may cause unexpected runtime behavior.
-          /w14905 # wide string literal cast to 'LPSTR'
-          /w14906 # string literal cast to 'LPWSTR'
+          /w14826 # Conversion from 'type1' to 'type_2' is sign-extended. This may cause unexpected runtime behaviour.
           /w14928 # illegal copy-initialization; more than one user-defined conversion has been implicitly applied
           /permissive- # standards conformance mode for MSVC compiler.
     )
@@ -64,7 +61,6 @@ function(compiler_init target_name)
         -Wshadow
         -Wsign-conversion
         -Wundef
-        -Wzero-as-null-pointer-constant
         -Wno-unused-function # We often have non-inline functions that aren't used in our test/example programs
     )
 
@@ -72,7 +68,6 @@ function(compiler_init target_name)
     set(GCC_FLAGS
         ${CLANG_FLAGS}
         -Wcast-qual
-        -Wctor-dtor-privacy
         -Wdisabled-optimization
         -Wduplicated-branches
         -Wduplicated-cond
@@ -80,7 +75,6 @@ function(compiler_init target_name)
         -Wlogical-op
         -Wmisleading-indentation
         -Wmissing-include-dirs
-        -Wno-ctor-dtor-privacy
         -Wno-dangling-else
         -Wno-format-nonliteral
         -Wno-unused-local-typedefs
@@ -88,13 +82,10 @@ function(compiler_init target_name)
         -Wredundant-decls
         -Wshift-overflow=2
         -Wsized-deallocation
-        -Wtrampolines
         -Wuseless-cast
-        -Wvector-operation-performance
-        -Wwrite-strings
     )
 
-    # Disable some GCC buggy checks ....
+    # Some GCC checks have some false positives so we disable them ...
     # GCC at least as of 12.2 has a bug where the -Wrestrict flag detects some false positives in optimized mode.
     set(GCC_FLAGS ${GCC_FLAGS} -Wno-restrict)
 
@@ -141,12 +132,5 @@ function(compiler_init target_name)
 
     # Set the other compilation flags as laid out above.
     target_compile_options(${target_name} ${target_type} ${compiler_flags})
-
-    # GCC at least as of 13.2 does not interact well with the new linker from Xcode-15 so use the classic version instead.
-    # We apply the fix for all GCC/Xcode links here for now and issue a message to let the user know ...
-    if(APPLE AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        message("Reverting to using the classic Xcode ld linker for gcc on MacOS!")
-        add_link_options("-Wl,-ld_classic")
-    endif()
 
 endfunction()

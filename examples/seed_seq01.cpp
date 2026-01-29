@@ -1,7 +1,10 @@
-/// @brief Create a randomly seeded RNG from a std::seed_seq
-/// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
-/// SPDX-License-Identifier: MIT
-#include "common.h"
+// Create a randomly seeded RNG from a `std::seed_seq`.
+//
+// SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
+// SPDX-License-Identifier: MIT
+
+#include <xoshiro.h>
+#include <utilities/utilities.h>
 
 /// @brief Returns a std::seed_seq that itself is seeded with an appropriate amount of entropy.
 /// @param state_bits The number of bits in the generator's state array you are trying to seed.
