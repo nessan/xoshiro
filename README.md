@@ -166,7 +166,7 @@ ge.shuffle(u);                              // <6>
 
 ### Extra Analysis
 
-Extra non-member functions for generator analysis are defined if the [`gf2][] library is available.
+Extra non-member functions for generator analysis are defined if the [`gf2`][] library is available.
 
 `gf2` is a `C++` library for doing linear algebra over [GF(2)][] the simplest field of two elements $\{0,1\}$, where the usual arithmetic operations are performed mod 2.
 The `gf2` library is header only and is easily incorporated into any application.
