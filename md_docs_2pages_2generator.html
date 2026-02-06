@@ -187,6 +187,7 @@ State Requirements</h2>
 <li>The <span class="tt">characteristic_coefficients</span> method is discussed below in the <a class="el" href="#jumping">Jumping</a> section.</li>
 </ul>
 <p>The <span class="tt"><a class="el" href="classxso_1_1xoroshiro.html" title="The state for the Xoroshiro family of pseudorandom number generators.">xso::xoroshiro</a></span> and <span class="tt"><a class="el" href="classxso_1_1xoshiro.html" title="The state for the Xoshiro family of pseudorandom number generators.">xso::xoshiro</a></span> state engines primarily differ in how they implement the <span class="tt">step</span> method&mdash;the secret sauce, if you will.</p>
+<dl class="section note"><dt>Note</dt><dd>Any <span class="tt"><a class="el" href="classxso_1_1generator.html" title="A pseudorandom number generator combining a State and a Scrambler.">xso::generator</a></span> satisfies all these state requirements. This is useful as some functions work naturally on a <span class="tt">State</span>, but you can pass the <span class="tt">generator</span> along in its place as a proxy.</dd></dl>
 <h2 class="doxsection"><a class="anchor" id="state-types"></a>
 State Types</h2>
 <p>We define two state engines, each with several template parameters:</p>
