@@ -74,6 +74,10 @@ Here are the required types and methods:
 
 The `xso::xoroshiro` and `xso::xoshiro` state engines primarily differ in how they implement the `step` method---the secret sauce, if you will.
 
+> [!NOTE]
+> Any `xso::generator` satisfies all these state requirements.
+> This is useful as some functions work naturally on a `State`, but you can pass the `generator` along in its place as a proxy.
+
 ### State Types
 
 We define two state engines, each with several template parameters:
