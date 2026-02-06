@@ -1,14 +1,18 @@
-# README
+# Overview
 
-David Blackman and Sebastiano Vigna introduced the [xoshiro/xoroshiro][] class of pseudorandom number generators, which are very efficient and, though they have relatively small states, display excellent statistical properties. The mathematical details are to be found in their [paper][].
+<p align="center">
+    <img src="logo.png" style="display: block; margin: auto;" alt="project logo" />
+</p>
+
+David Blackman and Sebastiano Vigna introduced the [xoshiro/xoroshiro][] class of pseudorandom number generators, which are very efficient and, despite their relatively small state sizes, exhibit excellent statistical properties. The mathematical details are in their [paper][].
 
 `xoshiro.h` is a single header file, `C++` implementation of the _complete_ family of [xoshiro/xoroshiro][] pseudorandom uniform number generators.
 
 The generators satisfy `C++`'s [`std::uniform_random_bit_generator`][] concept and can drive any distribution defined in the standard library.
 
-We also provide efficient jump-ahead methods for *arbitrary* jump sizes, making these generators particularly suitable for parallel processing applications. They are excellent replacements for the "standard" _Mersenne Twister_ generator.
+We also provide efficient jump-ahead methods for _arbitrary_ jump sizes, making these generators particularly suitable for parallel processing applications. They are excellent replacements for the "standard" _Mersenne Twister_ generator.
 
-While the implementation is very general, there are simple type aliases for specific preferred instantiations that are known to work well in most situations.
+While the implementation is very general, there are simple type aliases for preferred instantiations known to work well in most situations.
 
 ## Example
 
@@ -42,7 +46,7 @@ int main()
 }
 ```
 
-Everything is in the single `xoshiro.h` header file. The classes, functions etc., are all in the `xso` namespace. `xso::rng` is a type alias for `xso::rng64` which produces 64-bit outputs from a specific _xoshiro_ generator with 256 bits of state.
+Everything is in the single `xoshiro.h` header file. The classes, functions, etc., are all in the `xso` namespace. `xso::rng` is a type alias for `xso::rng64,` which produces 64-bit outputs from a specific _xoshiro_ generator with 256 bits of state.
 
 Here is the output from one run of the program:
 
@@ -78,7 +82,7 @@ FetchContent_Declare(xoshiro URL https://github.com/nessan/xoshiro/releases/down
 FetchContent_MakeAvailable(xoshiro)
 ```
 
-This command downloads and unpacks an archive of the current version of `xoshiro` to your project's build folder. You can then add a dependency on `xoshiro::xoshiro`, a `CMake` alias for `xoshiro`. `FetchContent` will automatically ensure the build system knows where to find the downloaded header files and any needed compiler flags.
+This command downloads and unpacks the current version of xoshiro into your project's build folder. You can then add a dependency on `xoshiro::xoshiro`, a `CMake` alias for `xoshiro`. `FetchContent` will automatically ensure the build system knows where to find the downloaded header files and any needed compiler flags.
 
 Used like this, `FetchContent` will only download a minimal library version without any redundant test code, sample programs, documentation files, etc.
 
@@ -93,9 +97,9 @@ However, our implementation in `xoshiro.h` is distinguished in several other way
 
 Using `xoshiro.h`, you can create _any_ member of the _xoshiro/xoroshiro_ family.
 
-We have `State` classes that are templatised across the number of state bits and the parameters (labelled `A`, `B`, and `C` in the literature) that determine how the state is advanced from step to step.
+We have `State` classes that are templatized across the number of state bits and the parameters (labelled `A`, `B`, and `C` in the literature) that determine how the state is advanced from step to step.
 
-`Scrambler` classes are templatised across the other parameters (labelled `R`, `S`, and `T` in the literature) that determine how the higher dimensional state is scrambled/reduced to single 3-bit or 64-bit output words.
+`Scrambler` classes are templatized across the other parameters (labelled `R`, `S`, and `T` in the literature) that determine how the higher dimensional state is scrambled/reduced to single 3-bit or 64-bit output words.
 
 This means you can instantiate _any_ generator in the _xoshiro/xoroshiro_ family.
 
@@ -105,21 +109,21 @@ For the reasonable optimisation levels you are likely to employ in any numerical
 
 ### Simplicity
 
-While you can instantiate _any_ generator in the _xoshiro/xoroshiro_ family, we also recognise that only a limited number of those generators have been vetted for suitability as being "good".
+While you can instantiate _any_ generator in the _xoshiro/xoroshiro_ family, we also recognise that only a limited number of those generators have been vetted as "good".
 
 Therefore, we provide some _type aliases_ for the recommended default generators you should use in most cases.
 
 ### Arbitrary Jumps
 
-We provide methods to advance a generator by _arbitrary_ and potentially vast numbers of steps. This contrasts with the `C` versions, which only define a limited number of jump possibilities.
+We provide methods to advance a generator by an arbitrary and potentially vast number of steps. This contrasts with the `C` versions, which only define a limited number of jump possibilities.
 
-Huge jumps are used to _partition_ a single random number stream into non-overlapping sub-streams. In parallel processing applications, the sub-streams drive independent jobs running on different compute cores.
+Huge jumps are used to _partition_ a single random number stream into non-overlapping sub-streams. In parallel-processing applications, the sub-streams drive independent jobs running on different compute cores.
 
 ### Sampling Methods
 
-The `C++` standard library follows a typical design pattern for the facilities in its [`<random>`][] header. It maintains a strict separation between the classes that produce random bits and others that use those bits.
+The `C++` standard library follows a typical design pattern for the facilities in its [`<random>`][] header. It maintains a strict separation between the classes that produce random bits and those that use them.
 
-Uniform random bit generators produce streams of _uniformly_ distributed output words (usually 32-bit or 64-bit unsigned integers). Other classes and functions shape those core streams to simulate a desired distribution over some field of interest (for example, to generate variates from a uniform distribution of reals in the range 0 to 1).
+Uniform random bit generators produce streams of _uniformly_ distributed output words (usually 32-bit or 64-bit unsigned integers). Other classes and functions shape those core streams to simulate a desired distribution over a field of interest (for example, to generate variates from a uniform distribution on the real interval [0, 1]).
 
 The idea is reasonable enough. You can swap out the uniform random bit generator for a better one and continue to use the other functions without change.
 
@@ -137,7 +141,7 @@ std::cout << "Six-sided dice roll: " << gen.roll() << '\n';
 Similarly, you can ask one of our generators to flip a coin or shuffle the elements in a container.
 
 Perhaps most importantly, the generators directly support the idea of _sampling_.
-This includes pulling samples from a range, container, or an arbitrary distribution.
+This includes pulling samples from a range, a container, or an arbitrary distribution.
 
 Here are some examples:
 
@@ -157,38 +161,42 @@ gen.sample(v, u.begin(), u.word_count());   // <5>
 ge.shuffle(u);                              // <6>
 ```
 
-1. Prints a random integer from $[1,10]$,  where each integer is equally likely to occur.
+1. Prints a random integer from $[1,10]$, where each integer is equally likely to occur.
 2. Prints a random real from a uniform distribution over $[1,10)$
 3. Prints a random variate from a normal distribution with a mean of 70 and a standard deviation of 15.
 4. Fills an array `v` with ten random variates from that same distribution.
-5. Fills an array `u` with five elements drawn from `v` without replacement.
+5. Fills the array u with five elements from v, without replacement.
 6. Shuffles the elements of `u`.
 
 ### Extra Analysis
 
 Extra non-member functions for generator analysis are defined if the [`gf2`][] library is available.
 
-`gf2` is a `C++` library for doing linear algebra over [GF(2)][] the simplest field of two elements $\{0,1\}$, where the usual arithmetic operations are performed mod 2.
-The `gf2` library is header only and is easily incorporated into any application.
+[`gf2`][] is a `C++` library for doing linear algebra over [GF(2)][] the simplest field of two elements $\{0, 1\}$, where the usual arithmetic operations are performed mod 2.
+The [`gf2`][] library is header-only and is easily incorporated into any application.
 
 If it is available, then `xoshiro.h` defines some extra functions that let you access the generator's _transition matrix_ and use/analyse it in various ways.
 
-## Documentation
+## Useful Links
 
-You can read the project's documentation [here](https://nessan.github.io/xoshiro/). \
-The documentation site was generated using [Quarto](https://quarto.org).
+Here are links to the project's [repository][] and [documentation site][]
 
-### Contact
+The project uses [Doxytest][], a tool for generating C++ test programs from sample code embedded in header file comments.
 
-You can contact me by email [here](mailto:nzznfitz+gh@icloud.com).
+You can contact me by [email][].
 
 ### Copyright and License
 
-Copyright (c) 2022-present Nessan Fitzmaurice. \
-You can use this software under the [MIT license](https://opensource.org/license/mit).
+Copyright (c) 2022-present Nessan Fitzmaurice.<br>
+You can use this software under the [MIT license][].
 
 <!-- Reference Links -->
 
+[repository]: https://github.com/nessan/xoshiro
+[documentation site]: https://nessan.github.io/xoshiro
+[email]: mailto:nzznfitz+gh@icloud.com
+[MIT License]: https://opensource.org/license/mit
+[Doxytest]: https://nessan.github.io/doxytest/
 [xoshiro/xoroshiro]: https://prng.di.unimi.it
 [paper]: https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf
 [`std::uniform_random_bit_generator`]: https://en.cppreference.com/w/cpp/numeric/random/uniform_random_bit_generator

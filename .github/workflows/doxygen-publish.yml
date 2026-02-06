@@ -1,0 +1,35 @@
+# Triggers a fresh build of the projects's documentation site and publishes it to GitHub Pages.
+# Uses this [action](https://github.com/marketplace/actions/DenverCoder1/doxygen-github-pages-action).
+# The site is built using the Doxygen static generator (see https://doxygen.org).
+# The source for the site is in the docs/ subdirectory, which contains the Doxyfile, the theme files, and the pages.
+# The output of the build is in the docs/site subdirectory.
+name: Run Doxygen and publish documentation sit to GitHub Pages
+
+# When is the workflow run?
+on:
+    # Any push to the main branch will trigger a build of the site.
+    push:
+        branches:
+            - main
+
+    # Any formal release
+    release:
+        types: [published]
+
+    # You can also trigger the workflow manually (handy to debug the workflow).
+    workflow_dispatch:
+
+# The workflow has a single job ...
+jobs:
+    doxygen-publish:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            - uses: DenverCoder1/doxygen-github-pages-action@v2.0.0
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  branch: gh-pages
+                  folder: docs/site
+                  config_file: docs/Doxyfile
+                  doxygen_version: 1.15.0

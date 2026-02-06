@@ -9,8 +9,7 @@
 /// @brief Returns a std::seed_seq that itself is seeded with an appropriate amount of entropy.
 /// @param state_bits The number of bits in the generator's state array you are trying to seed.
 std::seed_seq
-seed_sequence(std::size_t state_bits)
-{
+seed_sequence(std::size_t state_bits) {
     // We will use calls to std::random_device to produce the entropy.
     std::random_device dev;
 
@@ -32,12 +31,12 @@ seed_sequence(std::size_t state_bits)
 /// @brief Returns a randomly seeded RNG
 template<typename RNG>
 RNG
-randomly_seeded()
-{
+randomly_seeded() {
     // Some constants etc.
     using word_type = typename RNG::word_type;
     constexpr std::size_t n_words = RNG::word_count();
-    constexpr std::size_t n_bits = RNG::bit_count();;
+    constexpr std::size_t n_bits = RNG::bit_count();
+    ;
 
     // An appropriate std::seed_seq for this RNG.
     auto seq = seed_sequence(n_bits);
@@ -49,12 +48,11 @@ randomly_seeded()
     if constexpr (sizeof(word_type) <= 4) {
         // Great--the seq.generate method will happily fully fill our seed array completely
         seq.generate(seed_array.begin(), seed_array.end());
-    }
-    else {
+    } else {
         // 64-bit space: it will take two generate() calls per seed word in our generator
         std::array<std::uint32_t, 2 * n_words> tmp;
         seq.generate(tmp.begin(), tmp.end());
-        for (std::size_t i = 0; i < n_words; ++i) {
+        for (auto i = 0uz; i < n_words; ++i) {
             auto l = static_cast<word_type>(tmp[2 * i]) << 32;
             auto r = static_cast<word_type>(tmp[2 * i + 1]);
             seed_array[i] = l | r;
@@ -67,8 +65,7 @@ randomly_seeded()
 }
 
 int
-main()
-{
+main() {
     // Create a couple of randomly seeded 64-bit generators
     auto rng64_1 = randomly_seeded<xso::rng64>();
     auto rng64_2 = randomly_seeded<xso::rng64>();

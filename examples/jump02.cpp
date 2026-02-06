@@ -1,4 +1,4 @@
-// For each of our type aliased state-engines compare jumping vs discarding for some fixed jump size n.
+// For each of our type aliased RNG-engines compare jumping vs discarding for some fixed jump size n.
 // We do some timing so this needs to be compiled with optimization enabled.
 //
 // SPDX-FileCopyrightText:  2023 Nessan Fitzmaurice <nzznfitz+gh@icloud.com>
@@ -7,11 +7,11 @@
 #include <xoshiro.h>
 #include <utilities/utilities.h>
 
-template<typename State>
+template<typename RNG>
 void
-run(State& engine, std::size_t J) {
+run(RNG& engine, std::size_t J) {
     // What are we working on?
-    std::print("Jumping/discarding {:L} states for {}:\n", J, engine);
+    std::print("Jumping/discarding {:L} random variates from {}:\n", J, engine);
 
     // Make an exact copy of the input generator
     auto tmp = engine;
@@ -19,9 +19,9 @@ run(State& engine, std::size_t J) {
     // stopwatch to time jumping vs. discarding
     utilities::stopwatch sw;
 
-    // Jumping ...
+    // Jumping without a precomputed jump polynomial (so should be slower)...
     sw.click();
-    xso::jump(engine, xso::jump_coefficients<State>(J));
+    engine.jump(J);
     sw.click();
     auto jump_secs = sw.lap();
 
@@ -43,46 +43,32 @@ int
 main() {
     utilities::pretty_print_thousands();
 
-    // Our generators
-    xso::xoroshiro_2x32_star       x01;
-    xso::xoroshiro_2x32_star_star  x02;
-    xso::xoshiro_4x32_plus         x03;
-    xso::xoshiro_4x32_plus_plus    x04;
-    xso::xoshiro_4x32_star_star    x05;
-    xso::xoroshiro_2x64_plus       x06;
-    xso::xoroshiro_2x64_plus_plus  x07;
-    xso::xoroshiro_2x64_star_star  x08;
-    xso::xoshiro_4x64_plus         x09;
-    xso::xoshiro_4x64_plus_plus    x10;
-    xso::xoshiro_4x64_star_star    x11;
-    xso::xoshiro_8x64_plus         x12;
-    xso::xoshiro_8x64_plus_plus    x13;
-    xso::xoshiro_8x64_star_star    x14;
-    xso::xoroshiro_16x64_star      x15;
-    xso::xoroshiro_16x64_star_star x16;
-    xso::xoroshiro_16x64_plus_plus x17;
+    // clang-format off
+    // All our type aliased generators (different types, so stored in a tuple)
+    auto generators = std::tuple{
+        xso::xoroshiro_2x32_star{},
+        xso::xoroshiro_2x32_star_star{},
+        xso::xoshiro_4x32_plus{},
+        xso::xoshiro_4x32_plus_plus{},
+        xso::xoshiro_4x32_star_star{},
+        xso::xoroshiro_2x64_plus{},
+        xso::xoroshiro_2x64_plus_plus{},
+        xso::xoroshiro_2x64_star_star{},
+        xso::xoshiro_4x64_plus{},
+        xso::xoshiro_4x64_plus_plus{},
+        xso::xoshiro_4x64_star_star{},
+        xso::xoshiro_8x64_plus{},
+        xso::xoshiro_8x64_plus_plus{},
+        xso::xoshiro_8x64_star_star{},
+        xso::xoroshiro_16x64_star{},
+        xso::xoroshiro_16x64_star_star{},
+        xso::xoroshiro_16x64_plus_plus{},
+    };
+    // clang-format on
 
-    // Number of states to jump
+    // Number of RNGs to jump
     std::size_t J = 500'000'000;
-
-    // And off we go ...
-    run(x01, J);
-    run(x02, J);
-    run(x03, J);
-    run(x04, J);
-    run(x05, J);
-    run(x06, J);
-    run(x07, J);
-    run(x08, J);
-    run(x09, J);
-    run(x10, J);
-    run(x11, J);
-    run(x12, J);
-    run(x13, J);
-    run(x14, J);
-    run(x15, J);
-    run(x16, J);
-    run(x17, J);
+    std::apply([&](auto&... rng) { (run(rng, J), ...); }, generators);
 
     return 0;
 }

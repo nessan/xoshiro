@@ -21,7 +21,7 @@ compare(New& x, Old& c) {
     constexpr std::size_t n_bits = New::bit_count();
 
     // Make sure we start both generators with identical states ...
-    for (std::size_t i = 0; i < n_words; ++i) c.s[i] = x[i];
+    for (auto i = 0uz; i < n_words; ++i) c.s[i] = x[i];
 
     // stopwatch to time the two versions
     utilities::stopwatch sw;
@@ -32,9 +32,9 @@ compare(New& x, Old& c) {
     sw.click();
     auto old_ms = 1000 * sw.lap();
 
-    // Our version of the jump ...
+    // Our version of the jump (not using precomputed jump polynomials so should be slower) ...
     sw.click();
-    xso::jump(x, xso::jump_coefficients<New>(3 * n_bits / 4, true));
+    x.jump(3 * n_bits / 4, true);
     sw.click();
     auto new_ms = 1000 * sw.lap();
 
@@ -51,56 +51,31 @@ int
 main() {
     utilities::pretty_print_thousands();
 
-    // Our versions of the generators
-    xso::xoshiro_4x32_plus         x03;
-    xso::xoshiro_4x32_plus_plus    x04;
-    xso::xoshiro_4x32_star_star    x05;
-    xso::xoroshiro_2x64_plus       x06;
-    xso::xoroshiro_2x64_plus_plus  x07;
-    xso::xoroshiro_2x64_star_star  x08;
-    xso::xoshiro_4x64_plus         x09;
-    xso::xoshiro_4x64_plus_plus    x10;
-    xso::xoshiro_4x64_star_star    x11;
-    xso::xoshiro_8x64_plus         x12;
-    xso::xoshiro_8x64_plus_plus    x13;
-    xso::xoshiro_8x64_star_star    x14;
-    xso::xoroshiro_16x64_star      x15;
-    xso::xoroshiro_16x64_star_star x16;
-    xso::xoroshiro_16x64_plus_plus x17;
-
-    // The original "C" versions of the generators wrapped in simple structs
-    old::xoshiro_4x32_plus         c03;
-    old::xoshiro_4x32_plus_plus    c04;
-    old::xoshiro_4x32_star_star    c05;
-    old::xoroshiro_2x64_plus       c06;
-    old::xoroshiro_2x64_plus_plus  c07;
-    old::xoroshiro_2x64_star_star  c08;
-    old::xoshiro_4x64_plus         c09;
-    old::xoshiro_4x64_plus_plus    c10;
-    old::xoshiro_4x64_star_star    c11;
-    old::xoshiro_8x64_plus         c12;
-    old::xoshiro_8x64_plus_plus    c13;
-    old::xoshiro_8x64_star_star    c14;
-    old::xoroshiro_16x64_star      c15;
-    old::xoroshiro_16x64_star_star c16;
-    old::xoroshiro_16x64_plus_plus c17;
+    // clang-format off
+    // Each tuple entry pairs "our" generator with the equivalent C version which is wrapped in a struct.
+    auto generators = std::tuple{
+        // std::pair{xso::xoroshiro_2x32_star{},       old::xoroshiro_2x32_star{}},
+        // std::pair{xso::xoroshiro_2x32_star_star{},  old::xoroshiro_2x32_star_star{}},
+        std::pair{xso::xoshiro_4x32_plus{},         old::xoshiro_4x32_plus{}},
+        std::pair{xso::xoshiro_4x32_plus_plus{},    old::xoshiro_4x32_plus_plus{}},
+        std::pair{xso::xoshiro_4x32_star_star{},    old::xoshiro_4x32_star_star{}},
+        std::pair{xso::xoroshiro_2x64_plus{},       old::xoroshiro_2x64_plus{}},
+        std::pair{xso::xoroshiro_2x64_plus_plus{},  old::xoroshiro_2x64_plus_plus{}},
+        std::pair{xso::xoroshiro_2x64_star_star{},  old::xoroshiro_2x64_star_star{}},
+        std::pair{xso::xoshiro_4x64_plus{},         old::xoshiro_4x64_plus{}},
+        std::pair{xso::xoshiro_4x64_plus_plus{},    old::xoshiro_4x64_plus_plus{}},
+        std::pair{xso::xoshiro_4x64_star_star{},    old::xoshiro_4x64_star_star{}},
+        std::pair{xso::xoshiro_8x64_plus{},         old::xoshiro_8x64_plus{}},
+        std::pair{xso::xoshiro_8x64_plus_plus{},    old::xoshiro_8x64_plus_plus{}},
+        std::pair{xso::xoshiro_8x64_star_star{},    old::xoshiro_8x64_star_star{}},
+        std::pair{xso::xoroshiro_16x64_star{},      old::xoroshiro_16x64_star{}},
+        std::pair{xso::xoroshiro_16x64_star_star{}, old::xoroshiro_16x64_star_star{}},
+        std::pair{xso::xoroshiro_16x64_plus_plus{}, old::xoroshiro_16x64_plus_plus{}},
+    };
+    // clang-format on
 
     // Run the comparisons ...
-    compare(x03, c03);
-    compare(x04, c04);
-    compare(x05, c05);
-    compare(x06, c06);
-    compare(x07, c07);
-    compare(x08, c08);
-    compare(x09, c09);
-    compare(x10, c10);
-    compare(x11, c11);
-    compare(x12, c12);
-    compare(x13, c13);
-    compare(x14, c14);
-    compare(x15, c15);
-    compare(x16, c16);
-    compare(x17, c17);
+    std::apply([&](auto&... p) { (compare(p.first, p.second), ...); }, generators);
 
     return 0;
 }

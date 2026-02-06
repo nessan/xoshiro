@@ -27,7 +27,7 @@
 #       LIBRARIES gf2::gf2 utilities::utilities)
 function(add_executables)
 
-    # Parse arguments: Look for the optional COMBINED_TARGET flag.
+    # First we parse arguments and look for the optional COMBINED_TARGET flag.
     # If present, see if a name follows it,otherwise default to "all_examples".
     set(filtered_args "")
     set(combined_target_requested FALSE)
@@ -60,16 +60,19 @@ function(add_executables)
         math(EXPR arg_index "${arg_index} + 1")
     endwhile()
 
+    # Parse the remaining arguments using cmake_parse_arguments.
     set(options)
     set(oneValueArgs)
     set(multiValueArgs LIBRARIES)
     cmake_parse_arguments(NEEDED "${options}" "${oneValueArgs}" "${multiValueArgs}" ${filtered_args})
 
+    # Error out if no source inputs were provided.
     set(source_inputs ${NEEDED_UNPARSED_ARGUMENTS})
     if(NOT source_inputs)
         message(FATAL_ERROR "add_executables: At least one directory or source file must be specified.")
     endif()
 
+    # Collect source files from the provided paths.
     set(valid_extensions ".c" ".cc" ".cxx" ".cpp" ".C" ".c++")
     set(collected_sources "")
 
@@ -104,14 +107,17 @@ function(add_executables)
         endif()
     endforeach()
 
+    # Error out if no source files were collected.
     if(NOT collected_sources)
         message(WARNING "add_executables: No source files were discovered in the provided inputs.")
         return()
     endif()
 
+    # Remove duplicates and sort the collected sources for consistent ordering.
     list(REMOVE_DUPLICATES collected_sources)
     list(SORT collected_sources)
 
+    # Create an executable target for each collected source file.
     set(executable_targets "")
     foreach(src_file ${collected_sources})
         cmake_path(GET src_file STEM target_name)
@@ -132,6 +138,7 @@ function(add_executables)
         list(APPEND executable_targets ${target_name})
     endforeach()
 
+    # If requested, create the combined aggregate target and set it to depend on all created executables.
     if(combined_target_requested AND executable_targets)
         if(combined_target_name STREQUAL "")
             set(combined_target_name "all_examples")

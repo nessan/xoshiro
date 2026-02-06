@@ -23,7 +23,7 @@ option(GF2 "Download the `gf2` library for extra functionality?" OFF)
 if (GF2)
 
     # Fetch a minimal archive of the `gf2` library from a remote repo.
-    include(FetchContent)
+    include(FetchContent) 
     FetchContent_Declare(gf2 URL https://github.com/nessan/gf2/releases/download/current/gf2.zip)
     FetchContent_MakeAvailable(gf2)
 
@@ -67,6 +67,12 @@ if (PROJECT_IS_TOP_LEVEL)
     include(add_executables)
     add_executables(${CMAKE_SOURCE_DIR}/examples
         COMBINED_TARGET "all_examples"
-        LIBRARIES ${PROJECT_NAME}::${PROJECT_NAME} gf2::gf2 utilities::utilities)
+        LIBRARIES ${PROJECT_NAME}::${PROJECT_NAME} utilities::utilities gf2::gf2)
+
+    # Extract the tests from the comments in the header files and create a target for each corresponding test program.
+    # We have a CMake module and a Python script that make that straightforward.
+    include(doxytest)
+    doxytest(${CMAKE_SOURCE_DIR}/include
+        INCLUDES "<xoshiro.h>" LIBRARIES ${PROJECT_NAME}::${PROJECT_NAME} gf2::gf2)
 
 endif()

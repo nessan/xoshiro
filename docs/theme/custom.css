@@ -1,0 +1,159 @@
+/* BUG FIX: `doxygen-awesome-sidebar-only.css` has a bug that doubles the margin-left. */
+@media screen and (min-width: 768px) {
+    #doc-content {
+        /*margin-left: var(--side-nav-fixed-width) !important;*/
+        margin-left: 0 !important;
+    }
+}
+
+/* Customise some dimensions etc.*/
+html {
+    --side-nav-fixed-width: 250px;
+    --menu-display: none;
+    --top-height: 60px;
+    --toc-sticky-top: -25px;
+    --toc-max-height: calc(100vh - 2 * var(--spacing-medium) - 25px);
+}
+
+html {
+    /* Want tables to be centered on the page */
+    .contents table:not(.memberdecls):not(.mlabels):not(.fieldtable):not(.memname),
+    .contents table:not(.memberdecls):not(.mlabels):not(.fieldtable):not(.memname) tbody {
+        display: table;
+        width: 98%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Simplify the look of code-spans by removing the borders  & also inherit font size from parent*/
+    code,
+    span.tt {
+        white-space: pre;
+        font-family: var(--font-family-monospace);
+        background-color: var(--fragment-background-color);
+        display: inline;
+        background: var(--code-background);
+        color: var(--code-foreground);
+        padding: 2px 6px;
+        border: none;
+        font-size: inherit !important;
+    }
+}
+
+/* We use Roboto for the main font and Roboto Mono for the monospace font */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap");
+
+/* Set the fonts we use and tone down the font weights for many elements, generally from 600 to 400 */
+html {
+    --font-family: "Roboto", sans-serif;
+    --font-family-monospace: "Roboto Mono", monospace;
+
+    /* font sizes */
+    --page-font-size: 17px;
+    --navigation-font-size: 15px;
+    --toc-font-size: 15px;
+    --code-font-size: 14px; /* affects code, fragment */
+    --title-font-size: 30px;
+
+    h1 {
+        font-size: 1.7em;
+    }
+
+    h2 {
+        font-size: 1.3em;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+        font-weight: 400;
+    }
+
+    a:link,
+    a:visited,
+    a:hover,
+    a:focus,
+    a:active {
+        font-weight: 400;
+    }
+
+    #projectname {
+        font-weight: 400;
+    }
+
+    #nav-tree .selected {
+        font-weight: 400;
+    }
+    #nav-tree .selected a {
+        font-weight: 400;
+    }
+
+    div.header .title {
+        font-weight: 400;
+    }
+
+    .paramname,
+    .paramname em {
+        font-weight: 400;
+    }
+
+    table.params .paramname {
+        font-weight: 400;
+    }
+
+    h2.memtitle {
+        font-weight: 400;
+    }
+
+    dl.reflist dt {
+        font-weight: 400;
+    }
+
+    th.markdownTableHeadLeft,
+    th.markdownTableHeadRight,
+    th.markdownTableHeadCenter,
+    th.markdownTableHeadNone,
+    table.doxtable th {
+        font-weight: 400;
+    }
+    table.fieldtable th {
+        font-weight: 400;
+    }
+
+    .navpath li.navelem b {
+        font-weight: 400;
+    }
+
+    .tabs-overview button.tab-button.active .tab-title {
+        font-weight: 400;
+    }
+}
+
+/* A trivial pseudocode environment */
+/* Usage: <div class="pseudocode"> Some code here ... </div> */
+/* Add comments that are floated to the right with a special marker <span class="comment">This is a comment</span> */
+html {
+    .pseudocode {
+        display: block;
+        font-family: var(--font-family-monospace);
+        background: var(--code-background);
+        color: var(--code-foreground);
+        padding: 2px 6px;
+        border: 1px solid var(--separator-color);
+        border-radius: var(--border-radius-medium);
+    }
+    .pseudocode .comment {
+        float: right;
+        margin-right: 20px;
+    }
+    .pseudocode .comment::before {
+        content: "▷ ";
+        color: #999999;
+        font-size: 0.8em;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+}
