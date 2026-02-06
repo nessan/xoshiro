@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['generality_0',['Generality',['../index.html#generality',1,'']]],
+  ['generator_1',['generator',['../classxso_1_1generator.html',1,'xso::generator&lt; State, Scrambler &gt;'],['../classxso_1_1generator.html#a611b99b9baabf535816175004da23c8b',1,'xso::generator::generator()'],['../classxso_1_1generator.html#ab0f5253198dab61e4d641541d37cf817',1,'xso::generator::generator(word_type s)'],['../classxso_1_1generator.html#ab775ae2863599933f2d9676dbdb87b16',1,'xso::generator::generator(Iter b, Iter e)']]],
+  ['generator_20api_20overview_2',['Generator API Overview',['../md_docs_2pages_2generator.html#generator-api-overview',1,'']]],
+  ['generator_20class_3',['The Generator Class',['../md_docs_2pages_2generator.html',1,'']]],
+  ['generator_3c_20xoroshiro_5f16x64_2c_20plus_5fplus_3c_2023_2c_2015_2c_200_20_3e_20_3e_4',['generator&lt; xoroshiro_16x64, plus_plus&lt; 23, 15, 0 &gt; &gt;',['../classxso_1_1generator.html',1,'xso']]],
+  ['generator_3c_20xoroshiro_5f16x64_2c_20star_3c_200x9e3779b97f4a7c13_2c_200_20_3e_20_3e_5',['generator&lt; xoroshiro_16x64, star&lt; 0x9e3779b97f4a7c13, 0 &gt; &gt;',['../classxso_1_1generator.html',1,'xso']]],
+  ['generator_3c_20xoroshiro_5f16x64_2c_20star_5fstar_3c_205_2c_207_2c_209_2c_200_20_3e_20_3e_6',['generator&lt; xoroshiro_16x64, star_star&lt; 5, 7, 9, 0 &gt; &gt;',['../classxso_1_1generator.html',1,'xso']]],
+  ['generator_3c_20xoroshiro_5f2x32_2c_20star_3c_200x9e3779bb_2c_200_20_3e_20_3e_7',['generator&lt; xoroshiro_2x32, star&lt; 0x9E3779BB, 0 &gt; &gt;',['../classxso_1_1generator.html',1,'xso']]],
+  ['generator_3c_20xoroshiro_5f2x32_2c_20star_5fstar_3c_200x9e3779bbu_2c_205_2c_205_2c_200_20_3e_20_3e_8',['generator&lt; xoroshiro_2x32, star_star&lt; 0x9E3779BBu, 5, 5, 0 &gt; &gt;',['../classxso_1_1generator.html',1,'xso']]],
+  ['generator_3c_20xoroshiro_5f2x64_2c_20plus_3c_200_2c_201_20_3e_20_3e_9',['generator&lt; xoroshiro_2x64, plus&lt; 0, 1 &gt; &gt;',['../classxso_1_1generator.html',1,'xso']]],
+  ['generator_3c_20xoroshiro_5f2x64_2c_20star_5fstar_3c_205_2c_207_2c_209_2c_200_20_3e_20_3e_10',['generator&lt; xoroshiro_2x64, star_star&lt; 5, 7, 9, 0 &gt; &gt;',['../classxso_1_1generator.html',1,'xso']]],
+  ['generator_3c_20xoroshiro_5f2x64b_2c_20plus_5fplus_3c_2017_2c_200_2c_201_20_3e_20_3e_11',['generator&lt; xoroshiro_2x64b, plus_plus&lt; 17, 0, 1 &gt; &gt;',['../classxso_1_1generator.html',1,'xso']]],
+  ['generator_3c_20xoshiro_5f4x32_2c_20plus_3c_200_2c_203_20_3e_20_3e_12',['generator&lt; xoshiro_4x32, plus&lt; 0, 3 &gt; &gt;',['../classxso_1_1generator.html',1,'xso']]],
+  ['generator_3c_20xoshiro_5f4x32_2c_20plus_5fplus_3c_207_2c_200_2c_203_20_3e_20_3e_13',['generator&lt; xoshiro_4x32, plus_plus&lt; 7, 0, 3 &gt; &gt;',['../classxso_1_1generator.html',1,'xso']]],
+  ['generator_3c_20xoshiro_5f4x32_2c_20star_5fstar_3c_205_2c_207_2c_209_2c_201_20_3e_20_3e_14',['generator&lt; xoshiro_4x32, star_star&lt; 5, 7, 9, 1 &gt; &gt;',['../classxso_1_1generator.html',1,'xso']]],
+  ['generator_3c_20xoshiro_5f4x64_2c_20plus_3c_200_2c_203_20_3e_20_3e_15',['generator&lt; xoshiro_4x64, plus&lt; 0, 3 &gt; &gt;',['../classxso_1_1generator.html',1,'xso']]],
+  ['generator_3c_20xoshiro_5f4x64_2c_20plus_5fplus_3c_2023_2c_200_2c_203_20_3e_20_3e_16',['generator&lt; xoshiro_4x64, plus_plus&lt; 23, 0, 3 &gt; &gt;',['../classxso_1_1generator.html',1,'xso']]],
+  ['generator_3c_20xoshiro_5f4x64_2c_20star_5fstar_3c_205_2c_207_2c_209_2c_201_20_3e_20_3e_17',['generator&lt; xoshiro_4x64, star_star&lt; 5, 7, 9, 1 &gt; &gt;',['../classxso_1_1generator.html',1,'xso']]],
+  ['generator_3c_20xoshiro_5f8x64_2c_20plus_3c_202_2c_200_20_3e_20_3e_18',['generator&lt; xoshiro_8x64, plus&lt; 2, 0 &gt; &gt;',['../classxso_1_1generator.html',1,'xso']]],
+  ['generator_3c_20xoshiro_5f8x64_2c_20plus_5fplus_3c_2017_2c_202_2c_200_20_3e_20_3e_19',['generator&lt; xoshiro_8x64, plus_plus&lt; 17, 2, 0 &gt; &gt;',['../classxso_1_1generator.html',1,'xso']]],
+  ['generator_3c_20xoshiro_5f8x64_2c_20star_5fstar_3c_205_2c_207_2c_209_2c_201_20_3e_20_3e_20',['generator&lt; xoshiro_8x64, star_star&lt; 5, 7, 9, 1 &gt; &gt;',['../classxso_1_1generator.html',1,'xso']]],
+  ['generators_21',['Generators',['../md_docs_2pages_2type-aliases.html#analysed-generators',1,'Analysed Generators'],['../md_docs_2pages_2type-aliases.html',1,'Recommended Generators'],['../md_docs_2pages_2type-aliases.html#recommended-generators-1',1,'Recommended Generators']]],
+  ['get_5fstate_22',['get_state',['../classxso_1_1generator.html#adfcaf2151443bae42bd6d6da9589c5be',1,'xso::generator::get_state()'],['../classxso_1_1xoshiro.html#a9315eb9a9a901cc942f8a4c031470df8',1,'xso::xoshiro::get_state()'],['../classxso_1_1xoroshiro.html#a34a7a4cf80e99269bdf363e4c9480106',1,'xso::xoroshiro::get_state()']]],
+  ['gf2_23',['gf2',['../md_docs_2pages_2jump-technique.html#implementation-using-gf2',1,'Implementation Using &lt;span class=&quot;tt&quot;&gt;gf2&lt;/span&gt;'],['../md_docs_2pages_2jump-technique.html#implementation-without-gf2',1,'Implementation Without &lt;span class=&quot;tt&quot;&gt;gf2&lt;/span&gt;']]]
+];

@@ -1,1289 +1,279 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
-<meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
-
-<title>The xoshiroLibrary – xoshiro/xoroshiro PRNG's</title>
-<style>
-code{white-space: pre-wrap;}
-span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
-div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-ul.task-list{list-style: none;}
-ul.task-list li input[type="checkbox"] {
-  width: 0.8em;
-  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
-  vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-</style>
-
-
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./assets/images/logo.png" rel="icon" type="image/png">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-65803ac9f8b9a226f900d64efc7d6e1f.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-6c43f866430f66231ec7948ae9cfb461.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-65803ac9f8b9a226f900d64efc7d6e1f.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-f64d3cc6d510363a8df64d83128550f2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-872cdecd6121a61d6fad0543e29579e4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-f64d3cc6d510363a8df64d83128550f2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/quarto-contrib/admonitions-1.0.0/admonitions.css" rel="stylesheet">
-<script id="quarto-search-options" type="application/json">{
-  "location": "navbar",
-  "copy-button": false,
-  "collapse-after": 3,
-  "panel-placement": "end",
-  "type": "overlay",
-  "limit": 50,
-  "keyboard-shortcut": [
-    "f",
-    "/",
-    "s"
-  ],
-  "show-item-context": false,
-  "language": {
-    "search-no-results-text": "No results",
-    "search-matching-documents-text": "matching documents",
-    "search-copy-link-title": "Copy link to search",
-    "search-hide-matches-text": "Hide additional matches",
-    "search-more-match-text": "more match in this document",
-    "search-more-matches-text": "more matches in this document",
-    "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
-  }
-}</script>
-<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-XV29LHZDKD"></script>
-
-<script type="text/javascript">
-
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-XV29LHZDKD', { 'anonymize_ip': true});
-</script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
+<!-- HTML header for doxygen 1.15.0-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=11" />
+        <meta name="generator" content="Doxygen 1.15.0" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>&lt;tt&gt;xoshiro: Overview</title>
+        <link href="tabs.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="dynsections.js"></script>
+        <script type="text/javascript" src="clipboard.js"></script>
+        <link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+ <link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+ <script type="text/javascript">
+window.MathJax = {
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  },
+  loader: {
+    load: ['[tex]/mathtools']
+  },
+  tex: {
+    macros: {    FF: "{\\mathbb{F}_2}",
+    mod: ["{ {#1 \\, \\mathrm{mod} \\, #2}}",2],
+    seq: ["{ \\left[#1_0 #1_1 \\ldots #1_{#2-1}\\right] }",2],
+    },
+    packages: {
+        '[+]': ['mathtools']
     }
   }
-}
-window.Quarto = {
-  typesetMath
 };
 </script>
-
-<meta property="og:title" content="The xoshiroLibrary – xoshiro/xoroshiro PRNG’s">
-<meta property="og:description" content="">
-<meta property="og:image" content="https://nessan.github.io/xoshiro/assets/images/logo.png">
-<meta property="og:site_name" content="xoshiro/xoroshiro PRNG's">
-<meta property="og:image:height" content="191">
-<meta property="og:image:width" content="566">
-</head>
-
-<body class="nav-sidebar floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
-    const toggleBodyColorMode = (bsSheetEl) => {
-      const mode = bsSheetEl.getAttribute("data-mode");
-      const bodyEl = window.document.querySelector("body");
-      if (mode === "dark") {
-        bodyEl.classList.add("quarto-dark");
-        bodyEl.classList.remove("quarto-light");
-      } else {
-        bodyEl.classList.add("quarto-light");
-        bodyEl.classList.remove("quarto-dark");
-      }
-    }
-    const toggleBodyColorPrimary = () => {
-      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
-      if (bsSheetEl) {
-        toggleBodyColorMode(bsSheetEl);
-      }
-    }
-    const setColorSchemeToggle = (alternate) => {
-      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
-      for (let i=0; i < toggles.length; i++) {
-        const toggle = toggles[i];
-        if (toggle) {
-          if (alternate) {
-            toggle.classList.add("alternate");
-          } else {
-            toggle.classList.remove("alternate");
-          }
-        }
-      }
-    };
-    const toggleColorMode = (alternate) => {
-      // Switch the stylesheets
-      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
-      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
-      manageTransitions('#quarto-margin-sidebar .nav-link', false);
-      if (alternate) {
-        // note: dark is layered on light, we don't disable primary!
-        enableStylesheet(alternateStylesheets);
-        for (const sheetNode of alternateStylesheets) {
-          if (sheetNode.id === "quarto-bootstrap") {
-            toggleBodyColorMode(sheetNode);
-          }
-        }
-      } else {
-        disableStylesheet(alternateStylesheets);
-        enableStylesheet(primaryStylesheets)
-        toggleBodyColorPrimary();
-      }
-      manageTransitions('#quarto-margin-sidebar .nav-link', true);
-      // Switch the toggles
-      setColorSchemeToggle(alternate)
-      // Hack to workaround the fact that safari doesn't
-      // properly recolor the scrollbar when toggling (#1455)
-      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
-        manageTransitions("body", false);
-        window.scrollTo(0, 1);
-        setTimeout(() => {
-          window.scrollTo(0, 0);
-          manageTransitions("body", true);
-        }, 40);
-      }
-    }
-    const disableStylesheet = (stylesheets) => {
-      for (let i=0; i < stylesheets.length; i++) {
-        const stylesheet = stylesheets[i];
-        stylesheet.rel = 'disabled-stylesheet';
-      }
-    }
-    const enableStylesheet = (stylesheets) => {
-      for (let i=0; i < stylesheets.length; i++) {
-        const stylesheet = stylesheets[i];
-        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
-          stylesheet.rel = 'stylesheet';
-        }
-      }
-    }
-    const manageTransitions = (selector, allowTransitions) => {
-      const els = window.document.querySelectorAll(selector);
-      for (let i=0; i < els.length; i++) {
-        const el = els[i];
-        if (allowTransitions) {
-          el.classList.remove('notransition');
-        } else {
-          el.classList.add('notransition');
-        }
-      }
-    }
-    const isFileUrl = () => {
-      return window.location.protocol === 'file:';
-    }
-    const hasAlternateSentinel = () => {
-      let styleSentinel = getColorSchemeSentinel();
-      if (styleSentinel !== null) {
-        return styleSentinel === "alternate";
-      } else {
-        return false;
-      }
-    }
-    const setStyleSentinel = (alternate) => {
-      const value = alternate ? "alternate" : "default";
-      if (!isFileUrl()) {
-        window.localStorage.setItem("quarto-color-scheme", value);
-      } else {
-        localAlternateSentinel = value;
-      }
-    }
-    const getColorSchemeSentinel = () => {
-      if (!isFileUrl()) {
-        const storageValue = window.localStorage.getItem("quarto-color-scheme");
-        return storageValue != null ? storageValue : localAlternateSentinel;
-      } else {
-        return localAlternateSentinel;
-      }
-    }
-    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
-      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
-      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
-      let newTheme = '';
-      if(authorPrefersDark) {
-        newTheme = isAlternate ? baseTheme : alternateTheme;
-      } else {
-        newTheme = isAlternate ? alternateTheme : baseTheme;
-      }
-      const changeGiscusTheme = () => {
-        // From: https://github.com/giscus/giscus/issues/336
-        const sendMessage = (message) => {
-          const iframe = document.querySelector('iframe.giscus-frame');
-          if (!iframe) return;
-          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
-        }
-        sendMessage({
-          setConfig: {
-            theme: newTheme
-          }
-        });
-      }
-      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
-      if (isGiscussLoaded) {
-        changeGiscusTheme();
-      }
-    };
-    const authorPrefersDark = false;
-    const darkModeDefault = authorPrefersDark;
-      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
-      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
-    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
-    // Dark / light mode switch
-    window.quartoToggleColorScheme = () => {
-      // Read the current dark / light value
-      let toAlternate = !hasAlternateSentinel();
-      toggleColorMode(toAlternate);
-      setStyleSentinel(toAlternate);
-      toggleGiscusIfUsed(toAlternate, darkModeDefault);
-      window.dispatchEvent(new Event('resize'));
-    };
-    // Switch to dark mode if need be
-    if (hasAlternateSentinel()) {
-      toggleColorMode(true);
-    } else {
-      toggleColorMode(false);
-    }
-  </script>
-
-<div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
-      <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    <img src="./assets/images/logo.png" alt="The xoshiro library logo" class="navbar-logo light-content">
-    <img src="./assets/images/logo.png" alt="The xoshiro library logo" class="navbar-logo dark-content">
-    </a>
-    <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">RNG</span>
-    </a>
+<script type="text/javascript" id="MathJax-script" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"></script>
+        <link href="doxygen.css" rel="stylesheet" type="text/css" />
+        <link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+        <!-- ... other metadata & script includes ... -->
+        <script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+        <script type="text/javascript">
+            DoxygenAwesomeDarkModeToggle.init();
+        </script>
+    </head>
+    <body>
+            <div id="top">
+                <!-- do not remove this div, it is closed by doxygen! -->
+                <div id="titlearea">
+                    <table cellspacing="0" cellpadding="0">
+                        <tbody>
+                            <tr id="projectrow">
+                                <td id="projectalign">
+                                    <div id="projectname">
+                                        &lt;tt&gt;xoshiro
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- end header part -->
+            </div>
+        </div>
+    </body>
+</html>
+<!-- Generated by Doxygen 1.15.0 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-  <span class="navbar-toggler-icon"></span>
-</button>
-          <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
-<span class="menu-text">Home</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./pages/generator.html"> 
-<span class="menu-text">Generators</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./pages/State.html"> 
-<span class="menu-text">States</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./pages/Scrambler.html"> 
-<span class="menu-text">Scramblers</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./pages/type-aliases.html"> 
-<span class="menu-text">Aliases</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./pages/partition.html"> 
-<span class="menu-text">Partitions</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./pages/jump-technique.html"> 
-<span class="menu-text">Jumps</span></a>
-  </li>  
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-more" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">More</span>
-    </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-more">    
-        <li>
-    <a class="dropdown-item" href="https://github.com/nessan/xoshiro"><i class="bi bi-github" role="img">
-</i> 
- <span class="dropdown-text">Project Repo</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="https://github.com/nessan/xoshiro/issues"><i class="bi bi-bug" role="img">
-</i> 
- <span class="dropdown-text">Report a Bug</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="mailto:nzznfitz+gh@icloud.com"><i class="bi bi-chat-right-text" role="img">
-</i> 
- <span class="dropdown-text">Ask a Question</span></a>
-  </li>  
-    </ul>
-  </li>
-</ul>
-          </div> <!-- /navcollapse -->
-            <div class="quarto-navbar-tools">
-    <a href="https://github.com/nessan/xoshiro" title="GitHub repo" class="quarto-navigation-tool px-1" aria-label="GitHub repo"><i class="bi bi-github"></i></a>
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
 </div>
-      </div> <!-- /container-fluid -->
-    </nav>
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-        <i class="bi bi-layout-text-sidebar-reverse"></i>
-      </button>
-        <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">The <code>xoshiro</code>Library</h1>
-        </a>     
-    </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
-<!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="sidebar-menu-container"> 
-    <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Overview</span></a>
-  </div>
-</li>
-        <li class="px-0"><hr class="sidebar-divider hi "></li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Generators</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./pages/generator.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Introduction</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./pages/generator.html#declaration" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Declaration</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./pages/generator.html#class-types-and-methods" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Class Types &amp; Methods</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./pages/generator.html#instance-methods" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Instance Methods</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./pages/generator.html#non-member-functions" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Non-member Functions</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./pages/type-aliases.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Recommended Generators</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="px-0"><hr class="sidebar-divider hi "></li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">States</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./pages/State.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Introduction</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./pages/State.html#our-state-classes" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Defined States</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./pages/State.html#class-types-and-methods" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Class Types &amp; Methods</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./pages/State.html#instance-methods" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Instance Methods</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./pages/State.html#precomputed-characteristics" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Precomputed Characteristics</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="px-0"><hr class="sidebar-divider hi "></li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">Scramblers</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./pages/Scrambler.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Introduction</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./pages/Scrambler.html#our-scrambler-classes" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Defined Scramblers</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./pages/Scrambler.html#methods" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Methods</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="px-0"><hr class="sidebar-divider hi "></li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
- <span class="menu-text">Stream Partitioning</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./pages/partition.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Introduction</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./pages/partition.html#declaration" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Declaration</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./pages/partition.html#instance-methods" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Instance Methods</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="px-0"><hr class="sidebar-divider hi "></li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
- <span class="menu-text">Technical Notes</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./pages/jump-technique.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">The Jump Technique</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-    </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example">Example</a></li>
-  <li><a href="#installation" id="toc-installation" class="nav-link" data-scroll-target="#installation">Installation</a></li>
-  <li><a href="#implementation" id="toc-implementation" class="nav-link" data-scroll-target="#implementation">Implementation</a>
-  <ul class="collapse">
-  <li><a href="#generality" id="toc-generality" class="nav-link" data-scroll-target="#generality">Generality</a></li>
-  <li><a href="#simplicity" id="toc-simplicity" class="nav-link" data-scroll-target="#simplicity">Simplicity</a></li>
-  <li><a href="#arbitrary-jumps" id="toc-arbitrary-jumps" class="nav-link" data-scroll-target="#arbitrary-jumps">Arbitrary Jumps</a></li>
-  <li><a href="#sampling-methods" id="toc-sampling-methods" class="nav-link" data-scroll-target="#sampling-methods">Sampling Methods</a></li>
-  <li><a href="#extra-analysis" id="toc-extra-analysis" class="nav-link" data-scroll-target="#extra-analysis">Extra Analysis</a></li>
-  </ul></li>
-  <li><a href="#documentation" id="toc-documentation" class="nav-link" data-scroll-target="#documentation">Documentation</a>
-  <ul class="collapse">
-  <li><a href="#contact" id="toc-contact" class="nav-link" data-scroll-target="#contact">Contact</a></li>
-  <li><a href="#copyright-and-license" id="toc-copyright-and-license" class="nav-link" data-scroll-target="#copyright-and-license">Copyright and License</a></li>
-  </ul></li>
-  </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/nessan/xoshiro/edit/main/docs/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nessan/xoshiro/issues/new/choose" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
-    </div>
-<!-- main -->
-<main class="content" id="quarto-document-content">
-
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title d-none d-lg-block">The <code>xoshiro</code>Library</h1>
+<script type="text/javascript">
+$(function(){initNavTree('index.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
 </div>
 
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
 
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>David Blackman and Sebastiano Vigna introduced the <a href="https://prng.di.unimi.it">xoshiro/xoroshiro</a> class of pseudorandom number generators, which are very efficient and, though they have relatively small states, display excellent statistical properties. The mathematical details are to be found in their <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">paper</a>.</p>
-<p><code>xoshiro.h</code> is a single header file, C++ implementation of the <em>complete</em> family of these generators.</p>
-<p>The implementations satisfy C++’s <a href="https://en.cppreference.com/w/cpp/numeric/random/uniform_random_bit_generator"><code>std::uniform_random_bit_generator</code></a> concept and can drive any of the distributions defined in the standard library.</p>
-<p>We also provide efficient jump-ahead methods for <em>arbitrary</em> jump sizes, making these generators particularly suitable for parallel processing applications. They are excellent replacements for the “standard” <em>Mersenne Twister</em> generator.</p>
-<p>While the implementation is very general, there are simple type aliases for specific preferred instantiations that are known to work well in most situations.</p>
-</section>
-<section id="example" class="level2">
-<h2 class="anchored" data-anchor-id="example">Example</h2>
-<p>Here is a simple example where we use the <em>default xoshiro</em> generator <code>xso::rng</code> to sample a normal distribution from the standard library.</p>
-<p>This is identical to the code shown on the <a href="https://en.cppreference.com/w/cpp/numeric/random/normal_distribution"><code>std::normal_distribution</code></a> webpage except that we use <code>xso::rng</code> as a drop-in replacement for the <code>std::mersenne_twister_engine</code>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-1"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-1-1" class="code-annotation-target"><a href="#annotated-cell-1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;xoshiro.h&gt;</span></span>
-<span id="annotated-cell-1-2"><a href="#annotated-cell-1-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;random&gt;</span></span>
-<span id="annotated-cell-1-3"><a href="#annotated-cell-1-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;map&gt;</span></span>
-<span id="annotated-cell-1-4"><a href="#annotated-cell-1-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;iomanip&gt;</span></span>
-<span id="annotated-cell-1-5"><a href="#annotated-cell-1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-1-6"><a href="#annotated-cell-1-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span></span>
-<span id="annotated-cell-1-7"><a href="#annotated-cell-1-7" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-1-8" class="code-annotation-target"><a href="#annotated-cell-1-8" aria-hidden="true" tabindex="-1"></a>    xso<span class="op">::</span>rng gen<span class="op">;</span></span>
-<span id="annotated-cell-1-9"><a href="#annotated-cell-1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-1-10"><a href="#annotated-cell-1-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// lambda: draws a sample from a normal distribution and rounds it to an integer.</span></span>
-<span id="annotated-cell-1-11"><a href="#annotated-cell-1-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>normal_distribution d<span class="op">{</span><span class="fl">5.0</span><span class="op">,</span> <span class="fl">2.0</span><span class="op">};</span></span>
-<span id="annotated-cell-1-12"><a href="#annotated-cell-1-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> random_int <span class="op">=</span> <span class="op">[&amp;</span>d<span class="op">,</span> <span class="op">&amp;</span>gen<span class="op">]</span> <span class="op">{</span> <span class="cf">return</span> <span class="dt">int</span><span class="op">(</span><span class="bu">std::</span>round<span class="op">(</span>dist<span class="op">(</span>gen<span class="op">)));</span> <span class="op">};</span></span>
-<span id="annotated-cell-1-13"><a href="#annotated-cell-1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-1-14"><a href="#annotated-cell-1-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Run many trials and create a histogram of the results in integer buckets.</span></span>
-<span id="annotated-cell-1-15"><a href="#annotated-cell-1-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>map<span class="op">&lt;</span><span class="dt">int</span><span class="op">,</span> <span class="dt">int</span><span class="op">&gt;</span> hist<span class="op">{};</span></span>
-<span id="annotated-cell-1-16"><a href="#annotated-cell-1-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> n <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> n <span class="op">!=</span> <span class="dv">25'000</span><span class="op">;</span> <span class="op">++</span>n<span class="op">)</span> <span class="op">++</span>hist<span class="op">[</span>random_int<span class="op">()];</span></span>
-<span id="annotated-cell-1-17"><a href="#annotated-cell-1-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-1-18"><a href="#annotated-cell-1-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Print that histogram.</span></span>
-<span id="annotated-cell-1-19"><a href="#annotated-cell-1-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="kw">auto</span> <span class="op">[</span>bucket<span class="op">,</span> count<span class="op">]</span> <span class="op">:</span> hist<span class="op">)</span> <span class="op">{</span></span>
-<span id="annotated-cell-1-20"><a href="#annotated-cell-1-20" aria-hidden="true" tabindex="-1"></a>        <span class="kw">auto</span> n <span class="op">=</span> <span class="kw">static_cast</span><span class="op">&lt;</span><span class="bu">std::</span>size_t<span class="op">&gt;(</span>count <span class="op">/</span> <span class="dv">100</span><span class="op">);</span></span>
-<span id="annotated-cell-1-21"><a href="#annotated-cell-1-21" aria-hidden="true" tabindex="-1"></a>        <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="bu">std::</span>setw<span class="op">(</span><span class="dv">2</span><span class="op">)</span> <span class="op">&lt;&lt;</span> bucket <span class="op">&lt;&lt;</span> <span class="ch">' '</span> <span class="op">&lt;&lt;</span> <span class="bu">std::</span>string<span class="op">(</span>n<span class="op">,</span> <span class="ch">'*'</span><span class="op">)</span> <span class="op">&lt;&lt;</span> <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">;</span></span>
-<span id="annotated-cell-1-22"><a href="#annotated-cell-1-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="annotated-cell-1-23"><a href="#annotated-cell-1-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-1" data-target-annotation="1">1</dt>
-<dd>
-<span data-code-cell="annotated-cell-1" data-code-lines="1" data-code-annotation="1">Everything is in the single <code>xoshiro.h</code> header file. The classes, functions, etc., are all in the <code>xso</code> namespace.</span>
-</dd>
-<dt data-target-cell="annotated-cell-1" data-target-annotation="2">2</dt>
-<dd>
-<span data-code-cell="annotated-cell-1" data-code-lines="8" data-code-annotation="2">This type alias for xso::rng64 produces 64-bit outputs from a specific <em>xoshiro</em> generator with 256 bits of state.</span>
-</dd>
-</dl>
-<p><span class="bt">Output:</span></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">-3</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">-2</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">-1</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a> <span class="ex">0</span> <span class="pp">**</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a> <span class="ex">1</span> <span class="pp">*******</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a> <span class="ex">2</span> <span class="pp">****************</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a> <span class="ex">3</span> <span class="pp">*****************************</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a> <span class="ex">4</span> <span class="pp">********************************************</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a> <span class="ex">5</span> <span class="pp">************************************************</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a> <span class="ex">6</span> <span class="pp">********************************************</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a> <span class="ex">7</span> <span class="pp">*****************************</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a> <span class="ex">8</span> <span class="pp">****************</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a> <span class="ex">9</span> <span class="pp">*******</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="ex">10</span> <span class="pp">**</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="ex">11</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="ex">12</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="ex">14</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="installation" class="level2">
-<h2 class="anchored" data-anchor-id="installation">Installation</h2>
-<p>This library is header-only, so there is nothing to compile &amp; link — drop the <code>xoshiro.h</code> file somewhere convenient, and you are good to go.</p>
-<p>Alternatively, if you are using <code>CMake</code>, you can use the standard <code>FetchContent</code> module by adding a few lines to your project’s <code>CMakeLists.txt</code> file:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode cmake code-with-copy"><code class="sourceCode cmake"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">include</span>(<span class="im">FetchContent</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">FetchContent_Declare</span>(xoshiro <span class="ot">URL</span> https://github.com/nessan/xoshiro/releases/download/current/xoshiro.zip)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">FetchContent_MakeAvailable</span>(xoshiro)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This command downloads and unpacks an archive of the current version of <code>xoshiro</code> to your project’s build folder. You can then add a dependency on <code>xoshiro::xoshiro</code>, a <code>CMake</code> alias for <code>xoshiro</code>. <code>FetchContent</code> will automatically ensure the build system knows where to find the downloaded header files and any needed compiler flags.</p>
-<p>Used like this, <code>FetchContent</code> will only download a minimal library version without any redundant test code, sample programs, documentation files, etc.</p>
-<div class="admonition note">
-    <table><tbody><tr>
-    <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
-    <td class="content">
-    
-The shown <code>URL</code> gets the <code>current</code> version of the library — whatever is in the main branch. For a fixed, stable library version (say release <code>2.0.0</code>), use a <code>URL</code> parameter like: <code>https://github.com/nessan/xoshiro/releases/download/2.0.0/xoshiro.zip</code>.
-</td></tr></tbody></table></div>
-</section>
-<section id="implementation" class="level2">
-<h2 class="anchored" data-anchor-id="implementation">Implementation</h2>
-<p><code>C</code> versions of the generators are available on the <a href="https://prng.di.unimi.it">xoshiro/xoroshiro</a> website. Wrapping those routines to conform to the <a href="https://en.cppreference.com/w/cpp/numeric/random/uniform_random_bit_generator"><code>std::uniform_random_bit_generator</code></a> concept is trivial.</p>
-<p>Our implementation in <code>xoshiro.h</code> is distinguished in several other ways:</p>
-<section id="generality" class="level3">
-<h3 class="anchored" data-anchor-id="generality">Generality</h3>
-<p>Using <code>xoshiro.h</code> you can create <em>any</em> member of the <em>xoshiro/xoroshiro</em> family.</p>
-<p>We have <a href="./pages/State.html"><code>State</code></a> classes that are templatized across the number of state bits, and the parameters (labelled <code>A</code>, <code>B</code>, and <code>C</code> in the literature) that determine how the state is advanced from step to step.</p>
-<p><a href="./pages/Scrambler.html"><code>Scrambler</code></a> classes are templatized across the other parameters (labelled <code>R</code>, <code>S</code>, and <code>T</code> in the literature) that determine how the higher dimensional state is scrambled/reduced to single 32-bit or 64-bit output words.</p>
+<div><div class="header">
+  <div class="headertitle"><div class="title">Overview </div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><p><a class="anchor" id="md_README"></a></p>
+<p align="center"></p>
+<p><img src="logo.png" alt="project logo" style="display: block; margin: auto;" class="inline"/> </p>
+<p>David Blackman and Sebastiano Vigna introduced the <a href="https://prng.di.unimi.it">xoshiro/xoroshiro</a> class of pseudorandom number generators, which are very efficient and, despite their relatively small state sizes, exhibit excellent statistical properties. The mathematical details are in their <a href="https://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">paper</a>.</p>
+<p><span class="tt"><a class="el" href="xoshiro_8h.html" title="An implementation of the xoshiro/xoroshiro family of pseudorandom number generators....">xoshiro.h</a></span> is a single header file, <span class="tt">C++</span> implementation of the <em>complete</em> family of <a href="https://prng.di.unimi.it">xoshiro/xoroshiro</a> pseudorandom uniform number generators.</p>
+<p>The generators satisfy <span class="tt">C++</span>'s <a href="https://en.cppreference.com/w/cpp/numeric/random/uniform_random_bit_generator"><span class="tt">std::uniform_random_bit_generator</span></a> concept and can drive any distribution defined in the standard library.</p>
+<p>We also provide efficient jump-ahead methods for <em>arbitrary</em> jump sizes, making these generators particularly suitable for parallel processing applications. They are excellent replacements for the "standard" <em>Mersenne Twister</em> generator.</p>
+<p>While the implementation is very general, there are simple type aliases for preferred instantiations known to work well in most situations.</p>
+<h1 class="doxsection"><a class="anchor" id="example"></a>
+Example</h1>
+<p>Here is a simple example of using the <em>default xoshiro</em> generator, <span class="tt"><a class="el" href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3" title="The recommended default generator for most usage – used as xso::rng.">xso::rng</a></span>, to sample a normal distribution from the standard library.</p>
+<p>We have copied the sample code from <a href="https://en.cppreference.com/w/cpp/numeric/random/normal_distribution"><span class="tt">std::normal_distribution</span></a> webpage and used <span class="tt"><a class="el" href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3" title="The recommended default generator for most usage – used as xso::rng.">xso::rng</a></span> as a drop-in replacement for <a href="https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine"><span class="tt">std::mersenne_twister_engine</span></a>.</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="xoshiro_8h.html">xoshiro.h</a>&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;random&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;map&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;iomanip&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> main()</div>
+<div class="line">{</div>
+<div class="line">    <a class="code hl_typedef" href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3">xso::rng</a> gen;</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// lambda: draws a sample from a normal distribution and rounds it to an integer.</span></div>
+<div class="line">    std::normal_distribution d{5.0, 2.0};</div>
+<div class="line">    <span class="keyword">auto</span> random_int = [&amp;d, &amp;gen] { <span class="keywordflow">return</span> int(std::round(dist(gen))); };</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Run many trials and create a histogram of the results in integer buckets.</span></div>
+<div class="line">    std::map&lt;int, int&gt; hist{};</div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> n = 0; n != 25&#39;000; ++n) ++hist[random_int()];</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Print that histogram.</span></div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keyword">auto</span> [bucket, count] : hist) {</div>
+<div class="line">        <span class="keyword">auto</span> n = <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(count / 100);</div>
+<div class="line">        std::cout &lt;&lt; std::setw(2) &lt;&lt; bucket &lt;&lt; <span class="charliteral">&#39; &#39;</span> &lt;&lt; std::string(n, <span class="charliteral">&#39;*&#39;</span>) &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line">    }</div>
+<div class="line">}</div>
+<div class="ttc" id="axoshiro_8h_html"><div class="ttname"><a href="xoshiro_8h.html">xoshiro.h</a></div><div class="ttdoc">An implementation of the xoshiro/xoroshiro family of pseudorandom number generators....</div></div>
+<div class="ttc" id="axoshiro_8h_html_a4433189e70713da57738a24dbae0a8b3"><div class="ttname"><a href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3">xso::rng</a></div><div class="ttdeci">rng64 rng</div><div class="ttdoc">The recommended default generator for most usage – used as xso::rng.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1211</div></div>
+</div><!-- fragment --><p>Everything is in the single <span class="tt"><a class="el" href="xoshiro_8h.html" title="An implementation of the xoshiro/xoroshiro family of pseudorandom number generators....">xoshiro.h</a></span> header file. The classes, functions, etc., are all in the <span class="tt">xso</span> namespace. <span class="tt"><a class="el" href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3" title="The recommended default generator for most usage – used as xso::rng.">xso::rng</a></span> is a type alias for <span class="tt"><a class="el" href="xoshiro_8h.html#acbac054ae0d786385a69f42215b966a6" title="The recommended 64-bit output generator – used as xso::rng64.">xso::rng64</a>,</span> which produces 64-bit outputs from a specific <em>xoshiro</em> generator with 256 bits of state.</p>
+<p>Here is the output from one run of the program:</p>
+<div class="fragment"><div class="line">-3</div>
+<div class="line">-2</div>
+<div class="line">-1</div>
+<div class="line"> 0 **</div>
+<div class="line"> 1 *******</div>
+<div class="line"> 2 ****************</div>
+<div class="line"> 3 *****************************</div>
+<div class="line"> 4 ********************************************</div>
+<div class="line"> 5 ************************************************</div>
+<div class="line"> 6 ********************************************</div>
+<div class="line"> 7 *****************************</div>
+<div class="line"> 8 ****************</div>
+<div class="line"> 9 *******</div>
+<div class="line">10 **</div>
+<div class="line">11</div>
+<div class="line">12</div>
+<div class="line">14</div>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="installation"></a>
+Installation</h1>
+<p>This library is header-only, so there is nothing to compile &amp; link—drop the <span class="tt"><a class="el" href="xoshiro_8h.html" title="An implementation of the xoshiro/xoroshiro family of pseudorandom number generators....">xoshiro.h</a></span> file somewhere convenient, and you are good to go.</p>
+<p>Alternatively, if you are using <span class="tt">CMake</span>, you can use the standard <span class="tt">FetchContent</span> module by adding a few lines to your project's <span class="tt">CMakeLists.txt</span> file:</p>
+<div class="fragment"><div class="line">include(FetchContent)</div>
+<div class="line">FetchContent_Declare(xoshiro URL https://github.com/nessan/xoshiro/releases/download/current/xoshiro.zip)</div>
+<div class="line">FetchContent_MakeAvailable(xoshiro)</div>
+</div><!-- fragment --><p>This command downloads and unpacks the current version of xoshiro into your project's build folder. You can then add a dependency on <span class="tt">xoshiro::xoshiro</span>, a <span class="tt">CMake</span> alias for <span class="tt">xoshiro</span>. <span class="tt">FetchContent</span> will automatically ensure the build system knows where to find the downloaded header files and any needed compiler flags.</p>
+<p>Used like this, <span class="tt">FetchContent</span> will only download a minimal library version without any redundant test code, sample programs, documentation files, etc.</p>
+<h1 class="doxsection"><a class="anchor" id="implementation"></a>
+Implementation</h1>
+<p><span class="tt">C</span> versions of the generators are available on the author's <a href="https://prng.di.unimi.it">website</a>. Wrapping those routines so they conform to the <a href="https://en.cppreference.com/w/cpp/numeric/random/uniform_random_bit_generator"><span class="tt">std::uniform_random_bit_generator</span></a> concept is a trivial exercise.</p>
+<p>However, our implementation in <span class="tt"><a class="el" href="xoshiro_8h.html" title="An implementation of the xoshiro/xoroshiro family of pseudorandom number generators....">xoshiro.h</a></span> is distinguished in several other ways:</p>
+<h2 class="doxsection"><a class="anchor" id="generality"></a>
+Generality</h2>
+<p>Using <span class="tt"><a class="el" href="xoshiro_8h.html" title="An implementation of the xoshiro/xoroshiro family of pseudorandom number generators....">xoshiro.h</a></span>, you can create <em>any</em> member of the <em>xoshiro/xoroshiro</em> family.</p>
+<p>We have <span class="tt">State</span> classes that are templatized across the number of state bits and the parameters (labelled <span class="tt">A</span>, <span class="tt">B</span>, and <span class="tt">C</span> in the literature) that determine how the state is advanced from step to step.</p>
+<p><span class="tt">Scrambler</span> classes are templatized across the other parameters (labelled <span class="tt">R</span>, <span class="tt">S</span>, and <span class="tt">T</span> in the literature) that determine how the higher dimensional state is scrambled/reduced to single 3-bit or 64-bit output words.</p>
 <p>This means you can instantiate <em>any</em> generator in the <em>xoshiro/xoroshiro</em> family.</p>
-<div class="admonition note">
-    <table><tbody><tr>
-    <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
-    <td class="content">
-    
-For the reasonable optimization levels you are likely to employ in any numerical code, the C++ versions perform identically to the simpler-looking <code>C</code> versions linked above.
-</td></tr></tbody></table></div>
-</section>
-<section id="simplicity" class="level3">
-<h3 class="anchored" data-anchor-id="simplicity">Simplicity</h3>
-<p>While you can instantiate <em>any</em> generator in the <em>xoshiro/xoroshiro</em> family, we also recognize that only a limited number of those generators have been vetted for suitability as being “good”.</p>
-<p>Therefore, we provide recommended <a href="./pages/type-aliases.html">type aliased</a> default generators you should use in most cases.</p>
-</section>
-<section id="arbitrary-jumps" class="level3">
-<h3 class="anchored" data-anchor-id="arbitrary-jumps">Arbitrary Jumps</h3>
-<p>We provide methods to advance a generator by <em>arbitrary</em> and potentially huge numbers of steps. This contrasts with the <code>C</code> versions, which only define a limited number of jump possibilities.</p>
-<p>Huge jumps are used to <em>partition</em> a single random number stream into non-overlapping sub-streams. In parallel processing applications, the sub-streams drive independent jobs running on different compute cores.</p>
-</section>
-<section id="sampling-methods" class="level3">
-<h3 class="anchored" data-anchor-id="sampling-methods">Sampling Methods</h3>
-<p>The C++ standard library follows a typical design pattern for the facilities in its standard <a href="https://en.cppreference.com/w/cpp/header/random"><code>random</code></a> header. It maintains a strict separation between the classes that produce random bits and others that use those bits.</p>
-<p>Uniform random bit generators produce streams of <em>uniformly</em> distributed output words (usually 32-bit or 64-bit unsigned integers). Other classes and functions shape those core streams to simulate a desired distribution over some field of interest (for example, to generate variates from a uniform distribution of reals in the range 0 to 1).</p>
+<h2 class="doxsection"><a class="anchor" id="no-compromise-on-speed"></a>
+No Compromise on Speed</h2>
+<p>For the reasonable optimisation levels you are likely to employ in any numerical code, the C++ versions perform identically to the simpler-looking <span class="tt">C</span> versions linked above.</p>
+<h2 class="doxsection"><a class="anchor" id="simplicity"></a>
+Simplicity</h2>
+<p>While you can instantiate <em>any</em> generator in the <em>xoshiro/xoroshiro</em> family, we also recognise that only a limited number of those generators have been vetted as "good".</p>
+<p>Therefore, we provide some <em>type aliases</em> for the recommended default generators you should use in most cases.</p>
+<h2 class="doxsection"><a class="anchor" id="arbitrary-jumps"></a>
+Arbitrary Jumps</h2>
+<p>We provide methods to advance a generator by an arbitrary and potentially vast number of steps. This contrasts with the <span class="tt">C</span> versions, which only define a limited number of jump possibilities.</p>
+<p>Huge jumps are used to <em>partition</em> a single random number stream into non-overlapping sub-streams. In parallel-processing applications, the sub-streams drive independent jobs running on different compute cores.</p>
+<h2 class="doxsection"><a class="anchor" id="sampling-methods"></a>
+Sampling Methods</h2>
+<p>The <span class="tt">C++</span> standard library follows a typical design pattern for the facilities in its <a href="https://en.cppreference.com/w/cpp/header/random"><span class="tt">&lt;random&gt;</span></a> header. It maintains a strict separation between the classes that produce random bits and those that use them.</p>
+<p>Uniform random bit generators produce streams of <em>uniformly</em> distributed output words (usually 32-bit or 64-bit unsigned integers). Other classes and functions shape those core streams to simulate a desired distribution over a field of interest (for example, to generate variates from a uniform distribution on the real interval [0, 1]).</p>
 <p>The idea is reasonable enough. You can swap out the uniform random bit generator for a better one and continue to use the other functions without change.</p>
-<p>However, this interface is quite complicated for the end user — particularly for a user with no idea, or interest in, how all the generator/distribution machinery works.</p>
-<p>Perhaps she googles “<code>c++ random number generator</code>” and get advice to use the <a href="https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine"><code>std::mersenne_twister_engine</code></a> class. However, by itself, that class only produces unsigned output words that are useless by themselves. To simulate something as simple as a die roll, she must feed the thing into some other class and use that to get the required effect.</p>
-<p>For this reason, we enrich our <em>xoshiro/xoroshiro</em> classes with some utility methods that interface <em>directly</em> with the various distribution classes in the standard <a href="https://en.cppreference.com/w/cpp/header/random"><code>random</code></a> header. That dice roll becomes something as simple as:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>xso<span class="op">::</span>rng gen<span class="op">;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"Six sided dice roll: "</span> <span class="op">&lt;&lt;</span> gen<span class="op">.</span>roll<span class="op">()</span> <span class="op">&lt;&lt;</span> <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Similarly, you can ask one of our generators to flip a coin or shuffle the elements in a container.</p>
-<p>Our generators also directly support <em>sampling</em>. This includes pulling samples from a range, container, or an arbitrary distribution.</p>
+<p>However, this interface is quite complicated for the end user—particularly for a user who has no idea or interest in how all the generator/distribution machinery works. Perhaps you google "`c++ random number generator`" and get advice to use the <a href="https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine"><span class="tt">std::mersenne_twister_engine</span></a> class. However, that produces those unsigned output words that are useless by themselves. To simulate something as simple as a die roll, you must feed the thing into some other class and use that to get the required effect.</p>
+<p>For this reason, we enrich our <em>xoshiro/xoroshiro</em> classes with some utility methods that interface directly with the various distribution classes in the standard <a href="https://en.cppreference.com/w/cpp/header/random"><span class="tt">&lt;random&gt;</span></a> header. That dice roll becomes something as simple as:</p>
+<div class="fragment"><div class="line"><a class="code hl_typedef" href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3">xso::rng</a> gen;</div>
+<div class="line">std::cout &lt;&lt; <span class="stringliteral">&quot;Six-sided dice roll: &quot;</span> &lt;&lt; gen.<a class="code hl_function" href="classxso_1_1generator.html#a4f9ec7a2031ce3dd06c3b650d855739c">roll</a>() &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="ttc" id="aclassxso_1_1generator_html_a4f9ec7a2031ce3dd06c3b650d855739c"><div class="ttname"><a href="classxso_1_1generator.html#a4f9ec7a2031ce3dd06c3b650d855739c">xso::generator::roll</a></div><div class="ttdeci">constexpr std::size_t roll(std::size_t n_sides=6)</div><div class="ttdoc">Sampling method that rolls a dice with an arbitrary number of sides (defaults to the usual 6).</div><div class="ttdef"><b>Definition</b> xoshiro.h:548</div></div>
+</div><!-- fragment --><p>Similarly, you can ask one of our generators to flip a coin or shuffle the elements in a container.</p>
+<p>Perhaps most importantly, the generators directly support the idea of <em>sampling</em>. This includes pulling samples from a range, a container, or an arbitrary distribution.</p>
 <p>Here are some examples:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-5"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-5-1" class="code-annotation-target"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> gen<span class="op">.</span>sample<span class="op">(</span><span class="dv">1</span><span class="op">,</span> <span class="dv">10</span><span class="op">)</span>   <span class="op">&lt;&lt;</span> <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-5-2" class="code-annotation-target"><a href="#annotated-cell-5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> gen<span class="op">.</span>sample<span class="op">(</span><span class="fl">1.</span><span class="op">,</span> <span class="fl">10.</span><span class="op">)</span> <span class="op">&lt;&lt;</span> <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">;</span></span>
-<span id="annotated-cell-5-3"><a href="#annotated-cell-5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-5-4"><a href="#annotated-cell-5-4" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>normal_distribution nd<span class="op">{</span><span class="fl">70.</span><span class="op">,</span> <span class="fl">15.</span><span class="op">};</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-5-5" class="code-annotation-target"><a href="#annotated-cell-5-5" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> gen<span class="op">.</span>sample<span class="op">(</span>nd<span class="op">);</span></span>
-<span id="annotated-cell-5-6"><a href="#annotated-cell-5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-5-7"><a href="#annotated-cell-5-7" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>array<span class="op">&lt;</span><span class="dt">double</span><span class="op">,</span> <span class="dv">10</span><span class="op">&gt;</span> v<span class="op">;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-5-8" class="code-annotation-target"><a href="#annotated-cell-5-8" aria-hidden="true" tabindex="-1"></a>gen<span class="op">.</span>sample<span class="op">(</span>nd<span class="op">,</span> v<span class="op">.</span>begin<span class="op">(),</span> v<span class="op">.</span>word_count<span class="op">());</span></span>
-<span id="annotated-cell-5-9"><a href="#annotated-cell-5-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-5-10"><a href="#annotated-cell-5-10" aria-hidden="true" tabindex="-1"></a><span class="bu">std::</span>array<span class="op">&lt;</span><span class="dt">double</span><span class="op">,</span> <span class="dv">5</span><span class="op">&gt;</span> u<span class="op">;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="5" onclick="event.preventDefault();">5</a><span id="annotated-cell-5-11" class="code-annotation-target"><a href="#annotated-cell-5-11" aria-hidden="true" tabindex="-1"></a>gen<span class="op">.</span>sample<span class="op">(</span>v<span class="op">,</span> u<span class="op">.</span>begin<span class="op">(),</span> u<span class="op">.</span>word_count<span class="op">());</span></span>
-<span id="annotated-cell-5-12"><a href="#annotated-cell-5-12" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="6" onclick="event.preventDefault();">6</a><span id="annotated-cell-5-13" class="code-annotation-target"><a href="#annotated-cell-5-13" aria-hidden="true" tabindex="-1"></a>ge<span class="op">.</span>shuffle<span class="op">(</span>u<span class="op">);</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-5" data-target-annotation="1">1</dt>
-<dd>
-<span data-code-cell="annotated-cell-5" data-code-lines="1" data-code-annotation="1">Prints a random integer from <span class="math inline">\([1,10]\)</span>, where each integer is equally likely to occur.</span>
-</dd>
-<dt data-target-cell="annotated-cell-5" data-target-annotation="2">2</dt>
-<dd>
-<span data-code-cell="annotated-cell-5" data-code-lines="2" data-code-annotation="2">Prints a random real from a uniform distribution over <span class="math inline">\([1,10)\)</span></span>
-</dd>
-<dt data-target-cell="annotated-cell-5" data-target-annotation="3">3</dt>
-<dd>
-<span data-code-cell="annotated-cell-5" data-code-lines="5" data-code-annotation="3">Prints a random variate from a normal distribution with mean 70 and standard deviation 15.</span>
-</dd>
-<dt data-target-cell="annotated-cell-5" data-target-annotation="4">4</dt>
-<dd>
-<span data-code-cell="annotated-cell-5" data-code-lines="8" data-code-annotation="4">Fills an array <code>v</code> with 10 random variates from that same distribution.</span>
-</dd>
-<dt data-target-cell="annotated-cell-5" data-target-annotation="5">5</dt>
-<dd>
-<span data-code-cell="annotated-cell-5" data-code-lines="11" data-code-annotation="5">Fills an array <code>u</code> with 5 elements drawn from <code>v</code> without replacement.</span>
-</dd>
-<dt data-target-cell="annotated-cell-5" data-target-annotation="6">6</dt>
-<dd>
-<span data-code-cell="annotated-cell-5" data-code-lines="13" data-code-annotation="6">Shuffles the elements of <code>u</code>.</span>
-</dd>
-</dl>
-<div class="admonition note">
-    <table><tbody><tr>
-    <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
-    <td class="content">
-    
-Of course, the generators can also still be used as uniform random bit generators. The extra sampling methods etc. just make them much more useful out of the box.
-</td></tr></tbody></table></div>
-</section>
-<section id="extra-analysis" class="level3">
-<h3 class="anchored" data-anchor-id="extra-analysis">Extra Analysis</h3>
-<p>Extra non-member functions for generator analysis are defined if the <a href="https://nessan.github.io/gf2"><code>gf2</code></a> library is available.</p>
-<p><code>gf2</code> is a C++ library for doing linear algebra over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a> the simplest Galois field of two elements <span class="math inline">\(\{0,1\}\)</span>, where the usual arithmetic operations are performed mod 2. The <code>gf2</code> library is header-only, so it can be easily incorporated into any application.</p>
-<p>If it is available, then <code>xoshiro.h</code> defines some extra functions that let you access the generator’s <em>transition matrix</em> and use/analyze that in various ways.</p>
-<div class="admonition note">
-    <table><tbody><tr>
-    <td class="icon"> <i class="fa icon-note" title="Note"></i></td>
-    <td class="content">
-    
-Even if you only use the single <code>xoshiro.h</code> header file without incorporating the <code>gf2</code> library, you can still jump any of the predefined type-aliased <em>xoshiro/xoroshiro</em> variants by <em>arbitrary</em> numbers of steps.
-</td></tr></tbody></table></div>
-</section>
-</section>
-<section id="documentation" class="level2">
-<h2 class="anchored" data-anchor-id="documentation">Documentation</h2>
-<p>Here is a link to the project’s source code <a href="https://github.com/nessan/xoshiro">repository</a>.<br>
-This <a href="https://nessan.github.io/xoshiro">documentation</a> site was constructed using the static website generator <a href="https://quarto.org">Quarto</a>.</p>
-<section id="contact" class="level3">
-<h3 class="anchored" data-anchor-id="contact">Contact</h3>
-<p>You can contact me by <a href="mailto:nzznfitz+gh@icloud.com">email</a></p>
-</section>
-<section id="copyright-and-license" class="level3">
-<h3 class="anchored" data-anchor-id="copyright-and-license">Copyright and License</h3>
-<p>Copyright (c) 2022-present Nessan Fitzmaurice.<br>
-You can use this software under the <a href="https://opensource.org/license/mit">MIT License</a></p>
-
-
-</section>
-</section>
-
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
-  window.document.addEventListener("DOMContentLoaded", function (event) {
-    // Ensure there is a toggle, if there isn't float one in the top right
-    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
-      const a = window.document.createElement('a');
-      a.classList.add('top-right');
-      a.classList.add('quarto-color-scheme-toggle');
-      a.href = "";
-      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
-      const i = window.document.createElement("i");
-      i.classList.add('bi');
-      a.appendChild(i);
-      window.document.body.appendChild(a);
-    }
-    setColorSchemeToggle(hasAlternateSentinel())
-    const icon = "";
-    const anchorJS = new window.AnchorJS();
-    anchorJS.options = {
-      placement: 'right',
-      icon: icon
-    };
-    anchorJS.add('.anchored');
-    const isCodeAnnotation = (el) => {
-      for (const clz of el.classList) {
-        if (clz.startsWith('code-annotation-')) {                     
-          return true;
-        }
-      }
-      return false;
-    }
-    const onCopySuccess = function(e) {
-      // button target
-      const button = e.trigger;
-      // don't keep focus
-      button.blur();
-      // flash "checked"
-      button.classList.add('code-copy-button-checked');
-      var currentTitle = button.getAttribute("title");
-      button.setAttribute("title", "Copied!");
-      let tooltip;
-      if (window.bootstrap) {
-        button.setAttribute("data-bs-toggle", "tooltip");
-        button.setAttribute("data-bs-placement", "left");
-        button.setAttribute("data-bs-title", "Copied!");
-        tooltip = new bootstrap.Tooltip(button, 
-          { trigger: "manual", 
-            customClass: "code-copy-button-tooltip",
-            offset: [0, -8]});
-        tooltip.show();    
-      }
-      setTimeout(function() {
-        if (tooltip) {
-          tooltip.hide();
-          button.removeAttribute("data-bs-title");
-          button.removeAttribute("data-bs-toggle");
-          button.removeAttribute("data-bs-placement");
-        }
-        button.setAttribute("title", currentTitle);
-        button.classList.remove('code-copy-button-checked');
-      }, 1000);
-      // clear code selection
-      e.clearSelection();
-    }
-    const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-      text: getTextToCopy
-    });
-    clipboard.on('success', onCopySuccess);
-    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-        text: getTextToCopy,
-        container: window.document.getElementById('quarto-embedded-source-code-modal')
-      });
-      clipboardModal.on('success', onCopySuccess);
-    }
-      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/nessan\.github\.io\/xoshiro");
-      var isInternal = (href) => {
-          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-      }
-      // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-      for (var i=0; i<links.length; i++) {
-        const link = links[i];
-        if (!isInternal(link.href)) {
-          // undo the damage that might have been done by quarto-nav.js in the case of
-          // links that we want to consider external
-          if (link.dataset.originalHref !== undefined) {
-            link.href = link.dataset.originalHref;
-          }
-        }
-      }
-    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-      const config = {
-        allowHTML: true,
-        maxWidth: 500,
-        delay: 100,
-        arrow: false,
-        appendTo: function(el) {
-            return el.parentElement;
-        },
-        interactive: true,
-        interactiveBorder: 10,
-        theme: 'quarto',
-        placement: 'bottom-start',
-      };
-      if (contentFn) {
-        config.content = contentFn;
-      }
-      if (onTriggerFn) {
-        config.onTrigger = onTriggerFn;
-      }
-      if (onUntriggerFn) {
-        config.onUntrigger = onUntriggerFn;
-      }
-      window.tippy(el, config); 
-    }
-    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-    for (var i=0; i<noterefs.length; i++) {
-      const ref = noterefs[i];
-      tippyHover(ref, function() {
-        // use id or data attribute instead here
-        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-        try { href = new URL(href).hash; } catch {}
-        const id = href.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note) {
-          return note.innerHTML;
-        } else {
-          return "";
-        }
-      });
-    }
-    const xrefs = window.document.querySelectorAll('a.quarto-xref');
-    const processXRef = (id, note) => {
-      // Strip column container classes
-      const stripColumnClz = (el) => {
-        el.classList.remove("page-full", "page-columns");
-        if (el.children) {
-          for (const child of el.children) {
-            stripColumnClz(child);
-          }
-        }
-      }
-      stripColumnClz(note)
-      if (id === null || id.startsWith('sec-')) {
-        // Special case sections, only their first couple elements
-        const container = document.createElement("div");
-        if (note.children && note.children.length > 2) {
-          container.appendChild(note.children[0].cloneNode(true));
-          for (let i = 1; i < note.children.length; i++) {
-            const child = note.children[i];
-            if (child.tagName === "P" && child.innerText === "") {
-              continue;
-            } else {
-              container.appendChild(child.cloneNode(true));
-              break;
-            }
-          }
-          if (window.Quarto?.typesetMath) {
-            window.Quarto.typesetMath(container);
-          }
-          return container.innerHTML
-        } else {
-          if (window.Quarto?.typesetMath) {
-            window.Quarto.typesetMath(note);
-          }
-          return note.innerHTML;
-        }
-      } else {
-        // Remove any anchor links if they are present
-        const anchorLink = note.querySelector('a.anchorjs-link');
-        if (anchorLink) {
-          anchorLink.remove();
-        }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(note);
-        }
-        if (note.classList.contains("callout")) {
-          return note.outerHTML;
-        } else {
-          return note.innerHTML;
-        }
-      }
-    }
-    for (var i=0; i<xrefs.length; i++) {
-      const xref = xrefs[i];
-      tippyHover(xref, undefined, function(instance) {
-        instance.disable();
-        let url = xref.getAttribute('href');
-        let hash = undefined; 
-        if (url.startsWith('#')) {
-          hash = url;
-        } else {
-          try { hash = new URL(url).hash; } catch {}
-        }
-        if (hash) {
-          const id = hash.replace(/^#\/?/, "");
-          const note = window.document.getElementById(id);
-          if (note !== null) {
-            try {
-              const html = processXRef(id, note.cloneNode(true));
-              instance.setContent(html);
-            } finally {
-              instance.enable();
-              instance.show();
-            }
-          } else {
-            // See if we can fetch this
-            fetch(url.split('#')[0])
-            .then(res => res.text())
-            .then(html => {
-              const parser = new DOMParser();
-              const htmlDoc = parser.parseFromString(html, "text/html");
-              const note = htmlDoc.getElementById(id);
-              if (note !== null) {
-                const html = processXRef(id, note);
-                instance.setContent(html);
-              } 
-            }).finally(() => {
-              instance.enable();
-              instance.show();
-            });
-          }
-        } else {
-          // See if we can fetch a full url (with no hash to target)
-          // This is a special case and we should probably do some content thinning / targeting
-          fetch(url)
-          .then(res => res.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.querySelector('main.content');
-            if (note !== null) {
-              // This should only happen for chapter cross references
-              // (since there is no id in the URL)
-              // remove the first header
-              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-                note.children[0].remove();
-              }
-              const html = processXRef(null, note);
-              instance.setContent(html);
-            } 
-          }).finally(() => {
-            instance.enable();
-            instance.show();
-          });
-        }
-      }, function(instance) {
-      });
-    }
-        let selectedAnnoteEl;
-        const selectorForAnnotation = ( cell, annotation) => {
-          let cellAttr = 'data-code-cell="' + cell + '"';
-          let lineAttr = 'data-code-annotation="' +  annotation + '"';
-          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-          return selector;
-        }
-        const selectCodeLines = (annoteEl) => {
-          const doc = window.document;
-          const targetCell = annoteEl.getAttribute("data-target-cell");
-          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-          const lineIds = lines.map((line) => {
-            return targetCell + "-" + line;
-          })
-          let top = null;
-          let height = null;
-          let parent = null;
-          if (lineIds.length > 0) {
-              //compute the position of the single el (top and bottom and make a div)
-              const el = window.document.getElementById(lineIds[0]);
-              top = el.offsetTop;
-              height = el.offsetHeight;
-              parent = el.parentElement.parentElement;
-            if (lineIds.length > 1) {
-              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-              height = bottom - top;
-            }
-            if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
-              let div = window.document.getElementById("code-annotation-line-highlight");
-              if (div === null) {
-                div = window.document.createElement("div");
-                div.setAttribute("id", "code-annotation-line-highlight");
-                div.style.position = 'absolute';
-                parent.appendChild(div);
-              }
-              div.style.top = top - 2 + "px";
-              div.style.height = height + 4 + "px";
-              div.style.left = 0;
-              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-              if (gutterDiv === null) {
-                gutterDiv = window.document.createElement("div");
-                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-                gutterDiv.style.position = 'absolute';
-                const codeCell = window.document.getElementById(targetCell);
-                const gutter = codeCell.querySelector('.code-annotation-gutter');
-                gutter.appendChild(gutterDiv);
-              }
-              gutterDiv.style.top = top - 2 + "px";
-              gutterDiv.style.height = height + 4 + "px";
-            }
-            selectedAnnoteEl = annoteEl;
-          }
-        };
-        const unselectCodeLines = () => {
-          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-          elementsIds.forEach((elId) => {
-            const div = window.document.getElementById(elId);
-            if (div) {
-              div.remove();
-            }
-          });
-          selectedAnnoteEl = undefined;
-        };
-          // Handle positioning of the toggle
-      window.addEventListener(
-        "resize",
-        throttle(() => {
-          elRect = undefined;
-          if (selectedAnnoteEl) {
-            selectCodeLines(selectedAnnoteEl);
-          }
-        }, 10)
-      );
-      function throttle(fn, ms) {
-      let throttle = false;
-      let timer;
-        return (...args) => {
-          if(!throttle) { // first call gets through
-              fn.apply(this, args);
-              throttle = true;
-          } else { // all the others get throttled
-              if(timer) clearTimeout(timer); // cancel #2
-              timer = setTimeout(() => {
-                fn.apply(this, args);
-                timer = throttle = false;
-              }, ms);
-          }
-        };
-      }
-        // Attach click handler to the DT
-        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-        for (const annoteDlNode of annoteDls) {
-          annoteDlNode.addEventListener('click', (event) => {
-            const clickedEl = event.target;
-            if (clickedEl !== selectedAnnoteEl) {
-              unselectCodeLines();
-              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-              if (activeEl) {
-                activeEl.classList.remove('code-annotation-active');
-              }
-              selectCodeLines(clickedEl);
-              clickedEl.classList.add('code-annotation-active');
-            } else {
-              // Unselect the line
-              unselectCodeLines();
-              clickedEl.classList.remove('code-annotation-active');
-            }
-          });
-        }
-    const findCites = (el) => {
-      const parentEl = el.parentElement;
-      if (parentEl) {
-        const cites = parentEl.dataset.cites;
-        if (cites) {
-          return {
-            el,
-            cites: cites.split(' ')
-          };
-        } else {
-          return findCites(el.parentElement)
-        }
-      } else {
-        return undefined;
-      }
-    };
-    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-    for (var i=0; i<bibliorefs.length; i++) {
-      const ref = bibliorefs[i];
-      const citeInfo = findCites(ref);
-      if (citeInfo) {
-        tippyHover(citeInfo.el, function() {
-          var popup = window.document.createElement('div');
-          citeInfo.cites.forEach(function(cite) {
-            var citeDiv = window.document.createElement('div');
-            citeDiv.classList.add('hanging-indent');
-            citeDiv.classList.add('csl-entry');
-            var biblioDiv = window.document.getElementById('ref-' + cite);
-            if (biblioDiv) {
-              citeDiv.innerHTML = biblioDiv.innerHTML;
-            }
-            popup.appendChild(citeDiv);
-          });
-          return popup.innerHTML;
-        });
-      }
-    }
-  });
-  </script>
-</div> <!-- /content -->
-<footer class="footer">
-  <div class="nav-footer">
-    <div class="nav-footer-left">
-<p>© 2022 Nessan ∙ Made with <a href="https://quarto.org">Quarto</a></p>
-</div>   
-    <div class="nav-footer-center">
-      <ul class="footer-items list-unstyled">
-    <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/nessan/xoshiro">
-      <i class="bi bi-github" role="img" aria-label="GitHub Repo">
-</i> 
-    </a>
-  </li>  
-    <li class="nav-item compact">
-    <a class="nav-link" href="mailto:nzznfitz+gh@icloud.com">
-      <i class="bi bi-envelope" role="img" aria-label="EMail address">
-</i> 
-    </a>
-  </li>  
-</ul>
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/nessan/xoshiro/edit/main/docs/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nessan/xoshiro/issues/new/choose" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
-    <div class="nav-footer-right">
-<p><a href="https://opensource.org/license/mit">MIT Licensed</a></p>
+<div class="fragment"><div class="line">std::cout &lt;&lt; gen.<a class="code hl_function" href="classxso_1_1generator.html#ad12b3007fa365122789924e00e83196e">sample</a>(1, 10)   &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;   <span class="comment">// &lt;1&gt;</span></div>
+<div class="line">std::cout &lt;&lt; gen.<a class="code hl_function" href="classxso_1_1generator.html#ad12b3007fa365122789924e00e83196e">sample</a>(1., 10.) &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;   <span class="comment">// &lt;2&gt;</span></div>
+<div class="line"> </div>
+<div class="line">std::normal_distribution nd{70., 15.};</div>
+<div class="line">std::cout &lt;&lt; gen.<a class="code hl_function" href="classxso_1_1generator.html#ad12b3007fa365122789924e00e83196e">sample</a>(nd);                <span class="comment">// &lt;3&gt;</span></div>
+<div class="line"> </div>
+<div class="line">std::array&lt;double, 10&gt; v;</div>
+<div class="line">gen.<a class="code hl_function" href="classxso_1_1generator.html#ad12b3007fa365122789924e00e83196e">sample</a>(nd, v.begin(), v.word_count());  <span class="comment">// &lt;4&gt;</span></div>
+<div class="line"> </div>
+<div class="line">std::array&lt;double, 5&gt; u;</div>
+<div class="line">gen.<a class="code hl_function" href="classxso_1_1generator.html#ad12b3007fa365122789924e00e83196e">sample</a>(v, u.begin(), u.word_count());   <span class="comment">// &lt;5&gt;</span></div>
+<div class="line"> </div>
+<div class="line">ge.shuffle(u);                              <span class="comment">// &lt;6&gt;</span></div>
+<div class="ttc" id="aclassxso_1_1generator_html_ad12b3007fa365122789924e00e83196e"><div class="ttname"><a href="classxso_1_1generator.html#ad12b3007fa365122789924e00e83196e">xso::generator::sample</a></div><div class="ttdeci">constexpr T sample(T a, T b)</div><div class="ttdoc">Sampling method that returns a single integer value from a uniform distribution over [a,...</div><div class="ttdef"><b>Definition</b> xoshiro.h:343</div></div>
+</div><!-- fragment --><ol type="1">
+<li>Prints a random integer from \([1,10]\), where each integer is equally likely to occur.</li>
+<li>Prints a random real from a uniform distribution over \([1,10)\)</li>
+<li>Prints a random variate from a normal distribution with a mean of 70 and a standard deviation of 15.</li>
+<li>Fills an array <span class="tt">v</span> with ten random variates from that same distribution.</li>
+<li>Fills the array u with five elements from v, without replacement.</li>
+<li>Shuffles the elements of <span class="tt">u</span>.</li>
+</ol>
+<h2 class="doxsection"><a class="anchor" id="extra-analysis"></a>
+Extra Analysis</h2>
+<p>Extra non-member functions for generator analysis are defined if the <a href="https://nessan.github.io/gf2"><span class="tt">gf2</span></a> library is available.</p>
+<p><a href="https://nessan.github.io/gf2"><span class="tt">gf2</span></a> is a <span class="tt">C++</span> library for doing linear algebra over <a href="https://en.wikipedia.org/wiki/GF(2)">GF(2)</a> the simplest field of two elements \(\{0, 1\}\), where the usual arithmetic operations are performed mod 2. The <a href="https://nessan.github.io/gf2"><span class="tt">gf2</span></a> library is header-only and is easily incorporated into any application.</p>
+<p>If it is available, then <span class="tt"><a class="el" href="xoshiro_8h.html" title="An implementation of the xoshiro/xoroshiro family of pseudorandom number generators....">xoshiro.h</a></span> defines some extra functions that let you access the generator's <em>transition matrix</em> and use/analyse it in various ways.</p>
+<h1 class="doxsection"><a class="anchor" id="useful-links"></a>
+Useful Links</h1>
+<p>Here are links to the project's <a href="https://github.com/nessan/xoshiro">repository</a> and <a href="https://nessan.github.io/xoshiro">documentation site</a></p>
+<p>The project uses <a href="https://nessan.github.io/doxytest/">Doxytest</a>, a tool for generating C++ test programs from sample code embedded in header file comments.</p>
+<p>You can contact me by <a href="#" onclick="location.href='mai'+'lto:'+'nzz'+'nf'+'itz'+'+g'+'h@i'+'cl'+'oud'+'.c'+'om'; return false;">email</a>.</p>
+<h2 class="doxsection"><a class="anchor" id="copyright-and-license"></a>
+Copyright and License</h2>
+<p>Copyright (c) 2022-present Nessan Fitzmaurice.<br  />
+ You can use this software under the <a href="https://opensource.org/license/mit">MIT license</a>. </p>
+</div></div><!-- PageDoc -->
+<a href="doxygen_crawl.html"></a>
+</div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- HTML footer for doxygen 1.15.0-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.15.0 </li>
+  </ul>
 </div>
-  </div>
-</footer>
-
-
-
-
-</body></html>
+</body>
+</html>

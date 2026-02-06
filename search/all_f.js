@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['sample_0',['sample',['../classxso_1_1generator.html#ad12b3007fa365122789924e00e83196e',1,'xso::generator::sample(T a, T b)'],['../classxso_1_1generator.html#ad12b3007fa365122789924e00e83196e',1,'xso::generator::sample(T a, T b)'],['../classxso_1_1generator.html#af003fefa1bae2bbd7096bf69c3ed5291',1,'xso::generator::sample(T b, T e)'],['../classxso_1_1generator.html#af1158de7dc7fe74226519a5fa4782397',1,'xso::generator::sample(const Container &amp;container)'],['../classxso_1_1generator.html#a546ab426fb96fa3ade8d6085a8e45c66',1,'xso::generator::sample(Src b, Src e, Dst dst, std::size_t n)'],['../classxso_1_1generator.html#a7da939f464cc54b68ed17da508e3939b',1,'xso::generator::sample(const Src &amp;src, Dst dst, std::size_t n)'],['../classxso_1_1generator.html#ad49d2fafb684d19a9a306bed8519cebe',1,'xso::generator::sample(Distribution auto &amp;dist)'],['../classxso_1_1generator.html#a768068cc434a95a57cf6a7febe7e0053',1,'xso::generator::sample(Distribution auto &amp;dist, Dst dst, std::size_t n)']]],
+  ['sampling_20methods_1',['Sampling Methods',['../index.html#sampling-methods',1,'']]],
+  ['sampling_20with_20replacement_2',['Sampling with Replacement',['../md_docs_2pages_2generator.html#sampling-with-replacement',1,'']]],
+  ['sampling_20without_20replacement_3',['Sampling without Replacement',['../md_docs_2pages_2generator.html#sampling-without-replacement',1,'']]],
+  ['scrambler_20requirements_4',['Scrambler Requirements',['../md_docs_2pages_2generator.html#scrambler-requirements',1,'']]],
+  ['scrambler_5ftype_5',['scrambler_type',['../classxso_1_1generator.html#ac6ee1034578d6673929c6d5d163fedb0',1,'xso::generator']]],
+  ['scramblers_6',['Scramblers',['../md_docs_2pages_2generator.html#scramblers',1,'']]],
+  ['see_20also_7',['See Also',['../md_docs_2pages_2generator.html#see-also',1,'See Also'],['../md_docs_2pages_2type-aliases.html#see-also-1',1,'See Also'],['../md_docs_2pages_2partition.html#see-also-2',1,'See Also']]],
+  ['seed_8',['seed',['../classxso_1_1generator.html#aa48eb64fa12256470363815c750d910f',1,'xso::generator::seed()'],['../classxso_1_1generator.html#a7919b349d191e43400cac533b94a992e',1,'xso::generator::seed(word_type seed)'],['../classxso_1_1generator.html#a5264b217bfbc30d50a86298891ace8ef',1,'xso::generator::seed(Src b, Src e)'],['../classxso_1_1xoshiro.html#ab8d0cfeb6299f6e11c7dab332daeba83',1,'xso::xoshiro::seed()'],['../classxso_1_1xoroshiro.html#abc29fa35b7f7179334a58b9a4215fa19',1,'xso::xoroshiro::seed()']]],
+  ['seeding_20methods_9',['Seeding Methods',['../md_docs_2pages_2generator.html#seeding-methods',1,'']]],
+  ['shuffle_10',['shuffle',['../classxso_1_1generator.html#ae3ba7c5a4a28dae365cfd559acd12496',1,'xso::generator::shuffle(Iter b, Iter e)'],['../classxso_1_1generator.html#a56e98b2e019f16ea9a2ad34bc8c84778',1,'xso::generator::shuffle(Container &amp;container)']]],
+  ['shuffling_11',['Shuffling',['../md_docs_2pages_2generator.html#shuffling',1,'']]],
+  ['simplicity_12',['Simplicity',['../index.html#simplicity',1,'']]],
+  ['single_20word_13',['Construction from a Single Word',['../md_docs_2pages_2generator.html#construction-from-a-single-word',1,'']]],
+  ['speed_14',['No Compromise on Speed',['../index.html#no-compromise-on-speed',1,'']]],
+  ['star_15',['star',['../structxso_1_1star.html',1,'xso']]],
+  ['star_5fstar_16',['star_star',['../structxso_1_1star__star.html',1,'xso']]],
+  ['state_17',['State',['../md_docs_2pages_2generator.html#construction-from-full-state',1,'Construction from Full State'],['../md_docs_2pages_2jump-technique.html#performing-jumps-for-a-particular-state',1,'Performing Jumps for a Particular State']]],
+  ['state_20access_18',['State Access',['../md_docs_2pages_2generator.html#state-access',1,'']]],
+  ['state_20requirements_19',['State Requirements',['../md_docs_2pages_2generator.html#state-requirements',1,'']]],
+  ['state_20types_20',['State Types',['../md_docs_2pages_2generator.html#state-types',1,'']]],
+  ['state_5ftype_21',['state_type',['../classxso_1_1generator.html#a4dc84ee4292e503a8f43c3b0b82af630',1,'xso::generator']]],
+  ['step_22',['step',['../classxso_1_1generator.html#a33e21899668ffeb72ffca142e78df8ca',1,'xso::generator::step()'],['../classxso_1_1xoshiro.html#a3d75a25862f869a5116554cfe97b3aec',1,'xso::xoshiro::step()'],['../classxso_1_1xoroshiro.html#a3a9f4d1681a707b092ccb22557198a43',1,'xso::xoroshiro::step()']]]
+];
