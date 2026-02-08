@@ -899,7 +899,7 @@ public:
             // Get a useful'ish error message by pumping a deliberately false condition into static_assert(...).
             static_assert(N < 0, "No xoshiro step() implementation for this number of words of state!");
         }
-    };
+    }
 
     /// Class method that fills a destination iterator with our _precomputed_ characteristic polynomial coefficients.
     ///

@@ -20,7 +20,7 @@ run(State&) {
     always_confirm(c.is_monic(), "Characteristic polynomial is not monic!");
 
     // Find p(x) where c(x) = x^n + p(x) and deg[p(x)] < n.
-    auto p = c.sub(c.size() - 1);
+    auto p = c.sub_polynomial(c.size() - 1);
 
     // Convert the coefficients of p(x) to an array of words.
     typename State::array_type p_words;
