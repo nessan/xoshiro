@@ -242,13 +242,13 @@ Scramblers</h2>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadCenter">Scrambler  </th><th class="markdownTableHeadCenter">Template Parameters  </th><th class="markdownTableHeadCenter">Return from the scrambler's function call  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyCenter"><span class="tt"><a class="el" href="structxso_1_1star.html" title="The star functor multiplies a state word by a constant.">xso::star</a>&lt;S,i&gt;</span>  </td><td class="markdownTableBodyCenter">\(S\), \(i\)  </td><td class="markdownTableBodyCenter">\(a_i \times S\)  </td></tr>
+<td class="markdownTableBodyCenter"><span class="tt"><a class="el" href="structxso_1_1star.html" title="The star scrambler is passed a state array and will return S * state[w] where:">xso::star</a>&lt;S,i&gt;</span>  </td><td class="markdownTableBodyCenter">\(S\), \(i\)  </td><td class="markdownTableBodyCenter">\(a_i \times S\)  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyCenter"><span class="tt"><a class="el" href="structxso_1_1star__star.html" title="The star_star functor multiplies a state word by a constant, rotates the result, then multiplies by a...">xso::star_star</a>&lt;S,T,R,i&gt;</span>  </td><td class="markdownTableBodyCenter">\(S\), \(T\), \(R\), \(i\)  </td><td class="markdownTableBodyCenter">\(\rho_R(a_i \times S) \times T\)  </td></tr>
+<td class="markdownTableBodyCenter"><span class="tt"><a class="el" href="structxso_1_1star__star.html" title="The star_star scrambler is passed a state array an returns T * rotl(S * state[w], R) where:">xso::star_star</a>&lt;S,T,R,i&gt;</span>  </td><td class="markdownTableBodyCenter">\(S\), \(T\), \(R\), \(i\)  </td><td class="markdownTableBodyCenter">\(\rho_R(a_i \times S) \times T\)  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyCenter"><span class="tt"><a class="el" href="structxso_1_1plus.html" title="The plus functor can be passed a state array and will return the sum of two state words.">xso::plus</a>&lt;i,j&gt;</span>  </td><td class="markdownTableBodyCenter">\(i\), \(j\)  </td><td class="markdownTableBodyCenter">\(a_i + a_j\)  </td></tr>
+<td class="markdownTableBodyCenter"><span class="tt"><a class="el" href="structxso_1_1plus.html" title="The plus scrambler is passed a state array an returns state[w0] + state[w1].">xso::plus</a>&lt;i,j&gt;</span>  </td><td class="markdownTableBodyCenter">\(i\), \(j\)  </td><td class="markdownTableBodyCenter">\(a_i + a_j\)  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyCenter"><span class="tt"><a class="el" href="structxso_1_1plus__plus.html" title="The plus_plus functor can be passed a state array and will return the sum of two state words rotated ...">xso::plus_plus</a>&lt;R,i,j&gt;</span>  </td><td class="markdownTableBodyCenter">\(R\), \(i\), \(j\)  </td><td class="markdownTableBodyCenter">\(\rho_R(a_i + a_j) + a_i\)  </td></tr>
+<td class="markdownTableBodyCenter"><span class="tt"><a class="el" href="structxso_1_1plus__plus.html" title="The plus_plus scrambler is passed a state array an returns rotl(state[w0] + state[w1],...">xso::plus_plus</a>&lt;R,i,j&gt;</span>  </td><td class="markdownTableBodyCenter">\(R\), \(i\), \(j\)  </td><td class="markdownTableBodyCenter">\(\rho_R(a_i + a_j) + a_i\)  </td></tr>
 </table>
 <h1 class="doxsection"><a class="anchor" id="generator-api-overview"></a>
 Generator API Overview</h1>
@@ -347,7 +347,7 @@ Construction from a Single Word</h2>
 <div class="line">        std::println(<span class="stringliteral">&quot;Call {}: {}\t{}&quot;</span>, i, g0(), g1());</div>
 <div class="line">}</div>
 <div class="ttc" id="axoshiro_8h_html"><div class="ttname"><a href="xoshiro_8h.html">xoshiro.h</a></div><div class="ttdoc">An implementation of the xoshiro/xoroshiro family of pseudorandom number generators....</div></div>
-<div class="ttc" id="axoshiro_8h_html_acbac054ae0d786385a69f42215b966a6"><div class="ttname"><a href="xoshiro_8h.html#acbac054ae0d786385a69f42215b966a6">xso::rng64</a></div><div class="ttdeci">xoshiro_4x64_star_star rng64</div><div class="ttdoc">The recommended 64-bit output generator – used as xso::rng64.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1208</div></div>
+<div class="ttc" id="axoshiro_8h_html_acbac054ae0d786385a69f42215b966a6"><div class="ttname"><a href="xoshiro_8h.html#acbac054ae0d786385a69f42215b966a6">xso::rng64</a></div><div class="ttdeci">xoshiro_4x64_star_star rng64</div><div class="ttdoc">The recommended 64-bit output generator – used as xso::rng64.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1210</div></div>
 </div><!-- fragment --><ol type="1">
 <li>Create two <em>xoshiro</em> generators with very similar seeds, and print the results of a few calls to each.</li>
 <li>Reseed both generators with the same seed and again print the results of a few calls.</li>
@@ -391,7 +391,7 @@ Construction from Full State</h2>
 <div class="line">}</div>
 <div class="ttc" id="aclassxso_1_1generator_html_a33cd134d984950233a58069db81d7776"><div class="ttname"><a href="classxso_1_1generator.html#a33cd134d984950233a58069db81d7776">xso::generator&lt; xoshiro_4x64, star_star&lt; 5, 7, 9, 1 &gt; &gt;::array_type</a></div><div class="ttdeci">typename xoshiro_4x64::array_type array_type</div><div class="ttdef"><b>Definition</b> xoshiro.h:84</div></div>
 <div class="ttc" id="aclassxso_1_1generator_html_adfcaf2151443bae42bd6d6da9589c5be"><div class="ttname"><a href="classxso_1_1generator.html#adfcaf2151443bae42bd6d6da9589c5be">xso::generator::get_state</a></div><div class="ttdeci">constexpr void get_state(Dst dst) const</div><div class="ttdoc">Copies the whole state into the destination iterator dst.</div><div class="ttdef"><b>Definition</b> xoshiro.h:320</div></div>
-<div class="ttc" id="axoshiro_8h_html_a4433189e70713da57738a24dbae0a8b3"><div class="ttname"><a href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3">xso::rng</a></div><div class="ttdeci">rng64 rng</div><div class="ttdoc">The recommended default generator for most usage – used as xso::rng.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1211</div></div>
+<div class="ttc" id="axoshiro_8h_html_a4433189e70713da57738a24dbae0a8b3"><div class="ttname"><a href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3">xso::rng</a></div><div class="ttdeci">rng64 rng</div><div class="ttdoc">The recommended default generator for most usage – used as xso::rng.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1213</div></div>
 </div><!-- fragment --><ol type="1">
 <li>Two default-constructed generators f and g are fully and randomly seeded.</li>
 <li>We print one output from each generator and expect those to be different.</li>
@@ -693,7 +693,7 @@ Jumping</h1>
 <div class="line">    }</div>
 <div class="line">}</div>
 <div class="ttc" id="aclassxso_1_1generator_html_abc55e831802ffd96652c321f2f38d349"><div class="ttname"><a href="classxso_1_1generator.html#abc55e831802ffd96652c321f2f38d349">xso::generator::jump</a></div><div class="ttdeci">constexpr auto jump(std::size_t n, bool n_is_log2=false)</div><div class="ttdoc">Jumps the generator&#39;s state forward by J steps where J is either n or 2^n to accommodate huge jumps t...</div><div class="ttdef"><b>Definition</b> xoshiro.h:642</div></div>
-<div class="ttc" id="axoshiro_8h_html_ac1070168c155852dca7df21a59985647"><div class="ttname"><a href="xoshiro_8h.html#ac1070168c155852dca7df21a59985647">xso::jump_coefficients</a></div><div class="ttdeci">constexpr auto jump_coefficients(std::size_t J, bool J_is_log2=false)</div><div class="ttdoc">Returns the coefficients of the jump polynomial that can be used to jump a generator/state ahead by  ...</div><div class="ttdef"><b>Definition</b> xoshiro.h:1301</div></div>
+<div class="ttc" id="axoshiro_8h_html_ac1070168c155852dca7df21a59985647"><div class="ttname"><a href="xoshiro_8h.html#ac1070168c155852dca7df21a59985647">xso::jump_coefficients</a></div><div class="ttdeci">constexpr auto jump_coefficients(std::size_t J, bool J_is_log2=false)</div><div class="ttdoc">Returns the coefficients of the jump polynomial that can be used to jump a generator/state ahead by  ...</div><div class="ttdef"><b>Definition</b> xoshiro.h:1303</div></div>
 </div><!-- fragment --><ol type="1">
 <li>Construct two identical generators <span class="tt">r0</span> and <span class="tt">r1</span>.</li>
 <li>Here we using a very modest jump size so the <span class="tt">discard</span> method has no issues.</li>
@@ -784,8 +784,8 @@ Extra Methods</h1>
 <div class="line">    std::println(<span class="stringliteral">&quot;jump75:    {::#x}&quot;</span>, poly_words);</div>
 <div class="line">}</div>
 <div class="ttc" id="aclassxso_1_1xoshiro_html"><div class="ttname"><a href="classxso_1_1xoshiro.html">xso::xoshiro</a></div><div class="ttdoc">The state for the Xoshiro family of pseudorandom number generators.</div><div class="ttdef"><b>Definition</b> xoshiro.h:829</div></div>
-<div class="ttc" id="axoshiro_8h_html_ae6327bd526ffaf07bfb2334a357f9e51"><div class="ttname"><a href="xoshiro_8h.html#ae6327bd526ffaf07bfb2334a357f9e51">xso::characteristic_polynomial</a></div><div class="ttdeci">auto characteristic_polynomial()</div><div class="ttdoc">Returns the characteristic polynomial for our state&#39;s transition matrix as a gf2::BitPolynomial.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1632</div></div>
-<div class="ttc" id="axoshiro_8h_html_af5723a480082f0aed2c0b982492e83fe"><div class="ttname"><a href="xoshiro_8h.html#af5723a480082f0aed2c0b982492e83fe">xso::jump_polynomial</a></div><div class="ttdeci">auto jump_polynomial(gf2::BitPolynomial&lt; typename State::word_type &gt; const &amp;c, std::size_t N, bool N_is_log2=false)</div><div class="ttdoc">Returns a jump polynomial that moves the generator type J steps ahead in its random number stream.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1646</div></div>
+<div class="ttc" id="axoshiro_8h_html_ae6327bd526ffaf07bfb2334a357f9e51"><div class="ttname"><a href="xoshiro_8h.html#ae6327bd526ffaf07bfb2334a357f9e51">xso::characteristic_polynomial</a></div><div class="ttdeci">auto characteristic_polynomial()</div><div class="ttdoc">Returns the characteristic polynomial for our state&#39;s transition matrix as a gf2::BitPolynomial.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1634</div></div>
+<div class="ttc" id="axoshiro_8h_html_af5723a480082f0aed2c0b982492e83fe"><div class="ttname"><a href="xoshiro_8h.html#af5723a480082f0aed2c0b982492e83fe">xso::jump_polynomial</a></div><div class="ttdeci">auto jump_polynomial(gf2::BitPolynomial&lt; typename State::word_type &gt; const &amp;c, std::size_t N, bool N_is_log2=false)</div><div class="ttdoc">Returns a jump polynomial that moves the generator type J steps ahead in its random number stream.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1648</div></div>
 </div><!-- fragment --><ol type="1">
 <li>We create a specific xoshiro state.</li>
 <li>Use <a href="https://nessan.github.io/gf2"><span class="tt">gf2</span></a> to extract the transition matrix's characteristic polynomial \(c(x)\).</li>

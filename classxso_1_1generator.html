@@ -327,7 +327,7 @@ template&lt;typename State, typename Scrambler&gt; </div>
 Example</h1>
 <div class="fragment"><div class="line"><a class="code hl_typedef" href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3">xso::rng</a> <a class="code hl_typedef" href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3">rng</a>;</div>
 <div class="line">assert(<a class="code hl_typedef" href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3">rng</a>() != <a class="code hl_typedef" href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3">rng</a>());  <span class="comment">// Very, very unlucky if they are equal!</span></div>
-<div class="ttc" id="axoshiro_8h_html_a4433189e70713da57738a24dbae0a8b3"><div class="ttname"><a href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3">xso::rng</a></div><div class="ttdeci">rng64 rng</div><div class="ttdoc">The recommended default generator for most usage – used as xso::rng.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1211</div></div>
+<div class="ttc" id="axoshiro_8h_html_a4433189e70713da57738a24dbae0a8b3"><div class="ttname"><a href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3">xso::rng</a></div><div class="ttdeci">rng64 rng</div><div class="ttdoc">The recommended default generator for most usage – used as xso::rng.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1213</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -704,7 +704,7 @@ Example</h1>
 <div class="ttc" id="aclassxso_1_1generator_html_a65ab4a83922c2da9fbb2c0baaf204273"><div class="ttname"><a href="#a65ab4a83922c2da9fbb2c0baaf204273">xso::generator&lt; xoshiro_4x64, star_star&lt; 5, 7, 9, 1 &gt; &gt;::word_count</a></div><div class="ttdeci">static constexpr std::size_t word_count()</div><div class="ttdef"><b>Definition</b> xoshiro.h:92</div></div>
 <div class="ttc" id="aclassxso_1_1generator_html_aa15572094d2494e470c7342b7a64dab2"><div class="ttname"><a href="#aa15572094d2494e470c7342b7a64dab2">xso::generator::discard</a></div><div class="ttdeci">void discard(std::uint64_t z)</div><div class="ttdoc">Discards the next z iterations in the random number sequence.</div><div class="ttdef"><b>Definition</b> xoshiro.h:614</div></div>
 <div class="ttc" id="aclassxso_1_1generator_html_abc55e831802ffd96652c321f2f38d349"><div class="ttname"><a href="#abc55e831802ffd96652c321f2f38d349">xso::generator::jump</a></div><div class="ttdeci">constexpr auto jump(std::size_t n, bool n_is_log2=false)</div><div class="ttdoc">Jumps the generator&#39;s state forward by J steps where J is either n or 2^n to accommodate huge jumps t...</div><div class="ttdef"><b>Definition</b> xoshiro.h:642</div></div>
-<div class="ttc" id="axoshiro_8h_html_ac1070168c155852dca7df21a59985647"><div class="ttname"><a href="xoshiro_8h.html#ac1070168c155852dca7df21a59985647">xso::jump_coefficients</a></div><div class="ttdeci">constexpr auto jump_coefficients(std::size_t J, bool J_is_log2=false)</div><div class="ttdoc">Returns the coefficients of the jump polynomial that can be used to jump a generator/state ahead by  ...</div><div class="ttdef"><b>Definition</b> xoshiro.h:1301</div></div>
+<div class="ttc" id="axoshiro_8h_html_ac1070168c155852dca7df21a59985647"><div class="ttname"><a href="xoshiro_8h.html#ac1070168c155852dca7df21a59985647">xso::jump_coefficients</a></div><div class="ttdeci">constexpr auto jump_coefficients(std::size_t J, bool J_is_log2=false)</div><div class="ttdoc">Returns the coefficients of the jump polynomial that can be used to jump a generator/state ahead by  ...</div><div class="ttdef"><b>Definition</b> xoshiro.h:1303</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -1559,10 +1559,10 @@ template&lt;typename State, typename Scrambler&gt; </div>
 
 <p>Class method that returns a name for this <em>type</em> of generator &mdash; combining State and Scrambler names. </p>
 <p>The returned string is for the generator type as a whole, combining both the State and Scrambler type names. There is no instance specific information in the returned string (i.e. no seed/state data).</p>
-<p>For example: <span class="tt"><a class="el" href="classxso_1_1xoshiro.html" title="The state for the Xoshiro family of pseudorandom number generators.">xoshiro</a>&lt;4x64,17,45&gt;<a class="el" href="structxso_1_1star__star.html" title="The star_star functor multiplies a state word by a constant, rotates the result, then multiplies by a...">star_star</a>&lt;5,7,1&gt;</span> for an xoshiro generator with four 64-bit state words, using parameters 17 and 45 to step the state, combined with the "**" scrambler using parameters 5, 7 and 1.</p>
+<p>For example: <span class="tt"><a class="el" href="classxso_1_1xoshiro.html" title="The state for the Xoshiro family of pseudorandom number generators.">xoshiro</a>&lt;4x64,17,45&gt; with <a class="el" href="structxso_1_1star__star.html" title="The star_star scrambler is passed a state array an returns T * rotl(S * state[w], R) where:">star_star</a>&lt;5,7,1&gt;</span> for an xoshiro generator with four 64-bit state words, using parameters 17 and 45 to step the state, combined with the "**" scrambler using parameters 5, 7 and 1.</p>
 <h1 class="doxsection"><a class="anchor" id="example-3"></a>
 Example</h1>
-<div class="fragment"><div class="line">assert_eq(<a class="code hl_function" href="#a01f5c8ac40100cb4c1dc9a47f1402743">xso::rng::type_string</a>(), <span class="stringliteral">&quot;xoshiro&lt;4x64,17,45&gt;star_star&lt;5,7,1&gt;&quot;</span>);</div>
+<div class="fragment"><div class="line">assert_eq(<a class="code hl_function" href="#a01f5c8ac40100cb4c1dc9a47f1402743">xso::rng::type_string</a>(), <span class="stringliteral">&quot;xoshiro&lt;4x64,17,45&gt; with star_star&lt;5,7,9,1&gt;&quot;</span>);</div>
 <div class="ttc" id="aclassxso_1_1generator_html_a01f5c8ac40100cb4c1dc9a47f1402743"><div class="ttname"><a href="#a01f5c8ac40100cb4c1dc9a47f1402743">xso::generator&lt; xoshiro_4x64, star_star&lt; 5, 7, 9, 1 &gt; &gt;::type_string</a></div><div class="ttdeci">static constexpr auto type_string()</div><div class="ttdef"><b>Definition</b> xoshiro.h:114</div></div>
 </div><!-- fragment --> 
 </div>

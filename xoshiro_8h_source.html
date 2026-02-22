@@ -175,7 +175,7 @@ $(function(){initNavTree('xoshiro_8h_source.html','',''); });
 <div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span></div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno"><a class="line" href="classxso_1_1generator.html#a8e044b188405ca421333db181e9de020">  100</a></span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> std::size_t <a class="code hl_function" href="classxso_1_1generator.html#a8e044b188405ca421333db181e9de020">bit_count</a>() { <span class="keywordflow">return</span> State::bit_count(); }</div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span></div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno"><a class="line" href="classxso_1_1generator.html#a01f5c8ac40100cb4c1dc9a47f1402743">  114</a></span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> <a class="code hl_function" href="classxso_1_1generator.html#a01f5c8ac40100cb4c1dc9a47f1402743">type_string</a>() { <span class="keywordflow">return</span> std::format(<span class="stringliteral">&quot;{}{}&quot;</span>, State::type_string(), Scrambler::type_string()); }</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno"><a class="line" href="classxso_1_1generator.html#a01f5c8ac40100cb4c1dc9a47f1402743">  114</a></span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> <a class="code hl_function" href="classxso_1_1generator.html#a01f5c8ac40100cb4c1dc9a47f1402743">type_string</a>() { <span class="keywordflow">return</span> std::format(<span class="stringliteral">&quot;{} with {}&quot;</span>, State::type_string(), Scrambler::type_string()); }</div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span></div>
 <div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span></div>
 <div class="line"><a id="l00125" name="l00125"></a><span class="lineno"><a class="line" href="classxso_1_1generator.html#af67c09af07a4e6c2591f6eac890f373c">  125</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classxso_1_1generator.html#af67c09af07a4e6c2591f6eac890f373c">result_type</a> = <a class="code hl_typedef" href="classxso_1_1generator.html#abb2fc073e6f30d544026f5e9bc655c4c">word_type</a>;</div>
@@ -725,529 +725,529 @@ $(function(){initNavTree('xoshiro_8h_source.html','',''); });
 <div class="line"><a id="l01107" name="l01107"></a><span class="lineno"> 1107</span><span class="comment">// A Scrambler is a functor that is passed a State and returns a single unsigned output word.</span></div>
 <div class="line"><a id="l01108" name="l01108"></a><span class="lineno"> 1108</span><span class="comment">// --------------------------------------------------------------------------------------------------------------------</span></div>
 <div class="line"><a id="l01109" name="l01109"></a><span class="lineno"> 1109</span></div>
-<div class="line"><a id="l01116" name="l01116"></a><span class="lineno"> 1116</span><span class="keyword">template</span>&lt;auto S, std::<span class="keywordtype">size_t</span> w&gt;</div>
-<div class="foldopen" id="foldopen01117" data-start="{" data-end="};">
-<div class="line"><a id="l01117" name="l01117"></a><span class="lineno"><a class="line" href="structxso_1_1star.html"> 1117</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structxso_1_1star.html">star</a> {</div>
-<div class="line"><a id="l01118" name="l01118"></a><span class="lineno"> 1118</span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> operator()(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; state)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> S * state[w]; }</div>
-<div class="line"><a id="l01119" name="l01119"></a><span class="lineno"> 1119</span> </div>
-<div class="line"><a id="l01120" name="l01120"></a><span class="lineno"> 1120</span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> type_string() { <span class="keywordflow">return</span> std::format(<span class="stringliteral">&quot;star&lt;{:x},{}&gt;&quot;</span>, S, w); }</div>
-<div class="line"><a id="l01121" name="l01121"></a><span class="lineno"> 1121</span>};</div>
+<div class="line"><a id="l01118" name="l01118"></a><span class="lineno"> 1118</span><span class="keyword">template</span>&lt;auto S, std::<span class="keywordtype">size_t</span> w = 0&gt;</div>
+<div class="foldopen" id="foldopen01119" data-start="{" data-end="};">
+<div class="line"><a id="l01119" name="l01119"></a><span class="lineno"><a class="line" href="structxso_1_1star.html"> 1119</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structxso_1_1star.html">star</a> {</div>
+<div class="line"><a id="l01120" name="l01120"></a><span class="lineno"> 1120</span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> operator()(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; state)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> S * state[w]; }</div>
+<div class="line"><a id="l01121" name="l01121"></a><span class="lineno"> 1121</span> </div>
+<div class="line"><a id="l01122" name="l01122"></a><span class="lineno"> 1122</span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> type_string() { <span class="keywordflow">return</span> std::format(<span class="stringliteral">&quot;star&lt;{:x},{}&gt;&quot;</span>, S, w); }</div>
+<div class="line"><a id="l01123" name="l01123"></a><span class="lineno"> 1123</span>};</div>
 </div>
-<div class="line"><a id="l01122" name="l01122"></a><span class="lineno"> 1122</span></div>
-<div class="line"><a id="l01132" name="l01132"></a><span class="lineno"> 1132</span><span class="keyword">template</span>&lt;auto S, auto R, auto T, std::<span class="keywordtype">size_t</span> w&gt;</div>
-<div class="foldopen" id="foldopen01133" data-start="{" data-end="};">
-<div class="line"><a id="l01133" name="l01133"></a><span class="lineno"><a class="line" href="structxso_1_1star__star.html"> 1133</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structxso_1_1star__star.html">star_star</a> {</div>
-<div class="line"><a id="l01134" name="l01134"></a><span class="lineno"> 1134</span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> operator()(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; state)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> T * std::rotl(S * state[w], R); }</div>
-<div class="line"><a id="l01135" name="l01135"></a><span class="lineno"> 1135</span> </div>
-<div class="line"><a id="l01136" name="l01136"></a><span class="lineno"> 1136</span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> type_string() { <span class="keywordflow">return</span> std::format(<span class="stringliteral">&quot;star_star&lt;{:x},{},{}&gt;&quot;</span>, S, R, w); }</div>
-<div class="line"><a id="l01137" name="l01137"></a><span class="lineno"> 1137</span>};</div>
+<div class="line"><a id="l01124" name="l01124"></a><span class="lineno"> 1124</span></div>
+<div class="line"><a id="l01135" name="l01135"></a><span class="lineno"> 1135</span><span class="keyword">template</span>&lt;auto S, auto R, auto T, std::<span class="keywordtype">size_t</span> w = 0&gt;</div>
+<div class="foldopen" id="foldopen01136" data-start="{" data-end="};">
+<div class="line"><a id="l01136" name="l01136"></a><span class="lineno"><a class="line" href="structxso_1_1star__star.html"> 1136</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structxso_1_1star__star.html">star_star</a> {</div>
+<div class="line"><a id="l01137" name="l01137"></a><span class="lineno"> 1137</span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> operator()(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; state)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> T * std::rotl(S * state[w], R); }</div>
+<div class="line"><a id="l01138" name="l01138"></a><span class="lineno"> 1138</span> </div>
+<div class="line"><a id="l01139" name="l01139"></a><span class="lineno"> 1139</span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> type_string() { <span class="keywordflow">return</span> std::format(<span class="stringliteral">&quot;star_star&lt;{:x},{},{:x},{}&gt;&quot;</span>, S, R, T, w); }</div>
+<div class="line"><a id="l01140" name="l01140"></a><span class="lineno"> 1140</span>};</div>
 </div>
-<div class="line"><a id="l01138" name="l01138"></a><span class="lineno"> 1138</span></div>
-<div class="line"><a id="l01145" name="l01145"></a><span class="lineno"> 1145</span><span class="keyword">template</span>&lt;std::<span class="keywordtype">size_t</span> w0, std::<span class="keywordtype">size_t</span> w1&gt;</div>
-<div class="foldopen" id="foldopen01146" data-start="{" data-end="};">
-<div class="line"><a id="l01146" name="l01146"></a><span class="lineno"><a class="line" href="structxso_1_1plus.html"> 1146</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structxso_1_1plus.html">plus</a> {</div>
-<div class="line"><a id="l01147" name="l01147"></a><span class="lineno"> 1147</span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> operator()(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; state)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> state[w0] + state[w1]; }</div>
-<div class="line"><a id="l01148" name="l01148"></a><span class="lineno"> 1148</span> </div>
-<div class="line"><a id="l01149" name="l01149"></a><span class="lineno"> 1149</span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> type_string() { <span class="keywordflow">return</span> std::format(<span class="stringliteral">&quot;plus&lt;{},{}&gt;&quot;</span>, w0, w1); }</div>
-<div class="line"><a id="l01150" name="l01150"></a><span class="lineno"> 1150</span>};</div>
+<div class="line"><a id="l01141" name="l01141"></a><span class="lineno"> 1141</span></div>
+<div class="line"><a id="l01149" name="l01149"></a><span class="lineno"> 1149</span><span class="keyword">template</span>&lt;std::<span class="keywordtype">size_t</span> w0 = 0, std::<span class="keywordtype">size_t</span> w1 = 1&gt;</div>
+<div class="foldopen" id="foldopen01150" data-start="{" data-end="};">
+<div class="line"><a id="l01150" name="l01150"></a><span class="lineno"><a class="line" href="structxso_1_1plus.html"> 1150</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structxso_1_1plus.html">plus</a> {</div>
+<div class="line"><a id="l01151" name="l01151"></a><span class="lineno"> 1151</span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> operator()(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; state)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> state[w0] + state[w1]; }</div>
+<div class="line"><a id="l01152" name="l01152"></a><span class="lineno"> 1152</span> </div>
+<div class="line"><a id="l01153" name="l01153"></a><span class="lineno"> 1153</span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> type_string() { <span class="keywordflow">return</span> std::format(<span class="stringliteral">&quot;plus&lt;{},{}&gt;&quot;</span>, w0, w1); }</div>
+<div class="line"><a id="l01154" name="l01154"></a><span class="lineno"> 1154</span>};</div>
 </div>
-<div class="line"><a id="l01151" name="l01151"></a><span class="lineno"> 1151</span></div>
-<div class="line"><a id="l01159" name="l01159"></a><span class="lineno"> 1159</span><span class="keyword">template</span>&lt;auto R, std::<span class="keywordtype">size_t</span> w0, std::<span class="keywordtype">size_t</span> w1&gt;</div>
-<div class="foldopen" id="foldopen01160" data-start="{" data-end="};">
-<div class="line"><a id="l01160" name="l01160"></a><span class="lineno"><a class="line" href="structxso_1_1plus__plus.html"> 1160</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structxso_1_1plus__plus.html">plus_plus</a> {</div>
-<div class="line"><a id="l01161" name="l01161"></a><span class="lineno"> 1161</span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> operator()(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; state)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> std::rotl(state[w0] + state[w1], R) + state[w0]; }</div>
-<div class="line"><a id="l01162" name="l01162"></a><span class="lineno"> 1162</span> </div>
-<div class="line"><a id="l01163" name="l01163"></a><span class="lineno"> 1163</span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> type_string() { <span class="keywordflow">return</span> std::format(<span class="stringliteral">&quot;plus_plus&lt;{},{},{}&gt;&quot;</span>, R, w0, w1); }</div>
-<div class="line"><a id="l01164" name="l01164"></a><span class="lineno"> 1164</span>};</div>
+<div class="line"><a id="l01155" name="l01155"></a><span class="lineno"> 1155</span></div>
+<div class="line"><a id="l01161" name="l01161"></a><span class="lineno"> 1161</span><span class="keyword">template</span>&lt;auto R, std::<span class="keywordtype">size_t</span> w0, std::<span class="keywordtype">size_t</span> w1&gt;</div>
+<div class="foldopen" id="foldopen01162" data-start="{" data-end="};">
+<div class="line"><a id="l01162" name="l01162"></a><span class="lineno"><a class="line" href="structxso_1_1plus__plus.html"> 1162</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structxso_1_1plus__plus.html">plus_plus</a> {</div>
+<div class="line"><a id="l01163" name="l01163"></a><span class="lineno"> 1163</span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> operator()(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; state)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> std::rotl(state[w0] + state[w1], R) + state[w0]; }</div>
+<div class="line"><a id="l01164" name="l01164"></a><span class="lineno"> 1164</span> </div>
+<div class="line"><a id="l01165" name="l01165"></a><span class="lineno"> 1165</span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keyword">auto</span> type_string() { <span class="keywordflow">return</span> std::format(<span class="stringliteral">&quot;plus_plus&lt;{},{},{}&gt;&quot;</span>, R, w0, w1); }</div>
+<div class="line"><a id="l01166" name="l01166"></a><span class="lineno"> 1166</span>};</div>
 </div>
-<div class="line"><a id="l01165" name="l01165"></a><span class="lineno"> 1165</span> </div>
-<div class="line"><a id="l01166" name="l01166"></a><span class="lineno"> 1166</span><span class="comment">// --------------------------------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a id="l01167" name="l01167"></a><span class="lineno"> 1167</span><span class="comment">// Type aliases for all 17 generators discussed in the Black &amp; Vigna paper</span></div>
+<div class="line"><a id="l01167" name="l01167"></a><span class="lineno"> 1167</span> </div>
 <div class="line"><a id="l01168" name="l01168"></a><span class="lineno"> 1168</span><span class="comment">// --------------------------------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a id="l01169" name="l01169"></a><span class="lineno"> 1169</span> </div>
-<div class="line"><a id="l01170" name="l01170"></a><span class="lineno"> 1170</span><span class="comment">// clang-format off</span></div>
-<div class="line"><a id="l01171" name="l01171"></a><span class="lineno"> 1171</span><span class="comment">// The analysed versions of the xoshiro engine with specific choices for A &amp; B:</span></div>
-<div class="line"><a id="l01172" name="l01172"></a><span class="lineno"> 1172</span><span class="keyword">using </span>xoshiro_4x32              = <a class="code hl_class" href="classxso_1_1xoshiro.html">xoshiro&lt;4, uint32_t, 9,  11&gt;</a>;</div>
-<div class="line"><a id="l01173" name="l01173"></a><span class="lineno"> 1173</span><span class="keyword">using </span>xoshiro_4x64              = <a class="code hl_class" href="classxso_1_1xoshiro.html">xoshiro&lt;4, uint64_t, 17, 45&gt;</a>;</div>
-<div class="line"><a id="l01174" name="l01174"></a><span class="lineno"> 1174</span><span class="keyword">using </span>xoshiro_8x64              = <a class="code hl_class" href="classxso_1_1xoshiro.html">xoshiro&lt;8, uint64_t, 11, 21&gt;</a>;</div>
-<div class="line"><a id="l01175" name="l01175"></a><span class="lineno"> 1175</span> </div>
-<div class="line"><a id="l01176" name="l01176"></a><span class="lineno"> 1176</span><span class="comment">// The analysed versions of the xoshiro engine with specific choices for A, B &amp; C:</span></div>
-<div class="line"><a id="l01177" name="l01177"></a><span class="lineno"> 1177</span><span class="keyword">using </span>xoroshiro_2x32            = <a class="code hl_class" href="classxso_1_1xoroshiro.html">xoroshiro&lt;2,  uint32_t, 26, 9,  13&gt;</a>;</div>
-<div class="line"><a id="l01178" name="l01178"></a><span class="lineno"> 1178</span><span class="keyword">using </span>xoroshiro_2x64            = <a class="code hl_class" href="classxso_1_1xoroshiro.html">xoroshiro&lt;2,  uint64_t, 24, 16, 37&gt;</a>;</div>
-<div class="line"><a id="l01179" name="l01179"></a><span class="lineno"> 1179</span><span class="keyword">using </span>xoroshiro_2x64b           = <a class="code hl_class" href="classxso_1_1xoroshiro.html">xoroshiro&lt;2,  uint64_t, 49, 21, 28&gt;</a>;  <span class="comment">// Alternative for 2x64 case</span></div>
-<div class="line"><a id="l01180" name="l01180"></a><span class="lineno"> 1180</span><span class="keyword">using </span>xoroshiro_16x64           = <a class="code hl_class" href="classxso_1_1xoroshiro.html">xoroshiro&lt;16, uint64_t, 25, 27, 36&gt;</a>;</div>
-<div class="line"><a id="l01181" name="l01181"></a><span class="lineno"> 1181</span> </div>
-<div class="line"><a id="l01182" name="l01182"></a><span class="lineno"> 1182</span><span class="comment">// The analyzed versions of the xoshiro generators:</span></div>
-<div class="line"><a id="l01183" name="l01183"></a><span class="lineno"> 1183</span><span class="keyword">using </span>xoshiro_4x32_plus         = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoshiro_4x32, plus&lt;0, 3&gt;</a>&gt;;</div>
-<div class="line"><a id="l01184" name="l01184"></a><span class="lineno"> 1184</span><span class="keyword">using </span>xoshiro_4x32_plus_plus    = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoshiro_4x32, plus_plus&lt;7, 0, 3&gt;</a>&gt;;</div>
-<div class="line"><a id="l01185" name="l01185"></a><span class="lineno"> 1185</span><span class="keyword">using </span>xoshiro_4x32_star_star    = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoshiro_4x32, star_star&lt;5, 7, 9, 1&gt;</a>&gt;;</div>
-<div class="line"><a id="l01186" name="l01186"></a><span class="lineno"> 1186</span><span class="keyword">using </span>xoshiro_4x64_plus         = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoshiro_4x64, plus&lt;0, 3&gt;</a>&gt;;</div>
-<div class="line"><a id="l01187" name="l01187"></a><span class="lineno"> 1187</span><span class="keyword">using </span>xoshiro_4x64_plus_plus    = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoshiro_4x64, plus_plus&lt;23, 0, 3&gt;</a>&gt;;</div>
-<div class="line"><a id="l01188" name="l01188"></a><span class="lineno"> 1188</span><span class="keyword">using </span>xoshiro_4x64_star_star    = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoshiro_4x64, star_star&lt;5, 7, 9, 1&gt;</a>&gt;;</div>
-<div class="line"><a id="l01189" name="l01189"></a><span class="lineno"> 1189</span><span class="keyword">using </span>xoshiro_8x64_plus         = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoshiro_8x64, plus&lt;2, 0&gt;</a>&gt;;</div>
-<div class="line"><a id="l01190" name="l01190"></a><span class="lineno"> 1190</span><span class="keyword">using </span>xoshiro_8x64_plus_plus    = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoshiro_8x64, plus_plus&lt;17, 2, 0&gt;</a>&gt;;</div>
-<div class="line"><a id="l01191" name="l01191"></a><span class="lineno"> 1191</span><span class="keyword">using </span>xoshiro_8x64_star_star    = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoshiro_8x64, star_star&lt;5, 7, 9, 1&gt;</a>&gt;;</div>
-<div class="line"><a id="l01192" name="l01192"></a><span class="lineno"> 1192</span> </div>
-<div class="line"><a id="l01193" name="l01193"></a><span class="lineno"> 1193</span><span class="comment">// The analysed versions of the xoroshiro generators:</span></div>
-<div class="line"><a id="l01194" name="l01194"></a><span class="lineno"> 1194</span><span class="keyword">using </span>xoroshiro_2x32_star       = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoroshiro_2x32,  star&lt;0x9E3779BB, 0&gt;</a>&gt;;</div>
-<div class="line"><a id="l01195" name="l01195"></a><span class="lineno"> 1195</span><span class="keyword">using </span>xoroshiro_2x32_star_star  = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoroshiro_2x32,  star_star&lt;0x9E3779BBu, 5, 5, 0&gt;</a>&gt;;</div>
-<div class="line"><a id="l01196" name="l01196"></a><span class="lineno"> 1196</span><span class="keyword">using </span>xoroshiro_2x64_plus       = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoroshiro_2x64,  plus&lt;0, 1&gt;</a>&gt;;</div>
-<div class="line"><a id="l01197" name="l01197"></a><span class="lineno"> 1197</span><span class="keyword">using </span>xoroshiro_2x64_plus_plus  = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoroshiro_2x64b, plus_plus&lt;17, 0, 1&gt;</a>&gt;;</div>
-<div class="line"><a id="l01198" name="l01198"></a><span class="lineno"> 1198</span><span class="keyword">using </span>xoroshiro_2x64_star_star  = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoroshiro_2x64,  star_star&lt;5, 7, 9, 0&gt;</a>&gt;;</div>
-<div class="line"><a id="l01199" name="l01199"></a><span class="lineno"> 1199</span><span class="keyword">using </span>xoroshiro_16x64_plus_plus = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoroshiro_16x64, plus_plus&lt;23, 15, 0&gt;</a>&gt;;</div>
-<div class="line"><a id="l01200" name="l01200"></a><span class="lineno"> 1200</span><span class="keyword">using </span>xoroshiro_16x64_star      = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoroshiro_16x64, star&lt;0x9e3779b97f4a7c13, 0&gt;</a>&gt;;</div>
-<div class="line"><a id="l01201" name="l01201"></a><span class="lineno"> 1201</span><span class="keyword">using </span>xoroshiro_16x64_star_star = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoroshiro_16x64, star_star&lt;5, 7, 9, 0&gt;</a>&gt;;</div>
-<div class="line"><a id="l01202" name="l01202"></a><span class="lineno"> 1202</span><span class="comment">// clang-format on</span></div>
-<div class="line"><a id="l01203" name="l01203"></a><span class="lineno"> 1203</span></div>
-<div class="line"><a id="l01205" name="l01205"></a><span class="lineno"><a class="line" href="xoshiro_8h.html#a2b8f0093647e2cf57a893cbddd8e90d7"> 1205</a></span><span class="keyword">using </span><a class="code hl_typedef" href="xoshiro_8h.html#a2b8f0093647e2cf57a893cbddd8e90d7">rng32</a> = xoshiro_4x32_star_star;</div>
-<div class="line"><a id="l01206" name="l01206"></a><span class="lineno"> 1206</span></div>
-<div class="line"><a id="l01208" name="l01208"></a><span class="lineno"><a class="line" href="xoshiro_8h.html#acbac054ae0d786385a69f42215b966a6"> 1208</a></span><span class="keyword">using </span><a class="code hl_typedef" href="xoshiro_8h.html#acbac054ae0d786385a69f42215b966a6">rng64</a> = xoshiro_4x64_star_star;</div>
-<div class="line"><a id="l01209" name="l01209"></a><span class="lineno"> 1209</span></div>
-<div class="line"><a id="l01211" name="l01211"></a><span class="lineno"><a class="line" href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3"> 1211</a></span><span class="keyword">using </span><a class="code hl_typedef" href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3">rng</a> = <a class="code hl_typedef" href="xoshiro_8h.html#acbac054ae0d786385a69f42215b966a6">rng64</a>;</div>
-<div class="line"><a id="l01212" name="l01212"></a><span class="lineno"> 1212</span> </div>
-<div class="line"><a id="l01213" name="l01213"></a><span class="lineno"> 1213</span><span class="comment">// --------------------------------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a id="l01214" name="l01214"></a><span class="lineno"> 1214</span><span class="comment">// Partitions of random number stream:</span></div>
-<div class="line"><a id="l01215" name="l01215"></a><span class="lineno"> 1215</span><span class="comment">//</span></div>
-<div class="line"><a id="l01216" name="l01216"></a><span class="lineno"> 1216</span><span class="comment">// For parallel processing applications it can be useful to split a single random number stream into a number of</span></div>
-<div class="line"><a id="l01217" name="l01217"></a><span class="lineno"> 1217</span><span class="comment">// non-overlapping &quot;partitions&quot;. Then different computational threads can get their &quot;own set&quot; of random numbers without</span></div>
-<div class="line"><a id="l01218" name="l01218"></a><span class="lineno"> 1218</span><span class="comment">// worrying about stream overlaps etc.</span></div>
-<div class="line"><a id="l01219" name="l01219"></a><span class="lineno"> 1219</span><span class="comment">//</span></div>
-<div class="line"><a id="l01220" name="l01220"></a><span class="lineno"> 1220</span><span class="comment">// The partitions need to be very large so this only works for States where we can jump far ahead in an efficient way.</span></div>
-<div class="line"><a id="l01221" name="l01221"></a><span class="lineno"> 1221</span><span class="comment">// --------------------------------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a id="l01222" name="l01222"></a><span class="lineno"> 1222</span></div>
-<div class="line"><a id="l01230" name="l01230"></a><span class="lineno"> 1230</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> RNG&gt;</div>
-<div class="foldopen" id="foldopen01231" data-start="{" data-end="};">
-<div class="line"><a id="l01231" name="l01231"></a><span class="lineno"><a class="line" href="classxso_1_1partition.html"> 1231</a></span><span class="keyword">class </span><a class="code hl_function" href="classxso_1_1partition.html#abe34f71f85cb3a6706e4ca6c5baa27d1">partition</a> {</div>
-<div class="line"><a id="l01232" name="l01232"></a><span class="lineno"> 1232</span><span class="keyword">public</span>:</div>
-<div class="foldopen" id="foldopen01241" data-start="{" data-end="}">
-<div class="line"><a id="l01241" name="l01241"></a><span class="lineno"><a class="line" href="classxso_1_1partition.html#abe34f71f85cb3a6706e4ca6c5baa27d1"> 1241</a></span>    <a class="code hl_function" href="classxso_1_1partition.html#abe34f71f85cb3a6706e4ca6c5baa27d1">partition</a>(<span class="keyword">const</span> RNG&amp; <a class="code hl_typedef" href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3">rng</a>, std::size_t n_partitions) : m_rng{<a class="code hl_typedef" href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3">rng</a>} {</div>
-<div class="line"><a id="l01242" name="l01242"></a><span class="lineno"> 1242</span>        <span class="comment">// Make sure the requested number of partitions makes sense -- silently fix any issues.</span></div>
-<div class="line"><a id="l01243" name="l01243"></a><span class="lineno"> 1243</span>        <span class="keywordflow">if</span> (n_partitions == 0) n_partitions = 1;</div>
-<div class="line"><a id="l01244" name="l01244"></a><span class="lineno"> 1244</span> </div>
-<div class="line"><a id="l01245" name="l01245"></a><span class="lineno"> 1245</span>        <span class="comment">// How many bits of state in the RNG type?</span></div>
-<div class="line"><a id="l01246" name="l01246"></a><span class="lineno"> 1246</span>        <span class="keyword">auto</span> n_bits = RNG::bit_count();</div>
-<div class="line"><a id="l01247" name="l01247"></a><span class="lineno"> 1247</span> </div>
-<div class="line"><a id="l01248" name="l01248"></a><span class="lineno"> 1248</span>        <span class="comment">// The period of the generator is `2^n_bits` so each partition ideally has size `2^n_bits / n_partitions`.</span></div>
-<div class="line"><a id="l01249" name="l01249"></a><span class="lineno"> 1249</span>        <span class="comment">// That number will probably overflow a std::size_t so we must instead keep everything in log 2 form.</span></div>
-<div class="line"><a id="l01250" name="l01250"></a><span class="lineno"> 1250</span>        <span class="comment">// First we find the smallest `n` such that `2^n &gt;= n_partitions - 1`.</span></div>
-<div class="line"><a id="l01251" name="l01251"></a><span class="lineno"> 1251</span>        <span class="comment">// Note if `n_partitions` is 128 the following gives `n = 7` and does the same if `n = 100`.</span></div>
-<div class="line"><a id="l01252" name="l01252"></a><span class="lineno"> 1252</span>        <span class="keyword">auto</span> n = <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(std::bit_width(n_partitions - 1));</div>
-<div class="line"><a id="l01253" name="l01253"></a><span class="lineno"> 1253</span> </div>
-<div class="line"><a id="l01254" name="l01254"></a><span class="lineno"> 1254</span>        <span class="comment">// We will create `2^n` partitions which is probably more than needed but the wastage is negligible.</span></div>
-<div class="line"><a id="l01255" name="l01255"></a><span class="lineno"> 1255</span>        <span class="comment">// To create those `2^n` partitions we must be able to jump ahead `2^(n_bits - n)` steps many times.</span></div>
-<div class="line"><a id="l01256" name="l01256"></a><span class="lineno"> 1256</span>        <span class="keyword">auto</span> power_2 = n_bits - n;</div>
-<div class="line"><a id="l01257" name="l01257"></a><span class="lineno"> 1257</span> </div>
-<div class="line"><a id="l01258" name="l01258"></a><span class="lineno"> 1258</span>        <span class="comment">// Precompute the jump coefficients to advance the generator `2^power_2` steps i.e. along to the next partition.</span></div>
-<div class="line"><a id="l01259" name="l01259"></a><span class="lineno"> 1259</span>        m_jump_coefficients = <a class="code hl_function" href="xoshiro_8h.html#ac1070168c155852dca7df21a59985647">xso::jump_coefficients&lt;typename RNG::state_type&gt;</a>(power_2, <span class="keyword">true</span>);</div>
-<div class="line"><a id="l01260" name="l01260"></a><span class="lineno"> 1260</span>    }</div>
+<div class="line"><a id="l01169" name="l01169"></a><span class="lineno"> 1169</span><span class="comment">// Type aliases for all 17 generators discussed in the Black &amp; Vigna paper</span></div>
+<div class="line"><a id="l01170" name="l01170"></a><span class="lineno"> 1170</span><span class="comment">// --------------------------------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a id="l01171" name="l01171"></a><span class="lineno"> 1171</span> </div>
+<div class="line"><a id="l01172" name="l01172"></a><span class="lineno"> 1172</span><span class="comment">// clang-format off</span></div>
+<div class="line"><a id="l01173" name="l01173"></a><span class="lineno"> 1173</span><span class="comment">// The analysed versions of the xoshiro engine with specific choices for A &amp; B:</span></div>
+<div class="line"><a id="l01174" name="l01174"></a><span class="lineno"> 1174</span><span class="keyword">using </span>xoshiro_4x32              = <a class="code hl_class" href="classxso_1_1xoshiro.html">xoshiro&lt;4, uint32_t, 9,  11&gt;</a>;</div>
+<div class="line"><a id="l01175" name="l01175"></a><span class="lineno"> 1175</span><span class="keyword">using </span>xoshiro_4x64              = <a class="code hl_class" href="classxso_1_1xoshiro.html">xoshiro&lt;4, uint64_t, 17, 45&gt;</a>;</div>
+<div class="line"><a id="l01176" name="l01176"></a><span class="lineno"> 1176</span><span class="keyword">using </span>xoshiro_8x64              = <a class="code hl_class" href="classxso_1_1xoshiro.html">xoshiro&lt;8, uint64_t, 11, 21&gt;</a>;</div>
+<div class="line"><a id="l01177" name="l01177"></a><span class="lineno"> 1177</span> </div>
+<div class="line"><a id="l01178" name="l01178"></a><span class="lineno"> 1178</span><span class="comment">// The analysed versions of the xoshiro engine with specific choices for A, B &amp; C:</span></div>
+<div class="line"><a id="l01179" name="l01179"></a><span class="lineno"> 1179</span><span class="keyword">using </span>xoroshiro_2x32            = <a class="code hl_class" href="classxso_1_1xoroshiro.html">xoroshiro&lt;2,  uint32_t, 26, 9,  13&gt;</a>;</div>
+<div class="line"><a id="l01180" name="l01180"></a><span class="lineno"> 1180</span><span class="keyword">using </span>xoroshiro_2x64            = <a class="code hl_class" href="classxso_1_1xoroshiro.html">xoroshiro&lt;2,  uint64_t, 24, 16, 37&gt;</a>;</div>
+<div class="line"><a id="l01181" name="l01181"></a><span class="lineno"> 1181</span><span class="keyword">using </span>xoroshiro_2x64b           = <a class="code hl_class" href="classxso_1_1xoroshiro.html">xoroshiro&lt;2,  uint64_t, 49, 21, 28&gt;</a>;  <span class="comment">// Alternative for 2x64 case</span></div>
+<div class="line"><a id="l01182" name="l01182"></a><span class="lineno"> 1182</span><span class="keyword">using </span>xoroshiro_16x64           = <a class="code hl_class" href="classxso_1_1xoroshiro.html">xoroshiro&lt;16, uint64_t, 25, 27, 36&gt;</a>;</div>
+<div class="line"><a id="l01183" name="l01183"></a><span class="lineno"> 1183</span> </div>
+<div class="line"><a id="l01184" name="l01184"></a><span class="lineno"> 1184</span><span class="comment">// The analyzed versions of the xoshiro generators:</span></div>
+<div class="line"><a id="l01185" name="l01185"></a><span class="lineno"> 1185</span><span class="keyword">using </span>xoshiro_4x32_plus         = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoshiro_4x32, plus&lt;0, 3&gt;</a>&gt;;</div>
+<div class="line"><a id="l01186" name="l01186"></a><span class="lineno"> 1186</span><span class="keyword">using </span>xoshiro_4x32_plus_plus    = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoshiro_4x32, plus_plus&lt;7, 0, 3&gt;</a>&gt;;</div>
+<div class="line"><a id="l01187" name="l01187"></a><span class="lineno"> 1187</span><span class="keyword">using </span>xoshiro_4x32_star_star    = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoshiro_4x32, star_star&lt;5, 7, 9, 1&gt;</a>&gt;;</div>
+<div class="line"><a id="l01188" name="l01188"></a><span class="lineno"> 1188</span><span class="keyword">using </span>xoshiro_4x64_plus         = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoshiro_4x64, plus&lt;0, 3&gt;</a>&gt;;</div>
+<div class="line"><a id="l01189" name="l01189"></a><span class="lineno"> 1189</span><span class="keyword">using </span>xoshiro_4x64_plus_plus    = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoshiro_4x64, plus_plus&lt;23, 0, 3&gt;</a>&gt;;</div>
+<div class="line"><a id="l01190" name="l01190"></a><span class="lineno"> 1190</span><span class="keyword">using </span>xoshiro_4x64_star_star    = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoshiro_4x64, star_star&lt;5, 7, 9, 1&gt;</a>&gt;;</div>
+<div class="line"><a id="l01191" name="l01191"></a><span class="lineno"> 1191</span><span class="keyword">using </span>xoshiro_8x64_plus         = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoshiro_8x64, plus&lt;2, 0&gt;</a>&gt;;</div>
+<div class="line"><a id="l01192" name="l01192"></a><span class="lineno"> 1192</span><span class="keyword">using </span>xoshiro_8x64_plus_plus    = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoshiro_8x64, plus_plus&lt;17, 2, 0&gt;</a>&gt;;</div>
+<div class="line"><a id="l01193" name="l01193"></a><span class="lineno"> 1193</span><span class="keyword">using </span>xoshiro_8x64_star_star    = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoshiro_8x64, star_star&lt;5, 7, 9, 1&gt;</a>&gt;;</div>
+<div class="line"><a id="l01194" name="l01194"></a><span class="lineno"> 1194</span> </div>
+<div class="line"><a id="l01195" name="l01195"></a><span class="lineno"> 1195</span><span class="comment">// The analysed versions of the xoroshiro generators:</span></div>
+<div class="line"><a id="l01196" name="l01196"></a><span class="lineno"> 1196</span><span class="keyword">using </span>xoroshiro_2x32_star       = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoroshiro_2x32,  star&lt;0x9E3779BB, 0&gt;</a>&gt;;</div>
+<div class="line"><a id="l01197" name="l01197"></a><span class="lineno"> 1197</span><span class="keyword">using </span>xoroshiro_2x32_star_star  = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoroshiro_2x32,  star_star&lt;0x9E3779BB, 5, 5, 0&gt;</a>&gt;;</div>
+<div class="line"><a id="l01198" name="l01198"></a><span class="lineno"> 1198</span><span class="keyword">using </span>xoroshiro_2x64_plus       = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoroshiro_2x64,  plus&lt;0, 1&gt;</a>&gt;;</div>
+<div class="line"><a id="l01199" name="l01199"></a><span class="lineno"> 1199</span><span class="keyword">using </span>xoroshiro_2x64_plus_plus  = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoroshiro_2x64b, plus_plus&lt;17, 0, 1&gt;</a>&gt;;</div>
+<div class="line"><a id="l01200" name="l01200"></a><span class="lineno"> 1200</span><span class="keyword">using </span>xoroshiro_2x64_star_star  = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoroshiro_2x64,  star_star&lt;5, 7, 9, 0&gt;</a>&gt;;</div>
+<div class="line"><a id="l01201" name="l01201"></a><span class="lineno"> 1201</span><span class="keyword">using </span>xoroshiro_16x64_plus_plus = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoroshiro_16x64, plus_plus&lt;23, 15, 0&gt;</a>&gt;;</div>
+<div class="line"><a id="l01202" name="l01202"></a><span class="lineno"> 1202</span><span class="keyword">using </span>xoroshiro_16x64_star      = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoroshiro_16x64, star&lt;0x9e3779b97f4a7c13, 0&gt;</a>&gt;;</div>
+<div class="line"><a id="l01203" name="l01203"></a><span class="lineno"> 1203</span><span class="keyword">using </span>xoroshiro_16x64_star_star = <a class="code hl_class" href="classxso_1_1generator.html">generator&lt;xoroshiro_16x64, star_star&lt;5, 7, 9, 0&gt;</a>&gt;;</div>
+<div class="line"><a id="l01204" name="l01204"></a><span class="lineno"> 1204</span><span class="comment">// clang-format on</span></div>
+<div class="line"><a id="l01205" name="l01205"></a><span class="lineno"> 1205</span></div>
+<div class="line"><a id="l01207" name="l01207"></a><span class="lineno"><a class="line" href="xoshiro_8h.html#a2b8f0093647e2cf57a893cbddd8e90d7"> 1207</a></span><span class="keyword">using </span><a class="code hl_typedef" href="xoshiro_8h.html#a2b8f0093647e2cf57a893cbddd8e90d7">rng32</a> = xoshiro_4x32_star_star;</div>
+<div class="line"><a id="l01208" name="l01208"></a><span class="lineno"> 1208</span></div>
+<div class="line"><a id="l01210" name="l01210"></a><span class="lineno"><a class="line" href="xoshiro_8h.html#acbac054ae0d786385a69f42215b966a6"> 1210</a></span><span class="keyword">using </span><a class="code hl_typedef" href="xoshiro_8h.html#acbac054ae0d786385a69f42215b966a6">rng64</a> = xoshiro_4x64_star_star;</div>
+<div class="line"><a id="l01211" name="l01211"></a><span class="lineno"> 1211</span></div>
+<div class="line"><a id="l01213" name="l01213"></a><span class="lineno"><a class="line" href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3"> 1213</a></span><span class="keyword">using </span><a class="code hl_typedef" href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3">rng</a> = <a class="code hl_typedef" href="xoshiro_8h.html#acbac054ae0d786385a69f42215b966a6">rng64</a>;</div>
+<div class="line"><a id="l01214" name="l01214"></a><span class="lineno"> 1214</span> </div>
+<div class="line"><a id="l01215" name="l01215"></a><span class="lineno"> 1215</span><span class="comment">// --------------------------------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a id="l01216" name="l01216"></a><span class="lineno"> 1216</span><span class="comment">// Partitions of random number stream:</span></div>
+<div class="line"><a id="l01217" name="l01217"></a><span class="lineno"> 1217</span><span class="comment">//</span></div>
+<div class="line"><a id="l01218" name="l01218"></a><span class="lineno"> 1218</span><span class="comment">// For parallel processing applications it can be useful to split a single random number stream into a number of</span></div>
+<div class="line"><a id="l01219" name="l01219"></a><span class="lineno"> 1219</span><span class="comment">// non-overlapping &quot;partitions&quot;. Then different computational threads can get their &quot;own set&quot; of random numbers without</span></div>
+<div class="line"><a id="l01220" name="l01220"></a><span class="lineno"> 1220</span><span class="comment">// worrying about stream overlaps etc.</span></div>
+<div class="line"><a id="l01221" name="l01221"></a><span class="lineno"> 1221</span><span class="comment">//</span></div>
+<div class="line"><a id="l01222" name="l01222"></a><span class="lineno"> 1222</span><span class="comment">// The partitions need to be very large so this only works for States where we can jump far ahead in an efficient way.</span></div>
+<div class="line"><a id="l01223" name="l01223"></a><span class="lineno"> 1223</span><span class="comment">// --------------------------------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a id="l01224" name="l01224"></a><span class="lineno"> 1224</span></div>
+<div class="line"><a id="l01232" name="l01232"></a><span class="lineno"> 1232</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> RNG&gt;</div>
+<div class="foldopen" id="foldopen01233" data-start="{" data-end="};">
+<div class="line"><a id="l01233" name="l01233"></a><span class="lineno"><a class="line" href="classxso_1_1partition.html"> 1233</a></span><span class="keyword">class </span><a class="code hl_function" href="classxso_1_1partition.html#abe34f71f85cb3a6706e4ca6c5baa27d1">partition</a> {</div>
+<div class="line"><a id="l01234" name="l01234"></a><span class="lineno"> 1234</span><span class="keyword">public</span>:</div>
+<div class="foldopen" id="foldopen01243" data-start="{" data-end="}">
+<div class="line"><a id="l01243" name="l01243"></a><span class="lineno"><a class="line" href="classxso_1_1partition.html#abe34f71f85cb3a6706e4ca6c5baa27d1"> 1243</a></span>    <a class="code hl_function" href="classxso_1_1partition.html#abe34f71f85cb3a6706e4ca6c5baa27d1">partition</a>(<span class="keyword">const</span> RNG&amp; <a class="code hl_typedef" href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3">rng</a>, std::size_t n_partitions) : m_rng{<a class="code hl_typedef" href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3">rng</a>} {</div>
+<div class="line"><a id="l01244" name="l01244"></a><span class="lineno"> 1244</span>        <span class="comment">// Make sure the requested number of partitions makes sense -- silently fix any issues.</span></div>
+<div class="line"><a id="l01245" name="l01245"></a><span class="lineno"> 1245</span>        <span class="keywordflow">if</span> (n_partitions == 0) n_partitions = 1;</div>
+<div class="line"><a id="l01246" name="l01246"></a><span class="lineno"> 1246</span> </div>
+<div class="line"><a id="l01247" name="l01247"></a><span class="lineno"> 1247</span>        <span class="comment">// How many bits of state in the RNG type?</span></div>
+<div class="line"><a id="l01248" name="l01248"></a><span class="lineno"> 1248</span>        <span class="keyword">auto</span> n_bits = RNG::bit_count();</div>
+<div class="line"><a id="l01249" name="l01249"></a><span class="lineno"> 1249</span> </div>
+<div class="line"><a id="l01250" name="l01250"></a><span class="lineno"> 1250</span>        <span class="comment">// The period of the generator is `2^n_bits` so each partition ideally has size `2^n_bits / n_partitions`.</span></div>
+<div class="line"><a id="l01251" name="l01251"></a><span class="lineno"> 1251</span>        <span class="comment">// That number will probably overflow a std::size_t so we must instead keep everything in log 2 form.</span></div>
+<div class="line"><a id="l01252" name="l01252"></a><span class="lineno"> 1252</span>        <span class="comment">// First we find the smallest `n` such that `2^n &gt;= n_partitions - 1`.</span></div>
+<div class="line"><a id="l01253" name="l01253"></a><span class="lineno"> 1253</span>        <span class="comment">// Note if `n_partitions` is 128 the following gives `n = 7` and does the same if `n = 100`.</span></div>
+<div class="line"><a id="l01254" name="l01254"></a><span class="lineno"> 1254</span>        <span class="keyword">auto</span> n = <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(std::bit_width(n_partitions - 1));</div>
+<div class="line"><a id="l01255" name="l01255"></a><span class="lineno"> 1255</span> </div>
+<div class="line"><a id="l01256" name="l01256"></a><span class="lineno"> 1256</span>        <span class="comment">// We will create `2^n` partitions which is probably more than needed but the wastage is negligible.</span></div>
+<div class="line"><a id="l01257" name="l01257"></a><span class="lineno"> 1257</span>        <span class="comment">// To create those `2^n` partitions we must be able to jump ahead `2^(n_bits - n)` steps many times.</span></div>
+<div class="line"><a id="l01258" name="l01258"></a><span class="lineno"> 1258</span>        <span class="keyword">auto</span> power_2 = n_bits - n;</div>
+<div class="line"><a id="l01259" name="l01259"></a><span class="lineno"> 1259</span> </div>
+<div class="line"><a id="l01260" name="l01260"></a><span class="lineno"> 1260</span>        <span class="comment">// Precompute the jump coefficients to advance the generator `2^power_2` steps i.e. along to the next partition.</span></div>
+<div class="line"><a id="l01261" name="l01261"></a><span class="lineno"> 1261</span>        m_jump_coefficients = <a class="code hl_function" href="xoshiro_8h.html#ac1070168c155852dca7df21a59985647">xso::jump_coefficients&lt;typename RNG::state_type&gt;</a>(power_2, <span class="keyword">true</span>);</div>
+<div class="line"><a id="l01262" name="l01262"></a><span class="lineno"> 1262</span>    }</div>
 </div>
-<div class="line"><a id="l01261" name="l01261"></a><span class="lineno"> 1261</span></div>
-<div class="foldopen" id="foldopen01264" data-start="{" data-end="}">
-<div class="line"><a id="l01264" name="l01264"></a><span class="lineno"><a class="line" href="classxso_1_1partition.html#af4728a19af49489f4faf257b269ae54c"> 1264</a></span>    RNG <a class="code hl_function" href="classxso_1_1partition.html#af4728a19af49489f4faf257b269ae54c">next</a>() {</div>
-<div class="line"><a id="l01265" name="l01265"></a><span class="lineno"> 1265</span>        <span class="comment">// We already have a pre-baked generator seeded at the right spot ready to go.</span></div>
-<div class="line"><a id="l01266" name="l01266"></a><span class="lineno"> 1266</span>        RNG result = m_rng;</div>
-<div class="line"><a id="l01267" name="l01267"></a><span class="lineno"> 1267</span> </div>
-<div class="line"><a id="l01268" name="l01268"></a><span class="lineno"> 1268</span>        <span class="comment">// Prep for the next call by jumping the parent copy once more along its stream.</span></div>
-<div class="line"><a id="l01269" name="l01269"></a><span class="lineno"> 1269</span>        m_rng.jump(m_jump_coefficients);</div>
-<div class="line"><a id="l01270" name="l01270"></a><span class="lineno"> 1270</span> </div>
-<div class="line"><a id="l01271" name="l01271"></a><span class="lineno"> 1271</span>        <span class="comment">// And return the pre-baked one ...</span></div>
-<div class="line"><a id="l01272" name="l01272"></a><span class="lineno"> 1272</span>        <span class="keywordflow">return</span> result;</div>
-<div class="line"><a id="l01273" name="l01273"></a><span class="lineno"> 1273</span>    }</div>
+<div class="line"><a id="l01263" name="l01263"></a><span class="lineno"> 1263</span></div>
+<div class="foldopen" id="foldopen01266" data-start="{" data-end="}">
+<div class="line"><a id="l01266" name="l01266"></a><span class="lineno"><a class="line" href="classxso_1_1partition.html#af4728a19af49489f4faf257b269ae54c"> 1266</a></span>    RNG <a class="code hl_function" href="classxso_1_1partition.html#af4728a19af49489f4faf257b269ae54c">next</a>() {</div>
+<div class="line"><a id="l01267" name="l01267"></a><span class="lineno"> 1267</span>        <span class="comment">// We already have a pre-baked generator seeded at the right spot ready to go.</span></div>
+<div class="line"><a id="l01268" name="l01268"></a><span class="lineno"> 1268</span>        RNG result = m_rng;</div>
+<div class="line"><a id="l01269" name="l01269"></a><span class="lineno"> 1269</span> </div>
+<div class="line"><a id="l01270" name="l01270"></a><span class="lineno"> 1270</span>        <span class="comment">// Prep for the next call by jumping the parent copy once more along its stream.</span></div>
+<div class="line"><a id="l01271" name="l01271"></a><span class="lineno"> 1271</span>        m_rng.jump(m_jump_coefficients);</div>
+<div class="line"><a id="l01272" name="l01272"></a><span class="lineno"> 1272</span> </div>
+<div class="line"><a id="l01273" name="l01273"></a><span class="lineno"> 1273</span>        <span class="comment">// And return the pre-baked one ...</span></div>
+<div class="line"><a id="l01274" name="l01274"></a><span class="lineno"> 1274</span>        <span class="keywordflow">return</span> result;</div>
+<div class="line"><a id="l01275" name="l01275"></a><span class="lineno"> 1275</span>    }</div>
 </div>
-<div class="line"><a id="l01274" name="l01274"></a><span class="lineno"> 1274</span> </div>
-<div class="line"><a id="l01275" name="l01275"></a><span class="lineno"> 1275</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l01276" name="l01276"></a><span class="lineno"> 1276</span>    <span class="keyword">using </span>array_type = <span class="keyword">typename</span> RNG::array_type;</div>
-<div class="line"><a id="l01277" name="l01277"></a><span class="lineno"> 1277</span> </div>
-<div class="line"><a id="l01278" name="l01278"></a><span class="lineno"> 1278</span>    RNG        m_rng;</div>
-<div class="line"><a id="l01279" name="l01279"></a><span class="lineno"> 1279</span>    array_type m_jump_coefficients;</div>
-<div class="line"><a id="l01280" name="l01280"></a><span class="lineno"> 1280</span>};</div>
+<div class="line"><a id="l01276" name="l01276"></a><span class="lineno"> 1276</span> </div>
+<div class="line"><a id="l01277" name="l01277"></a><span class="lineno"> 1277</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l01278" name="l01278"></a><span class="lineno"> 1278</span>    <span class="keyword">using </span>array_type = <span class="keyword">typename</span> RNG::array_type;</div>
+<div class="line"><a id="l01279" name="l01279"></a><span class="lineno"> 1279</span> </div>
+<div class="line"><a id="l01280" name="l01280"></a><span class="lineno"> 1280</span>    RNG        m_rng;</div>
+<div class="line"><a id="l01281" name="l01281"></a><span class="lineno"> 1281</span>    array_type m_jump_coefficients;</div>
+<div class="line"><a id="l01282" name="l01282"></a><span class="lineno"> 1282</span>};</div>
 </div>
-<div class="line"><a id="l01281" name="l01281"></a><span class="lineno"> 1281</span> </div>
-<div class="line"><a id="l01282" name="l01282"></a><span class="lineno"> 1282</span><span class="comment">// --------------------------------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a id="l01283" name="l01283"></a><span class="lineno"> 1283</span><span class="comment">// Non-member functions for computing jump polynomials:</span></div>
+<div class="line"><a id="l01283" name="l01283"></a><span class="lineno"> 1283</span> </div>
 <div class="line"><a id="l01284" name="l01284"></a><span class="lineno"> 1284</span><span class="comment">// --------------------------------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a id="l01285" name="l01285"></a><span class="lineno"> 1285</span></div>
-<div class="line"><a id="l01299" name="l01299"></a><span class="lineno"> 1299</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> State&gt;</div>
-<div class="line"><a id="l01300" name="l01300"></a><span class="lineno"> 1300</span><span class="keyword">constexpr</span> <span class="keyword">auto</span></div>
-<div class="foldopen" id="foldopen01301" data-start="{" data-end="}">
-<div class="line"><a id="l01301" name="l01301"></a><span class="lineno"><a class="line" href="xoshiro_8h.html#ac1070168c155852dca7df21a59985647"> 1301</a></span><a class="code hl_function" href="xoshiro_8h.html#ac1070168c155852dca7df21a59985647">jump_coefficients</a>(std::size_t n, <span class="keywordtype">bool</span> n_is_log2) {</div>
-<div class="line"><a id="l01302" name="l01302"></a><span class="lineno"> 1302</span> </div>
-<div class="line"><a id="l01303" name="l01303"></a><span class="lineno"> 1303</span>    <span class="comment">// Retrieve the low order coefficients of characteristic polynomial --- this can throw if not precomputed.</span></div>
-<div class="line"><a id="l01304" name="l01304"></a><span class="lineno"> 1304</span>    std::array&lt;<span class="keyword">typename</span> State::word_type, State::word_count()&gt; char_coefficients;</div>
-<div class="line"><a id="l01305" name="l01305"></a><span class="lineno"> 1305</span>    State::characteristic_coefficients(char_coefficients.begin());</div>
-<div class="line"><a id="l01306" name="l01306"></a><span class="lineno"> 1306</span> </div>
-<div class="line"><a id="l01307" name="l01307"></a><span class="lineno"> 1307</span>    <span class="comment">// The jump polynomial is x^J mod c(x) -- that computation expects to be handed p(x) where c(x) = x^n + p(x).</span></div>
-<div class="line"><a id="l01308" name="l01308"></a><span class="lineno"> 1308</span>    <span class="keywordflow">return</span> xso::reduce(char_coefficients, n, n_is_log2);</div>
-<div class="line"><a id="l01309" name="l01309"></a><span class="lineno"> 1309</span>}</div>
+<div class="line"><a id="l01285" name="l01285"></a><span class="lineno"> 1285</span><span class="comment">// Non-member functions for computing jump polynomials:</span></div>
+<div class="line"><a id="l01286" name="l01286"></a><span class="lineno"> 1286</span><span class="comment">// --------------------------------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a id="l01287" name="l01287"></a><span class="lineno"> 1287</span></div>
+<div class="line"><a id="l01301" name="l01301"></a><span class="lineno"> 1301</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> State&gt;</div>
+<div class="line"><a id="l01302" name="l01302"></a><span class="lineno"> 1302</span><span class="keyword">constexpr</span> <span class="keyword">auto</span></div>
+<div class="foldopen" id="foldopen01303" data-start="{" data-end="}">
+<div class="line"><a id="l01303" name="l01303"></a><span class="lineno"><a class="line" href="xoshiro_8h.html#ac1070168c155852dca7df21a59985647"> 1303</a></span><a class="code hl_function" href="xoshiro_8h.html#ac1070168c155852dca7df21a59985647">jump_coefficients</a>(std::size_t n, <span class="keywordtype">bool</span> n_is_log2) {</div>
+<div class="line"><a id="l01304" name="l01304"></a><span class="lineno"> 1304</span> </div>
+<div class="line"><a id="l01305" name="l01305"></a><span class="lineno"> 1305</span>    <span class="comment">// Retrieve the low order coefficients of characteristic polynomial --- this can throw if not precomputed.</span></div>
+<div class="line"><a id="l01306" name="l01306"></a><span class="lineno"> 1306</span>    std::array&lt;<span class="keyword">typename</span> State::word_type, State::word_count()&gt; char_coefficients;</div>
+<div class="line"><a id="l01307" name="l01307"></a><span class="lineno"> 1307</span>    State::characteristic_coefficients(char_coefficients.begin());</div>
+<div class="line"><a id="l01308" name="l01308"></a><span class="lineno"> 1308</span> </div>
+<div class="line"><a id="l01309" name="l01309"></a><span class="lineno"> 1309</span>    <span class="comment">// The jump polynomial is x^J mod c(x) -- that computation expects to be handed p(x) where c(x) = x^n + p(x).</span></div>
+<div class="line"><a id="l01310" name="l01310"></a><span class="lineno"> 1310</span>    <span class="keywordflow">return</span> xso::reduce(char_coefficients, n, n_is_log2);</div>
+<div class="line"><a id="l01311" name="l01311"></a><span class="lineno"> 1311</span>}</div>
 </div>
-<div class="line"><a id="l01310" name="l01310"></a><span class="lineno"> 1310</span> </div>
-<div class="line"><a id="l01311" name="l01311"></a><span class="lineno"> 1311</span><span class="comment">// --------------------------------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a id="l01312" name="l01312"></a><span class="lineno"> 1312</span><span class="comment">// We have some &quot;internal&quot; functions that reduce x^J mod c(x) --- needed for the jump polynomial computations.</span></div>
-<div class="line"><a id="l01313" name="l01313"></a><span class="lineno"> 1313</span><span class="comment">// These re-implement a more general reduction method in the gf2::BitPolynomial class (https://nessan/github.io/gf2/).</span></div>
-<div class="line"><a id="l01314" name="l01314"></a><span class="lineno"> 1314</span><span class="comment">// Repeated here to make `xoshiro.h` self-contained.</span></div>
-<div class="line"><a id="l01315" name="l01315"></a><span class="lineno"> 1315</span><span class="comment">//</span></div>
-<div class="line"><a id="l01316" name="l01316"></a><span class="lineno"> 1316</span><span class="comment">// Not part of the public API but used for the jump calculations in the generator class.</span></div>
-<div class="line"><a id="l01317" name="l01317"></a><span class="lineno"> 1317</span><span class="comment">// --------------------------------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a id="l01318" name="l01318"></a><span class="lineno"> 1318</span> </div>
-<div class="line"><a id="l01319" name="l01319"></a><span class="lineno"> 1319</span><span class="comment">// Function to &quot;riffle&quot; a `src` word into two other words `lo` and `hi` containing the bits from `src`</span></div>
-<div class="line"><a id="l01320" name="l01320"></a><span class="lineno"> 1320</span><span class="comment">// interleaved with zeros.</span></div>
-<div class="line"><a id="l01321" name="l01321"></a><span class="lineno"> 1321</span><span class="comment">//</span></div>
-<div class="line"><a id="l01322" name="l01322"></a><span class="lineno"> 1322</span><span class="comment">// So the 8-bit word `abcdefgh` fills `lo` as `a0b0c0d0` and `hi` as  `e0f0g0h0`.</span></div>
+<div class="line"><a id="l01312" name="l01312"></a><span class="lineno"> 1312</span> </div>
+<div class="line"><a id="l01313" name="l01313"></a><span class="lineno"> 1313</span><span class="comment">// --------------------------------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a id="l01314" name="l01314"></a><span class="lineno"> 1314</span><span class="comment">// We have some &quot;internal&quot; functions that reduce x^J mod c(x) --- needed for the jump polynomial computations.</span></div>
+<div class="line"><a id="l01315" name="l01315"></a><span class="lineno"> 1315</span><span class="comment">// These re-implement a more general reduction method in the gf2::BitPolynomial class (https://nessan/github.io/gf2/).</span></div>
+<div class="line"><a id="l01316" name="l01316"></a><span class="lineno"> 1316</span><span class="comment">// Repeated here to make `xoshiro.h` self-contained.</span></div>
+<div class="line"><a id="l01317" name="l01317"></a><span class="lineno"> 1317</span><span class="comment">//</span></div>
+<div class="line"><a id="l01318" name="l01318"></a><span class="lineno"> 1318</span><span class="comment">// Not part of the public API but used for the jump calculations in the generator class.</span></div>
+<div class="line"><a id="l01319" name="l01319"></a><span class="lineno"> 1319</span><span class="comment">// --------------------------------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a id="l01320" name="l01320"></a><span class="lineno"> 1320</span> </div>
+<div class="line"><a id="l01321" name="l01321"></a><span class="lineno"> 1321</span><span class="comment">// Function to &quot;riffle&quot; a `src` word into two other words `lo` and `hi` containing the bits from `src`</span></div>
+<div class="line"><a id="l01322" name="l01322"></a><span class="lineno"> 1322</span><span class="comment">// interleaved with zeros.</span></div>
 <div class="line"><a id="l01323" name="l01323"></a><span class="lineno"> 1323</span><span class="comment">//</span></div>
-<div class="line"><a id="l01324" name="l01324"></a><span class="lineno"> 1324</span><span class="comment">// # Example</span></div>
-<div class="line"><a id="l01325" name="l01325"></a><span class="lineno"> 1325</span><span class="comment">// ```</span></div>
-<div class="line"><a id="l01326" name="l01326"></a><span class="lineno"> 1326</span><span class="comment">// std::uint8_t src = 0b1111&#39;1111;</span></div>
-<div class="line"><a id="l01327" name="l01327"></a><span class="lineno"> 1327</span><span class="comment">// std::uint8_t lo, hi;</span></div>
-<div class="line"><a id="l01328" name="l01328"></a><span class="lineno"> 1328</span><span class="comment">// xso::riffle(src, lo, hi);</span></div>
-<div class="line"><a id="l01329" name="l01329"></a><span class="lineno"> 1329</span><span class="comment">// assert_eq(lo, 0b01010101, &quot;lo is {:08b}&quot;, lo);</span></div>
-<div class="line"><a id="l01330" name="l01330"></a><span class="lineno"> 1330</span><span class="comment">// assert_eq(hi, 0b01010101, &quot;hi is {:08b}&quot;, hi);</span></div>
-<div class="line"><a id="l01331" name="l01331"></a><span class="lineno"> 1331</span><span class="comment">// ```</span></div>
-<div class="line"><a id="l01332" name="l01332"></a><span class="lineno"> 1332</span><span class="comment">// *NOTE:** This function is &quot;public&quot; for testing purposes only -- it is not part of the normal interface.</span></div>
-<div class="line"><a id="l01333" name="l01333"></a><span class="lineno"> 1333</span><span class="keyword">template</span>&lt;std::<span class="keywordtype">unsigned</span>_<span class="keywordtype">int</span>egral word_type&gt;</div>
-<div class="line"><a id="l01334" name="l01334"></a><span class="lineno"> 1334</span><span class="keyword">constexpr</span> <span class="keywordtype">void</span></div>
-<div class="line"><a id="l01335" name="l01335"></a><span class="lineno"> 1335</span>riffle(word_type src, word_type&amp; lo, word_type&amp; hi) {</div>
-<div class="line"><a id="l01336" name="l01336"></a><span class="lineno"> 1336</span>    <span class="comment">// Constants</span></div>
-<div class="line"><a id="l01337" name="l01337"></a><span class="lineno"> 1337</span>    <span class="keyword">constexpr</span> std::size_t bits_per_word = std::numeric_limits&lt;word_type&gt;::digits;</div>
-<div class="line"><a id="l01338" name="l01338"></a><span class="lineno"> 1338</span>    <span class="keyword">constexpr</span> std::size_t half_bits = bits_per_word / 2;</div>
-<div class="line"><a id="l01339" name="l01339"></a><span class="lineno"> 1339</span>    <span class="keyword">constexpr</span> word_type   one{1};</div>
-<div class="line"><a id="l01340" name="l01340"></a><span class="lineno"> 1340</span>    <span class="keyword">constexpr</span> word_type   ones = std::numeric_limits&lt;word_type&gt;::max();</div>
-<div class="line"><a id="l01341" name="l01341"></a><span class="lineno"> 1341</span> </div>
-<div class="line"><a id="l01342" name="l01342"></a><span class="lineno"> 1342</span>    <span class="comment">// Split the src into lo and hi halves.</span></div>
-<div class="line"><a id="l01343" name="l01343"></a><span class="lineno"> 1343</span>    lo = src &amp; (ones &gt;&gt; half_bits);</div>
-<div class="line"><a id="l01344" name="l01344"></a><span class="lineno"> 1344</span>    hi = src &gt;&gt; half_bits;</div>
-<div class="line"><a id="l01345" name="l01345"></a><span class="lineno"> 1345</span> </div>
-<div class="line"><a id="l01346" name="l01346"></a><span class="lineno"> 1346</span>    <span class="comment">// Some magic to interleave the respective halves with zeros.</span></div>
-<div class="line"><a id="l01347" name="l01347"></a><span class="lineno"> 1347</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> i = bits_per_word / 4; i &gt; 0; i /= 2) {</div>
-<div class="line"><a id="l01348" name="l01348"></a><span class="lineno"> 1348</span>        word_type div = word_type(one &lt;&lt; i) | one;</div>
-<div class="line"><a id="l01349" name="l01349"></a><span class="lineno"> 1349</span>        word_type msk = ones / div;</div>
-<div class="line"><a id="l01350" name="l01350"></a><span class="lineno"> 1350</span>        lo = (lo ^ (lo &lt;&lt; i)) &amp; msk;</div>
-<div class="line"><a id="l01351" name="l01351"></a><span class="lineno"> 1351</span>        hi = (hi ^ (hi &lt;&lt; i)) &amp; msk;</div>
-<div class="line"><a id="l01352" name="l01352"></a><span class="lineno"> 1352</span>    }</div>
-<div class="line"><a id="l01353" name="l01353"></a><span class="lineno"> 1353</span>}</div>
-<div class="line"><a id="l01354" name="l01354"></a><span class="lineno"> 1354</span> </div>
-<div class="line"><a id="l01355" name="l01355"></a><span class="lineno"> 1355</span><span class="comment">// Function that riffles a `src` array of unsigneds into two others `lo` and `hi` which will be filled with the</span></div>
-<div class="line"><a id="l01356" name="l01356"></a><span class="lineno"> 1356</span><span class="comment">// bits from `src` interleaved with zeros.</span></div>
-<div class="line"><a id="l01357" name="l01357"></a><span class="lineno"> 1357</span><span class="comment">//</span></div>
-<div class="line"><a id="l01358" name="l01358"></a><span class="lineno"> 1358</span><span class="comment">// We treat `lo` and `hi` as contiguous storage and fill the elements of `lo` first and then `hi`.</span></div>
-<div class="line"><a id="l01359" name="l01359"></a><span class="lineno"> 1359</span><span class="comment">// This allows us to optionally reuse `src` for the output array `lo` -- the call `riffle(src, src, hi)` will work.</span></div>
-<div class="line"><a id="l01360" name="l01360"></a><span class="lineno"> 1360</span><span class="comment">//</span></div>
-<div class="line"><a id="l01361" name="l01361"></a><span class="lineno"> 1361</span><span class="comment">// # Example</span></div>
-<div class="line"><a id="l01362" name="l01362"></a><span class="lineno"> 1362</span><span class="comment">// ```</span></div>
-<div class="line"><a id="l01363" name="l01363"></a><span class="lineno"> 1363</span><span class="comment">// std::array&lt;std::uint8_t, 2&gt; src = {0b1111&#39;1111, 0b1111&#39;1111};</span></div>
-<div class="line"><a id="l01364" name="l01364"></a><span class="lineno"> 1364</span><span class="comment">// std::array&lt;std::uint8_t, 2&gt; lo, hi;</span></div>
-<div class="line"><a id="l01365" name="l01365"></a><span class="lineno"> 1365</span><span class="comment">// xso::riffle(src, lo, hi);</span></div>
-<div class="line"><a id="l01366" name="l01366"></a><span class="lineno"> 1366</span><span class="comment">// assert_eq(lo, (std::array&lt;std::uint8_t, 2&gt;{0b01010101, 0b01010101}));</span></div>
-<div class="line"><a id="l01367" name="l01367"></a><span class="lineno"> 1367</span><span class="comment">// assert_eq(hi, (std::array&lt;std::uint8_t, 2&gt;{0b01010101, 0b01010101}));</span></div>
-<div class="line"><a id="l01368" name="l01368"></a><span class="lineno"> 1368</span><span class="comment">// ```</span></div>
-<div class="line"><a id="l01369" name="l01369"></a><span class="lineno"> 1369</span><span class="comment">// *NOTE:** This function is &quot;public&quot; for testing purposes only -- it is not part of the normal interface.</span></div>
-<div class="line"><a id="l01370" name="l01370"></a><span class="lineno"> 1370</span><span class="keyword">template</span>&lt;std::<span class="keywordtype">unsigned</span>_<span class="keywordtype">int</span>egral word_type, std::<span class="keywordtype">size_t</span> N&gt;</div>
-<div class="line"><a id="l01371" name="l01371"></a><span class="lineno"> 1371</span><span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">void</span></div>
-<div class="line"><a id="l01372" name="l01372"></a><span class="lineno"> 1372</span>riffle(<span class="keyword">const</span> std::array&lt;word_type, N&gt;&amp; src, std::array&lt;word_type, N&gt;&amp; lo, std::array&lt;word_type, N&gt;&amp; hi) {</div>
-<div class="line"><a id="l01373" name="l01373"></a><span class="lineno"> 1373</span>    <span class="comment">// We will riffle each word in src into two other words x &amp; y</span></div>
-<div class="line"><a id="l01374" name="l01374"></a><span class="lineno"> 1374</span>    word_type x, y;</div>
-<div class="line"><a id="l01375" name="l01375"></a><span class="lineno"> 1375</span> </div>
-<div class="line"><a id="l01376" name="l01376"></a><span class="lineno"> 1376</span>    <span class="comment">// We work through `src` in reverse order -- this allows the reuse of `src` for `lo`!</span></div>
-<div class="line"><a id="l01377" name="l01377"></a><span class="lineno"> 1377</span>    <span class="comment">// Treating [lo|hi] as contiguous storage, first working back through hi and then back through lo.</span></div>
-<div class="line"><a id="l01378" name="l01378"></a><span class="lineno"> 1378</span>    <span class="keywordflow">for</span> (std::size_t i = N; i-- &gt; 0;) {</div>
-<div class="line"><a id="l01379" name="l01379"></a><span class="lineno"> 1379</span>        riffle(src[i], x, y);</div>
-<div class="line"><a id="l01380" name="l01380"></a><span class="lineno"> 1380</span>        <span class="keywordflow">if</span> (2 * i + 1 &gt; N) {</div>
-<div class="line"><a id="l01381" name="l01381"></a><span class="lineno"> 1381</span>            <span class="comment">// Both x &amp; y go in hi -- note that if 2i + 1 - N &gt; 0 then 2i - N is &gt;= 0.</span></div>
-<div class="line"><a id="l01382" name="l01382"></a><span class="lineno"> 1382</span>            hi[2 * i - N] = x;</div>
-<div class="line"><a id="l01383" name="l01383"></a><span class="lineno"> 1383</span>            hi[2 * i + 1 - N] = y;</div>
-<div class="line"><a id="l01384" name="l01384"></a><span class="lineno"> 1384</span>        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (2 * i + 1 == N) {</div>
-<div class="line"><a id="l01385" name="l01385"></a><span class="lineno"> 1385</span>            <span class="comment">// Straddling situation where y goes in the first word of hi and x in the last word of lo.</span></div>
-<div class="line"><a id="l01386" name="l01386"></a><span class="lineno"> 1386</span>            lo[N - 1] = x;</div>
-<div class="line"><a id="l01387" name="l01387"></a><span class="lineno"> 1387</span>            hi[0] = y;</div>
-<div class="line"><a id="l01388" name="l01388"></a><span class="lineno"> 1388</span>        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l01389" name="l01389"></a><span class="lineno"> 1389</span>            <span class="comment">// Need to pop both x &amp; y into the lo array.</span></div>
-<div class="line"><a id="l01390" name="l01390"></a><span class="lineno"> 1390</span>            lo[2 * i] = x;</div>
-<div class="line"><a id="l01391" name="l01391"></a><span class="lineno"> 1391</span>            lo[2 * i + 1] = y;</div>
-<div class="line"><a id="l01392" name="l01392"></a><span class="lineno"> 1392</span>        }</div>
-<div class="line"><a id="l01393" name="l01393"></a><span class="lineno"> 1393</span>    }</div>
-<div class="line"><a id="l01394" name="l01394"></a><span class="lineno"> 1394</span>}</div>
-<div class="line"><a id="l01395" name="l01395"></a><span class="lineno"> 1395</span> </div>
-<div class="line"><a id="l01396" name="l01396"></a><span class="lineno"> 1396</span><span class="comment">// Function that computes r(x) = x^e mod c(x) in GF(2) where e = J or 2^J and J is an unsigned integer argument.</span></div>
-<div class="line"><a id="l01397" name="l01397"></a><span class="lineno"> 1397</span><span class="comment">//</span></div>
-<div class="line"><a id="l01398" name="l01398"></a><span class="lineno"> 1398</span><span class="comment">// The polynomial c(x) is monic of degree n so c(x) = x^n + p(x) where p(x) is a polynomial of degree less than n.</span></div>
-<div class="line"><a id="l01399" name="l01399"></a><span class="lineno"> 1399</span><span class="comment">// We are passed the n coefficients of p(x) packed into an array of unsigned integers.</span></div>
-<div class="line"><a id="l01400" name="l01400"></a><span class="lineno"> 1400</span><span class="comment">// We return the coefficients of r(x) = x^e mod c(x) packed into an array of unsigned integers in the same format.</span></div>
-<div class="line"><a id="l01401" name="l01401"></a><span class="lineno"> 1401</span><span class="comment">//</span></div>
-<div class="line"><a id="l01402" name="l01402"></a><span class="lineno"> 1402</span><span class="comment">// # Note</span></div>
-<div class="line"><a id="l01403" name="l01403"></a><span class="lineno"> 1403</span><span class="comment">// Any linting tool you use will (reasonably) complain that the complexity of this method is too high!</span></div>
-<div class="line"><a id="l01404" name="l01404"></a><span class="lineno"> 1404</span><span class="comment">// The method is a direct re-implementation of the `gf2::BitPolynomial::reduce` method which is also complex but</span></div>
-<div class="line"><a id="l01405" name="l01405"></a><span class="lineno"> 1405</span><span class="comment">// easier to understand as it is properly factored. The version here is is less general as it assumes that the</span></div>
-<div class="line"><a id="l01406" name="l01406"></a><span class="lineno"> 1406</span><span class="comment">// degree of p(x) is a multiple of 32.</span></div>
-<div class="line"><a id="l01407" name="l01407"></a><span class="lineno"> 1407</span><span class="comment">//</span></div>
-<div class="line"><a id="l01408" name="l01408"></a><span class="lineno"> 1408</span><span class="comment">// *NOTE:** This method &quot;public&quot; for testing purposes only -- it is not part of the normal interface.</span></div>
-<div class="line"><a id="l01409" name="l01409"></a><span class="lineno"> 1409</span><span class="keyword">template</span>&lt;std::<span class="keywordtype">unsigned</span>_<span class="keywordtype">int</span>egral word_type, std::<span class="keywordtype">size_t</span> N&gt;</div>
-<div class="line"><a id="l01410" name="l01410"></a><span class="lineno"> 1410</span><span class="keyword">constexpr</span> <span class="keyword">auto</span></div>
-<div class="line"><a id="l01411" name="l01411"></a><span class="lineno"> 1411</span>reduce(<span class="keyword">const</span> std::array&lt;word_type, N&gt;&amp; p, std::size_t J, <span class="keywordtype">bool</span> J_is_log2) {</div>
-<div class="line"><a id="l01412" name="l01412"></a><span class="lineno"> 1412</span> </div>
-<div class="line"><a id="l01413" name="l01413"></a><span class="lineno"> 1413</span>    <span class="comment">// We will return the coefficients of r(x) = x^e mod c(x) packed into an array of unsigned integers of this type.</span></div>
-<div class="line"><a id="l01414" name="l01414"></a><span class="lineno"> 1414</span>    <span class="keyword">using </span>array_type = std::array&lt;word_type, N&gt;;</div>
-<div class="line"><a id="l01415" name="l01415"></a><span class="lineno"> 1415</span> </div>
-<div class="line"><a id="l01416" name="l01416"></a><span class="lineno"> 1416</span>    <span class="comment">// Constant we use to indicate &quot;no such position&quot;/&quot;not found&quot; and a couple of others.</span></div>
-<div class="line"><a id="l01417" name="l01417"></a><span class="lineno"> 1417</span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span>      npos = <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(-1);</div>
-<div class="line"><a id="l01418" name="l01418"></a><span class="lineno"> 1418</span>    <span class="keyword">constexpr</span> word_type one{1};</div>
-<div class="line"><a id="l01419" name="l01419"></a><span class="lineno"> 1419</span> </div>
-<div class="line"><a id="l01420" name="l01420"></a><span class="lineno"> 1420</span>    <span class="comment">// The polynomial c(x) = x^n + p(x) where p(x) = p_0 + p_1 x + ... + p_{n-1} x^{n-1} and n is:</span></div>
-<div class="line"><a id="l01421" name="l01421"></a><span class="lineno"> 1421</span>    <span class="keyword">constexpr</span> std::size_t bits_per_word = std::numeric_limits&lt;word_type&gt;::digits;</div>
-<div class="line"><a id="l01422" name="l01422"></a><span class="lineno"> 1422</span>    <span class="keyword">constexpr</span> std::size_t n = N * bits_per_word;</div>
-<div class="line"><a id="l01423" name="l01423"></a><span class="lineno"> 1423</span> </div>
-<div class="line"><a id="l01424" name="l01424"></a><span class="lineno"> 1424</span>    <span class="comment">// lambda: Returns the index of the word that holds p_i.</span></div>
-<div class="line"><a id="l01425" name="l01425"></a><span class="lineno"> 1425</span>    <span class="keyword">auto</span> word = [=](std::size_t i) { <span class="keywordflow">return</span> i / bits_per_word; };</div>
-<div class="line"><a id="l01426" name="l01426"></a><span class="lineno"> 1426</span> </div>
-<div class="line"><a id="l01427" name="l01427"></a><span class="lineno"> 1427</span>    <span class="comment">// lambda: Returns the bit location of p_i inside the word that holds it.</span></div>
-<div class="line"><a id="l01428" name="l01428"></a><span class="lineno"> 1428</span>    <span class="keyword">auto</span> bit = [=](std::size_t i) { <span class="keywordflow">return</span> i % bits_per_word; };</div>
-<div class="line"><a id="l01429" name="l01429"></a><span class="lineno"> 1429</span> </div>
-<div class="line"><a id="l01430" name="l01430"></a><span class="lineno"> 1430</span>    <span class="comment">// lambda: Returns a mask that isolates p_i within the word that holds it.</span></div>
-<div class="line"><a id="l01431" name="l01431"></a><span class="lineno"> 1431</span>    <span class="keyword">auto</span> mask = [=](std::size_t i) { <span class="keywordflow">return</span> word_type{one &lt;&lt; bit(i)}; };</div>
-<div class="line"><a id="l01432" name="l01432"></a><span class="lineno"> 1432</span> </div>
-<div class="line"><a id="l01433" name="l01433"></a><span class="lineno"> 1433</span>    <span class="comment">// lambda: Returns true if poly_i is 1.</span></div>
-<div class="line"><a id="l01434" name="l01434"></a><span class="lineno"> 1434</span>    <span class="keyword">auto</span> test = [=](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; poly, std::size_t i) -&gt; <span class="keywordtype">bool</span> { <span class="keywordflow">return</span> poly[word(i)] &amp; mask(i); };</div>
-<div class="line"><a id="l01435" name="l01435"></a><span class="lineno"> 1435</span> </div>
-<div class="line"><a id="l01436" name="l01436"></a><span class="lineno"> 1436</span>    <span class="comment">// lambda: Sets poly_i to 1.</span></div>
-<div class="line"><a id="l01437" name="l01437"></a><span class="lineno"> 1437</span>    <span class="keyword">auto</span> set = [=](<span class="keyword">auto</span>&amp; poly, std::size_t i) { poly[word(i)] |= mask(i); };</div>
-<div class="line"><a id="l01438" name="l01438"></a><span class="lineno"> 1438</span> </div>
-<div class="line"><a id="l01439" name="l01439"></a><span class="lineno"> 1439</span>    <span class="comment">// lambda: Returns the index for the least significant set bit in the argument or `npos` if none set.</span></div>
-<div class="line"><a id="l01440" name="l01440"></a><span class="lineno"> 1440</span>    <span class="keyword">auto</span> lsb = [=](word_type w) { <span class="keywordflow">return</span> w == 0 ? npos : <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(std::countr_zero(w)); };</div>
-<div class="line"><a id="l01441" name="l01441"></a><span class="lineno"> 1441</span> </div>
-<div class="line"><a id="l01442" name="l01442"></a><span class="lineno"> 1442</span>    <span class="comment">// lambda: Returns the index for the most significant set bit in the argument or `npos` if none set.</span></div>
-<div class="line"><a id="l01443" name="l01443"></a><span class="lineno"> 1443</span>    <span class="keyword">auto</span> msb = [=](word_type w) { <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(std::bit_width(w) - 1); };</div>
-<div class="line"><a id="l01444" name="l01444"></a><span class="lineno"> 1444</span> </div>
-<div class="line"><a id="l01445" name="l01445"></a><span class="lineno"> 1445</span>    <span class="comment">// lambda: Returns the first set coefficient in poly or `npos` if the coefficients are all zero.</span></div>
-<div class="line"><a id="l01446" name="l01446"></a><span class="lineno"> 1446</span>    <span class="keyword">auto</span> first_set = [=](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; poly) {</div>
-<div class="line"><a id="l01447" name="l01447"></a><span class="lineno"> 1447</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span> i = 0uz; i &lt; N; ++i)</div>
-<div class="line"><a id="l01448" name="l01448"></a><span class="lineno"> 1448</span>            <span class="keywordflow">if</span> (poly[i] != 0) <span class="keywordflow">return</span> i * bits_per_word + lsb(poly[i]);</div>
-<div class="line"><a id="l01449" name="l01449"></a><span class="lineno"> 1449</span>        <span class="keywordflow">return</span> npos;</div>
-<div class="line"><a id="l01450" name="l01450"></a><span class="lineno"> 1450</span>    };</div>
-<div class="line"><a id="l01451" name="l01451"></a><span class="lineno"> 1451</span> </div>
-<div class="line"><a id="l01452" name="l01452"></a><span class="lineno"> 1452</span>    <span class="comment">// lambda: Returns the final set coefficient in poly or `npos` if the coefficients are all zero.</span></div>
-<div class="line"><a id="l01453" name="l01453"></a><span class="lineno"> 1453</span>    <span class="keyword">auto</span> final_set = [=](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; poly) {</div>
-<div class="line"><a id="l01454" name="l01454"></a><span class="lineno"> 1454</span>        std::size_t i = N;</div>
-<div class="line"><a id="l01455" name="l01455"></a><span class="lineno"> 1455</span>        <span class="keywordflow">while</span> (i--)</div>
-<div class="line"><a id="l01456" name="l01456"></a><span class="lineno"> 1456</span>            <span class="keywordflow">if</span> (poly[i] != 0) <span class="keywordflow">return</span> i * bits_per_word + msb(poly[i]);</div>
-<div class="line"><a id="l01457" name="l01457"></a><span class="lineno"> 1457</span>        <span class="keywordflow">return</span> npos;</div>
-<div class="line"><a id="l01458" name="l01458"></a><span class="lineno"> 1458</span>    };</div>
-<div class="line"><a id="l01459" name="l01459"></a><span class="lineno"> 1459</span> </div>
-<div class="line"><a id="l01460" name="l01460"></a><span class="lineno"> 1460</span>    <span class="comment">// lambda: Returns true if the highest coefficient in `poly` is set (then poly is said to be monic).</span></div>
-<div class="line"><a id="l01461" name="l01461"></a><span class="lineno"> 1461</span>    <span class="keyword">auto</span> monic = [=](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; poly) {</div>
-<div class="line"><a id="l01462" name="l01462"></a><span class="lineno"> 1462</span>        <span class="keyword">constexpr</span> std::size_t complement = bits_per_word - 1;</div>
-<div class="line"><a id="l01463" name="l01463"></a><span class="lineno"> 1463</span>        <span class="keyword">constexpr</span> <span class="keyword">auto</span>        final_bit_mask = word_type{one &lt;&lt; complement};</div>
-<div class="line"><a id="l01464" name="l01464"></a><span class="lineno"> 1464</span>        <span class="keywordflow">return</span> poly[N - 1] &amp; final_bit_mask;</div>
-<div class="line"><a id="l01465" name="l01465"></a><span class="lineno"> 1465</span>    };</div>
-<div class="line"><a id="l01466" name="l01466"></a><span class="lineno"> 1466</span> </div>
-<div class="line"><a id="l01467" name="l01467"></a><span class="lineno"> 1467</span>    <span class="comment">// lambda: Computes lhs &lt;- lhs + rhs which in GF(2) is equivalent to  lhs &lt;- lhs^rhs.</span></div>
-<div class="line"><a id="l01468" name="l01468"></a><span class="lineno"> 1468</span>    <span class="keyword">auto</span> add = [=](<span class="keyword">auto</span>&amp; lhs, <span class="keyword">const</span> <span class="keyword">auto</span>&amp; rhs) {</div>
-<div class="line"><a id="l01469" name="l01469"></a><span class="lineno"> 1469</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span> i = 0uz; i &lt; N; ++i) lhs[i] ^= rhs[i];</div>
-<div class="line"><a id="l01470" name="l01470"></a><span class="lineno"> 1470</span>    };</div>
-<div class="line"><a id="l01471" name="l01471"></a><span class="lineno"> 1471</span> </div>
-<div class="line"><a id="l01472" name="l01472"></a><span class="lineno"> 1472</span>    <span class="comment">// lambda: Performs a one place shift on the polynomial coefficients stored poly.</span></div>
-<div class="line"><a id="l01473" name="l01473"></a><span class="lineno"> 1473</span>    <span class="comment">// Shift is to the the right if you think the elements are in vector order [p0,p1,p2,p3] -&gt; [0,p0,p1,p2].</span></div>
-<div class="line"><a id="l01474" name="l01474"></a><span class="lineno"> 1474</span>    <span class="comment">// Shift is to the left when you think in bit order [b3,b2,b1,b0] -&gt; [b2,b1,b0,0].</span></div>
-<div class="line"><a id="l01475" name="l01475"></a><span class="lineno"> 1475</span>    <span class="keyword">auto</span> shift = [=](<span class="keyword">auto</span>&amp; poly) {</div>
-<div class="line"><a id="l01476" name="l01476"></a><span class="lineno"> 1476</span>        <span class="keyword">constexpr</span> std::size_t complement = bits_per_word - 1;</div>
-<div class="line"><a id="l01477" name="l01477"></a><span class="lineno"> 1477</span>        <span class="keywordflow">for</span> (std::size_t i = N - 1; i &gt; 0; --i) {</div>
-<div class="line"><a id="l01478" name="l01478"></a><span class="lineno"> 1478</span>            <span class="keyword">auto</span> l = <span class="keyword">static_cast&lt;</span>word_type<span class="keyword">&gt;</span>(poly[i] &lt;&lt; 1);</div>
-<div class="line"><a id="l01479" name="l01479"></a><span class="lineno"> 1479</span>            <span class="keyword">auto</span> r = <span class="keyword">static_cast&lt;</span>word_type<span class="keyword">&gt;</span>(poly[i - 1] &gt;&gt; complement);</div>
-<div class="line"><a id="l01480" name="l01480"></a><span class="lineno"> 1480</span>            poly[i] = l | r;</div>
-<div class="line"><a id="l01481" name="l01481"></a><span class="lineno"> 1481</span>        }</div>
-<div class="line"><a id="l01482" name="l01482"></a><span class="lineno"> 1482</span>        poly[0] &lt;&lt;= 1;</div>
-<div class="line"><a id="l01483" name="l01483"></a><span class="lineno"> 1483</span>    };</div>
-<div class="line"><a id="l01484" name="l01484"></a><span class="lineno"> 1484</span> </div>
-<div class="line"><a id="l01485" name="l01485"></a><span class="lineno"> 1485</span>    <span class="comment">// lambda: If degree[poly] &lt; n, this performs poly(x) &lt;- x*poly(x) mod c(x) where c(x) = x^n + p(x).</span></div>
-<div class="line"><a id="l01486" name="l01486"></a><span class="lineno"> 1486</span>    <span class="keyword">auto</span> times_x_step = [&amp;](<span class="keyword">auto</span>&amp; poly) {</div>
-<div class="line"><a id="l01487" name="l01487"></a><span class="lineno"> 1487</span>        <span class="keywordtype">bool</span> add_p = monic(poly);</div>
-<div class="line"><a id="l01488" name="l01488"></a><span class="lineno"> 1488</span>        shift(poly);</div>
-<div class="line"><a id="l01489" name="l01489"></a><span class="lineno"> 1489</span>        <span class="keywordflow">if</span> (add_p) add(poly, p);</div>
-<div class="line"><a id="l01490" name="l01490"></a><span class="lineno"> 1490</span>    };</div>
-<div class="line"><a id="l01491" name="l01491"></a><span class="lineno"> 1491</span> </div>
-<div class="line"><a id="l01492" name="l01492"></a><span class="lineno"> 1492</span>    <span class="comment">// We precompute x^{n + i} mod c(x) for i = 0, ..., n-1 starting from the known x^n mod c(x) = p.</span></div>
-<div class="line"><a id="l01493" name="l01493"></a><span class="lineno"> 1493</span>    <span class="comment">// Each x^{n + i} mod c(x) is a word-vector of coefficients and we put the lot into a std::vector.</span></div>
-<div class="line"><a id="l01494" name="l01494"></a><span class="lineno"> 1494</span>    std::vector&lt;array_type&gt; power_mod(n);</div>
-<div class="line"><a id="l01495" name="l01495"></a><span class="lineno"> 1495</span>    power_mod[0] = p;</div>
-<div class="line"><a id="l01496" name="l01496"></a><span class="lineno"> 1496</span>    <span class="keywordflow">for</span> (std::size_t i = 1; i &lt; n; ++i) {</div>
-<div class="line"><a id="l01497" name="l01497"></a><span class="lineno"> 1497</span>        power_mod[i] = power_mod[i - 1];</div>
-<div class="line"><a id="l01498" name="l01498"></a><span class="lineno"> 1498</span>        times_x_step(power_mod[i]);</div>
-<div class="line"><a id="l01499" name="l01499"></a><span class="lineno"> 1499</span>    }</div>
-<div class="line"><a id="l01500" name="l01500"></a><span class="lineno"> 1500</span> </div>
-<div class="line"><a id="l01501" name="l01501"></a><span class="lineno"> 1501</span>    <span class="comment">// Some work space we use below.</span></div>
-<div class="line"><a id="l01502" name="l01502"></a><span class="lineno"> 1502</span>    array_type hi;</div>
-<div class="line"><a id="l01503" name="l01503"></a><span class="lineno"> 1503</span> </div>
-<div class="line"><a id="l01504" name="l01504"></a><span class="lineno"> 1504</span>    <span class="comment">// lambda: If degree[poly] &lt; n, performs: poly(x) &lt;- poly(x)^2 mod c(x) where as usual c(x) = x^n + p(x).</span></div>
-<div class="line"><a id="l01505" name="l01505"></a><span class="lineno"> 1505</span>    <span class="keyword">auto</span> square_step = [&amp;](<span class="keyword">auto</span>&amp; poly) {</div>
-<div class="line"><a id="l01506" name="l01506"></a><span class="lineno"> 1506</span>        <span class="comment">// Compute poly(x)^2 -- in GF(2) this means interspersing all the coefficients with zeros.</span></div>
-<div class="line"><a id="l01507" name="l01507"></a><span class="lineno"> 1507</span>        <span class="comment">// We actually riffle poly directly into two arrays lo &amp; hi so that poly(x)^2 = lo(x) + x^n hi(x).</span></div>
-<div class="line"><a id="l01508" name="l01508"></a><span class="lineno"> 1508</span>        <span class="comment">// This only works because we assume n some multiple of N (i.e. all bits in poly matter).</span></div>
-<div class="line"><a id="l01509" name="l01509"></a><span class="lineno"> 1509</span>        <span class="comment">// NOTE: Our riffle method above for arrays lets us reuse the poly array for lo.</span></div>
-<div class="line"><a id="l01510" name="l01510"></a><span class="lineno"> 1510</span>        riffle(poly, poly, hi);</div>
-<div class="line"><a id="l01511" name="l01511"></a><span class="lineno"> 1511</span> </div>
-<div class="line"><a id="l01512" name="l01512"></a><span class="lineno"> 1512</span>        <span class="comment">// poly(x)^2 mod c(x) now is poly(x) + x^n hi(x) mod c(x) as degree[poly] &lt; n.</span></div>
-<div class="line"><a id="l01513" name="l01513"></a><span class="lineno"> 1513</span>        <span class="comment">// Add the x^n hi(x) mod c(x) term-by-term noting that at most every second term in hi(x) is 1.</span></div>
-<div class="line"><a id="l01514" name="l01514"></a><span class="lineno"> 1514</span>        <span class="keyword">auto</span> hi_first = first_set(hi);</div>
-<div class="line"><a id="l01515" name="l01515"></a><span class="lineno"> 1515</span>        <span class="keywordflow">if</span> (hi_first != npos) {</div>
-<div class="line"><a id="l01516" name="l01516"></a><span class="lineno"> 1516</span>            <span class="keyword">auto</span> hi_final = final_set(hi);</div>
-<div class="line"><a id="l01517" name="l01517"></a><span class="lineno"> 1517</span>            <span class="keywordflow">for</span> (std::size_t i = hi_first; i &lt;= hi_final; i += 2)</div>
-<div class="line"><a id="l01518" name="l01518"></a><span class="lineno"> 1518</span>                <span class="keywordflow">if</span> (test(hi, i)) add(poly, power_mod[i]);</div>
-<div class="line"><a id="l01519" name="l01519"></a><span class="lineno"> 1519</span>        }</div>
-<div class="line"><a id="l01520" name="l01520"></a><span class="lineno"> 1520</span>    };</div>
-<div class="line"><a id="l01521" name="l01521"></a><span class="lineno"> 1521</span> </div>
-<div class="line"><a id="l01522" name="l01522"></a><span class="lineno"> 1522</span>    <span class="comment">// Initialize our return value to all zeros.</span></div>
-<div class="line"><a id="l01523" name="l01523"></a><span class="lineno"> 1523</span>    array_type result;</div>
-<div class="line"><a id="l01524" name="l01524"></a><span class="lineno"> 1524</span>    result.fill(0);</div>
-<div class="line"><a id="l01525" name="l01525"></a><span class="lineno"> 1525</span> </div>
-<div class="line"><a id="l01526" name="l01526"></a><span class="lineno"> 1526</span>    <span class="comment">// Case: e = 2^J -- we just do J squaring steps starting from r(x) = x to get to  x^(2^J) mod c(x).</span></div>
-<div class="line"><a id="l01527" name="l01527"></a><span class="lineno"> 1527</span>    <span class="keywordflow">if</span> (J_is_log2) {</div>
-<div class="line"><a id="l01528" name="l01528"></a><span class="lineno"> 1528</span>        set(result, 1);</div>
-<div class="line"><a id="l01529" name="l01529"></a><span class="lineno"> 1529</span>        <span class="keywordflow">for</span> (std::size_t j = 0; j &lt; J; ++j) square_step(result);</div>
-<div class="line"><a id="l01530" name="l01530"></a><span class="lineno"> 1530</span>        <span class="keywordflow">return</span> result;</div>
-<div class="line"><a id="l01531" name="l01531"></a><span class="lineno"> 1531</span>    }</div>
-<div class="line"><a id="l01532" name="l01532"></a><span class="lineno"> 1532</span> </div>
-<div class="line"><a id="l01533" name="l01533"></a><span class="lineno"> 1533</span>    <span class="comment">// Case e = J &lt; n: Then x^J mod c(x) = x^J so we can set the appropriate coefficient in r and return.</span></div>
-<div class="line"><a id="l01534" name="l01534"></a><span class="lineno"> 1534</span>    <span class="keywordflow">if</span> (J &lt; n) {</div>
-<div class="line"><a id="l01535" name="l01535"></a><span class="lineno"> 1535</span>        set(result, J);</div>
-<div class="line"><a id="l01536" name="l01536"></a><span class="lineno"> 1536</span>        <span class="keywordflow">return</span> result;</div>
-<div class="line"><a id="l01537" name="l01537"></a><span class="lineno"> 1537</span>    }</div>
-<div class="line"><a id="l01538" name="l01538"></a><span class="lineno"> 1538</span> </div>
-<div class="line"><a id="l01539" name="l01539"></a><span class="lineno"> 1539</span>    <span class="comment">// Case e = J = n: Then x^J mod c(x) = p(x).</span></div>
-<div class="line"><a id="l01540" name="l01540"></a><span class="lineno"> 1540</span>    <span class="keywordflow">if</span> (J == n) <span class="keywordflow">return</span> p;</div>
-<div class="line"><a id="l01541" name="l01541"></a><span class="lineno"> 1541</span> </div>
-<div class="line"><a id="l01542" name="l01542"></a><span class="lineno"> 1542</span>    <span class="comment">// Case e = J &gt; n: We use a square &amp; multiply algorithm:</span></div>
-<div class="line"><a id="l01543" name="l01543"></a><span class="lineno"> 1543</span>    <span class="comment">// Note that if e.g. J = 0b00010111 then std::bit_floor(J) = 0b00010000.</span></div>
-<div class="line"><a id="l01544" name="l01544"></a><span class="lineno"> 1544</span>    std::size_t J_bit = std::bit_floor(J);</div>
-<div class="line"><a id="l01545" name="l01545"></a><span class="lineno"> 1545</span> </div>
-<div class="line"><a id="l01546" name="l01546"></a><span class="lineno"> 1546</span>    <span class="comment">// Start with r(x) = x mod c(x) which takes care of the most significant binary digit in J.</span></div>
-<div class="line"><a id="l01547" name="l01547"></a><span class="lineno"> 1547</span>    set(result, 1);</div>
-<div class="line"><a id="l01548" name="l01548"></a><span class="lineno"> 1548</span>    J_bit &gt;&gt;= 1;</div>
-<div class="line"><a id="l01549" name="l01549"></a><span class="lineno"> 1549</span> </div>
-<div class="line"><a id="l01550" name="l01550"></a><span class="lineno"> 1550</span>    <span class="comment">// And off we go ...</span></div>
-<div class="line"><a id="l01551" name="l01551"></a><span class="lineno"> 1551</span>    <span class="keywordflow">while</span> (J_bit) {</div>
-<div class="line"><a id="l01552" name="l01552"></a><span class="lineno"> 1552</span> </div>
-<div class="line"><a id="l01553" name="l01553"></a><span class="lineno"> 1553</span>        <span class="comment">// Always do a square step and then a times_x step if necessary (i.e. if current bit in J is set).</span></div>
-<div class="line"><a id="l01554" name="l01554"></a><span class="lineno"> 1554</span>        square_step(result);</div>
-<div class="line"><a id="l01555" name="l01555"></a><span class="lineno"> 1555</span>        <span class="keywordflow">if</span> (J &amp; J_bit) times_x_step(result);</div>
-<div class="line"><a id="l01556" name="l01556"></a><span class="lineno"> 1556</span> </div>
-<div class="line"><a id="l01557" name="l01557"></a><span class="lineno"> 1557</span>        <span class="comment">// On to the next bit position in n.</span></div>
-<div class="line"><a id="l01558" name="l01558"></a><span class="lineno"> 1558</span>        J_bit &gt;&gt;= 1;</div>
-<div class="line"><a id="l01559" name="l01559"></a><span class="lineno"> 1559</span>    }</div>
-<div class="line"><a id="l01560" name="l01560"></a><span class="lineno"> 1560</span>    <span class="keywordflow">return</span> result;</div>
-<div class="line"><a id="l01561" name="l01561"></a><span class="lineno"> 1561</span>}</div>
-<div class="line"><a id="l01562" name="l01562"></a><span class="lineno"> 1562</span> </div>
-<div class="line"><a id="l01563" name="l01563"></a><span class="lineno"> 1563</span><span class="preprocessor">#ifdef GF2</span></div>
+<div class="line"><a id="l01324" name="l01324"></a><span class="lineno"> 1324</span><span class="comment">// So the 8-bit word `abcdefgh` fills `lo` as `a0b0c0d0` and `hi` as  `e0f0g0h0`.</span></div>
+<div class="line"><a id="l01325" name="l01325"></a><span class="lineno"> 1325</span><span class="comment">//</span></div>
+<div class="line"><a id="l01326" name="l01326"></a><span class="lineno"> 1326</span><span class="comment">// # Example</span></div>
+<div class="line"><a id="l01327" name="l01327"></a><span class="lineno"> 1327</span><span class="comment">// ```</span></div>
+<div class="line"><a id="l01328" name="l01328"></a><span class="lineno"> 1328</span><span class="comment">// std::uint8_t src = 0b1111&#39;1111;</span></div>
+<div class="line"><a id="l01329" name="l01329"></a><span class="lineno"> 1329</span><span class="comment">// std::uint8_t lo, hi;</span></div>
+<div class="line"><a id="l01330" name="l01330"></a><span class="lineno"> 1330</span><span class="comment">// xso::riffle(src, lo, hi);</span></div>
+<div class="line"><a id="l01331" name="l01331"></a><span class="lineno"> 1331</span><span class="comment">// assert_eq(lo, 0b01010101, &quot;lo is {:08b}&quot;, lo);</span></div>
+<div class="line"><a id="l01332" name="l01332"></a><span class="lineno"> 1332</span><span class="comment">// assert_eq(hi, 0b01010101, &quot;hi is {:08b}&quot;, hi);</span></div>
+<div class="line"><a id="l01333" name="l01333"></a><span class="lineno"> 1333</span><span class="comment">// ```</span></div>
+<div class="line"><a id="l01334" name="l01334"></a><span class="lineno"> 1334</span><span class="comment">// *NOTE:** This function is &quot;public&quot; for testing purposes only -- it is not part of the normal interface.</span></div>
+<div class="line"><a id="l01335" name="l01335"></a><span class="lineno"> 1335</span><span class="keyword">template</span>&lt;std::<span class="keywordtype">unsigned</span>_<span class="keywordtype">int</span>egral word_type&gt;</div>
+<div class="line"><a id="l01336" name="l01336"></a><span class="lineno"> 1336</span><span class="keyword">constexpr</span> <span class="keywordtype">void</span></div>
+<div class="line"><a id="l01337" name="l01337"></a><span class="lineno"> 1337</span>riffle(word_type src, word_type&amp; lo, word_type&amp; hi) {</div>
+<div class="line"><a id="l01338" name="l01338"></a><span class="lineno"> 1338</span>    <span class="comment">// Constants</span></div>
+<div class="line"><a id="l01339" name="l01339"></a><span class="lineno"> 1339</span>    <span class="keyword">constexpr</span> std::size_t bits_per_word = std::numeric_limits&lt;word_type&gt;::digits;</div>
+<div class="line"><a id="l01340" name="l01340"></a><span class="lineno"> 1340</span>    <span class="keyword">constexpr</span> std::size_t half_bits = bits_per_word / 2;</div>
+<div class="line"><a id="l01341" name="l01341"></a><span class="lineno"> 1341</span>    <span class="keyword">constexpr</span> word_type   one{1};</div>
+<div class="line"><a id="l01342" name="l01342"></a><span class="lineno"> 1342</span>    <span class="keyword">constexpr</span> word_type   ones = std::numeric_limits&lt;word_type&gt;::max();</div>
+<div class="line"><a id="l01343" name="l01343"></a><span class="lineno"> 1343</span> </div>
+<div class="line"><a id="l01344" name="l01344"></a><span class="lineno"> 1344</span>    <span class="comment">// Split the src into lo and hi halves.</span></div>
+<div class="line"><a id="l01345" name="l01345"></a><span class="lineno"> 1345</span>    lo = src &amp; (ones &gt;&gt; half_bits);</div>
+<div class="line"><a id="l01346" name="l01346"></a><span class="lineno"> 1346</span>    hi = src &gt;&gt; half_bits;</div>
+<div class="line"><a id="l01347" name="l01347"></a><span class="lineno"> 1347</span> </div>
+<div class="line"><a id="l01348" name="l01348"></a><span class="lineno"> 1348</span>    <span class="comment">// Some magic to interleave the respective halves with zeros.</span></div>
+<div class="line"><a id="l01349" name="l01349"></a><span class="lineno"> 1349</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> i = bits_per_word / 4; i &gt; 0; i /= 2) {</div>
+<div class="line"><a id="l01350" name="l01350"></a><span class="lineno"> 1350</span>        word_type div = word_type(one &lt;&lt; i) | one;</div>
+<div class="line"><a id="l01351" name="l01351"></a><span class="lineno"> 1351</span>        word_type msk = ones / div;</div>
+<div class="line"><a id="l01352" name="l01352"></a><span class="lineno"> 1352</span>        lo = (lo ^ (lo &lt;&lt; i)) &amp; msk;</div>
+<div class="line"><a id="l01353" name="l01353"></a><span class="lineno"> 1353</span>        hi = (hi ^ (hi &lt;&lt; i)) &amp; msk;</div>
+<div class="line"><a id="l01354" name="l01354"></a><span class="lineno"> 1354</span>    }</div>
+<div class="line"><a id="l01355" name="l01355"></a><span class="lineno"> 1355</span>}</div>
+<div class="line"><a id="l01356" name="l01356"></a><span class="lineno"> 1356</span> </div>
+<div class="line"><a id="l01357" name="l01357"></a><span class="lineno"> 1357</span><span class="comment">// Function that riffles a `src` array of unsigneds into two others `lo` and `hi` which will be filled with the</span></div>
+<div class="line"><a id="l01358" name="l01358"></a><span class="lineno"> 1358</span><span class="comment">// bits from `src` interleaved with zeros.</span></div>
+<div class="line"><a id="l01359" name="l01359"></a><span class="lineno"> 1359</span><span class="comment">//</span></div>
+<div class="line"><a id="l01360" name="l01360"></a><span class="lineno"> 1360</span><span class="comment">// We treat `lo` and `hi` as contiguous storage and fill the elements of `lo` first and then `hi`.</span></div>
+<div class="line"><a id="l01361" name="l01361"></a><span class="lineno"> 1361</span><span class="comment">// This allows us to optionally reuse `src` for the output array `lo` -- the call `riffle(src, src, hi)` will work.</span></div>
+<div class="line"><a id="l01362" name="l01362"></a><span class="lineno"> 1362</span><span class="comment">//</span></div>
+<div class="line"><a id="l01363" name="l01363"></a><span class="lineno"> 1363</span><span class="comment">// # Example</span></div>
+<div class="line"><a id="l01364" name="l01364"></a><span class="lineno"> 1364</span><span class="comment">// ```</span></div>
+<div class="line"><a id="l01365" name="l01365"></a><span class="lineno"> 1365</span><span class="comment">// std::array&lt;std::uint8_t, 2&gt; src = {0b1111&#39;1111, 0b1111&#39;1111};</span></div>
+<div class="line"><a id="l01366" name="l01366"></a><span class="lineno"> 1366</span><span class="comment">// std::array&lt;std::uint8_t, 2&gt; lo, hi;</span></div>
+<div class="line"><a id="l01367" name="l01367"></a><span class="lineno"> 1367</span><span class="comment">// xso::riffle(src, lo, hi);</span></div>
+<div class="line"><a id="l01368" name="l01368"></a><span class="lineno"> 1368</span><span class="comment">// assert_eq(lo, (std::array&lt;std::uint8_t, 2&gt;{0b01010101, 0b01010101}));</span></div>
+<div class="line"><a id="l01369" name="l01369"></a><span class="lineno"> 1369</span><span class="comment">// assert_eq(hi, (std::array&lt;std::uint8_t, 2&gt;{0b01010101, 0b01010101}));</span></div>
+<div class="line"><a id="l01370" name="l01370"></a><span class="lineno"> 1370</span><span class="comment">// ```</span></div>
+<div class="line"><a id="l01371" name="l01371"></a><span class="lineno"> 1371</span><span class="comment">// *NOTE:** This function is &quot;public&quot; for testing purposes only -- it is not part of the normal interface.</span></div>
+<div class="line"><a id="l01372" name="l01372"></a><span class="lineno"> 1372</span><span class="keyword">template</span>&lt;std::<span class="keywordtype">unsigned</span>_<span class="keywordtype">int</span>egral word_type, std::<span class="keywordtype">size_t</span> N&gt;</div>
+<div class="line"><a id="l01373" name="l01373"></a><span class="lineno"> 1373</span><span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">void</span></div>
+<div class="line"><a id="l01374" name="l01374"></a><span class="lineno"> 1374</span>riffle(<span class="keyword">const</span> std::array&lt;word_type, N&gt;&amp; src, std::array&lt;word_type, N&gt;&amp; lo, std::array&lt;word_type, N&gt;&amp; hi) {</div>
+<div class="line"><a id="l01375" name="l01375"></a><span class="lineno"> 1375</span>    <span class="comment">// We will riffle each word in src into two other words x &amp; y</span></div>
+<div class="line"><a id="l01376" name="l01376"></a><span class="lineno"> 1376</span>    word_type x, y;</div>
+<div class="line"><a id="l01377" name="l01377"></a><span class="lineno"> 1377</span> </div>
+<div class="line"><a id="l01378" name="l01378"></a><span class="lineno"> 1378</span>    <span class="comment">// We work through `src` in reverse order -- this allows the reuse of `src` for `lo`!</span></div>
+<div class="line"><a id="l01379" name="l01379"></a><span class="lineno"> 1379</span>    <span class="comment">// Treating [lo|hi] as contiguous storage, first working back through hi and then back through lo.</span></div>
+<div class="line"><a id="l01380" name="l01380"></a><span class="lineno"> 1380</span>    <span class="keywordflow">for</span> (std::size_t i = N; i-- &gt; 0;) {</div>
+<div class="line"><a id="l01381" name="l01381"></a><span class="lineno"> 1381</span>        riffle(src[i], x, y);</div>
+<div class="line"><a id="l01382" name="l01382"></a><span class="lineno"> 1382</span>        <span class="keywordflow">if</span> (2 * i + 1 &gt; N) {</div>
+<div class="line"><a id="l01383" name="l01383"></a><span class="lineno"> 1383</span>            <span class="comment">// Both x &amp; y go in hi -- note that if 2i + 1 - N &gt; 0 then 2i - N is &gt;= 0.</span></div>
+<div class="line"><a id="l01384" name="l01384"></a><span class="lineno"> 1384</span>            hi[2 * i - N] = x;</div>
+<div class="line"><a id="l01385" name="l01385"></a><span class="lineno"> 1385</span>            hi[2 * i + 1 - N] = y;</div>
+<div class="line"><a id="l01386" name="l01386"></a><span class="lineno"> 1386</span>        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (2 * i + 1 == N) {</div>
+<div class="line"><a id="l01387" name="l01387"></a><span class="lineno"> 1387</span>            <span class="comment">// Straddling situation where y goes in the first word of hi and x in the last word of lo.</span></div>
+<div class="line"><a id="l01388" name="l01388"></a><span class="lineno"> 1388</span>            lo[N - 1] = x;</div>
+<div class="line"><a id="l01389" name="l01389"></a><span class="lineno"> 1389</span>            hi[0] = y;</div>
+<div class="line"><a id="l01390" name="l01390"></a><span class="lineno"> 1390</span>        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l01391" name="l01391"></a><span class="lineno"> 1391</span>            <span class="comment">// Need to pop both x &amp; y into the lo array.</span></div>
+<div class="line"><a id="l01392" name="l01392"></a><span class="lineno"> 1392</span>            lo[2 * i] = x;</div>
+<div class="line"><a id="l01393" name="l01393"></a><span class="lineno"> 1393</span>            lo[2 * i + 1] = y;</div>
+<div class="line"><a id="l01394" name="l01394"></a><span class="lineno"> 1394</span>        }</div>
+<div class="line"><a id="l01395" name="l01395"></a><span class="lineno"> 1395</span>    }</div>
+<div class="line"><a id="l01396" name="l01396"></a><span class="lineno"> 1396</span>}</div>
+<div class="line"><a id="l01397" name="l01397"></a><span class="lineno"> 1397</span> </div>
+<div class="line"><a id="l01398" name="l01398"></a><span class="lineno"> 1398</span><span class="comment">// Function that computes r(x) = x^e mod c(x) in GF(2) where e = J or 2^J and J is an unsigned integer argument.</span></div>
+<div class="line"><a id="l01399" name="l01399"></a><span class="lineno"> 1399</span><span class="comment">//</span></div>
+<div class="line"><a id="l01400" name="l01400"></a><span class="lineno"> 1400</span><span class="comment">// The polynomial c(x) is monic of degree n so c(x) = x^n + p(x) where p(x) is a polynomial of degree less than n.</span></div>
+<div class="line"><a id="l01401" name="l01401"></a><span class="lineno"> 1401</span><span class="comment">// We are passed the n coefficients of p(x) packed into an array of unsigned integers.</span></div>
+<div class="line"><a id="l01402" name="l01402"></a><span class="lineno"> 1402</span><span class="comment">// We return the coefficients of r(x) = x^e mod c(x) packed into an array of unsigned integers in the same format.</span></div>
+<div class="line"><a id="l01403" name="l01403"></a><span class="lineno"> 1403</span><span class="comment">//</span></div>
+<div class="line"><a id="l01404" name="l01404"></a><span class="lineno"> 1404</span><span class="comment">// # Note</span></div>
+<div class="line"><a id="l01405" name="l01405"></a><span class="lineno"> 1405</span><span class="comment">// Any linting tool you use will (reasonably) complain that the complexity of this method is too high!</span></div>
+<div class="line"><a id="l01406" name="l01406"></a><span class="lineno"> 1406</span><span class="comment">// The method is a direct re-implementation of the `gf2::BitPolynomial::reduce` method which is also complex but</span></div>
+<div class="line"><a id="l01407" name="l01407"></a><span class="lineno"> 1407</span><span class="comment">// easier to understand as it is properly factored. The version here is is less general as it assumes that the</span></div>
+<div class="line"><a id="l01408" name="l01408"></a><span class="lineno"> 1408</span><span class="comment">// degree of p(x) is a multiple of 32.</span></div>
+<div class="line"><a id="l01409" name="l01409"></a><span class="lineno"> 1409</span><span class="comment">//</span></div>
+<div class="line"><a id="l01410" name="l01410"></a><span class="lineno"> 1410</span><span class="comment">// *NOTE:** This method &quot;public&quot; for testing purposes only -- it is not part of the normal interface.</span></div>
+<div class="line"><a id="l01411" name="l01411"></a><span class="lineno"> 1411</span><span class="keyword">template</span>&lt;std::<span class="keywordtype">unsigned</span>_<span class="keywordtype">int</span>egral word_type, std::<span class="keywordtype">size_t</span> N&gt;</div>
+<div class="line"><a id="l01412" name="l01412"></a><span class="lineno"> 1412</span><span class="keyword">constexpr</span> <span class="keyword">auto</span></div>
+<div class="line"><a id="l01413" name="l01413"></a><span class="lineno"> 1413</span>reduce(<span class="keyword">const</span> std::array&lt;word_type, N&gt;&amp; p, std::size_t J, <span class="keywordtype">bool</span> J_is_log2) {</div>
+<div class="line"><a id="l01414" name="l01414"></a><span class="lineno"> 1414</span> </div>
+<div class="line"><a id="l01415" name="l01415"></a><span class="lineno"> 1415</span>    <span class="comment">// We will return the coefficients of r(x) = x^e mod c(x) packed into an array of unsigned integers of this type.</span></div>
+<div class="line"><a id="l01416" name="l01416"></a><span class="lineno"> 1416</span>    <span class="keyword">using </span>array_type = std::array&lt;word_type, N&gt;;</div>
+<div class="line"><a id="l01417" name="l01417"></a><span class="lineno"> 1417</span> </div>
+<div class="line"><a id="l01418" name="l01418"></a><span class="lineno"> 1418</span>    <span class="comment">// Constant we use to indicate &quot;no such position&quot;/&quot;not found&quot; and a couple of others.</span></div>
+<div class="line"><a id="l01419" name="l01419"></a><span class="lineno"> 1419</span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span>      npos = <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(-1);</div>
+<div class="line"><a id="l01420" name="l01420"></a><span class="lineno"> 1420</span>    <span class="keyword">constexpr</span> word_type one{1};</div>
+<div class="line"><a id="l01421" name="l01421"></a><span class="lineno"> 1421</span> </div>
+<div class="line"><a id="l01422" name="l01422"></a><span class="lineno"> 1422</span>    <span class="comment">// The polynomial c(x) = x^n + p(x) where p(x) = p_0 + p_1 x + ... + p_{n-1} x^{n-1} and n is:</span></div>
+<div class="line"><a id="l01423" name="l01423"></a><span class="lineno"> 1423</span>    <span class="keyword">constexpr</span> std::size_t bits_per_word = std::numeric_limits&lt;word_type&gt;::digits;</div>
+<div class="line"><a id="l01424" name="l01424"></a><span class="lineno"> 1424</span>    <span class="keyword">constexpr</span> std::size_t n = N * bits_per_word;</div>
+<div class="line"><a id="l01425" name="l01425"></a><span class="lineno"> 1425</span> </div>
+<div class="line"><a id="l01426" name="l01426"></a><span class="lineno"> 1426</span>    <span class="comment">// lambda: Returns the index of the word that holds p_i.</span></div>
+<div class="line"><a id="l01427" name="l01427"></a><span class="lineno"> 1427</span>    <span class="keyword">auto</span> word = [=](std::size_t i) { <span class="keywordflow">return</span> i / bits_per_word; };</div>
+<div class="line"><a id="l01428" name="l01428"></a><span class="lineno"> 1428</span> </div>
+<div class="line"><a id="l01429" name="l01429"></a><span class="lineno"> 1429</span>    <span class="comment">// lambda: Returns the bit location of p_i inside the word that holds it.</span></div>
+<div class="line"><a id="l01430" name="l01430"></a><span class="lineno"> 1430</span>    <span class="keyword">auto</span> bit = [=](std::size_t i) { <span class="keywordflow">return</span> i % bits_per_word; };</div>
+<div class="line"><a id="l01431" name="l01431"></a><span class="lineno"> 1431</span> </div>
+<div class="line"><a id="l01432" name="l01432"></a><span class="lineno"> 1432</span>    <span class="comment">// lambda: Returns a mask that isolates p_i within the word that holds it.</span></div>
+<div class="line"><a id="l01433" name="l01433"></a><span class="lineno"> 1433</span>    <span class="keyword">auto</span> mask = [=](std::size_t i) { <span class="keywordflow">return</span> word_type{one &lt;&lt; bit(i)}; };</div>
+<div class="line"><a id="l01434" name="l01434"></a><span class="lineno"> 1434</span> </div>
+<div class="line"><a id="l01435" name="l01435"></a><span class="lineno"> 1435</span>    <span class="comment">// lambda: Returns true if poly_i is 1.</span></div>
+<div class="line"><a id="l01436" name="l01436"></a><span class="lineno"> 1436</span>    <span class="keyword">auto</span> test = [=](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; poly, std::size_t i) -&gt; <span class="keywordtype">bool</span> { <span class="keywordflow">return</span> poly[word(i)] &amp; mask(i); };</div>
+<div class="line"><a id="l01437" name="l01437"></a><span class="lineno"> 1437</span> </div>
+<div class="line"><a id="l01438" name="l01438"></a><span class="lineno"> 1438</span>    <span class="comment">// lambda: Sets poly_i to 1.</span></div>
+<div class="line"><a id="l01439" name="l01439"></a><span class="lineno"> 1439</span>    <span class="keyword">auto</span> set = [=](<span class="keyword">auto</span>&amp; poly, std::size_t i) { poly[word(i)] |= mask(i); };</div>
+<div class="line"><a id="l01440" name="l01440"></a><span class="lineno"> 1440</span> </div>
+<div class="line"><a id="l01441" name="l01441"></a><span class="lineno"> 1441</span>    <span class="comment">// lambda: Returns the index for the least significant set bit in the argument or `npos` if none set.</span></div>
+<div class="line"><a id="l01442" name="l01442"></a><span class="lineno"> 1442</span>    <span class="keyword">auto</span> lsb = [=](word_type w) { <span class="keywordflow">return</span> w == 0 ? npos : <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(std::countr_zero(w)); };</div>
+<div class="line"><a id="l01443" name="l01443"></a><span class="lineno"> 1443</span> </div>
+<div class="line"><a id="l01444" name="l01444"></a><span class="lineno"> 1444</span>    <span class="comment">// lambda: Returns the index for the most significant set bit in the argument or `npos` if none set.</span></div>
+<div class="line"><a id="l01445" name="l01445"></a><span class="lineno"> 1445</span>    <span class="keyword">auto</span> msb = [=](word_type w) { <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(std::bit_width(w) - 1); };</div>
+<div class="line"><a id="l01446" name="l01446"></a><span class="lineno"> 1446</span> </div>
+<div class="line"><a id="l01447" name="l01447"></a><span class="lineno"> 1447</span>    <span class="comment">// lambda: Returns the first set coefficient in poly or `npos` if the coefficients are all zero.</span></div>
+<div class="line"><a id="l01448" name="l01448"></a><span class="lineno"> 1448</span>    <span class="keyword">auto</span> first_set = [=](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; poly) {</div>
+<div class="line"><a id="l01449" name="l01449"></a><span class="lineno"> 1449</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span> i = 0uz; i &lt; N; ++i)</div>
+<div class="line"><a id="l01450" name="l01450"></a><span class="lineno"> 1450</span>            <span class="keywordflow">if</span> (poly[i] != 0) <span class="keywordflow">return</span> i * bits_per_word + lsb(poly[i]);</div>
+<div class="line"><a id="l01451" name="l01451"></a><span class="lineno"> 1451</span>        <span class="keywordflow">return</span> npos;</div>
+<div class="line"><a id="l01452" name="l01452"></a><span class="lineno"> 1452</span>    };</div>
+<div class="line"><a id="l01453" name="l01453"></a><span class="lineno"> 1453</span> </div>
+<div class="line"><a id="l01454" name="l01454"></a><span class="lineno"> 1454</span>    <span class="comment">// lambda: Returns the final set coefficient in poly or `npos` if the coefficients are all zero.</span></div>
+<div class="line"><a id="l01455" name="l01455"></a><span class="lineno"> 1455</span>    <span class="keyword">auto</span> final_set = [=](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; poly) {</div>
+<div class="line"><a id="l01456" name="l01456"></a><span class="lineno"> 1456</span>        std::size_t i = N;</div>
+<div class="line"><a id="l01457" name="l01457"></a><span class="lineno"> 1457</span>        <span class="keywordflow">while</span> (i--)</div>
+<div class="line"><a id="l01458" name="l01458"></a><span class="lineno"> 1458</span>            <span class="keywordflow">if</span> (poly[i] != 0) <span class="keywordflow">return</span> i * bits_per_word + msb(poly[i]);</div>
+<div class="line"><a id="l01459" name="l01459"></a><span class="lineno"> 1459</span>        <span class="keywordflow">return</span> npos;</div>
+<div class="line"><a id="l01460" name="l01460"></a><span class="lineno"> 1460</span>    };</div>
+<div class="line"><a id="l01461" name="l01461"></a><span class="lineno"> 1461</span> </div>
+<div class="line"><a id="l01462" name="l01462"></a><span class="lineno"> 1462</span>    <span class="comment">// lambda: Returns true if the highest coefficient in `poly` is set (then poly is said to be monic).</span></div>
+<div class="line"><a id="l01463" name="l01463"></a><span class="lineno"> 1463</span>    <span class="keyword">auto</span> monic = [=](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; poly) {</div>
+<div class="line"><a id="l01464" name="l01464"></a><span class="lineno"> 1464</span>        <span class="keyword">constexpr</span> std::size_t complement = bits_per_word - 1;</div>
+<div class="line"><a id="l01465" name="l01465"></a><span class="lineno"> 1465</span>        <span class="keyword">constexpr</span> <span class="keyword">auto</span>        final_bit_mask = word_type{one &lt;&lt; complement};</div>
+<div class="line"><a id="l01466" name="l01466"></a><span class="lineno"> 1466</span>        <span class="keywordflow">return</span> poly[N - 1] &amp; final_bit_mask;</div>
+<div class="line"><a id="l01467" name="l01467"></a><span class="lineno"> 1467</span>    };</div>
+<div class="line"><a id="l01468" name="l01468"></a><span class="lineno"> 1468</span> </div>
+<div class="line"><a id="l01469" name="l01469"></a><span class="lineno"> 1469</span>    <span class="comment">// lambda: Computes lhs &lt;- lhs + rhs which in GF(2) is equivalent to  lhs &lt;- lhs^rhs.</span></div>
+<div class="line"><a id="l01470" name="l01470"></a><span class="lineno"> 1470</span>    <span class="keyword">auto</span> add = [=](<span class="keyword">auto</span>&amp; lhs, <span class="keyword">const</span> <span class="keyword">auto</span>&amp; rhs) {</div>
+<div class="line"><a id="l01471" name="l01471"></a><span class="lineno"> 1471</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span> i = 0uz; i &lt; N; ++i) lhs[i] ^= rhs[i];</div>
+<div class="line"><a id="l01472" name="l01472"></a><span class="lineno"> 1472</span>    };</div>
+<div class="line"><a id="l01473" name="l01473"></a><span class="lineno"> 1473</span> </div>
+<div class="line"><a id="l01474" name="l01474"></a><span class="lineno"> 1474</span>    <span class="comment">// lambda: Performs a one place shift on the polynomial coefficients stored poly.</span></div>
+<div class="line"><a id="l01475" name="l01475"></a><span class="lineno"> 1475</span>    <span class="comment">// Shift is to the the right if you think the elements are in vector order [p0,p1,p2,p3] -&gt; [0,p0,p1,p2].</span></div>
+<div class="line"><a id="l01476" name="l01476"></a><span class="lineno"> 1476</span>    <span class="comment">// Shift is to the left when you think in bit order [b3,b2,b1,b0] -&gt; [b2,b1,b0,0].</span></div>
+<div class="line"><a id="l01477" name="l01477"></a><span class="lineno"> 1477</span>    <span class="keyword">auto</span> shift = [=](<span class="keyword">auto</span>&amp; poly) {</div>
+<div class="line"><a id="l01478" name="l01478"></a><span class="lineno"> 1478</span>        <span class="keyword">constexpr</span> std::size_t complement = bits_per_word - 1;</div>
+<div class="line"><a id="l01479" name="l01479"></a><span class="lineno"> 1479</span>        <span class="keywordflow">for</span> (std::size_t i = N - 1; i &gt; 0; --i) {</div>
+<div class="line"><a id="l01480" name="l01480"></a><span class="lineno"> 1480</span>            <span class="keyword">auto</span> l = <span class="keyword">static_cast&lt;</span>word_type<span class="keyword">&gt;</span>(poly[i] &lt;&lt; 1);</div>
+<div class="line"><a id="l01481" name="l01481"></a><span class="lineno"> 1481</span>            <span class="keyword">auto</span> r = <span class="keyword">static_cast&lt;</span>word_type<span class="keyword">&gt;</span>(poly[i - 1] &gt;&gt; complement);</div>
+<div class="line"><a id="l01482" name="l01482"></a><span class="lineno"> 1482</span>            poly[i] = l | r;</div>
+<div class="line"><a id="l01483" name="l01483"></a><span class="lineno"> 1483</span>        }</div>
+<div class="line"><a id="l01484" name="l01484"></a><span class="lineno"> 1484</span>        poly[0] &lt;&lt;= 1;</div>
+<div class="line"><a id="l01485" name="l01485"></a><span class="lineno"> 1485</span>    };</div>
+<div class="line"><a id="l01486" name="l01486"></a><span class="lineno"> 1486</span> </div>
+<div class="line"><a id="l01487" name="l01487"></a><span class="lineno"> 1487</span>    <span class="comment">// lambda: If degree[poly] &lt; n, this performs poly(x) &lt;- x*poly(x) mod c(x) where c(x) = x^n + p(x).</span></div>
+<div class="line"><a id="l01488" name="l01488"></a><span class="lineno"> 1488</span>    <span class="keyword">auto</span> times_x_step = [&amp;](<span class="keyword">auto</span>&amp; poly) {</div>
+<div class="line"><a id="l01489" name="l01489"></a><span class="lineno"> 1489</span>        <span class="keywordtype">bool</span> add_p = monic(poly);</div>
+<div class="line"><a id="l01490" name="l01490"></a><span class="lineno"> 1490</span>        shift(poly);</div>
+<div class="line"><a id="l01491" name="l01491"></a><span class="lineno"> 1491</span>        <span class="keywordflow">if</span> (add_p) add(poly, p);</div>
+<div class="line"><a id="l01492" name="l01492"></a><span class="lineno"> 1492</span>    };</div>
+<div class="line"><a id="l01493" name="l01493"></a><span class="lineno"> 1493</span> </div>
+<div class="line"><a id="l01494" name="l01494"></a><span class="lineno"> 1494</span>    <span class="comment">// We precompute x^{n + i} mod c(x) for i = 0, ..., n-1 starting from the known x^n mod c(x) = p.</span></div>
+<div class="line"><a id="l01495" name="l01495"></a><span class="lineno"> 1495</span>    <span class="comment">// Each x^{n + i} mod c(x) is a word-vector of coefficients and we put the lot into a std::vector.</span></div>
+<div class="line"><a id="l01496" name="l01496"></a><span class="lineno"> 1496</span>    std::vector&lt;array_type&gt; power_mod(n);</div>
+<div class="line"><a id="l01497" name="l01497"></a><span class="lineno"> 1497</span>    power_mod[0] = p;</div>
+<div class="line"><a id="l01498" name="l01498"></a><span class="lineno"> 1498</span>    <span class="keywordflow">for</span> (std::size_t i = 1; i &lt; n; ++i) {</div>
+<div class="line"><a id="l01499" name="l01499"></a><span class="lineno"> 1499</span>        power_mod[i] = power_mod[i - 1];</div>
+<div class="line"><a id="l01500" name="l01500"></a><span class="lineno"> 1500</span>        times_x_step(power_mod[i]);</div>
+<div class="line"><a id="l01501" name="l01501"></a><span class="lineno"> 1501</span>    }</div>
+<div class="line"><a id="l01502" name="l01502"></a><span class="lineno"> 1502</span> </div>
+<div class="line"><a id="l01503" name="l01503"></a><span class="lineno"> 1503</span>    <span class="comment">// Some work space we use below.</span></div>
+<div class="line"><a id="l01504" name="l01504"></a><span class="lineno"> 1504</span>    array_type hi;</div>
+<div class="line"><a id="l01505" name="l01505"></a><span class="lineno"> 1505</span> </div>
+<div class="line"><a id="l01506" name="l01506"></a><span class="lineno"> 1506</span>    <span class="comment">// lambda: If degree[poly] &lt; n, performs: poly(x) &lt;- poly(x)^2 mod c(x) where as usual c(x) = x^n + p(x).</span></div>
+<div class="line"><a id="l01507" name="l01507"></a><span class="lineno"> 1507</span>    <span class="keyword">auto</span> square_step = [&amp;](<span class="keyword">auto</span>&amp; poly) {</div>
+<div class="line"><a id="l01508" name="l01508"></a><span class="lineno"> 1508</span>        <span class="comment">// Compute poly(x)^2 -- in GF(2) this means interspersing all the coefficients with zeros.</span></div>
+<div class="line"><a id="l01509" name="l01509"></a><span class="lineno"> 1509</span>        <span class="comment">// We actually riffle poly directly into two arrays lo &amp; hi so that poly(x)^2 = lo(x) + x^n hi(x).</span></div>
+<div class="line"><a id="l01510" name="l01510"></a><span class="lineno"> 1510</span>        <span class="comment">// This only works because we assume n some multiple of N (i.e. all bits in poly matter).</span></div>
+<div class="line"><a id="l01511" name="l01511"></a><span class="lineno"> 1511</span>        <span class="comment">// NOTE: Our riffle method above for arrays lets us reuse the poly array for lo.</span></div>
+<div class="line"><a id="l01512" name="l01512"></a><span class="lineno"> 1512</span>        riffle(poly, poly, hi);</div>
+<div class="line"><a id="l01513" name="l01513"></a><span class="lineno"> 1513</span> </div>
+<div class="line"><a id="l01514" name="l01514"></a><span class="lineno"> 1514</span>        <span class="comment">// poly(x)^2 mod c(x) now is poly(x) + x^n hi(x) mod c(x) as degree[poly] &lt; n.</span></div>
+<div class="line"><a id="l01515" name="l01515"></a><span class="lineno"> 1515</span>        <span class="comment">// Add the x^n hi(x) mod c(x) term-by-term noting that at most every second term in hi(x) is 1.</span></div>
+<div class="line"><a id="l01516" name="l01516"></a><span class="lineno"> 1516</span>        <span class="keyword">auto</span> hi_first = first_set(hi);</div>
+<div class="line"><a id="l01517" name="l01517"></a><span class="lineno"> 1517</span>        <span class="keywordflow">if</span> (hi_first != npos) {</div>
+<div class="line"><a id="l01518" name="l01518"></a><span class="lineno"> 1518</span>            <span class="keyword">auto</span> hi_final = final_set(hi);</div>
+<div class="line"><a id="l01519" name="l01519"></a><span class="lineno"> 1519</span>            <span class="keywordflow">for</span> (std::size_t i = hi_first; i &lt;= hi_final; i += 2)</div>
+<div class="line"><a id="l01520" name="l01520"></a><span class="lineno"> 1520</span>                <span class="keywordflow">if</span> (test(hi, i)) add(poly, power_mod[i]);</div>
+<div class="line"><a id="l01521" name="l01521"></a><span class="lineno"> 1521</span>        }</div>
+<div class="line"><a id="l01522" name="l01522"></a><span class="lineno"> 1522</span>    };</div>
+<div class="line"><a id="l01523" name="l01523"></a><span class="lineno"> 1523</span> </div>
+<div class="line"><a id="l01524" name="l01524"></a><span class="lineno"> 1524</span>    <span class="comment">// Initialize our return value to all zeros.</span></div>
+<div class="line"><a id="l01525" name="l01525"></a><span class="lineno"> 1525</span>    array_type result;</div>
+<div class="line"><a id="l01526" name="l01526"></a><span class="lineno"> 1526</span>    result.fill(0);</div>
+<div class="line"><a id="l01527" name="l01527"></a><span class="lineno"> 1527</span> </div>
+<div class="line"><a id="l01528" name="l01528"></a><span class="lineno"> 1528</span>    <span class="comment">// Case: e = 2^J -- we just do J squaring steps starting from r(x) = x to get to  x^(2^J) mod c(x).</span></div>
+<div class="line"><a id="l01529" name="l01529"></a><span class="lineno"> 1529</span>    <span class="keywordflow">if</span> (J_is_log2) {</div>
+<div class="line"><a id="l01530" name="l01530"></a><span class="lineno"> 1530</span>        set(result, 1);</div>
+<div class="line"><a id="l01531" name="l01531"></a><span class="lineno"> 1531</span>        <span class="keywordflow">for</span> (std::size_t j = 0; j &lt; J; ++j) square_step(result);</div>
+<div class="line"><a id="l01532" name="l01532"></a><span class="lineno"> 1532</span>        <span class="keywordflow">return</span> result;</div>
+<div class="line"><a id="l01533" name="l01533"></a><span class="lineno"> 1533</span>    }</div>
+<div class="line"><a id="l01534" name="l01534"></a><span class="lineno"> 1534</span> </div>
+<div class="line"><a id="l01535" name="l01535"></a><span class="lineno"> 1535</span>    <span class="comment">// Case e = J &lt; n: Then x^J mod c(x) = x^J so we can set the appropriate coefficient in r and return.</span></div>
+<div class="line"><a id="l01536" name="l01536"></a><span class="lineno"> 1536</span>    <span class="keywordflow">if</span> (J &lt; n) {</div>
+<div class="line"><a id="l01537" name="l01537"></a><span class="lineno"> 1537</span>        set(result, J);</div>
+<div class="line"><a id="l01538" name="l01538"></a><span class="lineno"> 1538</span>        <span class="keywordflow">return</span> result;</div>
+<div class="line"><a id="l01539" name="l01539"></a><span class="lineno"> 1539</span>    }</div>
+<div class="line"><a id="l01540" name="l01540"></a><span class="lineno"> 1540</span> </div>
+<div class="line"><a id="l01541" name="l01541"></a><span class="lineno"> 1541</span>    <span class="comment">// Case e = J = n: Then x^J mod c(x) = p(x).</span></div>
+<div class="line"><a id="l01542" name="l01542"></a><span class="lineno"> 1542</span>    <span class="keywordflow">if</span> (J == n) <span class="keywordflow">return</span> p;</div>
+<div class="line"><a id="l01543" name="l01543"></a><span class="lineno"> 1543</span> </div>
+<div class="line"><a id="l01544" name="l01544"></a><span class="lineno"> 1544</span>    <span class="comment">// Case e = J &gt; n: We use a square &amp; multiply algorithm:</span></div>
+<div class="line"><a id="l01545" name="l01545"></a><span class="lineno"> 1545</span>    <span class="comment">// Note that if e.g. J = 0b00010111 then std::bit_floor(J) = 0b00010000.</span></div>
+<div class="line"><a id="l01546" name="l01546"></a><span class="lineno"> 1546</span>    std::size_t J_bit = std::bit_floor(J);</div>
+<div class="line"><a id="l01547" name="l01547"></a><span class="lineno"> 1547</span> </div>
+<div class="line"><a id="l01548" name="l01548"></a><span class="lineno"> 1548</span>    <span class="comment">// Start with r(x) = x mod c(x) which takes care of the most significant binary digit in J.</span></div>
+<div class="line"><a id="l01549" name="l01549"></a><span class="lineno"> 1549</span>    set(result, 1);</div>
+<div class="line"><a id="l01550" name="l01550"></a><span class="lineno"> 1550</span>    J_bit &gt;&gt;= 1;</div>
+<div class="line"><a id="l01551" name="l01551"></a><span class="lineno"> 1551</span> </div>
+<div class="line"><a id="l01552" name="l01552"></a><span class="lineno"> 1552</span>    <span class="comment">// And off we go ...</span></div>
+<div class="line"><a id="l01553" name="l01553"></a><span class="lineno"> 1553</span>    <span class="keywordflow">while</span> (J_bit) {</div>
+<div class="line"><a id="l01554" name="l01554"></a><span class="lineno"> 1554</span> </div>
+<div class="line"><a id="l01555" name="l01555"></a><span class="lineno"> 1555</span>        <span class="comment">// Always do a square step and then a times_x step if necessary (i.e. if current bit in J is set).</span></div>
+<div class="line"><a id="l01556" name="l01556"></a><span class="lineno"> 1556</span>        square_step(result);</div>
+<div class="line"><a id="l01557" name="l01557"></a><span class="lineno"> 1557</span>        <span class="keywordflow">if</span> (J &amp; J_bit) times_x_step(result);</div>
+<div class="line"><a id="l01558" name="l01558"></a><span class="lineno"> 1558</span> </div>
+<div class="line"><a id="l01559" name="l01559"></a><span class="lineno"> 1559</span>        <span class="comment">// On to the next bit position in n.</span></div>
+<div class="line"><a id="l01560" name="l01560"></a><span class="lineno"> 1560</span>        J_bit &gt;&gt;= 1;</div>
+<div class="line"><a id="l01561" name="l01561"></a><span class="lineno"> 1561</span>    }</div>
+<div class="line"><a id="l01562" name="l01562"></a><span class="lineno"> 1562</span>    <span class="keywordflow">return</span> result;</div>
+<div class="line"><a id="l01563" name="l01563"></a><span class="lineno"> 1563</span>}</div>
 <div class="line"><a id="l01564" name="l01564"></a><span class="lineno"> 1564</span> </div>
-<div class="line"><a id="l01565" name="l01565"></a><span class="lineno"> 1565</span><span class="comment">// --------------------------------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a id="l01566" name="l01566"></a><span class="lineno"> 1566</span><span class="comment">// Non-member functions that are only defined if we have access to the `gf2` library.</span></div>
-<div class="line"><a id="l01567" name="l01567"></a><span class="lineno"> 1567</span><span class="comment">// See https://nessan.github.io/gf2/ for tools for working with polynomials and matrices over GF(2).</span></div>
-<div class="line"><a id="l01568" name="l01568"></a><span class="lineno"> 1568</span><span class="comment">// --------------------------------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a id="l01569" name="l01569"></a><span class="lineno"> 1569</span></div>
-<div class="line"><a id="l01579" name="l01579"></a><span class="lineno"> 1579</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> State&gt;</div>
-<div class="line"><a id="l01580" name="l01580"></a><span class="lineno"> 1580</span><span class="keyword">auto</span></div>
-<div class="foldopen" id="foldopen01581" data-start="{" data-end="}">
-<div class="line"><a id="l01581" name="l01581"></a><span class="lineno"><a class="line" href="xoshiro_8h.html#a08c06fbfc8fdcb3123f8d83f1c66f92e"> 1581</a></span><a class="code hl_function" href="xoshiro_8h.html#a08c06fbfc8fdcb3123f8d83f1c66f92e">transition_matrix</a>() {</div>
-<div class="line"><a id="l01582" name="l01582"></a><span class="lineno"> 1582</span> </div>
-<div class="line"><a id="l01583" name="l01583"></a><span class="lineno"> 1583</span>    <span class="keyword">using </span>word_type = <span class="keyword">typename</span> State::word_type;</div>
+<div class="line"><a id="l01565" name="l01565"></a><span class="lineno"> 1565</span><span class="preprocessor">#ifdef GF2</span></div>
+<div class="line"><a id="l01566" name="l01566"></a><span class="lineno"> 1566</span> </div>
+<div class="line"><a id="l01567" name="l01567"></a><span class="lineno"> 1567</span><span class="comment">// --------------------------------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a id="l01568" name="l01568"></a><span class="lineno"> 1568</span><span class="comment">// Non-member functions that are only defined if we have access to the `gf2` library.</span></div>
+<div class="line"><a id="l01569" name="l01569"></a><span class="lineno"> 1569</span><span class="comment">// See https://nessan.github.io/gf2/ for tools for working with polynomials and matrices over GF(2).</span></div>
+<div class="line"><a id="l01570" name="l01570"></a><span class="lineno"> 1570</span><span class="comment">// --------------------------------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a id="l01571" name="l01571"></a><span class="lineno"> 1571</span></div>
+<div class="line"><a id="l01581" name="l01581"></a><span class="lineno"> 1581</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> State&gt;</div>
+<div class="line"><a id="l01582" name="l01582"></a><span class="lineno"> 1582</span><span class="keyword">auto</span></div>
+<div class="foldopen" id="foldopen01583" data-start="{" data-end="}">
+<div class="line"><a id="l01583" name="l01583"></a><span class="lineno"><a class="line" href="xoshiro_8h.html#a08c06fbfc8fdcb3123f8d83f1c66f92e"> 1583</a></span><a class="code hl_function" href="xoshiro_8h.html#a08c06fbfc8fdcb3123f8d83f1c66f92e">transition_matrix</a>() {</div>
 <div class="line"><a id="l01584" name="l01584"></a><span class="lineno"> 1584</span> </div>
-<div class="line"><a id="l01585" name="l01585"></a><span class="lineno"> 1585</span>    <span class="comment">// Some constants for our state size.</span></div>
-<div class="line"><a id="l01586" name="l01586"></a><span class="lineno"> 1586</span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> n_words = State::word_count();</div>
-<div class="line"><a id="l01587" name="l01587"></a><span class="lineno"> 1587</span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> n_bits = State::bit_count();</div>
-<div class="line"><a id="l01588" name="l01588"></a><span class="lineno"> 1588</span> </div>
-<div class="line"><a id="l01589" name="l01589"></a><span class="lineno"> 1589</span>    <span class="comment">// The transition matrix will be a square n_bits x n_bits matrix over GF(2).</span></div>
-<div class="line"><a id="l01590" name="l01590"></a><span class="lineno"> 1590</span>    gf2::BitMatrix&lt;word_type&gt; result{n_bits, n_bits};</div>
-<div class="line"><a id="l01591" name="l01591"></a><span class="lineno"> 1591</span> </div>
-<div class="line"><a id="l01592" name="l01592"></a><span class="lineno"> 1592</span>    <span class="comment">// Some work-space in word and bit space</span></div>
-<div class="line"><a id="l01593" name="l01593"></a><span class="lineno"> 1593</span>    gf2::BitVector&lt;word_type&gt;      bits{n_bits};</div>
-<div class="line"><a id="l01594" name="l01594"></a><span class="lineno"> 1594</span>    std::array&lt;word_type, n_words&gt; words;</div>
-<div class="line"><a id="l01595" name="l01595"></a><span class="lineno"> 1595</span> </div>
-<div class="line"><a id="l01596" name="l01596"></a><span class="lineno"> 1596</span>    <span class="comment">// Create an State instance we will use to step through unit states.</span></div>
-<div class="line"><a id="l01597" name="l01597"></a><span class="lineno"> 1597</span>    State state;</div>
-<div class="line"><a id="l01598" name="l01598"></a><span class="lineno"> 1598</span> </div>
-<div class="line"><a id="l01599" name="l01599"></a><span class="lineno"> 1599</span>    <span class="comment">// We get the columns of the transition matrix by looking  at the action of `step()` on all the unit states.</span></div>
-<div class="line"><a id="l01600" name="l01600"></a><span class="lineno"> 1600</span>    <span class="keywordflow">for</span> (std::size_t k = 0; k &lt; n_bits; ++k) {</div>
-<div class="line"><a id="l01601" name="l01601"></a><span class="lineno"> 1601</span> </div>
-<div class="line"><a id="l01602" name="l01602"></a><span class="lineno"> 1602</span>        <span class="comment">// Create the k&#39;th unit state (i.e. the state just has the k&#39;th bit set and all others are zero)</span></div>
-<div class="line"><a id="l01603" name="l01603"></a><span class="lineno"> 1603</span>        bits.set_all(<span class="keyword">false</span>);</div>
-<div class="line"><a id="l01604" name="l01604"></a><span class="lineno"> 1604</span>        bits.set(k, <span class="keyword">true</span>);</div>
-<div class="line"><a id="l01605" name="l01605"></a><span class="lineno"> 1605</span> </div>
-<div class="line"><a id="l01606" name="l01606"></a><span class="lineno"> 1606</span>        <span class="comment">// Translate that unit bit-vector into an array of words.</span></div>
-<div class="line"><a id="l01607" name="l01607"></a><span class="lineno"> 1607</span>        bits.to_words(words.begin());</div>
-<div class="line"><a id="l01608" name="l01608"></a><span class="lineno"> 1608</span> </div>
-<div class="line"><a id="l01609" name="l01609"></a><span class="lineno"> 1609</span>        <span class="comment">// Seed the state from those words.</span></div>
-<div class="line"><a id="l01610" name="l01610"></a><span class="lineno"> 1610</span>        state.seed(words.cbegin(), words.cend());</div>
-<div class="line"><a id="l01611" name="l01611"></a><span class="lineno"> 1611</span> </div>
-<div class="line"><a id="l01612" name="l01612"></a><span class="lineno"> 1612</span>        <span class="comment">// Advance the state by one step.</span></div>
-<div class="line"><a id="l01613" name="l01613"></a><span class="lineno"> 1613</span>        state.step();</div>
-<div class="line"><a id="l01614" name="l01614"></a><span class="lineno"> 1614</span> </div>
-<div class="line"><a id="l01615" name="l01615"></a><span class="lineno"> 1615</span>        <span class="comment">// Translate the new state to bit-space.</span></div>
-<div class="line"><a id="l01616" name="l01616"></a><span class="lineno"> 1616</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span> i = 0uz; i &lt; n_words; ++i) bits.set_word(i, state[i]);</div>
-<div class="line"><a id="l01617" name="l01617"></a><span class="lineno"> 1617</span> </div>
-<div class="line"><a id="l01618" name="l01618"></a><span class="lineno"> 1618</span>        <span class="comment">// Store those bits into column `k` of the transition matrix.</span></div>
-<div class="line"><a id="l01619" name="l01619"></a><span class="lineno"> 1619</span>        <span class="comment">// NOTE:  Columnar access for a gf2::BitMatrix must be done element by element.</span></div>
-<div class="line"><a id="l01620" name="l01620"></a><span class="lineno"> 1620</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span> i = 0uz; i &lt; n_bits; ++i) result(i, k) = bits[i];</div>
-<div class="line"><a id="l01621" name="l01621"></a><span class="lineno"> 1621</span>    }</div>
-<div class="line"><a id="l01622" name="l01622"></a><span class="lineno"> 1622</span> </div>
-<div class="line"><a id="l01623" name="l01623"></a><span class="lineno"> 1623</span>    <span class="keywordflow">return</span> result;</div>
-<div class="line"><a id="l01624" name="l01624"></a><span class="lineno"> 1624</span>}</div>
+<div class="line"><a id="l01585" name="l01585"></a><span class="lineno"> 1585</span>    <span class="keyword">using </span>word_type = <span class="keyword">typename</span> State::word_type;</div>
+<div class="line"><a id="l01586" name="l01586"></a><span class="lineno"> 1586</span> </div>
+<div class="line"><a id="l01587" name="l01587"></a><span class="lineno"> 1587</span>    <span class="comment">// Some constants for our state size.</span></div>
+<div class="line"><a id="l01588" name="l01588"></a><span class="lineno"> 1588</span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> n_words = State::word_count();</div>
+<div class="line"><a id="l01589" name="l01589"></a><span class="lineno"> 1589</span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> n_bits = State::bit_count();</div>
+<div class="line"><a id="l01590" name="l01590"></a><span class="lineno"> 1590</span> </div>
+<div class="line"><a id="l01591" name="l01591"></a><span class="lineno"> 1591</span>    <span class="comment">// The transition matrix will be a square n_bits x n_bits matrix over GF(2).</span></div>
+<div class="line"><a id="l01592" name="l01592"></a><span class="lineno"> 1592</span>    gf2::BitMatrix&lt;word_type&gt; result{n_bits, n_bits};</div>
+<div class="line"><a id="l01593" name="l01593"></a><span class="lineno"> 1593</span> </div>
+<div class="line"><a id="l01594" name="l01594"></a><span class="lineno"> 1594</span>    <span class="comment">// Some work-space in word and bit space</span></div>
+<div class="line"><a id="l01595" name="l01595"></a><span class="lineno"> 1595</span>    gf2::BitVector&lt;word_type&gt;      bits{n_bits};</div>
+<div class="line"><a id="l01596" name="l01596"></a><span class="lineno"> 1596</span>    std::array&lt;word_type, n_words&gt; words;</div>
+<div class="line"><a id="l01597" name="l01597"></a><span class="lineno"> 1597</span> </div>
+<div class="line"><a id="l01598" name="l01598"></a><span class="lineno"> 1598</span>    <span class="comment">// Create an State instance we will use to step through unit states.</span></div>
+<div class="line"><a id="l01599" name="l01599"></a><span class="lineno"> 1599</span>    State state;</div>
+<div class="line"><a id="l01600" name="l01600"></a><span class="lineno"> 1600</span> </div>
+<div class="line"><a id="l01601" name="l01601"></a><span class="lineno"> 1601</span>    <span class="comment">// We get the columns of the transition matrix by looking  at the action of `step()` on all the unit states.</span></div>
+<div class="line"><a id="l01602" name="l01602"></a><span class="lineno"> 1602</span>    <span class="keywordflow">for</span> (std::size_t k = 0; k &lt; n_bits; ++k) {</div>
+<div class="line"><a id="l01603" name="l01603"></a><span class="lineno"> 1603</span> </div>
+<div class="line"><a id="l01604" name="l01604"></a><span class="lineno"> 1604</span>        <span class="comment">// Create the k&#39;th unit state (i.e. the state just has the k&#39;th bit set and all others are zero)</span></div>
+<div class="line"><a id="l01605" name="l01605"></a><span class="lineno"> 1605</span>        bits.set_all(<span class="keyword">false</span>);</div>
+<div class="line"><a id="l01606" name="l01606"></a><span class="lineno"> 1606</span>        bits.set(k, <span class="keyword">true</span>);</div>
+<div class="line"><a id="l01607" name="l01607"></a><span class="lineno"> 1607</span> </div>
+<div class="line"><a id="l01608" name="l01608"></a><span class="lineno"> 1608</span>        <span class="comment">// Translate that unit bit-vector into an array of words.</span></div>
+<div class="line"><a id="l01609" name="l01609"></a><span class="lineno"> 1609</span>        bits.to_words(words.begin());</div>
+<div class="line"><a id="l01610" name="l01610"></a><span class="lineno"> 1610</span> </div>
+<div class="line"><a id="l01611" name="l01611"></a><span class="lineno"> 1611</span>        <span class="comment">// Seed the state from those words.</span></div>
+<div class="line"><a id="l01612" name="l01612"></a><span class="lineno"> 1612</span>        state.seed(words.cbegin(), words.cend());</div>
+<div class="line"><a id="l01613" name="l01613"></a><span class="lineno"> 1613</span> </div>
+<div class="line"><a id="l01614" name="l01614"></a><span class="lineno"> 1614</span>        <span class="comment">// Advance the state by one step.</span></div>
+<div class="line"><a id="l01615" name="l01615"></a><span class="lineno"> 1615</span>        state.step();</div>
+<div class="line"><a id="l01616" name="l01616"></a><span class="lineno"> 1616</span> </div>
+<div class="line"><a id="l01617" name="l01617"></a><span class="lineno"> 1617</span>        <span class="comment">// Translate the new state to bit-space.</span></div>
+<div class="line"><a id="l01618" name="l01618"></a><span class="lineno"> 1618</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span> i = 0uz; i &lt; n_words; ++i) bits.set_word(i, state[i]);</div>
+<div class="line"><a id="l01619" name="l01619"></a><span class="lineno"> 1619</span> </div>
+<div class="line"><a id="l01620" name="l01620"></a><span class="lineno"> 1620</span>        <span class="comment">// Store those bits into column `k` of the transition matrix.</span></div>
+<div class="line"><a id="l01621" name="l01621"></a><span class="lineno"> 1621</span>        <span class="comment">// NOTE:  Columnar access for a gf2::BitMatrix must be done element by element.</span></div>
+<div class="line"><a id="l01622" name="l01622"></a><span class="lineno"> 1622</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span> i = 0uz; i &lt; n_bits; ++i) result(i, k) = bits[i];</div>
+<div class="line"><a id="l01623" name="l01623"></a><span class="lineno"> 1623</span>    }</div>
+<div class="line"><a id="l01624" name="l01624"></a><span class="lineno"> 1624</span> </div>
+<div class="line"><a id="l01625" name="l01625"></a><span class="lineno"> 1625</span>    <span class="keywordflow">return</span> result;</div>
+<div class="line"><a id="l01626" name="l01626"></a><span class="lineno"> 1626</span>}</div>
 </div>
-<div class="line"><a id="l01625" name="l01625"></a><span class="lineno"> 1625</span></div>
-<div class="line"><a id="l01630" name="l01630"></a><span class="lineno"> 1630</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> State&gt;</div>
-<div class="line"><a id="l01631" name="l01631"></a><span class="lineno"> 1631</span><span class="keyword">auto</span></div>
-<div class="foldopen" id="foldopen01632" data-start="{" data-end="}">
-<div class="line"><a id="l01632" name="l01632"></a><span class="lineno"><a class="line" href="xoshiro_8h.html#ae6327bd526ffaf07bfb2334a357f9e51"> 1632</a></span><a class="code hl_function" href="xoshiro_8h.html#ae6327bd526ffaf07bfb2334a357f9e51">characteristic_polynomial</a>() {</div>
-<div class="line"><a id="l01633" name="l01633"></a><span class="lineno"> 1633</span>    <span class="keyword">auto</span> T = <a class="code hl_function" href="xoshiro_8h.html#a08c06fbfc8fdcb3123f8d83f1c66f92e">xso::transition_matrix&lt;State&gt;</a>();</div>
-<div class="line"><a id="l01634" name="l01634"></a><span class="lineno"> 1634</span>    <span class="keywordflow">return</span> T.characteristic_polynomial();</div>
-<div class="line"><a id="l01635" name="l01635"></a><span class="lineno"> 1635</span>}</div>
+<div class="line"><a id="l01627" name="l01627"></a><span class="lineno"> 1627</span></div>
+<div class="line"><a id="l01632" name="l01632"></a><span class="lineno"> 1632</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> State&gt;</div>
+<div class="line"><a id="l01633" name="l01633"></a><span class="lineno"> 1633</span><span class="keyword">auto</span></div>
+<div class="foldopen" id="foldopen01634" data-start="{" data-end="}">
+<div class="line"><a id="l01634" name="l01634"></a><span class="lineno"><a class="line" href="xoshiro_8h.html#ae6327bd526ffaf07bfb2334a357f9e51"> 1634</a></span><a class="code hl_function" href="xoshiro_8h.html#ae6327bd526ffaf07bfb2334a357f9e51">characteristic_polynomial</a>() {</div>
+<div class="line"><a id="l01635" name="l01635"></a><span class="lineno"> 1635</span>    <span class="keyword">auto</span> T = <a class="code hl_function" href="xoshiro_8h.html#a08c06fbfc8fdcb3123f8d83f1c66f92e">xso::transition_matrix&lt;State&gt;</a>();</div>
+<div class="line"><a id="l01636" name="l01636"></a><span class="lineno"> 1636</span>    <span class="keywordflow">return</span> T.characteristic_polynomial();</div>
+<div class="line"><a id="l01637" name="l01637"></a><span class="lineno"> 1637</span>}</div>
 </div>
-<div class="line"><a id="l01636" name="l01636"></a><span class="lineno"> 1636</span></div>
-<div class="line"><a id="l01644" name="l01644"></a><span class="lineno"> 1644</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> State&gt;</div>
-<div class="line"><a id="l01645" name="l01645"></a><span class="lineno"> 1645</span><span class="keyword">auto</span></div>
-<div class="foldopen" id="foldopen01646" data-start="{" data-end="}">
-<div class="line"><a id="l01646" name="l01646"></a><span class="lineno"><a class="line" href="xoshiro_8h.html#af5723a480082f0aed2c0b982492e83fe"> 1646</a></span><a class="code hl_function" href="xoshiro_8h.html#af5723a480082f0aed2c0b982492e83fe">jump_polynomial</a>(gf2::BitPolynomial&lt;typename State::word_type&gt; <span class="keyword">const</span>&amp; c, std::size_t N, <span class="keywordtype">bool</span> N_is_log2 = <span class="keyword">false</span>) {</div>
-<div class="line"><a id="l01647" name="l01647"></a><span class="lineno"> 1647</span>    <span class="keywordflow">return</span> c.reduce_x_to_the(N, N_is_log2);</div>
-<div class="line"><a id="l01648" name="l01648"></a><span class="lineno"> 1648</span>}</div>
+<div class="line"><a id="l01638" name="l01638"></a><span class="lineno"> 1638</span></div>
+<div class="line"><a id="l01646" name="l01646"></a><span class="lineno"> 1646</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> State&gt;</div>
+<div class="line"><a id="l01647" name="l01647"></a><span class="lineno"> 1647</span><span class="keyword">auto</span></div>
+<div class="foldopen" id="foldopen01648" data-start="{" data-end="}">
+<div class="line"><a id="l01648" name="l01648"></a><span class="lineno"><a class="line" href="xoshiro_8h.html#af5723a480082f0aed2c0b982492e83fe"> 1648</a></span><a class="code hl_function" href="xoshiro_8h.html#af5723a480082f0aed2c0b982492e83fe">jump_polynomial</a>(gf2::BitPolynomial&lt;typename State::word_type&gt; <span class="keyword">const</span>&amp; c, std::size_t N, <span class="keywordtype">bool</span> N_is_log2 = <span class="keyword">false</span>) {</div>
+<div class="line"><a id="l01649" name="l01649"></a><span class="lineno"> 1649</span>    <span class="keywordflow">return</span> c.reduce_x_to_the(N, N_is_log2);</div>
+<div class="line"><a id="l01650" name="l01650"></a><span class="lineno"> 1650</span>}</div>
 </div>
-<div class="line"><a id="l01649" name="l01649"></a><span class="lineno"> 1649</span> </div>
-<div class="line"><a id="l01650" name="l01650"></a><span class="lineno"> 1650</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l01651" name="l01651"></a><span class="lineno"> 1651</span> </div>
-<div class="line"><a id="l01652" name="l01652"></a><span class="lineno"> 1652</span>} <span class="comment">// namespace xso</span></div>
+<div class="line"><a id="l01652" name="l01652"></a><span class="lineno"> 1652</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l01653" name="l01653"></a><span class="lineno"> 1653</span> </div>
-<div class="line"><a id="l01654" name="l01654"></a><span class="lineno"> 1654</span><span class="comment">// --------------------------------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a id="l01655" name="l01655"></a><span class="lineno"> 1655</span><span class="comment">// Formatting and output stream support for our generators:</span></div>
+<div class="line"><a id="l01654" name="l01654"></a><span class="lineno"> 1654</span>} <span class="comment">// namespace xso</span></div>
+<div class="line"><a id="l01655" name="l01655"></a><span class="lineno"> 1655</span> </div>
 <div class="line"><a id="l01656" name="l01656"></a><span class="lineno"> 1656</span><span class="comment">// --------------------------------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a id="l01657" name="l01657"></a><span class="lineno"> 1657</span> </div>
-<div class="line"><a id="l01658" name="l01658"></a><span class="lineno"> 1658</span><span class="comment">// A concept that matches any type that has an accessible `type_string()` class `method.</span></div>
-<div class="line"><a id="l01659" name="l01659"></a><span class="lineno"> 1659</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l01660" name="l01660"></a><span class="lineno"> 1660</span><span class="keyword">concept </span>has_type_string_class_method = <span class="keyword">requires</span> {</div>
-<div class="line"><a id="l01661" name="l01661"></a><span class="lineno"> 1661</span>    { T::type_string() } -&gt; std::convertible_to&lt;std::string&gt;;</div>
-<div class="line"><a id="l01662" name="l01662"></a><span class="lineno"> 1662</span>};</div>
-<div class="line"><a id="l01663" name="l01663"></a><span class="lineno"> 1663</span></div>
-<div class="line"><a id="l01667" name="l01667"></a><span class="lineno"> 1667</span><span class="keyword">template</span>&lt;has_type_<span class="keywordtype">string</span>_<span class="keyword">class</span>_method T&gt;</div>
-<div class="foldopen" id="foldopen01668" data-start="{" data-end="};">
-<div class="line"><a id="l01668" name="l01668"></a><span class="lineno"><a class="line" href="structstd_1_1formatter_3_01T_01_4.html"> 1668</a></span><span class="keyword">struct </span>std::formatter&lt;T&gt; {</div>
-<div class="line"><a id="l01669" name="l01669"></a><span class="lineno"> 1669</span></div>
-<div class="foldopen" id="foldopen01671" data-start="{" data-end="}">
-<div class="line"><a id="l01671" name="l01671"></a><span class="lineno"><a class="line" href="structstd_1_1formatter_3_01T_01_4.html#ad55b85d6e28560ede47ac21ad77db14f"> 1671</a></span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> <a class="code hl_function" href="structstd_1_1formatter_3_01T_01_4.html#ad55b85d6e28560ede47ac21ad77db14f">parse</a>(<span class="keyword">const</span> std::format_parse_context&amp; ctx) {</div>
-<div class="line"><a id="l01672" name="l01672"></a><span class="lineno"> 1672</span>        <span class="keyword">auto</span> it = ctx.begin();</div>
-<div class="line"><a id="l01673" name="l01673"></a><span class="lineno"> 1673</span>        assert(it == ctx.end() || *it == <span class="charliteral">&#39;}&#39;</span>);</div>
-<div class="line"><a id="l01674" name="l01674"></a><span class="lineno"> 1674</span>        <span class="keywordflow">return</span> it;</div>
-<div class="line"><a id="l01675" name="l01675"></a><span class="lineno"> 1675</span>    }</div>
+<div class="line"><a id="l01657" name="l01657"></a><span class="lineno"> 1657</span><span class="comment">// Formatting and output stream support for our generators:</span></div>
+<div class="line"><a id="l01658" name="l01658"></a><span class="lineno"> 1658</span><span class="comment">// --------------------------------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a id="l01659" name="l01659"></a><span class="lineno"> 1659</span> </div>
+<div class="line"><a id="l01660" name="l01660"></a><span class="lineno"> 1660</span><span class="comment">// A concept that matches any type that has an accessible `type_string()` class `method.</span></div>
+<div class="line"><a id="l01661" name="l01661"></a><span class="lineno"> 1661</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l01662" name="l01662"></a><span class="lineno"> 1662</span><span class="keyword">concept </span>has_type_string_class_method = <span class="keyword">requires</span> {</div>
+<div class="line"><a id="l01663" name="l01663"></a><span class="lineno"> 1663</span>    { T::type_string() } -&gt; std::convertible_to&lt;std::string&gt;;</div>
+<div class="line"><a id="l01664" name="l01664"></a><span class="lineno"> 1664</span>};</div>
+<div class="line"><a id="l01665" name="l01665"></a><span class="lineno"> 1665</span></div>
+<div class="line"><a id="l01669" name="l01669"></a><span class="lineno"> 1669</span><span class="keyword">template</span>&lt;has_type_<span class="keywordtype">string</span>_<span class="keyword">class</span>_method T&gt;</div>
+<div class="foldopen" id="foldopen01670" data-start="{" data-end="};">
+<div class="line"><a id="l01670" name="l01670"></a><span class="lineno"><a class="line" href="structstd_1_1formatter_3_01T_01_4.html"> 1670</a></span><span class="keyword">struct </span>std::formatter&lt;T&gt; {</div>
+<div class="line"><a id="l01671" name="l01671"></a><span class="lineno"> 1671</span></div>
+<div class="foldopen" id="foldopen01673" data-start="{" data-end="}">
+<div class="line"><a id="l01673" name="l01673"></a><span class="lineno"><a class="line" href="structstd_1_1formatter_3_01T_01_4.html#ad55b85d6e28560ede47ac21ad77db14f"> 1673</a></span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> <a class="code hl_function" href="structstd_1_1formatter_3_01T_01_4.html#ad55b85d6e28560ede47ac21ad77db14f">parse</a>(<span class="keyword">const</span> std::format_parse_context&amp; ctx) {</div>
+<div class="line"><a id="l01674" name="l01674"></a><span class="lineno"> 1674</span>        <span class="keyword">auto</span> it = ctx.begin();</div>
+<div class="line"><a id="l01675" name="l01675"></a><span class="lineno"> 1675</span>        assert(it == ctx.end() || *it == <span class="charliteral">&#39;}&#39;</span>);</div>
+<div class="line"><a id="l01676" name="l01676"></a><span class="lineno"> 1676</span>        <span class="keywordflow">return</span> it;</div>
+<div class="line"><a id="l01677" name="l01677"></a><span class="lineno"> 1677</span>    }</div>
 </div>
-<div class="line"><a id="l01676" name="l01676"></a><span class="lineno"> 1676</span></div>
-<div class="line"><a id="l01678" name="l01678"></a><span class="lineno"> 1678</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> FormatContext&gt;</div>
-<div class="foldopen" id="foldopen01679" data-start="{" data-end="}">
-<div class="line"><a id="l01679" name="l01679"></a><span class="lineno"><a class="line" href="structstd_1_1formatter_3_01T_01_4.html#a1a4dd22d719fab847c93a66b140db006"> 1679</a></span>    <span class="keyword">auto</span> <a class="code hl_function" href="structstd_1_1formatter_3_01T_01_4.html#a1a4dd22d719fab847c93a66b140db006">format</a>(<span class="keyword">const</span> T&amp;, FormatContext&amp; ctx)<span class="keyword"> const </span>{</div>
-<div class="line"><a id="l01680" name="l01680"></a><span class="lineno"> 1680</span>        <span class="keywordflow">return</span> std::format_to(ctx.out(), <span class="stringliteral">&quot;{}&quot;</span>, T::type_string());</div>
-<div class="line"><a id="l01681" name="l01681"></a><span class="lineno"> 1681</span>    }</div>
+<div class="line"><a id="l01678" name="l01678"></a><span class="lineno"> 1678</span></div>
+<div class="line"><a id="l01680" name="l01680"></a><span class="lineno"> 1680</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> FormatContext&gt;</div>
+<div class="foldopen" id="foldopen01681" data-start="{" data-end="}">
+<div class="line"><a id="l01681" name="l01681"></a><span class="lineno"><a class="line" href="structstd_1_1formatter_3_01T_01_4.html#a1a4dd22d719fab847c93a66b140db006"> 1681</a></span>    <span class="keyword">auto</span> <a class="code hl_function" href="structstd_1_1formatter_3_01T_01_4.html#a1a4dd22d719fab847c93a66b140db006">format</a>(<span class="keyword">const</span> T&amp;, FormatContext&amp; ctx)<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l01682" name="l01682"></a><span class="lineno"> 1682</span>        <span class="keywordflow">return</span> std::format_to(ctx.out(), <span class="stringliteral">&quot;{}&quot;</span>, T::type_string());</div>
+<div class="line"><a id="l01683" name="l01683"></a><span class="lineno"> 1683</span>    }</div>
 </div>
-<div class="line"><a id="l01682" name="l01682"></a><span class="lineno"> 1682</span>};</div>
+<div class="line"><a id="l01684" name="l01684"></a><span class="lineno"> 1684</span>};</div>
 </div>
-<div class="line"><a id="l01683" name="l01683"></a><span class="lineno"> 1683</span></div>
-<div class="line"><a id="l01687" name="l01687"></a><span class="lineno"> 1687</span><span class="keyword">template</span>&lt;has_type_<span class="keywordtype">string</span>_<span class="keyword">class</span>_method T&gt;</div>
-<div class="foldopen" id="foldopen01688" data-start="{" data-end="}">
-<div class="line"><a id="l01688" name="l01688"></a><span class="lineno"><a class="line" href="xoshiro_8h.html#a3693f1449cff07bf97cb43bc6fabe127"> 1688</a></span>std::ostream&amp;</div>
-<div class="line"><a id="l01689" name="l01689"></a><span class="lineno"> 1689</span><a class="code hl_function" href="xoshiro_8h.html#a3693f1449cff07bf97cb43bc6fabe127">operator&lt;&lt;</a>(std::ostream&amp; s, <span class="keyword">const</span> T&amp;) {</div>
-<div class="line"><a id="l01690" name="l01690"></a><span class="lineno"> 1690</span>    s &lt;&lt; T::type_string();</div>
-<div class="line"><a id="l01691" name="l01691"></a><span class="lineno"> 1691</span>    <span class="keywordflow">return</span> s;</div>
-<div class="line"><a id="l01692" name="l01692"></a><span class="lineno"> 1692</span>}</div>
+<div class="line"><a id="l01685" name="l01685"></a><span class="lineno"> 1685</span></div>
+<div class="line"><a id="l01689" name="l01689"></a><span class="lineno"> 1689</span><span class="keyword">template</span>&lt;has_type_<span class="keywordtype">string</span>_<span class="keyword">class</span>_method T&gt;</div>
+<div class="foldopen" id="foldopen01690" data-start="{" data-end="}">
+<div class="line"><a id="l01690" name="l01690"></a><span class="lineno"><a class="line" href="xoshiro_8h.html#a3693f1449cff07bf97cb43bc6fabe127"> 1690</a></span>std::ostream&amp;</div>
+<div class="line"><a id="l01691" name="l01691"></a><span class="lineno"> 1691</span><a class="code hl_function" href="xoshiro_8h.html#a3693f1449cff07bf97cb43bc6fabe127">operator&lt;&lt;</a>(std::ostream&amp; s, <span class="keyword">const</span> T&amp;) {</div>
+<div class="line"><a id="l01692" name="l01692"></a><span class="lineno"> 1692</span>    s &lt;&lt; T::type_string();</div>
+<div class="line"><a id="l01693" name="l01693"></a><span class="lineno"> 1693</span>    <span class="keywordflow">return</span> s;</div>
+<div class="line"><a id="l01694" name="l01694"></a><span class="lineno"> 1694</span>}</div>
 </div>
 <div class="ttc" id="aclassxso_1_1generator_html"><div class="ttname"><a href="classxso_1_1generator.html">xso::generator</a></div><div class="ttdoc">A pseudorandom number generator combining a State and a Scrambler.</div><div class="ttdef"><b>Definition</b> xoshiro.h:69</div></div>
 <div class="ttc" id="aclassxso_1_1generator_html_a01f5c8ac40100cb4c1dc9a47f1402743"><div class="ttname"><a href="classxso_1_1generator.html#a01f5c8ac40100cb4c1dc9a47f1402743">xso::generator::type_string</a></div><div class="ttdeci">static constexpr auto type_string()</div><div class="ttdoc">Class method that returns a name for this type of generator — combining State and Scrambler names.</div><div class="ttdef"><b>Definition</b> xoshiro.h:114</div></div>
@@ -1288,8 +1288,8 @@ $(function(){initNavTree('xoshiro_8h_source.html','',''); });
 <div class="ttc" id="aclassxso_1_1generator_html_af1158de7dc7fe74226519a5fa4782397"><div class="ttname"><a href="classxso_1_1generator.html#af1158de7dc7fe74226519a5fa4782397">xso::generator::sample</a></div><div class="ttdeci">constexpr auto sample(const Container &amp;container)</div><div class="ttdoc">Sampling method that returns a single value from a container – all elements are equally likely to be ...</div><div class="ttdef"><b>Definition</b> xoshiro.h:433</div></div>
 <div class="ttc" id="aclassxso_1_1generator_html_af67c09af07a4e6c2591f6eac890f373c"><div class="ttname"><a href="classxso_1_1generator.html#af67c09af07a4e6c2591f6eac890f373c">xso::generator::result_type</a></div><div class="ttdeci">word_type result_type</div><div class="ttdoc">The unsigned integer type returned by the generator&#39;s operator()() method.</div><div class="ttdef"><b>Definition</b> xoshiro.h:125</div></div>
 <div class="ttc" id="aclassxso_1_1generator_html_afd0ec144650c0642254526a207a96139"><div class="ttname"><a href="classxso_1_1generator.html#afd0ec144650c0642254526a207a96139">xso::generator::jump</a></div><div class="ttdeci">void jump(gf2::BitPolynomial&lt; word_type &gt; const &amp;jump_poly)</div><div class="ttdoc">Jumps a state/generator ahead in its random number stream by J steps.</div><div class="ttdef"><b>Definition</b> xoshiro.h:763</div></div>
-<div class="ttc" id="aclassxso_1_1partition_html_abe34f71f85cb3a6706e4ca6c5baa27d1"><div class="ttname"><a href="classxso_1_1partition.html#abe34f71f85cb3a6706e4ca6c5baa27d1">xso::partition::partition</a></div><div class="ttdeci">partition(const RNG &amp;rng, std::size_t n_partitions)</div><div class="ttdoc">Constructs a partition for the passed parent random number generator rng.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1241</div></div>
-<div class="ttc" id="aclassxso_1_1partition_html_af4728a19af49489f4faf257b269ae54c"><div class="ttname"><a href="classxso_1_1partition.html#af4728a19af49489f4faf257b269ae54c">xso::partition::next</a></div><div class="ttdeci">RNG next()</div><div class="ttdoc">Returns the next generator that is seeded at the start of the next sub-stream of the parent random nu...</div><div class="ttdef"><b>Definition</b> xoshiro.h:1264</div></div>
+<div class="ttc" id="aclassxso_1_1partition_html_abe34f71f85cb3a6706e4ca6c5baa27d1"><div class="ttname"><a href="classxso_1_1partition.html#abe34f71f85cb3a6706e4ca6c5baa27d1">xso::partition::partition</a></div><div class="ttdeci">partition(const RNG &amp;rng, std::size_t n_partitions)</div><div class="ttdoc">Constructs a partition for the passed parent random number generator rng.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1243</div></div>
+<div class="ttc" id="aclassxso_1_1partition_html_af4728a19af49489f4faf257b269ae54c"><div class="ttname"><a href="classxso_1_1partition.html#af4728a19af49489f4faf257b269ae54c">xso::partition::next</a></div><div class="ttdeci">RNG next()</div><div class="ttdoc">Returns the next generator that is seeded at the start of the next sub-stream of the parent random nu...</div><div class="ttdef"><b>Definition</b> xoshiro.h:1266</div></div>
 <div class="ttc" id="aclassxso_1_1xoroshiro_html"><div class="ttname"><a href="classxso_1_1xoroshiro.html">xso::xoroshiro</a></div><div class="ttdoc">The state for the Xoroshiro family of pseudorandom number generators.</div><div class="ttdef"><b>Definition</b> xoshiro.h:958</div></div>
 <div class="ttc" id="aclassxso_1_1xoroshiro_html_a11549b6780e1ee6b7801e4ca3225d15c"><div class="ttname"><a href="classxso_1_1xoroshiro.html#a11549b6780e1ee6b7801e4ca3225d15c">xso::xoroshiro::type_string</a></div><div class="ttdeci">static constexpr auto type_string()</div><div class="ttdoc">Class method that returns a name for this state.</div><div class="ttdef"><b>Definition</b> xoshiro.h:973</div></div>
 <div class="ttc" id="aclassxso_1_1xoroshiro_html_a34a7a4cf80e99269bdf363e4c9480106"><div class="ttname"><a href="classxso_1_1xoroshiro.html#a34a7a4cf80e99269bdf363e4c9480106">xso::xoroshiro::get_state</a></div><div class="ttdeci">constexpr void get_state(Dst dst) const</div><div class="ttdoc">Copies the whole state into the destination iterator dst.</div><div class="ttdef"><b>Definition</b> xoshiro.h:989</div></div>
@@ -1315,20 +1315,20 @@ $(function(){initNavTree('xoshiro_8h_source.html','',''); });
 <div class="ttc" id="aclassxso_1_1xoshiro_html_a9315eb9a9a901cc942f8a4c031470df8"><div class="ttname"><a href="classxso_1_1xoshiro.html#a9315eb9a9a901cc942f8a4c031470df8">xso::xoshiro::get_state</a></div><div class="ttdeci">constexpr void get_state(Dst dst) const</div><div class="ttdoc">Copies the whole state into the destination iterator dst.</div><div class="ttdef"><b>Definition</b> xoshiro.h:856</div></div>
 <div class="ttc" id="aclassxso_1_1xoshiro_html_ab8d0cfeb6299f6e11c7dab332daeba83"><div class="ttname"><a href="classxso_1_1xoshiro.html#ab8d0cfeb6299f6e11c7dab332daeba83">xso::xoshiro::seed</a></div><div class="ttdeci">constexpr void seed(Src b, Src e)</div><div class="ttdoc">Sets the state from an iteration of words.</div><div class="ttdef"><b>Definition</b> xoshiro.h:867</div></div>
 <div class="ttc" id="aconceptxso_1_1Distribution_html"><div class="ttname"><a href="conceptxso_1_1Distribution.html">xso::Distribution</a></div><div class="ttdoc">A C++ concept that lets us distinguish standard distribution types from other types.</div><div class="ttdef"><b>Definition</b> xoshiro.h:46</div></div>
-<div class="ttc" id="astructstd_1_1formatter_3_01T_01_4_html_a1a4dd22d719fab847c93a66b140db006"><div class="ttname"><a href="structstd_1_1formatter_3_01T_01_4.html#a1a4dd22d719fab847c93a66b140db006">std::formatter&lt; T &gt;::format</a></div><div class="ttdeci">auto format(const T &amp;, FormatContext &amp;ctx) const</div><div class="ttdoc">Push out a formatted xso::generator using its type_string() method.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1679</div></div>
-<div class="ttc" id="astructstd_1_1formatter_3_01T_01_4_html_ad55b85d6e28560ede47ac21ad77db14f"><div class="ttname"><a href="structstd_1_1formatter_3_01T_01_4.html#ad55b85d6e28560ede47ac21ad77db14f">std::formatter&lt; T &gt;::parse</a></div><div class="ttdeci">constexpr auto parse(const std::format_parse_context &amp;ctx)</div><div class="ttdoc">Parse the format specifier – currently only handle the default empty specifier.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1671</div></div>
-<div class="ttc" id="astructxso_1_1plus__plus_html"><div class="ttname"><a href="structxso_1_1plus__plus.html">xso::plus_plus</a></div><div class="ttdoc">The plus_plus functor can be passed a state array and will return the sum of two state words rotated ...</div><div class="ttdef"><b>Definition</b> xoshiro.h:1160</div></div>
-<div class="ttc" id="astructxso_1_1plus_html"><div class="ttname"><a href="structxso_1_1plus.html">xso::plus</a></div><div class="ttdoc">The plus functor can be passed a state array and will return the sum of two state words.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1146</div></div>
-<div class="ttc" id="astructxso_1_1star__star_html"><div class="ttname"><a href="structxso_1_1star__star.html">xso::star_star</a></div><div class="ttdoc">The star_star functor multiplies a state word by a constant, rotates the result, then multiplies by a...</div><div class="ttdef"><b>Definition</b> xoshiro.h:1133</div></div>
-<div class="ttc" id="astructxso_1_1star_html"><div class="ttname"><a href="structxso_1_1star.html">xso::star</a></div><div class="ttdoc">The star functor multiplies a state word by a constant.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1117</div></div>
-<div class="ttc" id="axoshiro_8h_html_a08c06fbfc8fdcb3123f8d83f1c66f92e"><div class="ttname"><a href="xoshiro_8h.html#a08c06fbfc8fdcb3123f8d83f1c66f92e">xso::transition_matrix</a></div><div class="ttdeci">auto transition_matrix()</div><div class="ttdoc">Returns the transition matrix for a state/generator type as a gf2::BitMatrix.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1581</div></div>
-<div class="ttc" id="axoshiro_8h_html_a2b8f0093647e2cf57a893cbddd8e90d7"><div class="ttname"><a href="xoshiro_8h.html#a2b8f0093647e2cf57a893cbddd8e90d7">xso::rng32</a></div><div class="ttdeci">xoshiro_4x32_star_star rng32</div><div class="ttdoc">The recommended 32-bit output generator – used as xso::rng32.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1205</div></div>
-<div class="ttc" id="axoshiro_8h_html_a3693f1449cff07bf97cb43bc6fabe127"><div class="ttname"><a href="xoshiro_8h.html#a3693f1449cff07bf97cb43bc6fabe127">operator&lt;&lt;</a></div><div class="ttdeci">std::ostream &amp; operator&lt;&lt;(std::ostream &amp;s, const T &amp;)</div><div class="ttdoc">The usual output stream operator for an xso::generator, State, or Scrambler.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1689</div></div>
-<div class="ttc" id="axoshiro_8h_html_a4433189e70713da57738a24dbae0a8b3"><div class="ttname"><a href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3">xso::rng</a></div><div class="ttdeci">rng64 rng</div><div class="ttdoc">The recommended default generator for most usage – used as xso::rng.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1211</div></div>
-<div class="ttc" id="axoshiro_8h_html_ac1070168c155852dca7df21a59985647"><div class="ttname"><a href="xoshiro_8h.html#ac1070168c155852dca7df21a59985647">xso::jump_coefficients</a></div><div class="ttdeci">constexpr auto jump_coefficients(std::size_t J, bool J_is_log2=false)</div><div class="ttdoc">Returns the coefficients of the jump polynomial that can be used to jump a generator/state ahead by  ...</div><div class="ttdef"><b>Definition</b> xoshiro.h:1301</div></div>
-<div class="ttc" id="axoshiro_8h_html_acbac054ae0d786385a69f42215b966a6"><div class="ttname"><a href="xoshiro_8h.html#acbac054ae0d786385a69f42215b966a6">xso::rng64</a></div><div class="ttdeci">xoshiro_4x64_star_star rng64</div><div class="ttdoc">The recommended 64-bit output generator – used as xso::rng64.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1208</div></div>
-<div class="ttc" id="axoshiro_8h_html_ae6327bd526ffaf07bfb2334a357f9e51"><div class="ttname"><a href="xoshiro_8h.html#ae6327bd526ffaf07bfb2334a357f9e51">xso::characteristic_polynomial</a></div><div class="ttdeci">auto characteristic_polynomial()</div><div class="ttdoc">Returns the characteristic polynomial for our state&#39;s transition matrix as a gf2::BitPolynomial.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1632</div></div>
-<div class="ttc" id="axoshiro_8h_html_af5723a480082f0aed2c0b982492e83fe"><div class="ttname"><a href="xoshiro_8h.html#af5723a480082f0aed2c0b982492e83fe">xso::jump_polynomial</a></div><div class="ttdeci">auto jump_polynomial(gf2::BitPolynomial&lt; typename State::word_type &gt; const &amp;c, std::size_t N, bool N_is_log2=false)</div><div class="ttdoc">Returns a jump polynomial that moves the generator type J steps ahead in its random number stream.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1646</div></div>
+<div class="ttc" id="astructstd_1_1formatter_3_01T_01_4_html_a1a4dd22d719fab847c93a66b140db006"><div class="ttname"><a href="structstd_1_1formatter_3_01T_01_4.html#a1a4dd22d719fab847c93a66b140db006">std::formatter&lt; T &gt;::format</a></div><div class="ttdeci">auto format(const T &amp;, FormatContext &amp;ctx) const</div><div class="ttdoc">Push out a formatted xso::generator using its type_string() method.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1681</div></div>
+<div class="ttc" id="astructstd_1_1formatter_3_01T_01_4_html_ad55b85d6e28560ede47ac21ad77db14f"><div class="ttname"><a href="structstd_1_1formatter_3_01T_01_4.html#ad55b85d6e28560ede47ac21ad77db14f">std::formatter&lt; T &gt;::parse</a></div><div class="ttdeci">constexpr auto parse(const std::format_parse_context &amp;ctx)</div><div class="ttdoc">Parse the format specifier – currently only handle the default empty specifier.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1673</div></div>
+<div class="ttc" id="astructxso_1_1plus__plus_html"><div class="ttname"><a href="structxso_1_1plus__plus.html">xso::plus_plus</a></div><div class="ttdoc">The plus_plus scrambler is passed a state array an returns rotl(state[w0] + state[w1],...</div><div class="ttdef"><b>Definition</b> xoshiro.h:1162</div></div>
+<div class="ttc" id="astructxso_1_1plus_html"><div class="ttname"><a href="structxso_1_1plus.html">xso::plus</a></div><div class="ttdoc">The plus scrambler is passed a state array an returns state[w0] + state[w1].</div><div class="ttdef"><b>Definition</b> xoshiro.h:1150</div></div>
+<div class="ttc" id="astructxso_1_1star__star_html"><div class="ttname"><a href="structxso_1_1star__star.html">xso::star_star</a></div><div class="ttdoc">The star_star scrambler is passed a state array an returns T * rotl(S * state[w], R) where:</div><div class="ttdef"><b>Definition</b> xoshiro.h:1136</div></div>
+<div class="ttc" id="astructxso_1_1star_html"><div class="ttname"><a href="structxso_1_1star.html">xso::star</a></div><div class="ttdoc">The star scrambler is passed a state array and will return S * state[w] where:</div><div class="ttdef"><b>Definition</b> xoshiro.h:1119</div></div>
+<div class="ttc" id="axoshiro_8h_html_a08c06fbfc8fdcb3123f8d83f1c66f92e"><div class="ttname"><a href="xoshiro_8h.html#a08c06fbfc8fdcb3123f8d83f1c66f92e">xso::transition_matrix</a></div><div class="ttdeci">auto transition_matrix()</div><div class="ttdoc">Returns the transition matrix for a state/generator type as a gf2::BitMatrix.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1583</div></div>
+<div class="ttc" id="axoshiro_8h_html_a2b8f0093647e2cf57a893cbddd8e90d7"><div class="ttname"><a href="xoshiro_8h.html#a2b8f0093647e2cf57a893cbddd8e90d7">xso::rng32</a></div><div class="ttdeci">xoshiro_4x32_star_star rng32</div><div class="ttdoc">The recommended 32-bit output generator – used as xso::rng32.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1207</div></div>
+<div class="ttc" id="axoshiro_8h_html_a3693f1449cff07bf97cb43bc6fabe127"><div class="ttname"><a href="xoshiro_8h.html#a3693f1449cff07bf97cb43bc6fabe127">operator&lt;&lt;</a></div><div class="ttdeci">std::ostream &amp; operator&lt;&lt;(std::ostream &amp;s, const T &amp;)</div><div class="ttdoc">The usual output stream operator for an xso::generator, State, or Scrambler.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1691</div></div>
+<div class="ttc" id="axoshiro_8h_html_a4433189e70713da57738a24dbae0a8b3"><div class="ttname"><a href="xoshiro_8h.html#a4433189e70713da57738a24dbae0a8b3">xso::rng</a></div><div class="ttdeci">rng64 rng</div><div class="ttdoc">The recommended default generator for most usage – used as xso::rng.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1213</div></div>
+<div class="ttc" id="axoshiro_8h_html_ac1070168c155852dca7df21a59985647"><div class="ttname"><a href="xoshiro_8h.html#ac1070168c155852dca7df21a59985647">xso::jump_coefficients</a></div><div class="ttdeci">constexpr auto jump_coefficients(std::size_t J, bool J_is_log2=false)</div><div class="ttdoc">Returns the coefficients of the jump polynomial that can be used to jump a generator/state ahead by  ...</div><div class="ttdef"><b>Definition</b> xoshiro.h:1303</div></div>
+<div class="ttc" id="axoshiro_8h_html_acbac054ae0d786385a69f42215b966a6"><div class="ttname"><a href="xoshiro_8h.html#acbac054ae0d786385a69f42215b966a6">xso::rng64</a></div><div class="ttdeci">xoshiro_4x64_star_star rng64</div><div class="ttdoc">The recommended 64-bit output generator – used as xso::rng64.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1210</div></div>
+<div class="ttc" id="axoshiro_8h_html_ae6327bd526ffaf07bfb2334a357f9e51"><div class="ttname"><a href="xoshiro_8h.html#ae6327bd526ffaf07bfb2334a357f9e51">xso::characteristic_polynomial</a></div><div class="ttdeci">auto characteristic_polynomial()</div><div class="ttdoc">Returns the characteristic polynomial for our state&#39;s transition matrix as a gf2::BitPolynomial.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1634</div></div>
+<div class="ttc" id="axoshiro_8h_html_af5723a480082f0aed2c0b982492e83fe"><div class="ttname"><a href="xoshiro_8h.html#af5723a480082f0aed2c0b982492e83fe">xso::jump_polynomial</a></div><div class="ttdeci">auto jump_polynomial(gf2::BitPolynomial&lt; typename State::word_type &gt; const &amp;c, std::size_t N, bool N_is_log2=false)</div><div class="ttdoc">Returns a jump polynomial that moves the generator type J steps ahead in its random number stream.</div><div class="ttdef"><b>Definition</b> xoshiro.h:1648</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

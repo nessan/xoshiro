@@ -129,21 +129,21 @@ $(function(){initNavTree('structxso_1_1star.html','','structxso_1_1star-members'
 </div><!--header-->
 <div class="contents">
 
-<p>The <span class="tt"><a class="el" href="structxso_1_1star.html" title="The star functor multiplies a state word by a constant.">star</a></span> functor multiplies a state word by a constant.  
+<p>The <span class="tt"><a class="el" href="structxso_1_1star.html" title="The star scrambler is passed a state array and will return S * state[w] where:">star</a></span> scrambler is passed a <span class="tt">state</span> array and will return <span class="tt">S * state[w]</span> where:  
  <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="xoshiro_8h_source.html">xoshiro.h</a>&gt;</code></p>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><div class="compoundTemplParams">template&lt;auto S, std::size_t w&gt;<br />
-struct xso::star&lt; S, w &gt;</div><p>The <span class="tt"><a class="el" href="structxso_1_1star.html" title="The star functor multiplies a state word by a constant.">star</a></span> functor multiplies a state word by a constant. </p>
+<div class="textblock"><div class="compoundTemplParams">template&lt;auto S, std::size_t w = 0&gt;<br />
+struct xso::star&lt; S, w &gt;</div><p>The <span class="tt"><a class="el" href="structxso_1_1star.html" title="The star scrambler is passed a state array and will return S * state[w] where:">star</a></span> scrambler is passed a <span class="tt">state</span> array and will return <span class="tt">S * state[w]</span> where: </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">S</td><td>A constant multiplier. </td></tr>
-    <tr><td class="paramname">w</td><td>The index of the word in the state array to use.</td></tr>
+    <tr><td class="paramname">S</td><td>is a constant multiplier which should be <em>odd</em> to ensure good mixing of bits. </td></tr>
+    <tr><td class="paramname">w</td><td>is the index of the word in the state array to use.</td></tr>
   </table>
   </dd>
 </dl>
-<p>This scrambler can be passed a state array and will return <span class="tt">S * state[w]</span>. </p>
+<p>For this scrambler, any choice of <span class="tt">w</span> will do as all the words are getting updated by the state advance algorithm. Typically, we use multipliers that are <span class="tt">2^s + 1</span> for some <span class="tt">s</span> as those are odd and compilers will optimize the multiplication to a shift and add. </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <div id="page-nav" class="page-nav-panel">
