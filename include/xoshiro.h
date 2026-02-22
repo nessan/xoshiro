@@ -104,14 +104,14 @@ public:
     /// The returned string is for the generator type as a whole, combining both the State and Scrambler type names.
     /// There is no instance specific information in the returned string (i.e. no seed/state data).
     ///
-    /// For example: `xoshiro<4x64,17,45>star_star<5,7,1>` for an xoshiro generator with four 64-bit state words,
+    /// For example: `xoshiro<4x64,17,45> with star_star<5,7,1>` for an xoshiro generator with four 64-bit state words,
     /// using parameters 17 and 45 to step the state, combined with the "**" scrambler using parameters 5, 7 and 1.
     ///
     /// # Example
     /// ```
-    /// assert_eq(xso::rng::type_string(), "xoshiro<4x64,17,45>star_star<5,7,1>");
+    /// assert_eq(xso::rng::type_string(), "xoshiro<4x64,17,45> with star_star<5,7,9,1>");
     /// ```
-    static constexpr auto type_string() { return std::format("{}{}", State::type_string(), Scrambler::type_string()); }
+    static constexpr auto type_string() { return std::format("{} with {}", State::type_string(), Scrambler::type_string()); }
 
     /// @}
     /// @name Items required for the std::uniform_random_bit_generator concept:
@@ -1107,55 +1107,57 @@ private:
 // A Scrambler is a functor that is passed a State and returns a single unsigned output word.
 // --------------------------------------------------------------------------------------------------------------------
 
-/// The `star` functor multiplies a state word by a constant.
+/// The `star` scrambler is passed a `state` array and will return `S * state[w]`  where:
 ///
-/// @tparam S  A constant multiplier.
-/// @tparam w  The index of the word in the state array to use.
+/// @tparam S  is a constant multiplier which should be _odd_ to ensure good mixing of bits.
+/// @tparam w  is the  index of the word in the state array to use.
 ///
-/// This scrambler can be passed a state array and will return `S * state[w]`.
-template<auto S, std::size_t w>
+/// For this scrambler, any choice of `w` will do as all the words are getting updated by the state advance algorithm.
+/// Typically, we use multipliers that are `2^s + 1` for some `s` as those are odd and compilers will optimize the
+/// multiplication to a shift and add.
+template<auto S, std::size_t w = 0>
 struct star {
     constexpr auto operator()(const auto& state) const { return S * state[w]; }
 
     static constexpr auto type_string() { return std::format("star<{:x},{}>", S, w); }
 };
 
-/// The `star_star` functor multiplies a state word by a constant, rotates the result, then multiplies by another
-/// constant.
+/// The `star_star` scrambler is passed a `state` array an returns `T * rotl(S * state[w], R)` where:
 ///
-/// @tparam S  A constant multiplier.
-/// @tparam R  A rotation amount.
-/// @tparam T  A constant multiplier applied after the rotation.
-/// @tparam w  The index of the word in the state array to use.
+/// @tparam S  is a constant multiplier that should be odd.
+/// @tparam R  is a rotation amount.
+/// @tparam T  is a constant multiplier applied after the rotation.
+/// @tparam w  is the index of the word in the state array to use.
 ///
-/// This scrambler can be passed a state array and will return `rotl(S * state[w], R) * T`.
-template<auto S, auto R, auto T, std::size_t w>
+/// For this scrambler, any choice of `w` will do as all the words are getting updated by the state advance algorithm.
+/// Typically, we use multipliers that are `2^s + 1` for some `s` as those are odd and compilers will optimize the
+/// multiplication to a shift and add.
+template<auto S, auto R, auto T, std::size_t w = 0>
 struct star_star {
     constexpr auto operator()(const auto& state) const { return T * std::rotl(S * state[w], R); }
 
-    static constexpr auto type_string() { return std::format("star_star<{:x},{},{}>", S, R, w); }
+    static constexpr auto type_string() { return std::format("star_star<{:x},{},{:x},{}>", S, R, T, w); }
 };
 
-/// The `plus` functor can be passed a state array and will return the sum of two state words.
+/// The `plus` scrambler is passed a `state` array an returns `state[w0] + state[w1]`.
 ///
 /// @tparam w0 The index of the first word in the state array to use.
 /// @tparam w1 The index of the second word in the state array to use.
 ///
-/// This scrambler can be passed a state array and will return `state[w0] + state[w1]`.
-template<std::size_t w0, std::size_t w1>
+/// For this scrambler, any choice of `w0` and `w1` will do as all the words are getting updated by the state advance
+/// algorithm.
+template<std::size_t w0 = 0, std::size_t w1 = 1>
 struct plus {
     constexpr auto operator()(const auto& state) const { return state[w0] + state[w1]; }
 
     static constexpr auto type_string() { return std::format("plus<{},{}>", w0, w1); }
 };
 
-/// The `plus_plus` functor can be passed a state array and will return the sum of two state words rotated and shifted.
+/// The `plus_plus` scrambler is passed a `state` array an returns `rotl(state[w0] + state[w1], R) + state[w0]`.
 ///
 /// @tparam w0 The index of the first word in the state array to use.
 /// @tparam w1 The index of the second word in the state array to use.
 /// @tparam R  A rotation amount.
-///
-/// This scrambler can be passed a state array and will return `rotl(state[w0] + state[w1], R) + state[w0]`.
 template<auto R, std::size_t w0, std::size_t w1>
 struct plus_plus {
     constexpr auto operator()(const auto& state) const { return std::rotl(state[w0] + state[w1], R) + state[w0]; }
@@ -1192,7 +1194,7 @@ using xoshiro_8x64_star_star    = generator<xoshiro_8x64, star_star<5, 7, 9, 1>>
 
 // The analysed versions of the xoroshiro generators:
 using xoroshiro_2x32_star       = generator<xoroshiro_2x32,  star<0x9E3779BB, 0>>;
-using xoroshiro_2x32_star_star  = generator<xoroshiro_2x32,  star_star<0x9E3779BBu, 5, 5, 0>>;
+using xoroshiro_2x32_star_star  = generator<xoroshiro_2x32,  star_star<0x9E3779BB, 5, 5, 0>>;
 using xoroshiro_2x64_plus       = generator<xoroshiro_2x64,  plus<0, 1>>;
 using xoroshiro_2x64_plus_plus  = generator<xoroshiro_2x64b, plus_plus<17, 0, 1>>;
 using xoroshiro_2x64_star_star  = generator<xoroshiro_2x64,  star_star<5, 7, 9, 0>>;
