@@ -151,7 +151,7 @@ Example</h1>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// lambda: draws a sample from a normal distribution and rounds it to an integer.</span></div>
 <div class="line">    std::normal_distribution d{5.0, 2.0};</div>
-<div class="line">    <span class="keyword">auto</span> random_int = [&amp;d, &amp;gen] { <span class="keywordflow">return</span> int(std::round(dist(gen))); };</div>
+<div class="line">    <span class="keyword">auto</span> random_int = [&amp;d, &amp;gen] { <span class="keywordflow">return</span> int(std::round(d(gen))); };</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// Run many trials and create a histogram of the results in integer buckets.</span></div>
 <div class="line">    std::map&lt;int, int&gt; hist{};</div>
