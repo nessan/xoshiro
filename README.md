@@ -32,7 +32,7 @@ int main()
 
     // lambda: draws a sample from a normal distribution and rounds it to an integer.
     std::normal_distribution d{5.0, 2.0};
-    auto random_int = [&d, &gen] { return int(std::round(dist(gen))); };
+    auto random_int = [&d, &gen] { return int(std::round(d(gen))); };
 
     // Run many trials and create a histogram of the results in integer buckets.
     std::map<int, int> hist{};
